@@ -9,12 +9,32 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
 
+class _GoRouterRefreshNotifier extends ChangeNotifier {
+  final Ref _ref;
+  late final ProviderSubscription<AsyncValue<AuthStatus>> _subscription;
+
+  _GoRouterRefreshNotifier(this._ref) {
+    _subscription = _ref.listen<AsyncValue<AuthStatus>>(
+      authViewModelProvider,
+      (_, __) => notifyListeners(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _subscription.close();
+    super.dispose();
+  }
+}
+
 @riverpod
 GoRouter router(Ref ref) {
-  final authState = ref.watch(authViewModelProvider);
+  final notifier = _GoRouterRefreshNotifier(ref);
+  ref.onDispose(notifier.dispose);
 
   return GoRouter(
     initialLocation: '/login',
+    refreshListenable: notifier,
     routes: [
       GoRoute(
         path: '/login',
@@ -26,6 +46,7 @@ GoRouter router(Ref ref) {
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {
+      final authState = ref.read(authViewModelProvider);
       // 로딩 중이거나 에러 발생 시 아무것도 하지 않음 (스플래시 화면 등이 있다면 그곳으로 처리)
       if (authState.isLoading || authState.hasError) {
         return null;

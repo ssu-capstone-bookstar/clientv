@@ -41,6 +41,10 @@ class CustomInterceptor extends Interceptor {
   @override
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    if (options.path == '/api/v1/auth/login') {
+      return super.onRequest(options, handler);
+    }
+
     final tokens = await _ref.read(authViewModelProvider.notifier).getTokens();
     if (tokens.accessToken != null) {
       options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';

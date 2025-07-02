@@ -43,6 +43,7 @@ class AuthViewModel extends _$AuthViewModel {
       final request =
           LoginRequest(providerType: providerType, idToken: idToken);
       final response = await _authRepository.login(request);
+
       final authData = response.data;
 
       await _secureStorageRepository.saveTokens(

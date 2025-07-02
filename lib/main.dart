@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   KakaoSdk.init(
-    nativeAppKey: '946993e6e0c5509a570c89c310827ebd',
+    nativeAppKey: '152cbc672bf7a38751fa53962ac99d9b',
   );
 
   // await dotenv.load();
