@@ -1,3 +1,4 @@
+import 'package:book/common/theme/app_colors.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/search/viewmodels/search_viewmodel.dart';
 import 'package:book/search/widgets/book_search_result_card.dart';
@@ -21,6 +22,9 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _textController.addListener(() {
+      setState(() {});
+    });
   }
 
   void _onScroll() {
@@ -41,11 +45,19 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final searchState = ref.watch(searchViewModelProvider);
+    final hasText = _textController.text.isNotEmpty;
+
+    final outlineInputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(
+        color: hasText ? AppColors.primaryPurple : Colors.grey.shade300,
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('책픽'),
-        centerTitle: true,
+        title: const Text('책 찾기'),
+        centerTitle: false,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
@@ -59,9 +71,12 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           children: [
             TextField(
               controller: _textController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: '읽고 싶은 책을 검색해 보세요',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
+                border: outlineInputBorder,
+                enabledBorder: outlineInputBorder,
+                focusedBorder: outlineInputBorder,
               ),
               onSubmitted: (value) {
                 ref.read(searchViewModelProvider.notifier).searchBooks(value);
@@ -73,45 +88,62 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
                 data: (data) {
                   if (data.books.isEmpty && _textController.text.isEmpty) {
                     return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            Assets.icons.icBookpickSearchCharacter,
-                            width: 150,
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            '어떤 도서를 찾고 계신가요?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(fontSize: 18),
-                          ),
-                        ],
+                      child: SvgPicture.asset(
+                        Assets.icons.icBookpickSearchCharacter,
+                        width: 150,
                       ),
                     );
                   }
                   if (data.books.isEmpty && _textController.text.isNotEmpty) {
                     return const Center(child: Text('검색 결과가 없습니다.'));
                   }
-                  return GridView.builder(
+
+                  final books = data.books;
+                  final hasNext = data.hasNext;
+                  final rowCount = (books.length / 3).ceil();
+
+                  return ListView.separated(
                     controller: _scrollController,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 0.5,
-                    ),
-                    itemCount: data.books.length + (data.hasNext ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == data.books.length) {
+                    itemCount: rowCount + (hasNext ? 1 : 0),
+                    itemBuilder: (context, rowIndex) {
+                      if (rowIndex == rowCount) {
                         return const Center(
-                          child: CircularProgressIndicator(),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: CircularProgressIndicator(),
+                          ),
                         );
                       }
-                      return BookSearchResultCard(book: data.books[index]);
+
+                      final startIndex = rowIndex * 3;
+                      final List<Widget> rowItems = [];
+                      for (int i = 0; i < 3; i++) {
+                        final bookIndex = startIndex + i;
+                        if (bookIndex < books.length) {
+                          rowItems.add(
+                            Expanded(
+                              child:
+                                  BookSearchResultCard(book: books[bookIndex]),
+                            ),
+                          );
+                        } else {
+                          rowItems.add(Expanded(child: Container()));
+                        }
+                        if (i < 2) {
+                          rowItems.add(const SizedBox(width: 16));
+                        }
+                      }
+
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: rowItems,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Divider(height: 1),
+                      );
                     },
                   );
                 },

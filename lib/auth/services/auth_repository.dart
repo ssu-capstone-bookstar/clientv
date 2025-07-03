@@ -2,7 +2,6 @@ import 'package:book/auth/models/auth_response.dart';
 import 'package:book/auth/models/login_request.dart';
 import 'package:book/common/di/dio_client.dart';
 import 'package:book/common/models/response_form.dart';
-import 'package:book/common/models/status_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
