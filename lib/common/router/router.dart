@@ -1,7 +1,12 @@
 import 'package:book/auth/models/auth_status.dart';
 import 'package:book/auth/screens/login_screen.dart';
 import 'package:book/auth/viewmodels/auth_viewmodel.dart';
+import 'package:book/book_pick/screens/book_pick_screen.dart';
+import 'package:book/chat/screens/book_talk_screen.dart';
+import 'package:book/deep_time/screens/deep_time_screen.dart';
+import 'package:book/feed/screens/feed_screen.dart';
 import 'package:book/home/screens/home_screen.dart';
+import 'package:book/reading_challenge/screens/reading_challenge_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,36 +37,81 @@ GoRouter router(Ref ref) {
   final notifier = _GoRouterRefreshNotifier(ref);
   ref.onDispose(notifier.dispose);
 
+  final rootNavigatorKey = GlobalKey<NavigatorState>();
+
   return GoRouter(
     initialLocation: '/login',
+    navigatorKey: rootNavigatorKey,
     refreshListenable: notifier,
     routes: [
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
       ),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return HomeScreen(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/reading-log',
+                builder: (context, state) => const FeedScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/book-talk',
+                builder: (context, state) => const BookTalkScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/book-pick',
+                builder: (context, state) => const BookPickScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/deep-time',
+                builder: (context, state) => const DeepTimeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/reading-challenge',
+                builder: (context, state) => const ReadingChallengeScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {
       final authState = ref.read(authViewModelProvider);
-      // 로딩 중이거나 에러 발생 시 아무것도 하지 않음 (스플래시 화면 등이 있다면 그곳으로 처리)
+
       if (authState.isLoading || authState.hasError) {
         return null;
       }
 
-      final status = authState.value;
-      final loggedIn = status == AuthStatus.authenticated;
+      final loggedIn = authState.value == AuthStatus.authenticated;
       final loggingIn = state.matchedLocation == '/login';
 
-      if (!loggedIn && !loggingIn) {
-        return '/login';
+      if (!loggedIn) {
+        return loggingIn ? null : '/login';
       }
 
-      if (loggedIn && loggingIn) {
-        return '/home';
+      if (loggingIn) {
+        return '/reading-log';
       }
 
       return null;
