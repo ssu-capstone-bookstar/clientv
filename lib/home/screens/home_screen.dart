@@ -37,8 +37,6 @@ class HomeScreen extends StatelessWidget {
       ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF212124),
-        type: BottomNavigationBarType.fixed,
         currentIndex: navigationShell.currentIndex,
         onTap: (index) {
           navigationShell.goBranch(
@@ -68,12 +66,6 @@ class HomeScreen extends StatelessWidget {
             label: '리딩챌린지',
           ),
         ],
-        selectedItemColor: const Color(0xFF8B5CF6),
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-        elevation: 0,
       ),
     );
   }

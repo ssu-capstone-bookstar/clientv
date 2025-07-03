@@ -7,6 +7,7 @@ import 'package:book/deep_time/screens/deep_time_screen.dart';
 import 'package:book/feed/screens/feed_screen.dart';
 import 'package:book/home/screens/home_screen.dart';
 import 'package:book/reading_challenge/screens/reading_challenge_screen.dart';
+import 'package:book/search/screens/search_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -94,6 +95,10 @@ GoRouter router(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/search-detail',
+        builder: (context, state) => const SearchDetailScreen(),
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {

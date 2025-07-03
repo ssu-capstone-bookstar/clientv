@@ -1,5 +1,7 @@
 import 'package:book/common/router/router.dart';
+import 'package:book/common/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
@@ -28,20 +30,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Book SNS App',
-      theme: ThemeData(
-        fontFamily: 'Pretendard',
-        scaffoldBackgroundColor: Colors.white,
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          titleTextStyle: TextStyle(
-            color: Colors.black, // 제목 색상 변경
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      theme: AppTheme.themeData,
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
     );
