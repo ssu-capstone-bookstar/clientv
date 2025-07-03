@@ -111,7 +111,7 @@ GoRouter router(Ref ref) {
       }
 
       if (loggingIn) {
-        return '/reading-log';
+        return '/book-pick';
       }
 
       return null;
