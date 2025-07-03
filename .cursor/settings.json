@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@context-7/mcp-server"],
+      "env": {
+        "CONTEXT_7_API_KEY": "${env:CONTEXT_7_API_KEY}",
+        "CONTEXT_7_PROJECT_ID": "${env:CONTEXT_7_PROJECT_ID}"
+      }
+    }
+  }
+} 
