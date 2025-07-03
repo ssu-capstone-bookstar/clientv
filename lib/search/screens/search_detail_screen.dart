@@ -15,10 +15,26 @@ class SearchDetailScreen extends ConsumerStatefulWidget {
 
 class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
+      ref.read(searchViewModelProvider.notifier).fetchNextPage();
+    }
+  }
 
   @override
   void dispose() {
     _textController.dispose();
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -54,8 +70,8 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
             const SizedBox(height: 20),
             Expanded(
               child: searchState.when(
-                data: (books) {
-                  if (books.isEmpty && _textController.text.isEmpty) {
+                data: (data) {
+                  if (data.books.isEmpty && _textController.text.isEmpty) {
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -76,10 +92,11 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
                       ),
                     );
                   }
-                  if (books.isEmpty && _textController.text.isNotEmpty) {
-                     return const Center(child: Text('검색 결과가 없습니다.'));
+                  if (data.books.isEmpty && _textController.text.isNotEmpty) {
+                    return const Center(child: Text('검색 결과가 없습니다.'));
                   }
                   return GridView.builder(
+                    controller: _scrollController,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
@@ -87,9 +104,14 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
                       mainAxisSpacing: 16,
                       childAspectRatio: 0.5,
                     ),
-                    itemCount: books.length,
+                    itemCount: data.books.length + (data.hasNext ? 1 : 0),
                     itemBuilder: (context, index) {
-                      return BookSearchResultCard(book: books[index]);
+                      if (index == data.books.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return BookSearchResultCard(book: data.books[index]);
                     },
                   );
                 },
