@@ -82,7 +82,7 @@ class _ImageRepository implements ImageRepository {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$imageRepositoryHash() => r'c6c59c77fe0158a3aedd7933966c1ba1d04947eb';
+String _$imageRepositoryHash() => r'6c1bc7497e92394e48a90aac7c75484442e5c46f';
 
 /// See also [imageRepository].
 @ProviderFor(imageRepository)

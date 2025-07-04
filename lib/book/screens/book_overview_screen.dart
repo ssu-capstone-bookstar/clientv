@@ -1,10 +1,11 @@
 import 'package:book/book/viewmodels/book_overview_viewmodel.dart';
 import 'package:book/book/widgets/book_info_widget.dart';
-import 'package:book/book/widgets/related_posts_widget.dart';
+import 'package:book/reading_diary/viewmodels/related_diaries_viewmodel.dart';
+import 'package:book/reading_diary/widgets/related_diaries_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BookOverviewScreen extends ConsumerWidget {
+class BookOverviewScreen extends ConsumerStatefulWidget {
   const BookOverviewScreen({
     super.key,
     required this.bookId,
@@ -13,30 +14,56 @@ class BookOverviewScreen extends ConsumerWidget {
   final int bookId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bookState = ref.watch(bookOverviewViewModelProvider(bookId));
+  ConsumerState<BookOverviewScreen> createState() => _BookOverviewScreenState();
+}
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('책픽'),
-        centerTitle: true,
-      ),
-      body: bookState.when(
-        data: (book) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BookInfoWidget(book: book),
-                const RelatedPostsWidget(),
-              ],
+class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
+      ref
+          .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
+          .fetchNextPage();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bookState = ref.watch(bookOverviewViewModelProvider(widget.bookId));
+
+    return bookState.when(
+      data: (book) {
+        return CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: BookInfoWidget(book: book),
+              ),
             ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Text('오류가 발생했습니다: $error'),
-        ),
+            RelatedDiariesWidget(bookId: widget.bookId),
+          ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(
+        child: Text('오류가 발생했습니다: $error'),
       ),
     );
   }

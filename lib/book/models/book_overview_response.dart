@@ -14,8 +14,9 @@ abstract class BookOverviewResponse with _$BookOverviewResponse {
     required String isbn,
     required String publisher,
     required double star,
+    required String publishedDate,
   }) = _BookOverviewResponse;
 
   factory BookOverviewResponse.fromJson(Map<String, dynamic> json) =>
       _$BookOverviewResponseFromJson(json);
-} 
+}

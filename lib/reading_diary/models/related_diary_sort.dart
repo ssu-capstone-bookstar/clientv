@@ -1,0 +1,4 @@
+enum RelatedDiarySort {
+  POPULAR,
+  LATEST,
+} 

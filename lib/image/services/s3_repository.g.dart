@@ -6,7 +6,7 @@ part of 's3_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$s3RepositoryHash() => r'8bbb851cd5029b8c3ad2eb1408fb8256bb4ac846';
+String _$s3RepositoryHash() => r'7c9daf1e0d5ba28b64fc3eef7a0e5b5378c1f6d8';
 
 /// See also [s3Repository].
 @ProviderFor(s3Repository)

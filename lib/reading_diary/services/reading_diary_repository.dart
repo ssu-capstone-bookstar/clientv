@@ -5,6 +5,7 @@ import 'package:book/common/models/response_form.dart';
 import 'package:book/reading_diary/models/diary_request.dart';
 import 'package:book/reading_diary/models/diary_response.dart';
 import 'package:book/reading_diary/models/liked_diary_response.dart';
+import 'package:book/reading_diary/models/related_diary_sort.dart';
 import 'package:book/reading_diary/models/related_diary_thumbnail.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,7 +63,7 @@ abstract class ReadingDiaryRepository {
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getRelatedDiaries(
     @Path('bookId') int bookId, {
-    @Query('relatedDiarySort') String? relatedDiarySort,
+    @Query('relatedDiarySort') RelatedDiarySort? relatedDiarySort,
     @Query('cursorId') int? cursorId,
     @Query('cursorScore') double? cursorScore,
     @Query('size') int? size,

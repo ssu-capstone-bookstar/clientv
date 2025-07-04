@@ -270,14 +270,14 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getRelatedDiaries(
     int bookId, {
-    String? relatedDiarySort,
+    RelatedDiarySort? relatedDiarySort,
     int? cursorId,
     double? cursorScore,
     int? size,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'relatedDiarySort': relatedDiarySort,
+      r'relatedDiarySort': relatedDiarySort?.name,
       r'cursorId': cursorId,
       r'cursorScore': cursorScore,
       r'size': size,

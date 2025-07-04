@@ -17,6 +17,7 @@ _BookOverviewResponse _$BookOverviewResponseFromJson(
       isbn: json['isbn'] as String,
       publisher: json['publisher'] as String,
       star: (json['star'] as num).toDouble(),
+      publishedDate: json['publishedDate'] as String,
     );
 
 Map<String, dynamic> _$BookOverviewResponseToJson(
@@ -30,4 +31,5 @@ Map<String, dynamic> _$BookOverviewResponseToJson(
       'isbn': instance.isbn,
       'publisher': instance.publisher,
       'star': instance.star,
+      'publishedDate': instance.publishedDate,
     };
