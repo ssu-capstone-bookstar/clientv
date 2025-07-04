@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'related_diaries_viewmodel.dart';
+part of 'related_diaries_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -24,7 +24,7 @@ final relatedDiarySortStateProvider = AutoDisposeNotifierProvider<
 
 typedef _$RelatedDiarySortState = AutoDisposeNotifier<RelatedDiarySort>;
 String _$relatedDiariesViewModelHash() =>
-    r'79812325581c67fc3bf77059576c39ef3cad9ee3';
+    r'33da7bba516619ddc7219733e66e1e7dd7abd967';
 
 /// Copied from Dart SDK
 class _SystemHash {
