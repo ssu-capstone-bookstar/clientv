@@ -24,7 +24,7 @@ class SocialLoginService {
             token = await UserApi.instance.loginWithKakaoAccount();
           } else {
             debugPrint('카카오 로그인 에러: $e');
-            return '';
+            return null;
           }
         }
       } else {
@@ -33,6 +33,7 @@ class SocialLoginService {
       return token.idToken ?? '';
     } catch (error) {
       debugPrint('알 수 없는 카카오 에러: $error');
+      return null;
     }
   }
 

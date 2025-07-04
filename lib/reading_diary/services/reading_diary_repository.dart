@@ -1,9 +1,11 @@
 import 'package:book/common/di/dio_client.dart';
 import 'package:book/common/models/cursor_page_response.dart';
+import 'package:book/common/models/dual_cursor_page_response.dart';
 import 'package:book/common/models/response_form.dart';
 import 'package:book/reading_diary/models/diary_request.dart';
 import 'package:book/reading_diary/models/diary_response.dart';
 import 'package:book/reading_diary/models/liked_diary_response.dart';
+import 'package:book/reading_diary/models/related_diary_thumbnail.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -53,6 +55,16 @@ abstract class ReadingDiaryRepository {
   @GET('/api/v2/reading-diaries/me')
   Future<ResponseForm<CursorPageResponse<LikedDiaryResponse>>> getLikedDiaries({
     @Query('cursorId') int? cursorId,
+    @Query('size') int? size,
+  });
+
+  @GET('/api/v2/books/{bookId}/related/reading-diaries')
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getRelatedDiaries(
+    @Path('bookId') int bookId, {
+    @Query('relatedDiarySort') String? relatedDiarySort,
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
     @Query('size') int? size,
   });
 }

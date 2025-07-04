@@ -13,16 +13,13 @@ part 'auth_viewmodel.g.dart';
 
 @Riverpod(keepAlive: true)
 class AuthViewModel extends _$AuthViewModel {
-  late final AuthRepository _authRepository;
-  late final SocialLoginService _socialLoginService;
-  late final SecureStorageRepository _secureStorageRepository;
+  late final AuthRepository _authRepository = ref.read(authRepositoryProvider);
+  late final SocialLoginService _socialLoginService = SocialLoginService();
+  late final SecureStorageRepository _secureStorageRepository =
+      ref.read(secureStorageRepositoryProvider);
 
   @override
   Future<AuthStatus> build() async {
-    _authRepository = ref.watch(authRepositoryProvider);
-    _socialLoginService = SocialLoginService();
-    _secureStorageRepository = ref.watch(secureStorageRepositoryProvider);
-
     final storedRefreshToken = await _secureStorageRepository.getRefreshToken();
     if (storedRefreshToken != null) {
       final newAuthData = await refreshToken();
@@ -85,19 +82,20 @@ class AuthViewModel extends _$AuthViewModel {
       return null;
     }
 
-    final authData =
+    final authDataResponse =
         await _authRepository.renewToken('Bearer $oldRefreshToken');
 
-    if (authData.data == null) {
+    final authData = authDataResponse.data;
+    if (authData == null) {
       await signOut();
       return null;
     }
 
     await _secureStorageRepository.saveTokens(
-      accessToken: authData.data!.accessToken,
-      refreshToken: authData.data!.refreshToken,
+      accessToken: authData.accessToken,
+      refreshToken: authData.refreshToken,
     );
-    ref.read(userProvider.notifier).setUser(authData.data!);
-    return authData.data;
+    ref.read(userProvider.notifier).setUser(authData);
+    return authData;
   }
 }

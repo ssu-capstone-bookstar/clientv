@@ -40,6 +40,7 @@ dependencies:
   # New dependency
   flutter_dotenv: ^5.1.0
   cached_network_image: ^3.4.1
+  mime: ^1.0.5
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'image_request.dart';
+part of 'presigned_url_request.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,80 +13,74 @@ part of 'image_request.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ImageRequest {
-  String get image;
-  int get sequence;
+mixin _$PresignedUrlRequest {
+  String get fileName;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of PresignedUrlRequest
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ImageRequestCopyWith<ImageRequest> get copyWith =>
-      _$ImageRequestCopyWithImpl<ImageRequest>(
-          this as ImageRequest, _$identity);
+  $PresignedUrlRequestCopyWith<PresignedUrlRequest> get copyWith =>
+      _$PresignedUrlRequestCopyWithImpl<PresignedUrlRequest>(
+          this as PresignedUrlRequest, _$identity);
 
-  /// Serializes this ImageRequest to a JSON map.
+  /// Serializes this PresignedUrlRequest to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ImageRequest &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.sequence, sequence) ||
-                other.sequence == sequence));
+            other is PresignedUrlRequest &&
+            (identical(other.fileName, fileName) ||
+                other.fileName == fileName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, image, sequence);
+  int get hashCode => Object.hash(runtimeType, fileName);
 
   @override
   String toString() {
-    return 'ImageRequest(image: $image, sequence: $sequence)';
+    return 'PresignedUrlRequest(fileName: $fileName)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ImageRequestCopyWith<$Res> {
-  factory $ImageRequestCopyWith(
-          ImageRequest value, $Res Function(ImageRequest) _then) =
-      _$ImageRequestCopyWithImpl;
+abstract mixin class $PresignedUrlRequestCopyWith<$Res> {
+  factory $PresignedUrlRequestCopyWith(
+          PresignedUrlRequest value, $Res Function(PresignedUrlRequest) _then) =
+      _$PresignedUrlRequestCopyWithImpl;
   @useResult
-  $Res call({String image, int sequence});
+  $Res call({String fileName});
 }
 
 /// @nodoc
-class _$ImageRequestCopyWithImpl<$Res> implements $ImageRequestCopyWith<$Res> {
-  _$ImageRequestCopyWithImpl(this._self, this._then);
+class _$PresignedUrlRequestCopyWithImpl<$Res>
+    implements $PresignedUrlRequestCopyWith<$Res> {
+  _$PresignedUrlRequestCopyWithImpl(this._self, this._then);
 
-  final ImageRequest _self;
-  final $Res Function(ImageRequest) _then;
+  final PresignedUrlRequest _self;
+  final $Res Function(PresignedUrlRequest) _then;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of PresignedUrlRequest
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? image = null,
-    Object? sequence = null,
+    Object? fileName = null,
   }) {
     return _then(_self.copyWith(
-      image: null == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
+      fileName: null == fileName
+          ? _self.fileName
+          : fileName // ignore: cast_nullable_to_non_nullable
               as String,
-      sequence: null == sequence
-          ? _self.sequence
-          : sequence // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [ImageRequest].
-extension ImageRequestPatterns on ImageRequest {
+/// Adds pattern-matching-related methods to [PresignedUrlRequest].
+extension PresignedUrlRequestPatterns on PresignedUrlRequest {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -101,12 +95,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ImageRequest value)? $default, {
+    TResult Function(_PresignedUrlRequest value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
+      case _PresignedUrlRequest() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -128,11 +122,11 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ImageRequest value) $default,
+    TResult Function(_PresignedUrlRequest value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest():
+      case _PresignedUrlRequest():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -153,11 +147,11 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ImageRequest value)? $default,
+    TResult? Function(_PresignedUrlRequest value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
+      case _PresignedUrlRequest() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -178,13 +172,13 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String image, int sequence)? $default, {
+    TResult Function(String fileName)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
-        return $default(_that.image, _that.sequence);
+      case _PresignedUrlRequest() when $default != null:
+        return $default(_that.fileName);
       case _:
         return orElse();
     }
@@ -205,12 +199,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String image, int sequence) $default,
+    TResult Function(String fileName) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest():
-        return $default(_that.image, _that.sequence);
+      case _PresignedUrlRequest():
+        return $default(_that.fileName);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -230,12 +224,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String image, int sequence)? $default,
+    TResult? Function(String fileName)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
-        return $default(_that.image, _that.sequence);
+      case _PresignedUrlRequest() when $default != null:
+        return $default(_that.fileName);
       case _:
         return null;
     }
@@ -244,29 +238,26 @@ extension ImageRequestPatterns on ImageRequest {
 
 /// @nodoc
 @JsonSerializable()
-class _ImageRequest implements ImageRequest {
-  const _ImageRequest({this.image = '', this.sequence = 1});
-  factory _ImageRequest.fromJson(Map<String, dynamic> json) =>
-      _$ImageRequestFromJson(json);
+class _PresignedUrlRequest implements PresignedUrlRequest {
+  const _PresignedUrlRequest({required this.fileName});
+  factory _PresignedUrlRequest.fromJson(Map<String, dynamic> json) =>
+      _$PresignedUrlRequestFromJson(json);
 
   @override
-  @JsonKey()
-  final String image;
-  @override
-  @JsonKey()
-  final int sequence;
+  final String fileName;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of PresignedUrlRequest
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ImageRequestCopyWith<_ImageRequest> get copyWith =>
-      __$ImageRequestCopyWithImpl<_ImageRequest>(this, _$identity);
+  _$PresignedUrlRequestCopyWith<_PresignedUrlRequest> get copyWith =>
+      __$PresignedUrlRequestCopyWithImpl<_PresignedUrlRequest>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ImageRequestToJson(
+    return _$PresignedUrlRequestToJson(
       this,
     );
   }
@@ -275,58 +266,52 @@ class _ImageRequest implements ImageRequest {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ImageRequest &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.sequence, sequence) ||
-                other.sequence == sequence));
+            other is _PresignedUrlRequest &&
+            (identical(other.fileName, fileName) ||
+                other.fileName == fileName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, image, sequence);
+  int get hashCode => Object.hash(runtimeType, fileName);
 
   @override
   String toString() {
-    return 'ImageRequest(image: $image, sequence: $sequence)';
+    return 'PresignedUrlRequest(fileName: $fileName)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ImageRequestCopyWith<$Res>
-    implements $ImageRequestCopyWith<$Res> {
-  factory _$ImageRequestCopyWith(
-          _ImageRequest value, $Res Function(_ImageRequest) _then) =
-      __$ImageRequestCopyWithImpl;
+abstract mixin class _$PresignedUrlRequestCopyWith<$Res>
+    implements $PresignedUrlRequestCopyWith<$Res> {
+  factory _$PresignedUrlRequestCopyWith(_PresignedUrlRequest value,
+          $Res Function(_PresignedUrlRequest) _then) =
+      __$PresignedUrlRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({String image, int sequence});
+  $Res call({String fileName});
 }
 
 /// @nodoc
-class __$ImageRequestCopyWithImpl<$Res>
-    implements _$ImageRequestCopyWith<$Res> {
-  __$ImageRequestCopyWithImpl(this._self, this._then);
+class __$PresignedUrlRequestCopyWithImpl<$Res>
+    implements _$PresignedUrlRequestCopyWith<$Res> {
+  __$PresignedUrlRequestCopyWithImpl(this._self, this._then);
 
-  final _ImageRequest _self;
-  final $Res Function(_ImageRequest) _then;
+  final _PresignedUrlRequest _self;
+  final $Res Function(_PresignedUrlRequest) _then;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of PresignedUrlRequest
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? image = null,
-    Object? sequence = null,
+    Object? fileName = null,
   }) {
-    return _then(_ImageRequest(
-      image: null == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
+    return _then(_PresignedUrlRequest(
+      fileName: null == fileName
+          ? _self.fileName
+          : fileName // ignore: cast_nullable_to_non_nullable
               as String,
-      sequence: null == sequence
-          ? _self.sequence
-          : sequence // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
