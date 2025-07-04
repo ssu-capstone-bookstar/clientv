@@ -10,14 +10,19 @@ part 'search_viewmodel.g.dart';
 class SearchViewModel extends _$SearchViewModel {
   late final SearchRepository _repository;
   bool _isFetchingPage = false;
+  bool _isBusy = false;
 
   @override
-  FutureOr<SearchState> build() {
+  FutureOr<SearchState> build() async {
     _repository = ref.watch(searchRepositoryProvider);
     return const SearchState();
   }
 
   Future<void> searchBooks(String query) async {
+    if (state is AsyncLoading) {
+      return;
+    }
+
     if (query.isEmpty) {
       state = const AsyncValue.data(SearchState());
       return;
@@ -25,22 +30,28 @@ class SearchViewModel extends _$SearchViewModel {
 
     state = const AsyncValue.loading();
 
-    state = await AsyncValue.guard(() async {
+    try {
       final response = await _repository.searchBooks(query);
-      return SearchState(
-        books: response.data.data,
-        start: 2,
-        hasNext: response.data.hasNext,
-        query: query,
+      state = AsyncValue.data(
+        SearchState(
+          books: response.data.data,
+          start: 2,
+          hasNext: response.data.hasNext,
+          query: query,
+        ),
       );
-    });
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
   }
 
   Future<void> fetchNextPage() async {
     if (_isFetchingPage) return;
 
     final currentState = state.value;
-    if (currentState == null || !currentState.hasNext || currentState.query == null) {
+    if (currentState == null ||
+        !currentState.hasNext ||
+        currentState.query == null) {
       return;
     }
 
@@ -58,9 +69,9 @@ class SearchViewModel extends _$SearchViewModel {
       );
       state = AsyncValue.data(newState);
     } catch (e) {
-       state = AsyncValue.data(currentState.copyWith(hasNext: false));
+      state = AsyncValue.data(currentState.copyWith(hasNext: false));
     } finally {
       _isFetchingPage = false;
     }
   }
-} 
+}

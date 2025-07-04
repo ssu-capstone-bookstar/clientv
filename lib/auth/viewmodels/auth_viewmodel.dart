@@ -90,11 +90,11 @@ class AuthViewModel extends _$AuthViewModel {
           await _authRepository.renewToken('Bearer $oldRefreshToken');
 
       await _secureStorageRepository.saveTokens(
-        accessToken: authData.accessToken,
-        refreshToken: authData.refreshToken,
+        accessToken: authData.data.accessToken,
+        refreshToken: authData.data.refreshToken,
       );
-      ref.read(userProvider.notifier).setUser(authData);
-      return authData;
+      ref.read(userProvider.notifier).setUser(authData.data);
+      return authData.data;
     } catch (e) {
       // If renew fails (e.g., token expired), sign out to force a new login.
       await signOut();

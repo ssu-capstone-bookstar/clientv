@@ -95,6 +95,33 @@ class _SearchRepository implements SearchRepository {
   }
 
   @override
+  Future<ResponseForm<void>> deleteSearchHistory(String query) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'query': query};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<void>>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/v2/search/histories',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<void> _value;
+    try {
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ResponseForm<List<SearchUserResponse>>> getUsersByName(
     String nickName,
   ) async {

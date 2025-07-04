@@ -30,6 +30,9 @@ abstract class SearchRepository {
   @GET('/api/v2/search/histories')
   Future<ResponseForm<List<SearchHistoryResponse>>> getSearchHistories();
 
+  @DELETE('/api/v2/search/histories')
+  Future<ResponseForm<void>> deleteSearchHistory(@Query('query') String query);
+
   @GET('/api/v2/search/users/{nickName}')
   Future<ResponseForm<List<SearchUserResponse>>> getUsersByName(
     @Path('nickName') String nickName,

@@ -17,4 +17,6 @@ abstract class ResponseForm<T> with _$ResponseForm<T> {
     T Function(Object? json) fromJsonT,
   ) =>
       _$ResponseFormFromJson(json, fromJsonT);
+
+  static T empty<T>(Object? json) => json as T;
 } 
