@@ -8,6 +8,7 @@ import 'package:book/auth/services/social_login_service.dart';
 import 'package:book/common/components/secure_storage.dart';
 import 'package:book/user/providers/user_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/foundation.dart';
 
 part 'auth_viewmodel.g.dart';
 
@@ -45,6 +46,10 @@ class AuthViewModel extends _$AuthViewModel {
       final response = await _authRepository.login(request);
 
       final authData = response.data;
+
+      // accessToken, memberId 디버그 출력
+      debugPrint(
+          '[LOGIN] accessToken: ${authData.accessToken}, memberId: ${authData.memberId}');
 
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
@@ -97,6 +102,9 @@ class AuthViewModel extends _$AuthViewModel {
       accessToken: authData.data!.accessToken,
       refreshToken: authData.data!.refreshToken,
     );
+    // accessToken, memberId 디버그 출력
+    debugPrint(
+        '[AUTO LOGIN] accessToken: ${authData.data!.accessToken}, memberId: ${authData.data!.memberId}');
     ref.read(userProvider.notifier).setUser(authData.data!);
     return authData.data;
   }

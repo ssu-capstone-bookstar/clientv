@@ -32,7 +32,7 @@ abstract class ReadingDiaryRepository {
   Future<ResponseForm<dynamic>> deleteDiary(@Path('diaryId') int diaryId);
 
   @GET('/api/v2/reading-diaries/members/{memberId}')
-  Future<ResponseForm<CursorPageResponse<DiaryResponse>>> getMemberDiaries(
+  Future<ResponseForm<List<DiaryResponse>>> getMemberDiaries(
     @Path('memberId') int memberId, {
     @Query('cursorId') int? cursorId,
     @Query('size') int? size,

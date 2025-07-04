@@ -29,11 +29,21 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_getCurrentTitle(navigationShell.currentIndex)),
-        elevation: 0,
-        centerTitle: false,
-      ),
+      appBar: navigationShell.currentIndex == 0
+          ? AppBar(
+              leading: null,
+              title: const Text(
+                '책로그',
+              ),
+              actions: [
+                // TO-DO: 프로필 편집 버튼 제거
+              ],
+            )
+          : AppBar(
+              title: Text(_getCurrentTitle(navigationShell.currentIndex)),
+              elevation: 0,
+              centerTitle: true,
+            ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,

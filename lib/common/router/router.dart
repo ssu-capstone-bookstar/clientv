@@ -10,6 +10,7 @@ import 'package:book/home/screens/home_screen.dart';
 import 'package:book/profile/screens/profile_screen.dart';
 import 'package:book/reading_challenge/screens/reading_challenge_screen.dart';
 import 'package:book/search/screens/search_detail_screen.dart';
+import 'package:book/user/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -60,7 +61,13 @@ GoRouter router(Ref ref) {
             routes: [
               GoRoute(
                 path: '/book-log',
-                builder: (context, state) => const BookLogScreen(),
+                builder: (context, state) => Consumer(
+                  builder: (context, ref, _) {
+                    final user = ref.read(userProvider);
+                    final memberId = user?.memberId ?? 0;
+                    return BookLogScreen(memberId: memberId);
+                  },
+                ),
                 routes: [
                   GoRoute(
                     path: 'profile',

@@ -9,9 +9,10 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.backgroundBlack,
       elevation: 0,
+      centerTitle: true,
       titleTextStyle: TextStyle(
         color: AppColors.white,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(
@@ -40,7 +41,8 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.white),
       bodyMedium: TextStyle(color: AppColors.white),
-      titleLarge: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+      titleLarge:
+          TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
     ),
   );
-} 
+}

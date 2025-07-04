@@ -81,7 +81,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<CursorPageResponse<DiaryResponse>>> getMemberDiaries(
+  Future<ResponseForm<List<DiaryResponse>>> getMemberDiaries(
     int memberId, {
     int? cursorId,
     int? size,
@@ -94,8 +94,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<ResponseForm<CursorPageResponse<DiaryResponse>>>(
+    final _options = _setStreamType<ResponseForm<List<DiaryResponse>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -103,19 +102,20 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
             queryParameters: queryParameters,
             data: _data,
           )
-          .copyWith(
-            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
-          ),
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<CursorPageResponse<DiaryResponse>> _value;
+    late ResponseForm<List<DiaryResponse>> _value;
     try {
-      _value = ResponseForm<CursorPageResponse<DiaryResponse>>.fromJson(
+      _value = ResponseForm<List<DiaryResponse>>.fromJson(
         _result.data!,
-        (json) => CursorPageResponse<DiaryResponse>.fromJson(
-          json as Map<String, dynamic>,
-          (json) => DiaryResponse.fromJson(json as Map<String, dynamic>),
-        ),
+        (json) => json is List<dynamic>
+            ? json
+                .map<DiaryResponse>(
+                  (i) => DiaryResponse.fromJson(i as Map<String, dynamic>),
+                )
+                .toList()
+            : List.empty(),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

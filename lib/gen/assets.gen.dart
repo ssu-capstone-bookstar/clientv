@@ -162,8 +162,20 @@ class $AssetsImagesGen {
   AssetGenImage get bookstarCharacter =>
       const AssetGenImage('assets/images/bookstar_character.png');
 
+  /// File path: assets/images/sample_book.jpg
+  AssetGenImage get sampleBook =>
+      const AssetGenImage('assets/images/sample_book.jpg');
+
+  /// File path: assets/images/speech_bubble.png
+  AssetGenImage get speechBubble =>
+      const AssetGenImage('assets/images/speech_bubble.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [bookstarCharacter];
+  List<AssetGenImage> get values => [
+    bookstarCharacter,
+    sampleBook,
+    speechBubble,
+  ];
 }
 
 class Assets {
