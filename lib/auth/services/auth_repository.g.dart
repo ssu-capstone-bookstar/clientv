@@ -77,13 +77,13 @@ class _AuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthResponse> renewToken(String refreshToken) async {
+  Future<ResponseForm<AuthResponse>> renewToken(String refreshToken) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': refreshToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<AuthResponse>(
+    final _options = _setStreamType<ResponseForm<AuthResponse>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -94,9 +94,12 @@ class _AuthRepository implements AuthRepository {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late AuthResponse _value;
+    late ResponseForm<AuthResponse> _value;
     try {
-      _value = AuthResponse.fromJson(_result.data!);
+      _value = ResponseForm<AuthResponse>.fromJson(
+        _result.data!,
+        (json) => AuthResponse.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

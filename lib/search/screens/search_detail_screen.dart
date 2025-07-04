@@ -146,7 +146,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               trailing: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  // TODO: Implement delete history
+                  ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries);
                 },
               ),
             );
