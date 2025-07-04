@@ -85,20 +85,19 @@ class AuthViewModel extends _$AuthViewModel {
       return null;
     }
 
-    try {
-      final authData =
-          await _authRepository.renewToken('Bearer $oldRefreshToken');
+    final authData =
+        await _authRepository.renewToken('Bearer $oldRefreshToken');
 
-      await _secureStorageRepository.saveTokens(
-        accessToken: authData.data.accessToken,
-        refreshToken: authData.data.refreshToken,
-      );
-      ref.read(userProvider.notifier).setUser(authData.data);
-      return authData.data;
-    } catch (e) {
-      // If renew fails (e.g., token expired), sign out to force a new login.
+    if (authData.data == null) {
       await signOut();
       return null;
     }
+
+    await _secureStorageRepository.saveTokens(
+      accessToken: authData.data!.accessToken,
+      refreshToken: authData.data!.refreshToken,
+    );
+    ref.read(userProvider.notifier).setUser(authData.data!);
+    return authData.data;
   }
 }
