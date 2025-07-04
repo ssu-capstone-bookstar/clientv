@@ -1,6 +1,7 @@
 import 'package:book/auth/models/auth_status.dart';
 import 'package:book/auth/screens/login_screen.dart';
 import 'package:book/auth/viewmodels/auth_viewmodel.dart';
+import 'package:book/book/screens/book_overview_screen.dart';
 import 'package:book/book_pick/screens/book_pick_screen.dart';
 import 'package:book/chat/screens/book_talk_screen.dart';
 import 'package:book/deep_time/screens/deep_time_screen.dart';
@@ -83,6 +84,24 @@ GoRouter router(Ref ref) {
               GoRoute(
                 path: '/book-pick',
                 builder: (context, state) => const BookPickScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'search',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const SearchDetailScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'book-overview/:bookId',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) {
+                          final bookId =
+                              int.parse(state.pathParameters['bookId']!);
+                          return BookOverviewScreen(bookId: bookId);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
@@ -103,10 +122,6 @@ GoRouter router(Ref ref) {
             ],
           ),
         ],
-      ),
-      GoRoute(
-        path: '/search-detail',
-        builder: (context, state) => const SearchDetailScreen(),
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {

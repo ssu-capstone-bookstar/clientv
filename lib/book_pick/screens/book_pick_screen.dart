@@ -20,7 +20,7 @@ class BookPickScreen extends StatelessWidget {
           const SizedBox(height: 16),
           GestureDetector(
             onTap: () {
-              context.push('/search-detail');
+              context.push('/book-pick/search');
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
