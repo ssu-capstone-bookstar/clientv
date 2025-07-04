@@ -1,14 +1,16 @@
 import 'package:book/common/router/router.dart';
 import 'package:book/common/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   KakaoSdk.init(
-    nativeAppKey: '152cbc672bf7a38751fa53962ac99d9b',
+    nativeAppKey: dotenv.env['KAKAO_NATIVE_KEY'],
   );
 
   // await dotenv.load();

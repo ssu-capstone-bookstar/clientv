@@ -35,8 +35,8 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<!-- 카카오 네이티브 앱 키: 152cbc672bf7a38751fa53962ac99d9b -->
-				<string>kakao152cbc672bf7a38751fa53962ac99d9b</string>
+				<!-- 카카오 네이티브 앱 키: from .env -->
+				<string>kakao$(KAKAO_NATIVE_KEY)</string>
 			</array>
 		</dict>
 		<!-- 구글 로그인 -->
