@@ -19,19 +19,18 @@ class SearchViewModel extends _$SearchViewModel {
   }
 
   Future<void> searchBooks(String query) async {
-    if (_isBusy) return;
-    _isBusy = true;
+    if (state is AsyncLoading) {
+      return;
+    }
+
+    if (query.isEmpty) {
+      state = const AsyncValue.data(SearchState());
+      return;
+    }
+
+    state = const AsyncValue.loading();
 
     try {
-      if (query.isEmpty) {
-        state = const AsyncValue.data(SearchState());
-        return;
-      }
-
-      state = const AsyncValue.loading();
-      await Future.delayed(
-          const Duration(milliseconds: 10)); // 상태 전파를 위한 아주 짧은 지연
-
       final response = await _repository.searchBooks(query);
       state = AsyncValue.data(
         SearchState(
@@ -43,8 +42,6 @@ class SearchViewModel extends _$SearchViewModel {
       );
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
-    } finally {
-      _isBusy = false;
     }
   }
 

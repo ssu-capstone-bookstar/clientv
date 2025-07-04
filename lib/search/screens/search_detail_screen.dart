@@ -52,21 +52,14 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<SearchState>>(searchViewModelProvider,
-        (previous, next) {
-      final searchState = next.value;
-      if (searchState != null && next is AsyncData) {
-        final query = searchState.query;
-        if (query != null && query.isNotEmpty) {
-          if (previous is AsyncLoading) {
-            ref.read(searchHistoryViewModelProvider.notifier).refresh();
-          }
-        }
+    ref.listen<AsyncValue<SearchState>>(searchViewModelProvider, (previous, _) {
+      if (previous is AsyncLoading) {
+        ref.read(searchHistoryViewModelProvider.notifier).refresh();
       }
     });
 
+    final searchState = ref.watch(searchViewModelProvider);
     final hasText = _textController.text.isNotEmpty;
-
     final outlineInputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: BorderSide(
@@ -102,7 +95,20 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: hasText ? _buildSearchResults() : _buildSearchHistory(),
+              child: searchState.maybeWhen(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                orElse: () {
+                  final showSearchResults = searchState.maybeWhen(
+                    data: (data) =>
+                        data.books.isNotEmpty &&
+                        data.query == _textController.text,
+                    orElse: () => false,
+                  );
+                  return showSearchResults
+                      ? _buildSearchResults()
+                      : _buildSearchHistory();
+                },
+              ),
             ),
           ],
         ),
@@ -135,6 +141,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               onTap: () {
                 final query = history.queries;
                 _textController.text = query;
+                _onSearchSubmitted(query);
               },
               trailing: IconButton(
                 icon: const Icon(Icons.clear),
