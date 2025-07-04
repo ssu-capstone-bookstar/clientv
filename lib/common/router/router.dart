@@ -1,19 +1,20 @@
-import 'package:book/auth/models/auth_status.dart';
-import 'package:book/auth/screens/login_screen.dart';
-import 'package:book/auth/viewmodels/auth_viewmodel.dart';
-import 'package:book/book/screens/book_overview_screen.dart';
-import 'package:book/book_pick/screens/book_pick_screen.dart';
-import 'package:book/chat/screens/book_talk_screen.dart';
-import 'package:book/deep_time/screens/deep_time_screen.dart';
-import 'package:book/book_log/screens/book_log_screen.dart';
-import 'package:book/home/screens/home_screen.dart';
-import 'package:book/profile/screens/profile_screen.dart';
-import 'package:book/reading_challenge/screens/reading_challenge_screen.dart';
-import 'package:book/search/screens/search_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../modules/auth/models/auth_status.dart';
+import '../../modules/auth/screens/login_screen.dart';
+import '../../modules/auth/viewmodels/auth_viewmodel.dart';
+import '../../modules/book/screens/book_overview_screen.dart';
+import '../../modules/book_log/screens/book_log_screen.dart';
+import '../../modules/book_pick/screens/book_pick_screen.dart';
+import '../../modules/chat/screens/book_talk_screen.dart';
+import '../../modules/deep_time/screens/deep_time_screen.dart';
+import '../../modules/home/screens/home_screen.dart';
+import '../../modules/profile/screens/profile_screen.dart';
+import '../../modules/reading_challenge/screens/reading_challenge_screen.dart';
+import '../../modules/search/screens/search_detail_screen.dart';
 
 part 'router.g.dart';
 
