@@ -5,9 +5,9 @@ import 'package:book/book/screens/book_overview_screen.dart';
 import 'package:book/book_pick/screens/book_pick_screen.dart';
 import 'package:book/chat/screens/book_talk_screen.dart';
 import 'package:book/deep_time/screens/deep_time_screen.dart';
-import 'package:book/feed/screens/feed_screen.dart';
+import 'package:book/book_log/screens/book_log_screen.dart';
 import 'package:book/home/screens/home_screen.dart';
-// import 'package:book/profile/screens/profile_screen.dart';
+import 'package:book/profile/screens/profile_screen.dart';
 import 'package:book/reading_challenge/screens/reading_challenge_screen.dart';
 import 'package:book/search/screens/search_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -59,15 +59,15 @@ GoRouter router(Ref ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/reading-log',
-                builder: (context, state) => const FeedScreen(),
-                // routes: [
-                //   GoRoute(
-                //     path: 'profile',
-                //     parentNavigatorKey: rootNavigatorKey,
-                //     // builder: (context, state) => const ProfileScreen(),
-                //   ),
-                // ],
+                path: '/book-log',
+                builder: (context, state) => const BookLogScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'profile',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const ProfileScreen(),
+                  ),
+                ],
               ),
             ],
           ),
