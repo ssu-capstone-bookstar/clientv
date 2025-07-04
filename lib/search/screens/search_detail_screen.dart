@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:book/common/theme/app_colors.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/search/viewmodels/search_history_viewmodel.dart';
@@ -18,14 +19,13 @@ class SearchDetailScreen extends ConsumerStatefulWidget {
 class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _textController.addListener(() {
-      setState(() {});
-    });
+    _textController.addListener(_onTextChanged);
   }
 
   void _onScroll() {
@@ -33,6 +33,23 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
         _scrollController.position.maxScrollExtent - 300) {
       ref.read(searchViewModelProvider.notifier).fetchNextPage();
     }
+  }
+
+  void _onTextChanged() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      final query = _textController.text;
+      if (query.length >= 2) {
+        if (query != ref.read(searchViewModelProvider).value?.query) {
+          _onSearchSubmitted(query);
+        }
+      } else {
+        if (ref.read(searchViewModelProvider).value?.books.isNotEmpty ?? false) {
+          ref.read(searchViewModelProvider.notifier).searchBooks('');
+        }
+      }
+    });
+    setState(() {});
   }
 
   void _onSearchSubmitted(String value) {
@@ -45,6 +62,8 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
+    _textController.removeListener(_onTextChanged);
     _textController.dispose();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
