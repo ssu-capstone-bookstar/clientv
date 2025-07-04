@@ -1,12 +1,12 @@
-import 'dart:async';
 import 'package:book/common/theme/app_colors.dart';
 import 'package:book/gen/assets.gen.dart';
+import 'package:book/search/models/search_state.dart';
 import 'package:book/search/viewmodels/search_history_viewmodel.dart';
 import 'package:book/search/viewmodels/search_viewmodel.dart';
 import 'package:book/search/widgets/book_search_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class SearchDetailScreen extends ConsumerStatefulWidget {
@@ -19,13 +19,14 @@ class SearchDetailScreen extends ConsumerStatefulWidget {
 class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _textController.addListener(_onTextChanged);
+    _textController.addListener(() {
+      setState(() {});
+    });
   }
 
   void _onScroll() {
@@ -35,35 +36,14 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
     }
   }
 
-  void _onTextChanged() {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      final query = _textController.text;
-      if (query.length >= 2) {
-        if (query != ref.read(searchViewModelProvider).value?.query) {
-          _onSearchSubmitted(query);
-        }
-      } else {
-        if (ref.read(searchViewModelProvider).value?.books.isNotEmpty ?? false) {
-          ref.read(searchViewModelProvider.notifier).searchBooks('');
-        }
-      }
-    });
-    setState(() {});
-  }
-
   void _onSearchSubmitted(String value) {
     if (value.isNotEmpty) {
-      ref.read(searchViewModelProvider.notifier).searchBooks(value).then((_) {
-        ref.read(searchHistoryViewModelProvider.notifier).refresh();
-      });
+      ref.read(searchViewModelProvider.notifier).searchBooks(value);
     }
   }
 
   @override
   void dispose() {
-    _debounce?.cancel();
-    _textController.removeListener(_onTextChanged);
     _textController.dispose();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
@@ -72,6 +52,19 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue<SearchState>>(searchViewModelProvider,
+        (previous, next) {
+      final searchState = next.value;
+      if (searchState != null && next is AsyncData) {
+        final query = searchState.query;
+        if (query != null && query.isNotEmpty) {
+          if (previous is AsyncLoading) {
+            ref.read(searchHistoryViewModelProvider.notifier).refresh();
+          }
+        }
+      }
+    });
+
     final hasText = _textController.text.isNotEmpty;
 
     final outlineInputBorder = OutlineInputBorder(
@@ -124,7 +117,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
       data: (historyData) {
         final histories = historyData.data;
 
-        if (histories.isEmpty) {
+        if (histories == null || histories.isEmpty) {
           return Center(
             child: SvgPicture.asset(
               Assets.icons.icBookpickSearchCharacter,
@@ -140,13 +133,15 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
             return ListTile(
               title: Text(history.queries),
               onTap: () {
-                _textController.text = history.queries;
-                _onSearchSubmitted(history.queries);
+                final query = history.queries;
+                _textController.text = query;
               },
               trailing: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries);
+                  ref
+                      .read(searchHistoryViewModelProvider.notifier)
+                      .removeHistory(history.queries);
                 },
               ),
             );
@@ -154,7 +149,8 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           separatorBuilder: (context, index) => const Divider(height: 1),
         );
       },
-      error: (error, stack) => const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
+      error: (error, stack) =>
+          const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
