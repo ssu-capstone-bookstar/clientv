@@ -1,5 +1,6 @@
 import 'package:book/auth/viewmodels/auth_viewmodel.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,7 +10,7 @@ part 'dio_client.g.dart';
 Dio dioClient(Ref ref) {
   final dio = Dio(
     BaseOptions(
-      baseUrl: 'http://15.164.30.67:8080',
+      baseUrl: dotenv.env['BASE_URL']!,
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 30),
       contentType: 'application/json',
@@ -25,7 +26,7 @@ Dio dioClient(Ref ref) {
 Dio baseDio(Ref ref) {
   return Dio(
     BaseOptions(
-      baseUrl: 'http://15.164.30.67:8080',
+      baseUrl: dotenv.env['BASE_URL']!,
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 30),
       contentType: 'application/json',
