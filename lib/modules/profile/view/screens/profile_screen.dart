@@ -40,7 +40,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       appBar: AppBar(
         title: const Text('프로필 편집'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const BackButton(),
           onPressed: () => context.pop(),
         ),
       ),
@@ -72,7 +72,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ? NetworkImage(profile.profileImageUrl)
                             : null,
                         child: profile.profileImageUrl.isEmpty
-                            ? const Icon(Icons.person, size: 48, color: Colors.grey)
+                            ? const Icon(Icons.person,
+                                size: 48, color: Colors.grey)
                             : null,
                         backgroundColor: Colors.grey[800],
                       ),
@@ -83,7 +84,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     children: [
                       SizedBox(
                         width: 60,
-                        child: const Text('닉네임', style: TextStyle(color: Colors.grey)),
+                        child: const Text('닉네임',
+                            style: TextStyle(color: Colors.grey)),
                       ),
                       Expanded(
                         child: Container(
@@ -107,7 +109,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     children: [
                       SizedBox(
                         width: 60,
-                        child: const Text('소개', style: TextStyle(color: Colors.grey)),
+                        child: const Text('소개',
+                            style: TextStyle(color: Colors.grey)),
                       ),
                       Expanded(
                         child: Container(
@@ -132,7 +135,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     children: [
                       SizedBox(
                         width: 60,
-                        child: const Text('픽한 도서', style: TextStyle(color: Colors.grey)),
+                        child: const Text('픽한 도서',
+                            style: TextStyle(color: Colors.grey)),
                       ),
                       Expanded(
                         child: GestureDetector(
@@ -154,7 +158,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     children: [
                       SizedBox(
                         width: 60,
-                        child: const Text('독서 중', style: TextStyle(color: Colors.grey)),
+                        child: const Text('독서 중',
+                            style: TextStyle(color: Colors.grey)),
                       ),
                       Expanded(
                         child: GestureDetector(
@@ -176,7 +181,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     children: [
                       SizedBox(
                         width: 60,
-                        child: const Text('완독 도서', style: TextStyle(color: Colors.grey)),
+                        child: const Text('완독 도서',
+                            style: TextStyle(color: Colors.grey)),
                       ),
                       Expanded(
                         child: GestureDetector(
@@ -201,7 +207,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       child: ElevatedButton(
                         onPressed: () async {
                           final nickname = _nicknameController.text.trim();
-                          final introduction = _introductionController.text.trim();
+                          final introduction =
+                              _introductionController.text.trim();
                           if (nickname.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('닉네임을 입력해주세요.')),
@@ -215,12 +222,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             profileImageUrl: '', // TODO: 이미지 변경 하도록 바꾸기
                             introduction: introduction,
                           );
-                          final repository = ref.read(profileRepositoryProvider);
+                          final repository =
+                              ref.read(profileRepositoryProvider);
                           try {
                             showDialog(
                               context: context,
                               barrierDismissible: false,
-                              builder: (_) => const Center(child: CircularProgressIndicator()),
+                              builder: (_) => const Center(
+                                  child: CircularProgressIndicator()),
                             );
                             await repository.updateMyProfile(request);
                             if (context.mounted) {
@@ -247,7 +256,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text('저장하기', style: TextStyle(fontSize: 16)),
+                        child:
+                            const Text('저장하기', style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ),
