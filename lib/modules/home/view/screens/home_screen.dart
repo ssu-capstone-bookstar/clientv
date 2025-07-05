@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const HomeScreen({
     super.key,
     required this.navigationShell,
   });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _lastVisitedTabIndex = 2; // 기본값: 책픽
 
   String _getCurrentTitle(int index) {
     switch (index) {
@@ -26,12 +33,32 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
+  void _onTabTapped(int index) {
+    if (index != 0) {
+      setState(() {
+        _lastVisitedTabIndex = index;
+      });
+    }
+    widget.navigationShell.goBranch(
+      index,
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final navigationShell = widget.navigationShell;
     return Scaffold(
       appBar: navigationShell.currentIndex == 0
           ? AppBar(
-              leading: !Navigator.canPop(context) ? const BackButton() : null,
+              leading: !Navigator.canPop(context)
+                  ? BackButton(
+                      onPressed: () {
+                        navigationShell.goBranch(_lastVisitedTabIndex,
+                            initialLocation: true);
+                      },
+                    )
+                  : null,
               title: const Text(
                 '책로그',
               ),
@@ -49,12 +76,7 @@ class HomeScreen extends StatelessWidget {
           ? null
           : BottomNavigationBar(
               currentIndex: navigationShell.currentIndex,
-              onTap: (index) {
-                navigationShell.goBranch(
-                  index,
-                  initialLocation: index == navigationShell.currentIndex,
-                );
-              },
+              onTap: _onTabTapped,
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.book),
