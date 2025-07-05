@@ -146,7 +146,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         },
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 0, 14, 24),
+        padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
         child: CtaButtonL1(
           text: '저장하기',
           enabled: _isEdited,
