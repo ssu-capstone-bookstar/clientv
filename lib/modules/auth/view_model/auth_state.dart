@@ -1,3 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'auth_view_model.dart';
+
 sealed class AuthState {}
 
 class AuthIdle extends AuthState {}
@@ -25,3 +28,29 @@ class AuthFailed extends AuthState {
 }
 
 class AuthLoading extends AuthState {}
+
+
+mixin class UserState {
+  AuthState watchAuthState(WidgetRef ref) {
+    final state = ref.watch(authViewModelProvider);
+
+    return state.when(
+      data: (data) => data,
+      loading: () => AuthLoading(),
+      error: (e, t) => AuthFailed(errorMsg: '', errorCode: -1),
+    );
+  }
+
+  AuthSuccess? watchUser(WidgetRef ref) {
+    final state = ref.read(authViewModelProvider);
+
+    return state.when(
+      data: (data) {
+        if (data is AuthSuccess) return data;
+        return null;
+      },
+      loading: () =>null,
+      error: (e, t) => null,
+    );
+  }
+}

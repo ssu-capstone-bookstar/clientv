@@ -1,4 +1,3 @@
-import 'package:book/modules/user/view_model/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -75,8 +74,9 @@ GoRouter router(Ref ref) {
                 path: '/book-log',
                 builder: (context, state) => Consumer(
                   builder: (context, ref, _) {
-                    final user = ref.read(userProvider);
-                    print('[DEBUG][BOOK_LOG] user: $user');
+                    final user = ref.read(authViewModelProvider.notifier).getUser();
+
+                    print('[DEBUG][BOOK_LOG] user: ${user?.memberId} ${user?.profileImage} ${user?.nickName}');
                     final memberId = user?.memberId ?? 0;
                     print('[DEBUG][BOOK_LOG] memberId: $memberId');
                     return BookLogScreen(memberId: memberId);
