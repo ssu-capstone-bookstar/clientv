@@ -17,7 +17,8 @@ part 'auth_view_model.g.dart';
 class AuthViewModel extends _$AuthViewModel {
   late final AuthRepository _authRepository = ref.read(authRepositoryProvider);
   late final SocialLoginService _socialLoginService = SocialLoginService();
-  late final SecureStorageRepository _secureStorageRepository = ref.read(secureStorageRepositoryProvider);
+  late final SecureStorageRepository _secureStorageRepository =
+      ref.read(secureStorageRepositoryProvider);
 
   @override
   Future<AuthState> build() async {
@@ -38,22 +39,30 @@ class AuthViewModel extends _$AuthViewModel {
       final String? idToken = await _getIdToken(providerType);
       if (idToken == null) {
         // return AuthStatus.unauthenticated;
-
         return AuthFailed(errorMsg: '', errorCode: -1);
       }
-      final request = LoginRequest(providerType: providerType, idToken: idToken);
+      final request =
+          LoginRequest(providerType: providerType, idToken: idToken);
       final response = await _authRepository.login(request);
 
       final authData = response.data;
+
+      // 디버그 콘솔에 토큰과 멤버 ID 출력
+      print('[DEBUG][LOGIN] accessToken: ${authData.accessToken}');
+      print('[DEBUG][LOGIN] refreshToken: ${authData.refreshToken}');
+      print('[DEBUG][LOGIN] memberId: ${authData.memberId}');
 
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
       );
-      // ref.read(userProvider.notifier).setUser(authData);
+      ref.read(userProvider.notifier).setUser(authData);
       // return AuthStatus.authenticated;
 
-      return AuthSuccess(memberId: authData.memberId, nickName: authData.nickName, profileImage: authData.profileImage);
+      return AuthSuccess(
+          memberId: authData.memberId,
+          nickName: authData.nickName,
+          profileImage: authData.profileImage);
     });
   }
 
@@ -70,7 +79,7 @@ class AuthViewModel extends _$AuthViewModel {
 
   Future<void> signOut() async {
     await _secureStorageRepository.deleteTokens();
-    // ref.read(userProvider.notifier).clearUser();
+    ref.read(userProvider.notifier).clearUser();
     // state = const AsyncValue.data(AuthStatus.unauthenticated);
 
     state = AsyncData(AuthIdle());
@@ -87,19 +96,28 @@ class AuthViewModel extends _$AuthViewModel {
     final oldRefreshToken = await _secureStorageRepository.getRefreshToken();
     if (oldRefreshToken == null) {
       await signOut();
-
       return null;
     }
 
+    // Print the refreshToken to the debug console
+    print('[DEBUG] /api/v1/auth/renew refreshToken: ' + oldRefreshToken);
+
     try {
-      final authDataResponse = await _authRepository.renewToken('Bearer $oldRefreshToken');
+      final authDataResponse =
+          await _authRepository.renewToken('Bearer $oldRefreshToken');
 
       final authData = authDataResponse.data;
+
+      // 디버그 콘솔에 토큰과 멤버 ID 출력
+      print('[DEBUG][AUTO_LOGIN] accessToken: ${authData.accessToken}');
+      print('[DEBUG][AUTO_LOGIN] refreshToken: ${authData.refreshToken}');
+      print('[DEBUG][AUTO_LOGIN] memberId: ${authData.memberId}');
 
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
       );
+      ref.read(userProvider.notifier).setUser(authData);
 
       state = AsyncData(
         AuthSuccess(
@@ -112,7 +130,6 @@ class AuthViewModel extends _$AuthViewModel {
       return authData;
     } catch (e, t) {
       await signOut();
-
       return null;
     }
   }

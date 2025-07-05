@@ -89,6 +89,7 @@ flutter:
     - assets/env/.env
     - assets/images/
     - assets/icons/
+    - assets/images/sample_book.jpg
 
 flutter_gen:
   output: lib/gen/

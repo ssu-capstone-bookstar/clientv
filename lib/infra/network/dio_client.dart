@@ -41,7 +41,8 @@ class CustomInterceptor extends Interceptor {
   CustomInterceptor(this._ref);
 
   @override
-  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     if (options.path == '/api/v1/auth/login') {
       return super.onRequest(options, handler);
     }
@@ -54,9 +55,12 @@ class CustomInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 && err.requestOptions.path != '/api/v1/auth/renew') {
-      final newAuthData = await _ref.read(authViewModelProvider.notifier).refreshToken();
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401 &&
+        err.requestOptions.path != '/api/v1/auth/renew') {
+      final newAuthData =
+          await _ref.read(authViewModelProvider.notifier).refreshToken();
 
       if (newAuthData != null) {
         final options = err.requestOptions;

@@ -176,8 +176,21 @@ class $AssetsImagesGen {
   AssetGenImage get heroLookUp3x =>
       const AssetGenImage('assets/images/hero_look_up@3x.png');
 
+  /// File path: assets/images/sample_book.jpg
+  AssetGenImage get sampleBook =>
+      const AssetGenImage('assets/images/sample_book.jpg');
+
+  /// File path: assets/images/speech_bubble.png
+  AssetGenImage get speechBubble =>
+      const AssetGenImage('assets/images/speech_bubble.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [heroLookForward3x, heroLookUp3x];
+  List<AssetGenImage> get values => [
+    heroLookForward3x,
+    heroLookUp3x,
+    sampleBook,
+    speechBubble,
+  ];
 }
 
 class Assets {

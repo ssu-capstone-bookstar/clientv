@@ -1,9 +1,9 @@
+import 'package:book/modules/user/view_model/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../modules/auth/model/auth_status.dart';
 import '../../modules/auth/view/screens/login_screen.dart';
 import '../../modules/auth/view_model/auth_state.dart';
 import '../../modules/auth/view_model/auth_view_model.dart';
@@ -26,7 +26,9 @@ GoRouter router(Ref ref) {
 
   ref
     ..onDispose(authState.dispose)
-    ..listen(authViewModelProvider.select((value) => value.whenData((value) => value)), (_, next) async {
+    ..listen(
+        authViewModelProvider.select(
+            (value) => value.whenData((value) => value)), (_, next) async {
       authState.value = next;
     });
 
@@ -71,7 +73,16 @@ GoRouter router(Ref ref) {
             routes: [
               GoRoute(
                 path: '/book-log',
-                builder: (context, state) => const BookLogScreen(),
+                builder: (context, state) => Consumer(
+                  builder: (context, ref, _) {
+                    final user = ref.read(userProvider);
+                    print('[DEBUG][BOOK_LOG] user: $user');
+                    final memberId = user?.memberId ?? 0;
+                    print('[DEBUG][BOOK_LOG] memberId: $memberId');
+                    return BookLogScreen(memberId: memberId);
+                    print('[DEBUG][BOOK_LOG] BookLogScreen');
+                  },
+                ),
                 routes: [
                   GoRoute(
                     path: 'profile',
@@ -105,7 +116,8 @@ GoRouter router(Ref ref) {
                         path: 'book-overview/:bookId',
                         parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) {
-                          final bookId = int.parse(state.pathParameters['bookId']!);
+                          final bookId =
+                              int.parse(state.pathParameters['bookId']!);
                           return BookOverviewScreen(bookId: bookId);
                         },
                       ),
