@@ -80,7 +80,6 @@ GoRouter router(Ref ref) {
                     final memberId = user?.memberId ?? 0;
                     print('[DEBUG][BOOK_LOG] memberId: $memberId');
                     return BookLogScreen(memberId: memberId);
-                    print('[DEBUG][BOOK_LOG] BookLogScreen');
                   },
                 ),
                 routes: [

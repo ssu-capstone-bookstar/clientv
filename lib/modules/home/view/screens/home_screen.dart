@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: navigationShell.currentIndex == 0
           ? AppBar(
-              leading: null,
+              leading: !Navigator.canPop(context) ? const BackButton() : null,
               title: const Text(
                 '책로그',
               ),
@@ -45,37 +45,39 @@ class HomeScreen extends StatelessWidget {
               centerTitle: true,
             ),
       body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        onTap: (index) {
-          navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
-          );
-        },
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: '책로그',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: '책톡',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '책픽',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.timelapse),
-            label: '딥타임',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.military_tech_outlined),
-            label: '리딩챌린지',
-          ),
-        ],
-      ),
+      bottomNavigationBar: navigationShell.currentIndex == 0
+          ? null
+          : BottomNavigationBar(
+              currentIndex: navigationShell.currentIndex,
+              onTap: (index) {
+                navigationShell.goBranch(
+                  index,
+                  initialLocation: index == navigationShell.currentIndex,
+                );
+              },
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.book),
+                  label: '책로그',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble_outline),
+                  label: '책톡',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: '책픽',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.timelapse),
+                  label: '딥타임',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.military_tech_outlined),
+                  label: '리딩챌린지',
+                ),
+              ],
+            ),
     );
   }
 }

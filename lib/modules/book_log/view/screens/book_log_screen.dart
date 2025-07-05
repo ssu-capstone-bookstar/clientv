@@ -273,7 +273,7 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
                                       width: cellSize,
                                       height: cellSize,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF2D2D33),
+                                        color: AppColors.appbarGray,
                                         border: border,
                                       ),
                                       child: imageUrl != null &&

@@ -16,7 +16,10 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(
-        color: AppColors.white,
+        color: AppColors.appbarGray,
+      ),
+      actionsIconTheme: IconThemeData(
+        color: AppColors.appbarGray,
       ),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
