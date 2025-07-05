@@ -200,72 +200,63 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   const Divider(),
                   const Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final nickname = _nicknameController.text.trim();
-                          final introduction =
-                              _introductionController.text.trim();
-                          if (nickname.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('닉네임을 입력해주세요.')),
-                            );
-                            return;
-                          }
-                          final profile = profileAsync.value;
-                          if (profile == null) return;
-                          final request = UpdateProfileRequest(
-                            nickName: nickname,
-                            profileImageUrl: '', // TODO: 이미지 변경 하도록 바꾸기
-                            introduction: introduction,
-                          );
-                          final repository =
-                              ref.read(profileRepositoryProvider);
-                          try {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) => const Center(
-                                  child: CircularProgressIndicator()),
-                            );
-                            await repository.updateMyProfile(request);
-                            if (context.mounted) {
-                              ref.invalidate(profileProvider);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('프로필이 저장되었습니다.')),
-                              );
-                              context.pop(); // 이전 화면으로 이동
-                            }
-                          } catch (e) {
-                            if (context.mounted) {
-                              Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('저장 실패: $e')),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryPurple,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child:
-                            const Text('저장하기', style: TextStyle(fontSize: 16)),
-                      ),
-                    ),
-                  ),
+                  // 저장 버튼은 bottomNavigationBar로 이동
                 ],
               ),
             ),
           );
         },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 0, 14, 24),
+        child: SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: ElevatedButton(
+            onPressed: () async {
+              final nickname = _nicknameController.text.trim();
+              final introduction = _introductionController.text.trim();
+              if (nickname.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('닉네임을 입력해주세요.')),
+                );
+                return;
+              }
+              final profile = profileAsync.value;
+              if (profile == null) return;
+              final request = UpdateProfileRequest(
+                nickName: nickname,
+                profileImageUrl: '', // TODO: 이미지 변경 하도록 바꾸기
+                introduction: introduction,
+              );
+              final repository = ref.read(profileRepositoryProvider);
+              try {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+                await repository.updateMyProfile(request);
+                if (context.mounted) {
+                  ref.invalidate(profileProvider);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('프로필이 저장되었습니다.')),
+                  );
+                  context.pop(); // 이전 화면으로 이동
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('저장 실패: $e')),
+                  );
+                }
+              }
+            },
+            child: const Text('저장하기'),
+          ),
+        ),
       ),
     );
   }
