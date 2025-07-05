@@ -27,8 +27,8 @@ dependencies:
   freezed_annotation: ^3.0.0
 
   # Social Login
-  google_sign_in: ^6.2.1
-  sign_in_with_apple: ^6.1.1
+  google_sign_in:
+  sign_in_with_apple:
   kakao_flutter_sdk: ^1.9.3
 
   # UI
@@ -41,6 +41,10 @@ dependencies:
   flutter_dotenv: ^5.1.0
   cached_network_image: ^3.4.1
   mime: ^1.0.5
+
+  # Firebase
+  firebase_auth:
+  firebase_core:
 
 dev_dependencies:
   flutter_test:

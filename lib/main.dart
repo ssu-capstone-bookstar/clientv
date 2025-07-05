@@ -1,19 +1,36 @@
-import 'package:book/common/router/router.dart';
-import 'package:book/common/theme/app_theme.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+
+import 'common/router/router.dart';
+import 'common/theme/app_theme.dart';
 
 import 'gen/assets.gen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await dotenv.load(fileName: Assets.env.aEnv);
 
   KakaoSdk.init(
     nativeAppKey: dotenv.env['KAKAO_NATIVE_KEY'],
   );
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    print('[onError] ${details.exception}');
+
+    FlutterError.presentError(details);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    print('[onError] ${error}');
+
+    return true;
+  };
 
   runApp(
     const ProviderScope(
