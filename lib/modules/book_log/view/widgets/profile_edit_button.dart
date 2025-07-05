@@ -1,3 +1,5 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,11 +12,11 @@ class ProfileEditButton extends StatelessWidget {
       height: 26,
       child: TextButton(
         style: TextButton.styleFrom(
-          backgroundColor: const Color(0xFF775DFF),
+          backgroundColor: ColorName.p1,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
-            side: const BorderSide(color: Color(0xFF8670FF), width: 1),
+            side: BorderSide(color: ColorName.p3, width: 1),
           ),
           padding: EdgeInsets.zero,
           elevation: 0,
@@ -28,13 +30,7 @@ class ProfileEditButton extends StatelessWidget {
             child: Text(
               '프로필 편집',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                height: 19 / 12, // 160%
-                color: Colors.white,
-              ),
+              style: AppTexts.b9,
             ),
           ),
         ),
