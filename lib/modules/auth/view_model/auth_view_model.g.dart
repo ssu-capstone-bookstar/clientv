@@ -6,12 +6,12 @@ part of 'auth_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authViewModelHash() => r'9cbd69e04a2a25a194835121bfb581bffe898473';
+String _$authViewModelHash() => r'4882343a8a49205338c0252bb01194af8ec06d4a';
 
 /// See also [AuthViewModel].
 @ProviderFor(AuthViewModel)
 final authViewModelProvider =
-    AsyncNotifierProvider<AuthViewModel, AuthStatus>.internal(
+    AsyncNotifierProvider<AuthViewModel, AuthState>.internal(
   AuthViewModel.new,
   name: r'authViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final authViewModelProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthViewModel = AsyncNotifier<AuthStatus>;
+typedef _$AuthViewModel = AsyncNotifier<AuthState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
