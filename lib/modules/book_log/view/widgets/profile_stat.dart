@@ -11,7 +11,7 @@ class ProfileStat extends StatelessWidget {
       width: 48,
       height: 19,
       child: Text(
-        ' 0$label $value',
+        '$label $value',
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontFamily: 'Pretendard',
