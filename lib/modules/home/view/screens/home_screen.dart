@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../gen/assets.gen.dart';
+
 class HomeScreen extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -54,8 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: !Navigator.canPop(context)
                   ? BackButton(
                       onPressed: () {
-                        navigationShell.goBranch(_lastVisitedTabIndex,
-                            initialLocation: true);
+                        navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
                       },
                     )
                   : null,
@@ -77,25 +78,30 @@ class _HomeScreenState extends State<HomeScreen> {
           : BottomNavigationBar(
               currentIndex: navigationShell.currentIndex,
               onTap: _onTabTapped,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.book),
+                  icon: Assets.images.navBookLogUnselected3x.image(scale: 3),
+                  activeIcon: Assets.images.navBookLogSelected3x.image(scale: 3),
                   label: '책로그',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat_bubble_outline),
+                  icon: Assets.images.navBookTalkUnselected3x.image(scale: 3),
+                  activeIcon: Assets.images.navBookTalkSelected3x.image(scale: 3),
                   label: '책톡',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: Assets.images.navBookPickUnselected3x.image(scale: 3),
+                  activeIcon: Assets.images.navBookPickSelected3x.image(scale: 3),
                   label: '책픽',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.timelapse),
+                  icon: Assets.images.navDeepTimeUnselected3x.image(scale: 3),
+                  activeIcon: Assets.images.navDeepTimeSelected3x.image(scale: 3),
                   label: '딥타임',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.military_tech_outlined),
+                  icon: Assets.images.navReadingChallengeUnselected3x.image(scale: 3),
+                  activeIcon: Assets.images.navReadingChallengeSelected3x.image(scale: 3),
                   label: '리딩챌린지',
                 ),
               ],
