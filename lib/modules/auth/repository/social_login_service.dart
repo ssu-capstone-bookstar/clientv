@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 @riverpod
 SocialLoginService socialLoginService(Ref ref) {
@@ -30,6 +30,7 @@ class SocialLoginService {
       } else {
         token = await UserApi.instance.loginWithKakaoAccount();
       }
+
       return token.idToken ?? '';
     } catch (error) {
       debugPrint('알 수 없는 카카오 에러: $error');
@@ -40,26 +41,34 @@ class SocialLoginService {
   Future<String?> loginWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        return googleAuth.idToken;
-      }
-      return null;
+
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      print('idToken 1 => ${googleAuth?.idToken}');
+
+      return googleAuth?.idToken;
+
     } catch (e) {
+      print('fail to loginWithGoogle: $e');
+
       return null;
     }
   }
 
   Future<String?> loginWithApple() async {
     try {
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-      return credential.identityToken;
+      final appleProvider = AppleAuthProvider();
+
+      final userCredential = await FirebaseAuth.instance.signInWithProvider(appleProvider);
+
+      return userCredential.user?.getIdToken();
     } catch (e) {
+      print('e: $e');
+
       return null;
     }
   }

@@ -1,15 +1,13 @@
 import 'dart:async';
 
-import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../infra/storage/secure_storage.dart';
-import '../../user/view_model/user_provider.dart';
 import '../model/auth_response.dart';
-import '../model/auth_status.dart';
 import '../model/login_request.dart';
 import '../repository/auth_repository.dart';
 import '../repository/social_login_service.dart';
+import 'auth_state.dart';
 
 part 'auth_view_model.g.dart';
 
@@ -36,22 +34,29 @@ class AuthViewModel extends _$AuthViewModel {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final String? idToken = await _getIdToken(providerType);
-      if (idToken == null) {
-        // return AuthStatus.unauthenticated;
 
+      if (idToken == null) {
         return AuthFailed(errorMsg: '', errorCode: -1);
       }
+
+      print('idToken => $idToken');
+
       final request = LoginRequest(providerType: providerType, idToken: idToken);
+
+      print('request => $request');
+
       final response = await _authRepository.login(request);
 
+      print('response => $request');
+
       final authData = response.data;
+
+      print('authData => $authData');
 
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
       );
-      // ref.read(userProvider.notifier).setUser(authData);
-      // return AuthStatus.authenticated;
 
       return AuthSuccess(memberId: authData.memberId, nickName: authData.nickName, profileImage: authData.profileImage);
     });
@@ -95,6 +100,12 @@ class AuthViewModel extends _$AuthViewModel {
       final authDataResponse = await _authRepository.renewToken('Bearer $oldRefreshToken');
 
       final authData = authDataResponse.data;
+
+      if (authData == null) {
+        await signOut();
+
+        return null;
+      }
 
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,

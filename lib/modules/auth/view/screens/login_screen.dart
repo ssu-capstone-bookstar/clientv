@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide IconAlignment;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../common/extension/string_extensions.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../../common/extension/string_extensions.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
@@ -59,11 +60,14 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Widget _buildHeroSection() {
-    return Center(child: AnimatedHeroSwitcher(imagePaths: [
-      Assets.images.heroLookUp3x.path,
-      Assets.images.heroLookForward3x.path,
-    ]));
-    // return Center(child: Assets.images.loginHero3x.image(scale: 3));
+    return Center(
+      child: AnimatedHeroSwitcher(
+        imagePaths: [
+          Assets.images.heroLookUp3x.path,
+          Assets.images.heroLookForward3x.path,
+        ],
+      ),
+    );
   }
 
   Widget _buildButtonSection(WidgetRef ref) {
@@ -79,6 +83,14 @@ class LoginScreen extends ConsumerWidget {
           backgroundColor: const Color(0xFFFEE500),
           textColor: Colors.black87,
         ),
+        // SignInWithAppleButton(
+        //   onPressed: () => ref.read(authViewModelProvider.notifier).login(ProviderType.apple),
+        //   style: SignInWithAppleButtonStyle.black,
+        //   height: 44,
+        //   borderRadius: BorderRadius.circular(8),
+        //   iconAlignment: IconAlignment.center,
+        //   text: 'Sign in with Apple',
+        // ),
         SocialLoginButton(
           onPressed: () {
             ref.read(authViewModelProvider.notifier).login(ProviderType.apple);

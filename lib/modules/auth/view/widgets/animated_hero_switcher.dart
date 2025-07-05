@@ -10,7 +10,7 @@ class AnimatedHeroSwitcher extends StatefulWidget {
     required this.imagePaths,
     this.interval = const Duration(seconds: 3),
     this.imageScale = 3.0,
-  }) : assert(imagePaths.length >= 2, 'At least two image paths are required');
+  }) : assert(imagePaths.length >= 2, '2개 이상의 이미지 주소가 필요합니다.');
 
   @override
   State<AnimatedHeroSwitcher> createState() => _AnimatedHeroSwitcherState();
