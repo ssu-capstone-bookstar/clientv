@@ -87,6 +87,7 @@ class AppTexts {
     fontFamily: FontFamily.pretendard,
     fontWeight: FontWeight.w600,
     fontSize: 14,
+    height: 1.5,
     letterSpacing: 0,
   );
 

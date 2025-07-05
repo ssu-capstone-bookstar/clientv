@@ -1,3 +1,5 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class BookStatusBadge extends StatelessWidget {
@@ -5,16 +7,8 @@ class BookStatusBadge extends StatelessWidget {
   const BookStatusBadge({required this.status, super.key});
   @override
   Widget build(BuildContext context) {
-    Color bgColor = const Color(0xFF2D2D33);
-    Color borderColor = const Color(0xFF393942);
-    Color textColor = Colors.white;
-    if (status == '완독') {
-      textColor = const Color(0xFF19F9D9);
-    } else if (status == '독서중') {
-      textColor = const Color(0xFFF6F99A);
-    } else if (status == '피드' || status == '픽') {
-      textColor = const Color(0xFFFFB74D);
-    }
+    Color bgColor = ColorName.g7;
+    Color borderColor = ColorName.g6;
     return Container(
       height: 18,
       padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 3),
@@ -26,15 +20,21 @@ class BookStatusBadge extends StatelessWidget {
       child: Center(
         child: Text(
           status,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.5,
-            color: textColor,
-          ),
+          style: AppTexts.cap1.copyWith(color: getStatusTextColor(status)),
         ),
       ),
     );
   }
 }
-// TODO: 상태 종류/디자인 확장 필요시 이 파일에서 작업
+
+Color getStatusTextColor(String status) {
+  if (status == '완독') {
+    return ColorName.m;
+  } else if (status == '독서중') {
+    return ColorName.l;
+  } else if (status == '피드' || status == '픽') {
+    return ColorName.o;
+  } else {
+    return Colors.white;
+  }
+}
