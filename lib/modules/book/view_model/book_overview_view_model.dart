@@ -21,4 +21,4 @@ class BookOverviewViewModel extends _$BookOverviewViewModel {
     final response = await _repository.getBookOverview(bookId);
     return response.data;
   }
-} 
+}

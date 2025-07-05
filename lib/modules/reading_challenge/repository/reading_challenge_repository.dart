@@ -18,8 +18,7 @@ ReadingChallengeRepository readingChallengeRepository(Ref ref) {
 
 @RestApi()
 abstract class ReadingChallengeRepository {
-  factory ReadingChallengeRepository(Dio dio, {String baseUrl}) =
-      _ReadingChallengeRepository;
+  factory ReadingChallengeRepository(Dio dio, {String baseUrl}) = _ReadingChallengeRepository;
 
   @POST('/api/v2/reading-challenges')
   Future<ResponseForm<ChallengeResponse>> createChallenge(

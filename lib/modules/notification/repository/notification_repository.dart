@@ -16,8 +16,7 @@ NotificationRepository notificationRepository(Ref ref) {
 
 @RestApi()
 abstract class NotificationRepository {
-  factory NotificationRepository(Dio dio, {String baseUrl}) =
-      _NotificationRepository;
+  factory NotificationRepository(Dio dio, {String baseUrl}) = _NotificationRepository;
 
   @POST('/api/v2/notifications/fcmToken')
   Future<void> save(

@@ -15,4 +15,4 @@ abstract class ChatMessageResponse with _$ChatMessageResponse {
 
   factory ChatMessageResponse.fromJson(Map<String, dynamic> json) =>
       _$ChatMessageResponseFromJson(json);
-} 
+}

@@ -11,6 +11,5 @@ abstract class RatingRequest with _$RatingRequest {
     @Default(0) int recommendationScore,
   }) = _RatingRequest;
 
-  factory RatingRequest.fromJson(Map<String, dynamic> json) =>
-      _$RatingRequestFromJson(json);
-} 
+  factory RatingRequest.fromJson(Map<String, dynamic> json) => _$RatingRequestFromJson(json);
+}

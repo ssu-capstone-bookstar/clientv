@@ -22,8 +22,7 @@ abstract class ProfileRepository {
   factory ProfileRepository(Dio dio, {String baseUrl}) = _ProfileRepository;
 
   @GET('/api/v2/profiles/{memberid}')
-  Future<ResponseForm<ProfileWithCounts>> getProfileById(
-      @Path('memberid') String memberid);
+  Future<ResponseForm<ProfileWithCounts>> getProfileById(@Path('memberid') String memberid);
 
   @PUT('/api/v2/profiles/me')
   Future<ResponseForm<ProfileResponse>> updateMyProfile(

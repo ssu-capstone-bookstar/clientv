@@ -30,4 +30,4 @@ class SearchHistoryViewModel extends _$SearchHistoryViewModel {
       return _repository.getSearchHistories();
     });
   }
-} 
+}

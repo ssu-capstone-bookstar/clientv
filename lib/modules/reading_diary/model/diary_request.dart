@@ -14,6 +14,5 @@ abstract class DiaryRequest with _$DiaryRequest {
     @Default([]) List<ImageRequest> images,
   }) = _DiaryRequest;
 
-  factory DiaryRequest.fromJson(Map<String, dynamic> json) =>
-      _$DiaryRequestFromJson(json);
-} 
+  factory DiaryRequest.fromJson(Map<String, dynamic> json) => _$DiaryRequestFromJson(json);
+}

@@ -13,4 +13,4 @@ abstract class DiaryImageResponse with _$DiaryImageResponse {
 
   factory DiaryImageResponse.fromJson(Map<String, dynamic> json) =>
       _$DiaryImageResponseFromJson(json);
-} 
+}

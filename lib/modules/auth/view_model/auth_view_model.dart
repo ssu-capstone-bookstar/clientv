@@ -38,8 +38,7 @@ class AuthViewModel extends _$AuthViewModel {
       if (idToken == null) {
         return AuthStatus.unauthenticated;
       }
-      final request =
-          LoginRequest(providerType: providerType, idToken: idToken);
+      final request = LoginRequest(providerType: providerType, idToken: idToken);
       final response = await _authRepository.login(request);
 
       final authData = response.data;
@@ -83,8 +82,7 @@ class AuthViewModel extends _$AuthViewModel {
       return null;
     }
 
-    final authDataResponse =
-        await _authRepository.renewToken('Bearer $oldRefreshToken');
+    final authDataResponse = await _authRepository.renewToken('Bearer $oldRefreshToken');
 
     final authData = authDataResponse.data;
     if (authData == null) {

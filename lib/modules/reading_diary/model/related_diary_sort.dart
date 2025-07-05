@@ -1,4 +1,4 @@
 enum RelatedDiarySort {
   POPULAR,
   LATEST,
-} 
+}

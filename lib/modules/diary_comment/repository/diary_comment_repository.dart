@@ -19,8 +19,7 @@ DiaryCommentRepository diaryCommentRepository(Ref ref) {
 
 @RestApi()
 abstract class DiaryCommentRepository {
-  factory DiaryCommentRepository(Dio dio, {String baseUrl}) =
-      _DiaryCommentRepository;
+  factory DiaryCommentRepository(Dio dio, {String baseUrl}) = _DiaryCommentRepository;
 
   @GET('/api/v2/reading-diaries/{diaryId}/comments')
   Future<ResponseForm<CursorPageResponse<DiaryCommentResponse>>> findComments({

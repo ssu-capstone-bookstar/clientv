@@ -12,6 +12,5 @@ abstract class FollowResponse with _$FollowResponse {
     required String profileImageUrl,
   }) = _FollowResponse;
 
-  factory FollowResponse.fromJson(Map<String, dynamic> json) =>
-      _$FollowResponseFromJson(json);
-} 
+  factory FollowResponse.fromJson(Map<String, dynamic> json) => _$FollowResponseFromJson(json);
+}

@@ -31,8 +31,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       ref.read(searchViewModelProvider.notifier).fetchNextPage();
     }
   }
@@ -100,14 +99,10 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
                 loading: () => const Center(child: CircularProgressIndicator()),
                 orElse: () {
                   final showSearchResults = searchState.maybeWhen(
-                    data: (data) =>
-                        data.books.isNotEmpty &&
-                        data.query == _textController.text,
+                    data: (data) => data.books.isNotEmpty && data.query == _textController.text,
                     orElse: () => false,
                   );
-                  return showSearchResults
-                      ? _buildSearchResults()
-                      : _buildSearchHistory();
+                  return showSearchResults ? _buildSearchResults() : _buildSearchHistory();
                 },
               ),
             ),
@@ -147,9 +142,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               trailing: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  ref
-                      .read(searchHistoryViewModelProvider.notifier)
-                      .removeHistory(history.queries);
+                  ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries);
                 },
               ),
             );
@@ -157,8 +150,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           separatorBuilder: (context, index) => const Divider(height: 1),
         );
       },
-      error: (error, stack) =>
-          const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
+      error: (error, stack) => const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }

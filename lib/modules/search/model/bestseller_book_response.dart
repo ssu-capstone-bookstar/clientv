@@ -15,4 +15,4 @@ abstract class BestsellerBookResponse with _$BestsellerBookResponse {
 
   factory BestsellerBookResponse.fromJson(Map<String, dynamic> json) =>
       _$BestsellerBookResponseFromJson(json);
-} 
+}

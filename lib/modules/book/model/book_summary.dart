@@ -12,6 +12,5 @@ abstract class BookSummary with _$BookSummary {
     @Default('') String thumbnailUrl,
   }) = _BookSummary;
 
-  factory BookSummary.fromJson(Map<String, dynamic> json) =>
-      _$BookSummaryFromJson(json);
-} 
+  factory BookSummary.fromJson(Map<String, dynamic> json) => _$BookSummaryFromJson(json);
+}

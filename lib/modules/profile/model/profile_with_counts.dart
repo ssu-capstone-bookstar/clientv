@@ -18,4 +18,4 @@ abstract class ProfileWithCounts with _$ProfileWithCounts {
 
   factory ProfileWithCounts.fromJson(Map<String, dynamic> json) =>
       _$ProfileWithCountsFromJson(json);
-} 
+}

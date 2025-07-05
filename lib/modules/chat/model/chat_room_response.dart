@@ -25,6 +25,5 @@ abstract class ChatRoomResponse with _$ChatRoomResponse {
     required int participantCount,
   }) = _ChatRoomResponse;
 
-  factory ChatRoomResponse.fromJson(Map<String, dynamic> json) =>
-      _$ChatRoomResponseFromJson(json);
+  factory ChatRoomResponse.fromJson(Map<String, dynamic> json) => _$ChatRoomResponseFromJson(json);
 }

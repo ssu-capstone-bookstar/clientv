@@ -32,13 +32,10 @@ class RelatedDiariesWidget extends ConsumerWidget {
                   children: [
                     Text(
                       '관련 독서일기',
-                      style: textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     GestureDetector(
-                      onTap: () => ref
-                          .read(relatedDiarySortStateProvider.notifier)
-                          .toggle(),
+                      onTap: () => ref.read(relatedDiarySortStateProvider.notifier).toggle(),
                       child: Row(
                         children: [
                           Text(
@@ -87,8 +84,7 @@ class RelatedDiariesWidget extends ConsumerWidget {
                       child: CachedNetworkImage(
                         imageUrl: post.firstImage.imageUrl,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            Container(color: Colors.grey[300]),
+                        placeholder: (context, url) => Container(color: Colors.grey[300]),
                         errorWidget: (context, url, error) => Container(
                           color: Colors.grey[300],
                           child: const Icon(Icons.error, color: Colors.white),
@@ -100,10 +96,10 @@ class RelatedDiariesWidget extends ConsumerWidget {
                 ),
               );
             },
-            loading: () => const SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator())),
-            error: (error, stack) => const SliverToBoxAdapter(
-                child: Center(child: Text('게시물을 불러오는 중 오류가 발생했습니다.'))),
+            loading: () =>
+                const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+            error: (error, stack) =>
+                const SliverToBoxAdapter(child: Center(child: Text('게시물을 불러오는 중 오류가 발생했습니다.'))),
           ),
           if (postsState.valueOrNull?.hasNext == true)
             const SliverToBoxAdapter(

@@ -58,9 +58,7 @@ class LoginScreen extends ConsumerWidget {
               const Spacer(flex: 3),
               _buildSocialLoginButton(
                 onPressed: () {
-                  ref
-                      .read(authViewModelProvider.notifier)
-                      .login(ProviderType.kakao);
+                  ref.read(authViewModelProvider.notifier).login(ProviderType.kakao);
                 },
                 assetName: 'assets/icons/kakao.svg',
                 label: '카카오 로그인',
@@ -70,9 +68,7 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               _buildSocialLoginButton(
                 onPressed: () {
-                  ref
-                      .read(authViewModelProvider.notifier)
-                      .login(ProviderType.apple);
+                  ref.read(authViewModelProvider.notifier).login(ProviderType.apple);
                 },
                 assetName: 'assets/icons/apple.svg',
                 label: 'Apple로 로그인',
@@ -82,9 +78,7 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               _buildSocialLoginButton(
                 onPressed: () {
-                  ref
-                      .read(authViewModelProvider.notifier)
-                      .login(ProviderType.google);
+                  ref.read(authViewModelProvider.notifier).login(ProviderType.google);
                 },
                 assetName: 'assets/icons/google.svg',
                 label: 'Google로 로그인',
@@ -114,9 +108,7 @@ class LoginScreen extends ConsumerWidget {
         backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: isGoogle
-              ? BorderSide(color: Colors.grey.shade300)
-              : BorderSide.none,
+          side: isGoogle ? BorderSide(color: Colors.grey.shade300) : BorderSide.none,
         ),
         padding: const EdgeInsets.symmetric(vertical: 16),
         elevation: 0,

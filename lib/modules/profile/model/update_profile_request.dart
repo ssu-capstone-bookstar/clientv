@@ -14,4 +14,4 @@ abstract class UpdateProfileRequest with _$UpdateProfileRequest {
 
   factory UpdateProfileRequest.fromJson(Map<String, dynamic> json) =>
       _$UpdateProfileRequestFromJson(json);
-} 
+}

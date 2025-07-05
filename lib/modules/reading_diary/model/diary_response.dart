@@ -17,6 +17,5 @@ abstract class DiaryResponse with _$DiaryResponse {
     required DateTime createdAt,
   }) = _DiaryResponse;
 
-  factory DiaryResponse.fromJson(Map<String, dynamic> json) =>
-      _$DiaryResponseFromJson(json);
-} 
+  factory DiaryResponse.fromJson(Map<String, dynamic> json) => _$DiaryResponseFromJson(json);
+}

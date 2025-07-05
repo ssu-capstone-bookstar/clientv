@@ -95,8 +95,7 @@ GoRouter router(Ref ref) {
                         path: 'book-overview/:bookId',
                         parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) {
-                          final bookId =
-                              int.parse(state.pathParameters['bookId']!);
+                          final bookId = int.parse(state.pathParameters['bookId']!);
                           return BookOverviewScreen(bookId: bookId);
                         },
                       ),

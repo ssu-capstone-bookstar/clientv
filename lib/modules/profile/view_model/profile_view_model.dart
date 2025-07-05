@@ -42,8 +42,7 @@ class ProfileNotifier extends AsyncNotifier<ProfileResponse?> {
   }
 }
 
-final profileProvider =
-    AsyncNotifierProvider<ProfileNotifier, ProfileResponse?>(
+final profileProvider = AsyncNotifierProvider<ProfileNotifier, ProfileResponse?>(
   () => ProfileNotifier(
     // 의존성 주입: profileRepositoryProvider를 읽어서 전달
     ProviderContainer().read(profileRepositoryProvider),

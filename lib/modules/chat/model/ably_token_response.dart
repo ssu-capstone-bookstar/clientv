@@ -11,4 +11,4 @@ abstract class AblyTokenResponse with _$AblyTokenResponse {
 
   factory AblyTokenResponse.fromJson(Map<String, dynamic> json) =>
       _$AblyTokenResponseFromJson(json);
-} 
+}

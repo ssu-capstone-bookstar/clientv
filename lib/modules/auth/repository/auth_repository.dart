@@ -27,10 +27,8 @@ abstract class AuthRepository {
   Future<ResponseForm<void>> withdraw();
 
   @POST('/renew')
-  Future<ResponseForm<AuthResponse>> renewToken(
-      @Header('Authorization') String refreshToken);
+  Future<ResponseForm<AuthResponse>> renewToken(@Header('Authorization') String refreshToken);
 
   @POST('/login/accesstoken')
-  Future<ResponseForm<dynamic>> loginByAccessToken(
-      @Header('Authorization') String accessToken);
+  Future<ResponseForm<dynamic>> loginByAccessToken(@Header('Authorization') String accessToken);
 }

@@ -15,4 +15,4 @@ abstract class DiaryReplyResponse with _$DiaryReplyResponse {
 
   factory DiaryReplyResponse.fromJson(Map<String, dynamic> json) =>
       _$DiaryReplyResponseFromJson(json);
-} 
+}

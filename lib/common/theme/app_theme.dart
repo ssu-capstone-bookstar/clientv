@@ -43,4 +43,4 @@ class AppTheme {
       titleLarge: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
     ),
   );
-} 
+}

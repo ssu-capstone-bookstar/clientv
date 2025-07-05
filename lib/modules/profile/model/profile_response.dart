@@ -12,6 +12,5 @@ abstract class ProfileResponse with _$ProfileResponse {
     required String introduction,
   }) = _ProfileResponse;
 
-  factory ProfileResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProfileResponseFromJson(json);
-} 
+  factory ProfileResponse.fromJson(Map<String, dynamic> json) => _$ProfileResponseFromJson(json);
+}

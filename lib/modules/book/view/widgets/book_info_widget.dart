@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../common/theme/app_colors.dart';
 import '../../model/book_overview_response.dart';
 
-
 class BookInfoWidget extends StatelessWidget {
   const BookInfoWidget({
     super.key,
@@ -36,12 +35,9 @@ class BookInfoWidget extends StatelessWidget {
               children: [
                 Text(book.title, style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 8),
-                Text('작가: ${book.author}',
-                    style: Theme.of(context).textTheme.bodyMedium),
-                Text('출판사: ${book.publisher}',
-                    style: Theme.of(context).textTheme.bodyMedium),
-                Text('출판연도: ${book.publishedDate}',
-                    style: Theme.of(context).textTheme.bodyMedium),
+                Text('작가: ${book.author}', style: Theme.of(context).textTheme.bodyMedium),
+                Text('출판사: ${book.publisher}', style: Theme.of(context).textTheme.bodyMedium),
+                Text('출판연도: ${book.publishedDate}', style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 16),
                 Row(
                   children: [

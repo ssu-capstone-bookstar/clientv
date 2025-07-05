@@ -16,9 +16,7 @@ class RelatedDiarySortState extends _$RelatedDiarySortState {
   }
 
   void toggle() {
-    state = state == RelatedDiarySort.LATEST
-        ? RelatedDiarySort.POPULAR
-        : RelatedDiarySort.LATEST;
+    state = state == RelatedDiarySort.LATEST ? RelatedDiarySort.POPULAR : RelatedDiarySort.LATEST;
   }
 }
 

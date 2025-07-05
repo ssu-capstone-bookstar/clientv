@@ -18,4 +18,4 @@ class User extends _$User {
   void clearUser() {
     state = null;
   }
-} 
+}

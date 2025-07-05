@@ -10,6 +10,5 @@ abstract class CommentRequest with _$CommentRequest {
     required String content,
   }) = _CommentRequest;
 
-  factory CommentRequest.fromJson(Map<String, dynamic> json) =>
-      _$CommentRequestFromJson(json);
-} 
+  factory CommentRequest.fromJson(Map<String, dynamic> json) => _$CommentRequestFromJson(json);
+}

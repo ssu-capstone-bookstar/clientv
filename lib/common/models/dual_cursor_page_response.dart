@@ -12,7 +12,6 @@ abstract class DualCursorPageResponse<T> with _$DualCursorPageResponse<T> {
     required bool hasNext,
   }) = _DualCursorPageResponse;
 
-  factory DualCursorPageResponse.fromJson(
-          Map<String, dynamic> json, T Function(Object?) fromT) =>
+  factory DualCursorPageResponse.fromJson(Map<String, dynamic> json, T Function(Object?) fromT) =>
       _$DualCursorPageResponseFromJson(json, fromT);
 }

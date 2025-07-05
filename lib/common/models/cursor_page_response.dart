@@ -16,4 +16,4 @@ abstract class CursorPageResponse<T> with _$CursorPageResponse<T> {
     T Function(Object? json) fromJsonT,
   ) =>
       _$CursorPageResponseFromJson(json, fromJsonT);
-} 
+}

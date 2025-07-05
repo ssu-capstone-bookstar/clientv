@@ -15,6 +15,5 @@ abstract class AuthResponse with _$AuthResponse {
     required DateTime refreshTokenExpiration,
   }) = _AuthResponse;
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) =>
-      _$AuthResponseFromJson(json);
+  factory AuthResponse.fromJson(Map<String, dynamic> json) => _$AuthResponseFromJson(json);
 }

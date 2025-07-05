@@ -35,11 +35,8 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
-      ref
-          .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
-          .fetchNextPage();
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+      ref.read(relatedDiariesViewModelProvider(widget.bookId).notifier).fetchNextPage();
     }
   }
 

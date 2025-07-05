@@ -23,8 +23,7 @@ ReadingDiaryRepository readingDiaryRepository(Ref ref) {
 
 @RestApi()
 abstract class ReadingDiaryRepository {
-  factory ReadingDiaryRepository(Dio dio, {String baseUrl}) =
-      _ReadingDiaryRepository;
+  factory ReadingDiaryRepository(Dio dio, {String baseUrl}) = _ReadingDiaryRepository;
 
   @POST('/api/v2/reading-diaries/challenges/{challengeId}')
   Future<ResponseForm<DiaryResponse>> createDiary(
@@ -61,8 +60,7 @@ abstract class ReadingDiaryRepository {
   });
 
   @GET('/api/v2/books/{bookId}/related/reading-diaries')
-  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
-      getRelatedDiaries(
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>> getRelatedDiaries(
     @Path('bookId') int bookId, {
     @Query('relatedDiarySort') RelatedDiarySort? relatedDiarySort,
     @Query('cursorId') int? cursorId,

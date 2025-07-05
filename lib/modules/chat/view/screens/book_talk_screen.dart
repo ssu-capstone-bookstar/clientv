@@ -12,4 +12,4 @@ class BookTalkScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

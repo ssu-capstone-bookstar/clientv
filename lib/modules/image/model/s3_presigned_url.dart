@@ -10,6 +10,5 @@ abstract class S3PresignedUrl with _$S3PresignedUrl {
     required String filePathInDB,
   }) = _S3PresignedUrl;
 
-  factory S3PresignedUrl.fromJson(Map<String, dynamic> json) =>
-      _$S3PresignedUrlFromJson(json);
+  factory S3PresignedUrl.fromJson(Map<String, dynamic> json) => _$S3PresignedUrlFromJson(json);
 }

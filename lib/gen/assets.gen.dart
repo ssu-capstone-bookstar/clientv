@@ -29,16 +29,13 @@ class $AssetsIconsGen {
   String get google => 'assets/icons/google.svg';
 
   /// File path: assets/icons/ic_bookpick_chat_character.svg
-  String get icBookpickChatCharacter =>
-      'assets/icons/ic_bookpick_chat_character.svg';
+  String get icBookpickChatCharacter => 'assets/icons/ic_bookpick_chat_character.svg';
 
   /// File path: assets/icons/ic_bookpick_search_character.svg
-  String get icBookpickSearchCharacter =>
-      'assets/icons/ic_bookpick_search_character.svg';
+  String get icBookpickSearchCharacter => 'assets/icons/ic_bookpick_search_character.svg';
 
   /// File path: assets/icons/ic_booktalk_search_character.svg
-  String get icBooktalkSearchCharacter =>
-      'assets/icons/ic_booktalk_search_character.svg';
+  String get icBooktalkSearchCharacter => 'assets/icons/ic_booktalk_search_character.svg';
 
   /// File path: assets/icons/ic_category_art_hobby.svg
   String get icCategoryArtHobby => 'assets/icons/ic_category_art_hobby.svg';
@@ -53,12 +50,10 @@ class $AssetsIconsGen {
   String get icCategoryLiterature => 'assets/icons/ic_category_literature.svg';
 
   /// File path: assets/icons/ic_category_science_tech.svg
-  String get icCategoryScienceTech =>
-      'assets/icons/ic_category_science_tech.svg';
+  String get icCategoryScienceTech => 'assets/icons/ic_category_science_tech.svg';
 
   /// File path: assets/icons/ic_category_social_sciences.svg
-  String get icCategorySocialSciences =>
-      'assets/icons/ic_category_social_sciences.svg';
+  String get icCategorySocialSciences => 'assets/icons/ic_category_social_sciences.svg';
 
   /// File path: assets/icons/ic_chat_notification.svg
   String get icChatNotification => 'assets/icons/ic_chat_notification.svg';
@@ -73,12 +68,10 @@ class $AssetsIconsGen {
   String get icDeeptypeCharFront => 'assets/icons/ic_deeptype_char_front.svg';
 
   /// File path: assets/icons/ic_deeptype_notification1.svg
-  String get icDeeptypeNotification1 =>
-      'assets/icons/ic_deeptype_notification1.svg';
+  String get icDeeptypeNotification1 => 'assets/icons/ic_deeptype_notification1.svg';
 
   /// File path: assets/icons/ic_deeptype_notification2.svg
-  String get icDeeptypeNotification2 =>
-      'assets/icons/ic_deeptype_notification2.svg';
+  String get icDeeptypeNotification2 => 'assets/icons/ic_deeptype_notification2.svg';
 
   /// File path: assets/icons/ic_deeptype_sticker1.svg
   String get icDeeptypeSticker1 => 'assets/icons/ic_deeptype_sticker1.svg';
@@ -108,16 +101,13 @@ class $AssetsIconsGen {
   String get icPointShopChar3 => 'assets/icons/ic_point_shop_char3.svg';
 
   /// File path: assets/icons/ic_reading_challenge_char1.svg
-  String get icReadingChallengeChar1 =>
-      'assets/icons/ic_reading_challenge_char1.svg';
+  String get icReadingChallengeChar1 => 'assets/icons/ic_reading_challenge_char1.svg';
 
   /// File path: assets/icons/ic_reading_challenge_char2.svg
-  String get icReadingChallengeChar2 =>
-      'assets/icons/ic_reading_challenge_char2.svg';
+  String get icReadingChallengeChar2 => 'assets/icons/ic_reading_challenge_char2.svg';
 
   /// File path: assets/icons/ic_reading_challenge_char3.svg
-  String get icReadingChallengeChar3 =>
-      'assets/icons/ic_reading_challenge_char3.svg';
+  String get icReadingChallengeChar3 => 'assets/icons/ic_reading_challenge_char3.svg';
 
   /// File path: assets/icons/ic_reading_complete.svg
   String get icReadingComplete => 'assets/icons/ic_reading_complete.svg';
@@ -130,39 +120,39 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-    apple,
-    google,
-    icBookpickChatCharacter,
-    icBookpickSearchCharacter,
-    icBooktalkSearchCharacter,
-    icCategoryArtHobby,
-    icCategoryBestseller,
-    icCategoryChildren,
-    icCategoryLiterature,
-    icCategoryScienceTech,
-    icCategorySocialSciences,
-    icChatNotification,
-    icDeeptypeCharBottom,
-    icDeeptypeCharBw,
-    icDeeptypeCharFront,
-    icDeeptypeNotification1,
-    icDeeptypeNotification2,
-    icDeeptypeSticker1,
-    icDeeptypeSticker2,
-    icDeeptypeSticker3,
-    icDeeptypeSticker4,
-    icLoginCharFront,
-    icLoginCharTop,
-    icPointShopChar1,
-    icPointShopChar2,
-    icPointShopChar3,
-    icReadingChallengeChar1,
-    icReadingChallengeChar2,
-    icReadingChallengeChar3,
-    icReadingComplete,
-    icWithdrawal,
-    kakao,
-  ];
+        apple,
+        google,
+        icBookpickChatCharacter,
+        icBookpickSearchCharacter,
+        icBooktalkSearchCharacter,
+        icCategoryArtHobby,
+        icCategoryBestseller,
+        icCategoryChildren,
+        icCategoryLiterature,
+        icCategoryScienceTech,
+        icCategorySocialSciences,
+        icChatNotification,
+        icDeeptypeCharBottom,
+        icDeeptypeCharBw,
+        icDeeptypeCharFront,
+        icDeeptypeNotification1,
+        icDeeptypeNotification2,
+        icDeeptypeSticker1,
+        icDeeptypeSticker2,
+        icDeeptypeSticker3,
+        icDeeptypeSticker4,
+        icLoginCharFront,
+        icLoginCharTop,
+        icPointShopChar1,
+        icPointShopChar2,
+        icPointShopChar3,
+        icReadingChallengeChar1,
+        icReadingChallengeChar2,
+        icReadingChallengeChar3,
+        icReadingComplete,
+        icWithdrawal,
+        kakao,
+      ];
 }
 
 class $AssetsImagesGen {
