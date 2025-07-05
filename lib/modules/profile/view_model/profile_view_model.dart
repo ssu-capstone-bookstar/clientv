@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../user/view_model/user_provider.dart';
+import '../../auth/view_model/auth_state.dart';
+import '../../auth/view_model/auth_view_model.dart';
 import '../model/profile_response.dart';
 import '../model/update_profile_request.dart';
 import '../repository/profile_repository.dart';
@@ -12,9 +13,9 @@ class ProfileNotifier extends AsyncNotifier<ProfileResponse?> {
 
   @override
   Future<ProfileResponse?> build() async {
-    final user = ref.watch(userProvider);
-    if (user == null) return null;
-    final response = await _repository.getProfileById(user.memberId.toString());
+    final authState = ref.watch(authViewModelProvider).value;
+    if (authState is! AuthSuccess) return null;
+    final response = await _repository.getProfileById(authState.memberId.toString());
     final profile = response.data;
     // ProfileWithCounts -> ProfileResponse 변환
     return ProfileResponse(

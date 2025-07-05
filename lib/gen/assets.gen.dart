@@ -176,6 +176,48 @@ class $AssetsImagesGen {
   AssetGenImage get heroLookUp3x =>
       const AssetGenImage('assets/images/hero_look_up@3x.png');
 
+  /// File path: assets/images/nav_book_log_selected@3x.png
+  AssetGenImage get navBookLogSelected3x =>
+      const AssetGenImage('assets/images/nav_book_log_selected@3x.png');
+
+  /// File path: assets/images/nav_book_log_unselected@3x.png
+  AssetGenImage get navBookLogUnselected3x =>
+      const AssetGenImage('assets/images/nav_book_log_unselected@3x.png');
+
+  /// File path: assets/images/nav_book_pick_selected@3x.png
+  AssetGenImage get navBookPickSelected3x =>
+      const AssetGenImage('assets/images/nav_book_pick_selected@3x.png');
+
+  /// File path: assets/images/nav_book_pick_unselected@3x.png
+  AssetGenImage get navBookPickUnselected3x =>
+      const AssetGenImage('assets/images/nav_book_pick_unselected@3x.png');
+
+  /// File path: assets/images/nav_book_talk_selected@3x.png
+  AssetGenImage get navBookTalkSelected3x =>
+      const AssetGenImage('assets/images/nav_book_talk_selected@3x.png');
+
+  /// File path: assets/images/nav_book_talk_unselected@3x.png
+  AssetGenImage get navBookTalkUnselected3x =>
+      const AssetGenImage('assets/images/nav_book_talk_unselected@3x.png');
+
+  /// File path: assets/images/nav_deep_time_selected@3x.png
+  AssetGenImage get navDeepTimeSelected3x =>
+      const AssetGenImage('assets/images/nav_deep_time_selected@3x.png');
+
+  /// File path: assets/images/nav_deep_time_unselected@3x.png
+  AssetGenImage get navDeepTimeUnselected3x =>
+      const AssetGenImage('assets/images/nav_deep_time_unselected@3x.png');
+
+  /// File path: assets/images/nav_reading_challenge_selected@3x.png
+  AssetGenImage get navReadingChallengeSelected3x => const AssetGenImage(
+    'assets/images/nav_reading_challenge_selected@3x.png',
+  );
+
+  /// File path: assets/images/nav_reading_challenge_unselected@3x.png
+  AssetGenImage get navReadingChallengeUnselected3x => const AssetGenImage(
+    'assets/images/nav_reading_challenge_unselected@3x.png',
+  );
+
   /// File path: assets/images/sample_book.jpg
   AssetGenImage get sampleBook =>
       const AssetGenImage('assets/images/sample_book.jpg');
@@ -188,6 +230,16 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [
     heroLookForward3x,
     heroLookUp3x,
+    navBookLogSelected3x,
+    navBookLogUnselected3x,
+    navBookPickSelected3x,
+    navBookPickUnselected3x,
+    navBookTalkSelected3x,
+    navBookTalkUnselected3x,
+    navDeepTimeSelected3x,
+    navDeepTimeUnselected3x,
+    navReadingChallengeSelected3x,
+    navReadingChallengeUnselected3x,
     sampleBook,
     speechBubble,
   ];

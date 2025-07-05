@@ -123,4 +123,15 @@ class AuthViewModel extends _$AuthViewModel {
       return null;
     }
   }
+
+  AuthSuccess? getUser() {
+    return state.when(
+      data: (data) {
+        if (data is AuthSuccess) return data;
+        return null;
+      },
+      loading: () => null,
+      error: (e, t) => null,
+    );
+  }
 }

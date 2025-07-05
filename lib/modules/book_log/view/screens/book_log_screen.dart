@@ -1,11 +1,12 @@
-import '../../model/book_log_models.dart';
-import 'package:book/modules/book_log/widgets/speech_bubble_overlay.dart';
-import 'package:book/modules/profile/view_model/profile_with_counts_provider.dart';
-import 'package:book/modules/reading_diary/viewmodels/member_diaries_provider.dart';
-import 'package:book/modules/user/view_model/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:book/common/theme/app_colors.dart';
+
+import '../../../../common/theme/app_colors.dart';
+import '../../../auth/view_model/auth_state.dart';
+import '../../../profile/view_model/profile_with_counts_provider.dart';
+import '../../../reading_diary/viewmodels/member_diaries_provider.dart';
+import '../../model/book_log_models.dart';
+import '../../widgets/speech_bubble_overlay.dart';
 import '../widgets/profile_stat.dart';
 import '../widgets/stat_divider.dart';
 import '../widgets/book_status_badge.dart';
@@ -22,7 +23,7 @@ class BookLogScreen extends ConsumerStatefulWidget {
   ConsumerState<BookLogScreen> createState() => _BookLogScreenState();
 }
 
-class _BookLogScreenState extends ConsumerState<BookLogScreen> {
+class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
   final GlobalKey _profileImageKey = GlobalKey();
   OverlayEntry? _speechBubbleEntry;
   bool _speechBubbleShown = false;
@@ -64,8 +65,7 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-    final bool isMyProfile = user != null && user.memberId == widget.memberId;
+    final bool isMyProfile = watchUser(ref) != null && watchUser(ref)?.memberId == widget.memberId;
     final profileAsync = ref.watch(profileWithCountsProvider(widget.memberId));
     final diariesAsync = ref.watch(memberDiariesProvider(widget.memberId));
 
