@@ -152,7 +152,7 @@ class _ProfileWithCounts implements ProfileWithCounts {
       required this.memberId,
       required this.nickName,
       required this.profileImageUrl,
-      required this.introduction,
+      this.introduction = '',
       required this.followingCount,
       required this.followerCount,
       required this.diaryCount});
@@ -169,6 +169,7 @@ class _ProfileWithCounts implements ProfileWithCounts {
   @override
   final String profileImageUrl;
   @override
+  @JsonKey()
   final String introduction;
   @override
   final int followingCount;

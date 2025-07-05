@@ -10,7 +10,7 @@ abstract class ProfileWithCounts with _$ProfileWithCounts {
     required int memberId,
     required String nickName,
     required String profileImageUrl,
-    required String introduction,
+    @Default('') String introduction,
     required int followingCount,
     required int followerCount,
     required int diaryCount,

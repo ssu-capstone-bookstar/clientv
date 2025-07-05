@@ -8,6 +8,7 @@ import '../model/login_request.dart';
 import '../repository/auth_repository.dart';
 import '../repository/social_login_service.dart';
 import 'auth_state.dart';
+import '../../user/view_model/user_provider.dart';
 
 part 'auth_view_model.g.dart';
 
@@ -15,7 +16,8 @@ part 'auth_view_model.g.dart';
 class AuthViewModel extends _$AuthViewModel {
   late final AuthRepository _authRepository = ref.read(authRepositoryProvider);
   late final SocialLoginService _socialLoginService = SocialLoginService();
-  late final SecureStorageRepository _secureStorageRepository = ref.read(secureStorageRepositoryProvider);
+  late final SecureStorageRepository _secureStorageRepository =
+      ref.read(secureStorageRepositoryProvider);
 
   @override
   Future<AuthState> build() async {
@@ -39,10 +41,9 @@ class AuthViewModel extends _$AuthViewModel {
         return AuthFailed(errorMsg: '', errorCode: -1);
       }
 
-      final request = LoginRequest(providerType: providerType, idToken: idToken);
-
+      final request =
+          LoginRequest(providerType: providerType, idToken: idToken);
       final response = await _authRepository.login(request);
-
       final authData = response.data;
 
       await _secureStorageRepository.saveTokens(
@@ -50,7 +51,13 @@ class AuthViewModel extends _$AuthViewModel {
         refreshToken: authData.refreshToken,
       );
 
-      return AuthSuccess(memberId: authData.memberId, nickName: authData.nickName, profileImage: authData.profileImage);
+      // userProvider에 사용자 정보 저장
+      ref.read(userProvider.notifier).setUser(authData);
+
+      return AuthSuccess(
+          memberId: authData.memberId,
+          nickName: authData.nickName,
+          profileImage: authData.profileImage);
     });
   }
 
@@ -81,18 +88,16 @@ class AuthViewModel extends _$AuthViewModel {
     final oldRefreshToken = await _secureStorageRepository.getRefreshToken();
     if (oldRefreshToken == null) {
       await signOut();
-
       return null;
     }
 
     try {
-      final authDataResponse = await _authRepository.renewToken('Bearer $oldRefreshToken');
-
+      final authDataResponse =
+          await _authRepository.renewToken('Bearer $oldRefreshToken');
       final authData = authDataResponse.data;
 
       if (authData == null) {
         await signOut();
-
         return null;
       }
 
@@ -100,6 +105,9 @@ class AuthViewModel extends _$AuthViewModel {
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
       );
+
+      // userProvider에 사용자 정보 저장
+      ref.read(userProvider.notifier).setUser(authData);
 
       state = AsyncData(
         AuthSuccess(
@@ -112,7 +120,6 @@ class AuthViewModel extends _$AuthViewModel {
       return authData;
     } catch (e, t) {
       await signOut();
-
       return null;
     }
   }

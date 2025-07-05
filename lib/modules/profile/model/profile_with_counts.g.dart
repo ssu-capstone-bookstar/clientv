@@ -12,7 +12,7 @@ _ProfileWithCounts _$ProfileWithCountsFromJson(Map<String, dynamic> json) =>
       memberId: (json['memberId'] as num).toInt(),
       nickName: json['nickName'] as String,
       profileImageUrl: json['profileImageUrl'] as String,
-      introduction: json['introduction'] as String,
+      introduction: json['introduction'] as String? ?? '',
       followingCount: (json['followingCount'] as num).toInt(),
       followerCount: (json['followerCount'] as num).toInt(),
       diaryCount: (json['diaryCount'] as num).toInt(),
