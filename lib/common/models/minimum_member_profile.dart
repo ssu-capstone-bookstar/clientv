@@ -12,4 +12,4 @@ abstract class MinimumMemberProfile with _$MinimumMemberProfile {
 
   factory MinimumMemberProfile.fromJson(Map<String, dynamic> json) =>
       _$MinimumMemberProfileFromJson(json);
-} 
+}

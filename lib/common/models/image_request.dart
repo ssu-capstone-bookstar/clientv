@@ -10,6 +10,5 @@ abstract class ImageRequest with _$ImageRequest {
     @Default(1) int sequence,
   }) = _ImageRequest;
 
-  factory ImageRequest.fromJson(Map<String, dynamic> json) =>
-      _$ImageRequestFromJson(json);
+  factory ImageRequest.fromJson(Map<String, dynamic> json) => _$ImageRequestFromJson(json);
 }

@@ -11,6 +11,5 @@ abstract class StatusResponse with _$StatusResponse {
     required String resultMessage,
   }) = _StatusResponse;
 
-  factory StatusResponse.fromJson(Map<String, dynamic> json) =>
-      _$StatusResponseFromJson(json);
-} 
+  factory StatusResponse.fromJson(Map<String, dynamic> json) => _$StatusResponseFromJson(json);
+}

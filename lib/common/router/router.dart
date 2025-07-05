@@ -1,52 +1,64 @@
-import 'package:book/auth/models/auth_status.dart';
-import 'package:book/auth/screens/login_screen.dart';
-import 'package:book/auth/viewmodels/auth_viewmodel.dart';
-import 'package:book/book/screens/book_overview_screen.dart';
-import 'package:book/book_pick/screens/book_pick_screen.dart';
-import 'package:book/chat/screens/book_talk_screen.dart';
-import 'package:book/deep_time/screens/deep_time_screen.dart';
-import 'package:book/book_log/screens/book_log_screen.dart';
-import 'package:book/home/screens/home_screen.dart';
-import 'package:book/profile/screens/profile_screen.dart';
-import 'package:book/reading_challenge/screens/reading_challenge_screen.dart';
-import 'package:book/search/screens/search_detail_screen.dart';
-import 'package:book/user/providers/user_provider.dart';
+import 'package:book/modules/user/view_model/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../modules/auth/view/screens/login_screen.dart';
+import '../../modules/auth/view_model/auth_state.dart';
+import '../../modules/auth/view_model/auth_view_model.dart';
+import '../../modules/book/view/screens/book_overview_screen.dart';
+import '../../modules/book_log/view/screens/book_log_screen.dart';
+import '../../modules/book_pick/view/screens/book_pick_screen.dart';
+import '../../modules/chat/view/screens/book_talk_screen.dart';
+import '../../modules/deep_time/view/screens/deep_time_screen.dart';
+import '../../modules/home/view/screens/home_screen.dart';
+import '../../modules/profile/view/screens/profile_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
+import '../../modules/search/view/screens/search_detail_screen.dart';
+
 part 'router.g.dart';
-
-class _GoRouterRefreshNotifier extends ChangeNotifier {
-  final Ref _ref;
-  late final ProviderSubscription<AsyncValue<AuthStatus>> _subscription;
-
-  _GoRouterRefreshNotifier(this._ref) {
-    _subscription = _ref.listen<AsyncValue<AuthStatus>>(
-      authViewModelProvider,
-      (_, __) => notifyListeners(),
-    );
-  }
-
-  @override
-  void dispose() {
-    _subscription.close();
-    super.dispose();
-  }
-}
 
 @riverpod
 GoRouter router(Ref ref) {
-  final notifier = _GoRouterRefreshNotifier(ref);
-  ref.onDispose(notifier.dispose);
-
   final rootNavigatorKey = GlobalKey<NavigatorState>();
+  final authState = ValueNotifier<AsyncValue<AuthState>>(const AsyncLoading());
+
+  ref
+    ..onDispose(authState.dispose)
+    ..listen(
+        authViewModelProvider.select(
+            (value) => value.whenData((value) => value)), (_, next) async {
+      authState.value = next;
+    });
 
   return GoRouter(
     initialLocation: '/login',
     navigatorKey: rootNavigatorKey,
-    refreshListenable: notifier,
+    refreshListenable: authState,
+    redirect: (context, state) {
+      if (authState.value.isLoading || !authState.value.hasValue) return null;
+
+      if (authState.value.unwrapPrevious().hasError) return '/login';
+
+      final isAuthenticated = authState.value.requireValue is AuthSuccess;
+      final isLoginRoute = state.uri.path == '/login';
+      // final isSplashRoute = state.uri.path == '/';
+
+      // if (isSplashRoute) {
+      //   return isAuthenticated ? '/book-pick' : '/login';
+      // }
+
+      if (isLoginRoute && isAuthenticated) {
+        return '/book-pick';
+      }
+
+      if (!isLoginRoute && !isAuthenticated) {
+        return '/login';
+      }
+
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/login',
@@ -64,8 +76,11 @@ GoRouter router(Ref ref) {
                 builder: (context, state) => Consumer(
                   builder: (context, ref, _) {
                     final user = ref.read(userProvider);
+                    print('[DEBUG][BOOK_LOG] user: $user');
                     final memberId = user?.memberId ?? 0;
+                    print('[DEBUG][BOOK_LOG] memberId: $memberId');
                     return BookLogScreen(memberId: memberId);
+                    print('[DEBUG][BOOK_LOG] BookLogScreen');
                   },
                 ),
                 routes: [
@@ -131,25 +146,5 @@ GoRouter router(Ref ref) {
         ],
       ),
     ],
-    redirect: (BuildContext context, GoRouterState state) {
-      final authState = ref.read(authViewModelProvider);
-
-      if (authState.isLoading || authState.hasError) {
-        return null;
-      }
-
-      final loggedIn = authState.value == AuthStatus.authenticated;
-      final loggingIn = state.matchedLocation == '/login';
-
-      if (!loggedIn) {
-        return loggingIn ? null : '/login';
-      }
-
-      if (loggingIn) {
-        return '/book-pick';
-      }
-
-      return null;
-    },
   );
 }

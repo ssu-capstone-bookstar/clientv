@@ -9,6 +9,16 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsEnvGen {
+  const $AssetsEnvGen();
+
+  /// File path: assets/env/.env
+  String get aEnv => 'assets/env/.env';
+
+  /// List of all assets
+  List<String> get values => [aEnv];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -158,9 +168,13 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/bookstar_character.png
-  AssetGenImage get bookstarCharacter =>
-      const AssetGenImage('assets/images/bookstar_character.png');
+  /// File path: assets/images/hero_look_forward@3x.png
+  AssetGenImage get heroLookForward3x =>
+      const AssetGenImage('assets/images/hero_look_forward@3x.png');
+
+  /// File path: assets/images/hero_look_up@3x.png
+  AssetGenImage get heroLookUp3x =>
+      const AssetGenImage('assets/images/hero_look_up@3x.png');
 
   /// File path: assets/images/sample_book.jpg
   AssetGenImage get sampleBook =>
@@ -172,7 +186,8 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    bookstarCharacter,
+    heroLookForward3x,
+    heroLookUp3x,
     sampleBook,
     speechBubble,
   ];
@@ -181,6 +196,7 @@ class $AssetsImagesGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsEnvGen env = $AssetsEnvGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

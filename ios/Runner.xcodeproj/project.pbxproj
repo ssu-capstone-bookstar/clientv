@@ -190,15 +190,16 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
-				FB1A3A779E6A7EE32923772A /* [CP] Check Pods Manifest.lock */,
+				E302C455E48CDF6DD79D438C /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
+				E7BC73152E17F59C004F32CE /* ShellScript */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				D34A89064BF9344051E8130F /* [CP] Embed Pods Frameworks */,
-				EBCB5C875B8B965445103460 /* [CP] Copy Pods Resources */,
+				A2D04350D8ED164601BE28AE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -299,7 +300,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		A2D04350D8ED164601BE28AE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		C7CF4967F11C8A4ADE0AE61D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -340,24 +358,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EBCB5C875B8B965445103460 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FB1A3A779E6A7EE32923772A /* [CP] Check Pods Manifest.lock */ = {
+		E302C455E48CDF6DD79D438C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -378,6 +379,23 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		E7BC73152E17F59C004F32CE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# .env 파일을 읽어 Generated.xcconfig 파일을 생성하는 스크립트\n\n# .env 파일 경로 설정 (프로젝트 루트)\nENV_FILE=\"$PROJECT_DIR/../.env\"\n\n# Generated.xcconfig 파일 경로 설정\nOUTPUT_FILE=\"${SRCROOT}/Flutter/Generated.xcconfig\"\n\n# .env 파일이 존재할 경우에만 실행\nif [ -f \"$ENV_FILE\" ]; then\n  # 기존 Generated.xcconfig 파일 비우기\n  > \"$OUTPUT_FILE\"\n\n  # .env 파일을 한 줄씩 읽어 Generated.xcconfig 파일에 작성\n  while IFS='=' read -r key value || [ -n \"$key\" ]; do\n    # 주석 또는 빈 줄은 건너뛰기\n    [[ \"$key\" =~ ^# || -z \"$key\" ]] && continue\n    \n    # 값의 앞뒤에 붙은 따옴표 제거\n    value=\"${value%\\\"}\"\n    value=\"${value#\\\"}\"\n    \n    # xcconfig 형식으로 저장\n    echo \"$key=$value\" >> \"$OUTPUT_FILE\"\n  done < \"$ENV_FILE\"\n  echo \"✅ .env 파일을 성공적으로 로드하여 Generated.xcconfig 파일을 생성했습니다.\"\nelse\n  echo \"⚠️ .env 파일이 존재하지 않습니다. (${ENV_FILE})\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

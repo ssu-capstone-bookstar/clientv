@@ -1,0 +1,32 @@
+<resources>
+    <color name="W1">#FFFFFFFF</color>
+    <color name="W2">#FFFAFAFA</color>
+    <color name="W3">#FFEFF0F2</color>
+    <color name="G1">#FFD4D9DD</color>
+    <color name="G2">#FFBCC2C6</color>
+    <color name="G3">#FF6B6B75</color>
+    <color name="G4">#FF5C5C6A</color>
+    <color name="G5">#FF4C4C57</color>
+    <color name="G6">#FF393942</color>
+    <color name="G7">#FF2D2D33</color>
+    <color name="B1">#FF191919</color>
+    <color name="B2">#FF090909</color>
+    <color name="Dim1">#33000000</color>
+    <color name="Dim2">#4D000000</color>
+    <color name="Dim3">#B3000000</color>
+    <color name="P1">#FF775DFF</color>
+    <color name="P2">#FF8E79FF</color>
+    <color name="P3">#FF8670FF</color>
+    <color name="P4">#FF8972FF</color>
+    <color name="P5">#33775DFF</color>
+    <color name="P6">#99775DFF</color>
+    <color name="R">#FFFF4D53</color>
+    <color name="G">#FF96FF50</color>
+    <color name="L">#FFE6FF66</color>
+    <color name="M">#FF01FFE5</color>
+    <color name="O">#FFFF8E16</color>
+    <color name="AP">#FFFF61D7</color>
+    <color name="IB">#FF39A2FF</color>
+    <color name="SG">#FF00ED8A</color>
+    <color name="E0">#FFFF6B54</color>
+</resources>
