@@ -1,8 +1,8 @@
 import 'package:book/modules/reading_diary/model/diary_image_response.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:book/modules/reading_diary/model/diary_response.dart';
 
-// 책장(책 아이콘)용 더미 데이터
+// 책장(책 아이콘)용 더미 데이터 모델
 class DummyBook {
   final String imageUrl;
   final String title;
@@ -90,7 +90,6 @@ final dummyDiaries = [
     decoration: '',
     createdAt: DateTime.now(),
   ),
-  // 복사된 더미 데이터들
   DiaryResponse(
     diaryId: 4,
     startPage: 31,

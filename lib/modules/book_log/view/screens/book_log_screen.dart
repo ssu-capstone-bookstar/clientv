@@ -1,12 +1,16 @@
-import 'package:book/modules/book_log/view/screens/book_log_dummy_data.dart';
+import '../../model/book_log_models.dart';
 import 'package:book/modules/book_log/widgets/speech_bubble_overlay.dart';
 import 'package:book/modules/profile/view_model/profile_with_counts_provider.dart';
 import 'package:book/modules/reading_diary/viewmodels/member_diaries_provider.dart';
 import 'package:book/modules/user/view_model/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:book/common/theme/app_colors.dart';
+import '../widgets/profile_stat.dart';
+import '../widgets/stat_divider.dart';
+import '../widgets/book_status_badge.dart';
+import '../widgets/profile_edit_button.dart';
+// TODO: 실제 데이터 연동, 상태관리 연동 등 필요한 부분에 주석 추가
 
 class BookLogScreen extends ConsumerStatefulWidget {
   final int memberId;
@@ -62,7 +66,6 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     final bool isMyProfile = user != null && user.memberId == widget.memberId;
-    final bool canPop = Navigator.of(context).canPop();
     final profileAsync = ref.watch(profileWithCountsProvider(widget.memberId));
     final diariesAsync = ref.watch(memberDiariesProvider(widget.memberId));
 
@@ -118,18 +121,18 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      _ProfileStat(label: '게시물', value: profile.diaryCount),
-                      _StatDivider(),
-                      _ProfileStat(label: '팔로잉', value: profile.followingCount),
-                      _StatDivider(),
-                      _ProfileStat(label: '팔로워', value: profile.followerCount),
+                      ProfileStat(label: '게시물', value: profile.diaryCount),
+                      StatDivider(),
+                      ProfileStat(label: '팔로잉', value: profile.followingCount),
+                      StatDivider(),
+                      ProfileStat(label: '팔로워', value: profile.followerCount),
                     ],
                   ),
                 ),
                 // 프로필 편집 버튼 (Figma 기준: 프로필 정보 아래, 책장 위)
                 if (isMyProfile) ...[
                   const SizedBox(height: 20),
-                  Center(child: _ProfileEditButton()),
+                  ProfileEditButton(),
                   const SizedBox(height: 16),
                 ],
                 const SizedBox(height: 15),
@@ -177,7 +180,7 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  _BookStatusBadge(status: book.status),
+                                  BookStatusBadge(status: book.status),
                                   const SizedBox(width: 3),
                                   Expanded(
                                     child: Text(
@@ -297,150 +300,6 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
               ],
             );
           },
-        ),
-      ),
-    );
-  }
-}
-
-class _ProfileEditButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 68,
-      height: 26,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: const Color(0xFF775DFF),
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: const BorderSide(color: Color(0xFF8670FF), width: 1),
-          ),
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        ),
-        onPressed: () => GoRouter.of(context).go('/book-log/profile'),
-        child: const SizedBox(
-          width: 65,
-          height: 19,
-          child: Center(
-            child: Text(
-              '프로필 편집',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                height: 19 / 12, // 160%
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FollowButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryPurple,
-        foregroundColor: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-        minimumSize: const Size(0, 36),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-        elevation: 0,
-      ),
-      onPressed: () {
-        // TODO: 팔로우/언팔로우 로직
-      },
-      child: const Text('팔로우'),
-    );
-  }
-}
-
-class _ProfileStat extends StatelessWidget {
-  final String label;
-  final int value;
-  const _ProfileStat({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 19,
-      child: Text(
-        '$label $value',
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          height: 1.6, // 160%
-          letterSpacing: -0.015,
-          color: Color(0xFF6B6B75),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Transform.rotate(
-        angle: -1.5708, // -90도 (라디안)
-        child: Container(
-          width: 18,
-          height: 0,
-          decoration: BoxDecoration(
-            color: Color(0xFF6B6B75),
-            border: Border.all(color: Color(0xFF2D2D33), width: 1),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BookStatusBadge extends StatelessWidget {
-  final String status;
-  const _BookStatusBadge({required this.status});
-  @override
-  Widget build(BuildContext context) {
-    Color bgColor = const Color(0xFF2D2D33);
-    Color borderColor = const Color(0xFF393942);
-    Color textColor = Colors.white;
-    if (status == '완독') {
-      textColor = Color(0xFF19F9D9);
-    } else if (status == '독서중') {
-      textColor = Color(0xFFF6F99A);
-    } else if (status == '피드' || status == '픽') {
-      textColor = Color(0xFFFFB74D);
-    }
-    return Container(
-      height: 18,
-      padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 3),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border.all(color: borderColor, width: 0.48),
-        borderRadius: BorderRadius.circular(3.83),
-      ),
-      child: Center(
-        child: Text(
-          status,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.5,
-            color: textColor,
-          ),
         ),
       ),
     );

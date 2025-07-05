@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_view_model.dart';
+part of 'book_log_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authViewModelHash() => r'697d6570a5a42f8f590b40d510a663a198b1da65';
+String _$bookLogViewModelHash() => r'0ef40922ccfad5e6f684ea74d05d8fc83f6d5582';
 
-/// See also [AuthViewModel].
-@ProviderFor(AuthViewModel)
-final authViewModelProvider =
-    AsyncNotifierProvider<AuthViewModel, AuthState>.internal(
-  AuthViewModel.new,
-  name: r'authViewModelProvider',
+/// See also [BookLogViewModel].
+@ProviderFor(BookLogViewModel)
+final bookLogViewModelProvider =
+    AutoDisposeNotifierProvider<BookLogViewModel, List<DiaryResponse>>.internal(
+  BookLogViewModel.new,
+  name: r'bookLogViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$authViewModelHash,
+      : _$bookLogViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthViewModel = AsyncNotifier<AuthState>;
+typedef _$BookLogViewModel = AutoDisposeNotifier<List<DiaryResponse>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
