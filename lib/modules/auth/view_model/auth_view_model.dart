@@ -39,19 +39,11 @@ class AuthViewModel extends _$AuthViewModel {
         return AuthFailed(errorMsg: '', errorCode: -1);
       }
 
-      print('idToken => $idToken');
-
       final request = LoginRequest(providerType: providerType, idToken: idToken);
-
-      print('request => $request');
 
       final response = await _authRepository.login(request);
 
-      print('response => $request');
-
       final authData = response.data;
-
-      print('authData => $authData');
 
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
@@ -75,9 +67,6 @@ class AuthViewModel extends _$AuthViewModel {
 
   Future<void> signOut() async {
     await _secureStorageRepository.deleteTokens();
-    // ref.read(userProvider.notifier).clearUser();
-    // state = const AsyncValue.data(AuthStatus.unauthenticated);
-
     state = AsyncData(AuthIdle());
   }
 

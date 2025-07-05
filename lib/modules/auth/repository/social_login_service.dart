@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 @riverpod
 SocialLoginService socialLoginService(Ref ref) {
@@ -23,7 +23,7 @@ class SocialLoginService {
           if (e is PlatformException) {
             token = await UserApi.instance.loginWithKakaoAccount();
           } else {
-            debugPrint('카카오 로그인 에러: $e');
+            debugPrint('[ERROR] loginWithKakao: $e');
             return null;
           }
         }
@@ -32,8 +32,8 @@ class SocialLoginService {
       }
 
       return token.idToken ?? '';
-    } catch (error) {
-      debugPrint('알 수 없는 카카오 에러: $error');
+    } catch (e) {
+      debugPrint('[ERROR] loginWithKakao: $e');
       return null;
     }
   }
@@ -48,12 +48,11 @@ class SocialLoginService {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      print('idToken 1 => ${googleAuth?.idToken}');
 
       return googleAuth?.idToken;
 
     } catch (e) {
-      print('fail to loginWithGoogle: $e');
+      debugPrint('[ERROR] loginWithGoogle: $e');
 
       return null;
     }
@@ -67,7 +66,7 @@ class SocialLoginService {
 
       return userCredential.user?.getIdToken();
     } catch (e) {
-      print('e: $e');
+      debugPrint('[ERROR] loginWithApple: $e');
 
       return null;
     }
