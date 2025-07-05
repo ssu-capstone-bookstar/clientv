@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../modules/auth/model/auth_status.dart';
 import '../../modules/auth/view/screens/login_screen.dart';
+import '../../modules/auth/view_model/auth_state.dart';
 import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
@@ -18,35 +19,44 @@ import '../../modules/search/view/screens/search_detail_screen.dart';
 
 part 'router.g.dart';
 
-class _GoRouterRefreshNotifier extends ChangeNotifier {
-  final Ref _ref;
-  late final ProviderSubscription<AsyncValue<AuthStatus>> _subscription;
-
-  _GoRouterRefreshNotifier(this._ref) {
-    _subscription = _ref.listen<AsyncValue<AuthStatus>>(
-      authViewModelProvider,
-      (_, __) => notifyListeners(),
-    );
-  }
-
-  @override
-  void dispose() {
-    _subscription.close();
-    super.dispose();
-  }
-}
-
 @riverpod
 GoRouter router(Ref ref) {
-  final notifier = _GoRouterRefreshNotifier(ref);
-  ref.onDispose(notifier.dispose);
-
   final rootNavigatorKey = GlobalKey<NavigatorState>();
+  final authState = ValueNotifier<AsyncValue<AuthState>>(const AsyncLoading());
+
+  ref
+    ..onDispose(authState.dispose)
+    ..listen(authViewModelProvider.select((value) => value.whenData((value) => value)), (_, next) async {
+      authState.value = next;
+    });
 
   return GoRouter(
     initialLocation: '/login',
     navigatorKey: rootNavigatorKey,
-    refreshListenable: notifier,
+    refreshListenable: authState,
+    redirect: (context, state) {
+      if (authState.value.isLoading || !authState.value.hasValue) return null;
+
+      if (authState.value.unwrapPrevious().hasError) return '/login';
+
+      final isAuthenticated = authState.value.requireValue is AuthSuccess;
+      final isLoginRoute = state.uri.path == '/login';
+      // final isSplashRoute = state.uri.path == '/';
+
+      // if (isSplashRoute) {
+      //   return isAuthenticated ? '/book-pick' : '/login';
+      // }
+
+      if (isLoginRoute && isAuthenticated) {
+        return '/book-pick';
+      }
+
+      if (!isLoginRoute && !isAuthenticated) {
+        return '/login';
+      }
+
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/login',
@@ -124,25 +134,5 @@ GoRouter router(Ref ref) {
         ],
       ),
     ],
-    redirect: (BuildContext context, GoRouterState state) {
-      final authState = ref.read(authViewModelProvider);
-
-      if (authState.isLoading || authState.hasError) {
-        return null;
-      }
-
-      final loggedIn = authState.value == AuthStatus.authenticated;
-      final loggingIn = state.matchedLocation == '/login';
-
-      if (!loggedIn) {
-        return loggingIn ? null : '/login';
-      }
-
-      if (loggingIn) {
-        return '/book-pick';
-      }
-
-      return null;
-    },
   );
 }

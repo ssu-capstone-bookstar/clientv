@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../common/extension/string_extensions.dart';
 
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../model/login_request.dart';
 import '../../view_model/auth_view_model.dart';
+import '../widgets/animated_hero_switcher.dart';
+import '../widgets/social_login_button.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -13,80 +18,14 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: AppPaddings.LOGIN_SCREEN_PADDING,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Spacer(flex: 2),
-              Image.asset(
-                'assets/images/bookstar_character.png',
-                height: 150,
-              ),
-              const SizedBox(height: 24),
-              RichText(
-                textAlign: TextAlign.center,
-                text: const TextSpan(
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.black,
-                    height: 1.4,
-                  ),
-                  children: [
-                    TextSpan(text: '책은 좋아하는데,\n'),
-                    TextSpan(
-                      text: '꾸준히',
-                      style: TextStyle(
-                        color: Color(0xFF7C4DFF),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(text: '가 어려웠다면.'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                '지금 북스타에서 시작해 보세요',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-              const Spacer(flex: 1),
-              const Spacer(flex: 3),
-              _buildSocialLoginButton(
-                onPressed: () {
-                  ref.read(authViewModelProvider.notifier).login(ProviderType.kakao);
-                },
-                assetName: 'assets/icons/kakao.svg',
-                label: '카카오 로그인',
-                backgroundColor: const Color(0xFFFEE500),
-                textColor: Colors.black87,
-              ),
-              const SizedBox(height: 12),
-              _buildSocialLoginButton(
-                onPressed: () {
-                  ref.read(authViewModelProvider.notifier).login(ProviderType.apple);
-                },
-                assetName: 'assets/icons/apple.svg',
-                label: 'Apple로 로그인',
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-              ),
-              const SizedBox(height: 12),
-              _buildSocialLoginButton(
-                onPressed: () {
-                  ref.read(authViewModelProvider.notifier).login(ProviderType.google);
-                },
-                assetName: 'assets/icons/google.svg',
-                label: 'Google로 로그인',
-                backgroundColor: Colors.white,
-                textColor: Colors.black,
-                isGoogle: true,
-              ),
-              const Spacer(flex: 2),
+              _buildGreetingSection(),
+              _buildHeroSection(),
+              _buildButtonSection(ref),
             ],
           ),
         ),
@@ -94,40 +33,72 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSocialLoginButton({
-    required VoidCallback onPressed,
-    required String assetName,
-    required String label,
-    required Color backgroundColor,
-    required Color textColor,
-    bool isGoogle = false,
-  }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: isGoogle ? BorderSide(color: Colors.grey.shade300) : BorderSide.none,
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        elevation: 0,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(assetName, width: 24, height: 24),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+  Widget _buildGreetingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 12.0,
+      children: [
+        RichText(
+          textAlign: TextAlign.start,
+          text: TextSpan(
+            children: [
+              '책'.colored(baseStyle: AppTexts.h4, color: ColorName.p1),
+              '은 좋아하는데,\n'.colored(baseStyle: AppTexts.h4, color: ColorName.w1),
+              '꾸준히'.colored(baseStyle: AppTexts.h4, color: ColorName.p1),
+              '가 어려웠다면.'.colored(baseStyle: AppTexts.h4, color: ColorName.w1),
+            ],
           ),
-        ],
-      ),
+        ),
+        Text(
+          '지금 북스타에서 시작해 보세요',
+          textAlign: TextAlign.start,
+          style: AppTexts.b8.copyWith(color: ColorName.g3),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroSection() {
+    return Center(child: AnimatedHeroSwitcher(imagePaths: [
+      Assets.images.heroLookUp3x.path,
+      Assets.images.heroLookForward3x.path,
+    ]));
+    // return Center(child: Assets.images.loginHero3x.image(scale: 3));
+  }
+
+  Widget _buildButtonSection(WidgetRef ref) {
+    return Column(
+      spacing: 12.0,
+      children: [
+        SocialLoginButton(
+          onPressed: () {
+            ref.read(authViewModelProvider.notifier).login(ProviderType.kakao);
+          },
+          assetName: 'assets/icons/kakao.svg',
+          label: '카카오 로그인',
+          backgroundColor: const Color(0xFFFEE500),
+          textColor: Colors.black87,
+        ),
+        SocialLoginButton(
+          onPressed: () {
+            ref.read(authViewModelProvider.notifier).login(ProviderType.apple);
+          },
+          assetName: 'assets/icons/apple.svg',
+          label: 'Apple로 로그인',
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+        ),
+        SocialLoginButton(
+          onPressed: () {
+            ref.read(authViewModelProvider.notifier).login(ProviderType.google);
+          },
+          assetName: 'assets/icons/google.svg',
+          label: 'Google로 로그인',
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          isGoogle: true,
+        ),
+      ],
     );
   }
 }
