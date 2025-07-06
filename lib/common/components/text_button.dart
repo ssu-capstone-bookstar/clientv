@@ -1,0 +1,67 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
+import 'package:flutter/material.dart';
+
+class CustomTextButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+
+  const CustomTextButton({
+    required this.label,
+    this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _SectionContainer(
+      child: InkWell(
+        onTap: () {
+          // TODO: 카테고리별 편집 페이지로 이동
+          if (onTap != null) onTap!();
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _SectionTitle(label),
+            const Spacer(),
+            const Icon(Icons.chevron_right, color: ColorName.g3),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionContainer extends StatelessWidget {
+  final Widget child;
+  const _SectionContainer({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 58,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: ColorName.g7, width: 1),
+        ),
+      ),
+      alignment: Alignment.centerLeft,
+      child: child,
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  final String text;
+  const _SectionTitle(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: AppTexts.b8.copyWith(color: ColorName.g2),
+    );
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -95,13 +96,13 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
                   child: CircleAvatar(
                     key: _profileImageKey,
                     radius: 40,
-                    backgroundColor: AppColors.widgetBlack,
+                    backgroundColor: ColorName.g7,
                     backgroundImage: profile.profileImageUrl.isNotEmpty
                         ? NetworkImage(profile.profileImageUrl)
                         : null,
                     child: profile.profileImageUrl.isEmpty
                         ? const Icon(Icons.person,
-                            size: 40, color: Color(0xFF444444))
+                            size: 40, color: ColorName.g5)
                         : null,
                   ),
                 ),

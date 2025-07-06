@@ -1,10 +1,10 @@
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileImageSection extends StatelessWidget {
   final String imageUrl;
   final VoidCallback? onTap;
-  const ProfileImageSection({Key? key, required this.imageUrl, this.onTap})
-      : super(key: key);
+  const ProfileImageSection({required this.imageUrl, this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +14,10 @@ class ProfileImageSection extends StatelessWidget {
         child: CircleAvatar(
           radius: 48,
           backgroundImage: imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
+          backgroundColor: ColorName.g7,
           child: imageUrl.isEmpty
-              ? const Icon(Icons.person, size: 48, color: Colors.grey)
+              ? const Icon(Icons.person, size: 48, color: ColorName.g5)
               : null,
-          backgroundColor: Colors.grey[800],
         ),
       ),
     );

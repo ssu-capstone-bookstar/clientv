@@ -33,7 +33,7 @@ class ProfileNotifier extends FamilyAsyncNotifier<ProfileWithCounts?, int?> {
         profileImageUrl: newProfile.profileImageUrl,
         introduction: newProfile.introduction,
       );
-      final response = await repository.updateMyProfile(request);
+      await repository.updateMyProfile(request);
       // 업데이트 후 프로필 다시 로드
       await build(arg);
     } catch (e, st) {

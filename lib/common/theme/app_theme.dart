@@ -1,6 +1,4 @@
 import 'package:book/common/theme/app_colors.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -48,27 +46,6 @@ class AppTheme {
       bodyMedium: TextStyle(color: AppColors.white),
       titleLarge:
           TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryPurple,
-        foregroundColor: Colors.white,
-        surfaceTintColor: AppColors.primaryPurple,
-        shadowColor: Colors.transparent,
-        disabledBackgroundColor: AppColors.primaryPurple.withOpacity(0.5),
-        disabledForegroundColor: Colors.white.withOpacity(0.5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: ColorName.p4,
-            width: 1,
-          ),
-        ),
-        textStyle: AppTexts.b7,
-        minimumSize: const Size(0, 56),
-        elevation: 0,
-        padding: EdgeInsets.fromLTRB(141, 14, 141, 14),
-      ),
     ),
   );
 }

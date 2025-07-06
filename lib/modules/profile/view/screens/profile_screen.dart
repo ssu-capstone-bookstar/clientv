@@ -6,13 +6,12 @@ import '../../model/update_profile_request.dart';
 import '../../repository/profile_repository.dart';
 import '../../view_model/profile_view_model.dart';
 import '../../../../common/components/cta_button_l1.dart';
-import 'profile_nickname_field.dart';
-import 'profile_introduction_field.dart';
 import 'profile_image_section.dart';
-import 'profile_book_section.dart';
+import '../../../../common/components/text_button.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book_log/view_model/book_log_view_model.dart';
+import 'package:book/modules/profile/view/widgets/profile_name_and_introduction_field.dart';
 
 void invalidateMyProfileProviders(WidgetRef ref, int myMemberId) {
   ref.invalidate(profileProvider(null));
@@ -142,19 +141,35 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           }
           return SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
                   ProfileImageSection(imageUrl: profile.profileImageUrl),
                   const SizedBox(height: 24),
-                  ProfileNicknameField(controller: _nicknameController),
-                  const Divider(),
-                  ProfileIntroductionField(controller: _introductionController),
-                  const Divider(),
-                  ProfileBookSection(),
-                  const Divider(),
+                  ProfileNameAndIntroductionField(
+                    nicknameController: _nicknameController,
+                    introductionController: _introductionController,
+                  ),
+                  CustomTextButton(
+                    label: '픽한 도서 편집',
+                    onTap: () {
+                      // TODO: 픽한 도서 편집 페이지로 이동
+                    },
+                  ),
+                  CustomTextButton(
+                    label: '독서 중 도서 편집',
+                    onTap: () {
+                      // TODO: 독서 중 도서 편집 페이지로 이동
+                    },
+                  ),
+                  CustomTextButton(
+                    label: '완독 도서 편집',
+                    onTap: () {
+                      // TODO: 완독 도서 편집 페이지로 이동
+                    },
+                  ),
                   const Spacer(),
                 ],
               ),
