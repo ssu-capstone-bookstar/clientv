@@ -97,6 +97,9 @@ flutter:
 
 flutter_gen:
   output: lib/gen/
+  integrations:
+    image: true
+    flutter_svg: true
   assets:
     enabled: true
   fonts:

@@ -1,10 +1,14 @@
+import 'package:book/common/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/components/text_field/search_text_field.dart';
 import '../../../../common/theme/app_colors.dart';
+import '../../../../common/theme/style/app_sizes.dart';
+import '../../../../common/theme/style/app_texts.dart';
 import '../../../../gen/assets.gen.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../model/search_state.dart';
 import '../../view_model/search_history_view_model.dart';
 import '../../view_model/search_view_model.dart';
@@ -59,41 +63,29 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
     });
 
     final searchState = ref.watch(searchViewModelProvider);
-    final hasText = _textController.text.isNotEmpty;
-    final outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(
-        color: hasText ? AppColors.primaryPurple : Colors.grey.shade300,
-      ),
-    );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('책 찾기'),
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            context.pop();
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(AppSizes.APP_BAR_HEIGHT),
+        child: AppBar(
+          title: const Text('책픽', style: AppTexts.b5),
+          leading: BackButton(),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: AppPaddings.SCREEN_BODY_PADDING,
         child: Column(
+          spacing: 35,
           children: [
-            TextField(
+            SearchTextField(
               controller: _textController,
-              decoration: InputDecoration(
-                hintText: '읽고 싶은 책을 검색해 보세요',
-                prefixIcon: const Icon(Icons.search),
-                border: outlineInputBorder,
-                enabledBorder: outlineInputBorder,
-                focusedBorder: outlineInputBorder,
-              ),
+              hintText: '읽고 싶은 책을 검색해 보세요',
+              hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
+              suffixIcon: _textController.text.isNotEmpty
+                  ? Assets.images.icSearchColored3x.image(scale: 3)
+                  : Assets.images.icSearchUncolored3x.image(scale: 3),
               onSubmitted: _onSearchSubmitted,
             ),
-            const SizedBox(height: 20),
             Expanded(
               child: searchState.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
@@ -120,11 +112,13 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
         final histories = historyData.data;
 
         if (histories == null || histories.isEmpty) {
-          return Center(
-            child: SvgPicture.asset(
-              Assets.icons.icBookpickSearchCharacter,
-              width: 150,
-            ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 12,
+            children: [
+              Assets.icons.icBookpickSearchCharacter.svg(),
+              Text('어떤 도서를 찾고 계신가요?', style: AppTexts.b8.copyWith(color: ColorName.g3),),
+            ],
           );
         }
 

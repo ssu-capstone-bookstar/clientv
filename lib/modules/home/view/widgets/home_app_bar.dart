@@ -24,14 +24,15 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
-      leading: isBookLog && !Navigator.canPop(context) ? BackButton(onPressed: onBackTap) : null,
+      leading: (isBookLog && !Navigator.canPop(context)) ? BackButton(onPressed: onBackTap) : null,
       title: Text(label, style: AppTexts.b5),
       actions: !Navigator.canPop(context)
           ? [
-              IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {}, // TODO: 마이페이지로 이동
-              )
+              if (isBookLog)
+                IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () {}, // TODO: 마이페이지로 이동
+                )
             ]
           : [BackButton()],
     );

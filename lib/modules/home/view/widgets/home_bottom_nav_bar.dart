@@ -27,21 +27,23 @@ class HomeBottomNavBar extends StatelessWidget {
           children: HomeBottomNavMenu.values.map((menu) {
             final isSelected = menu == currentMenu;
 
-            return GestureDetector(
-              onTap: () => onTap(menu),
-              behavior: HitTestBehavior.opaque,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 4.0,
-                children: [
-                  isSelected ? menu.activeIcon : menu.icon,
-                  Text(
-                    menu.label,
-                    style: AppTexts.b10.copyWith(
-                      color: isSelected ? ColorName.p1 : ColorName.g3,
+            return Expanded(
+              child: GestureDetector(
+                onTap: () => onTap(menu),
+                behavior: HitTestBehavior.opaque,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 4.0,
+                  children: [
+                    isSelected ? menu.activeIcon : menu.icon,
+                    Text(
+                      menu.label,
+                      style: AppTexts.b10.copyWith(
+                        color: isSelected ? ColorName.p1 : ColorName.g3,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }).toList(),

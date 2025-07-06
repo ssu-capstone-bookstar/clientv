@@ -7,7 +7,10 @@
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsEnvGen {
   const $AssetsEnvGen();
@@ -23,113 +26,132 @@ class $AssetsIconsGen {
   const $AssetsIconsGen();
 
   /// File path: assets/icons/apple.svg
-  String get apple => 'assets/icons/apple.svg';
+  SvgGenImage get apple => const SvgGenImage('assets/icons/apple.svg');
 
   /// File path: assets/icons/google.svg
-  String get google => 'assets/icons/google.svg';
+  SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
 
   /// File path: assets/icons/ic_bookpick_chat_character.svg
-  String get icBookpickChatCharacter =>
-      'assets/icons/ic_bookpick_chat_character.svg';
+  SvgGenImage get icBookpickChatCharacter =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_character.svg');
 
   /// File path: assets/icons/ic_bookpick_search_character.svg
-  String get icBookpickSearchCharacter =>
-      'assets/icons/ic_bookpick_search_character.svg';
+  SvgGenImage get icBookpickSearchCharacter =>
+      const SvgGenImage('assets/icons/ic_bookpick_search_character.svg');
 
   /// File path: assets/icons/ic_booktalk_search_character.svg
-  String get icBooktalkSearchCharacter =>
-      'assets/icons/ic_booktalk_search_character.svg';
+  SvgGenImage get icBooktalkSearchCharacter =>
+      const SvgGenImage('assets/icons/ic_booktalk_search_character.svg');
 
   /// File path: assets/icons/ic_category_art_hobby.svg
-  String get icCategoryArtHobby => 'assets/icons/ic_category_art_hobby.svg';
+  SvgGenImage get icCategoryArtHobby =>
+      const SvgGenImage('assets/icons/ic_category_art_hobby.svg');
 
   /// File path: assets/icons/ic_category_bestseller.svg
-  String get icCategoryBestseller => 'assets/icons/ic_category_bestseller.svg';
+  SvgGenImage get icCategoryBestseller =>
+      const SvgGenImage('assets/icons/ic_category_bestseller.svg');
 
   /// File path: assets/icons/ic_category_children.svg
-  String get icCategoryChildren => 'assets/icons/ic_category_children.svg';
+  SvgGenImage get icCategoryChildren =>
+      const SvgGenImage('assets/icons/ic_category_children.svg');
 
   /// File path: assets/icons/ic_category_literature.svg
-  String get icCategoryLiterature => 'assets/icons/ic_category_literature.svg';
+  SvgGenImage get icCategoryLiterature =>
+      const SvgGenImage('assets/icons/ic_category_literature.svg');
 
   /// File path: assets/icons/ic_category_science_tech.svg
-  String get icCategoryScienceTech =>
-      'assets/icons/ic_category_science_tech.svg';
+  SvgGenImage get icCategoryScienceTech =>
+      const SvgGenImage('assets/icons/ic_category_science_tech.svg');
 
   /// File path: assets/icons/ic_category_social_sciences.svg
-  String get icCategorySocialSciences =>
-      'assets/icons/ic_category_social_sciences.svg';
+  SvgGenImage get icCategorySocialSciences =>
+      const SvgGenImage('assets/icons/ic_category_social_sciences.svg');
 
   /// File path: assets/icons/ic_chat_notification.svg
-  String get icChatNotification => 'assets/icons/ic_chat_notification.svg';
+  SvgGenImage get icChatNotification =>
+      const SvgGenImage('assets/icons/ic_chat_notification.svg');
 
   /// File path: assets/icons/ic_deeptype_char_bottom.svg
-  String get icDeeptypeCharBottom => 'assets/icons/ic_deeptype_char_bottom.svg';
+  SvgGenImage get icDeeptypeCharBottom =>
+      const SvgGenImage('assets/icons/ic_deeptype_char_bottom.svg');
 
   /// File path: assets/icons/ic_deeptype_char_bw.svg
-  String get icDeeptypeCharBw => 'assets/icons/ic_deeptype_char_bw.svg';
+  SvgGenImage get icDeeptypeCharBw =>
+      const SvgGenImage('assets/icons/ic_deeptype_char_bw.svg');
 
   /// File path: assets/icons/ic_deeptype_char_front.svg
-  String get icDeeptypeCharFront => 'assets/icons/ic_deeptype_char_front.svg';
+  SvgGenImage get icDeeptypeCharFront =>
+      const SvgGenImage('assets/icons/ic_deeptype_char_front.svg');
 
   /// File path: assets/icons/ic_deeptype_notification1.svg
-  String get icDeeptypeNotification1 =>
-      'assets/icons/ic_deeptype_notification1.svg';
+  SvgGenImage get icDeeptypeNotification1 =>
+      const SvgGenImage('assets/icons/ic_deeptype_notification1.svg');
 
   /// File path: assets/icons/ic_deeptype_notification2.svg
-  String get icDeeptypeNotification2 =>
-      'assets/icons/ic_deeptype_notification2.svg';
+  SvgGenImage get icDeeptypeNotification2 =>
+      const SvgGenImage('assets/icons/ic_deeptype_notification2.svg');
 
   /// File path: assets/icons/ic_deeptype_sticker1.svg
-  String get icDeeptypeSticker1 => 'assets/icons/ic_deeptype_sticker1.svg';
+  SvgGenImage get icDeeptypeSticker1 =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker1.svg');
 
   /// File path: assets/icons/ic_deeptype_sticker2.svg
-  String get icDeeptypeSticker2 => 'assets/icons/ic_deeptype_sticker2.svg';
+  SvgGenImage get icDeeptypeSticker2 =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker2.svg');
 
   /// File path: assets/icons/ic_deeptype_sticker3.svg
-  String get icDeeptypeSticker3 => 'assets/icons/ic_deeptype_sticker3.svg';
+  SvgGenImage get icDeeptypeSticker3 =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker3.svg');
 
   /// File path: assets/icons/ic_deeptype_sticker4.svg
-  String get icDeeptypeSticker4 => 'assets/icons/ic_deeptype_sticker4.svg';
+  SvgGenImage get icDeeptypeSticker4 =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker4.svg');
 
   /// File path: assets/icons/ic_login_char_front.svg
-  String get icLoginCharFront => 'assets/icons/ic_login_char_front.svg';
+  SvgGenImage get icLoginCharFront =>
+      const SvgGenImage('assets/icons/ic_login_char_front.svg');
 
   /// File path: assets/icons/ic_login_char_top.svg
-  String get icLoginCharTop => 'assets/icons/ic_login_char_top.svg';
+  SvgGenImage get icLoginCharTop =>
+      const SvgGenImage('assets/icons/ic_login_char_top.svg');
 
   /// File path: assets/icons/ic_point_shop_char1.svg
-  String get icPointShopChar1 => 'assets/icons/ic_point_shop_char1.svg';
+  SvgGenImage get icPointShopChar1 =>
+      const SvgGenImage('assets/icons/ic_point_shop_char1.svg');
 
   /// File path: assets/icons/ic_point_shop_char2.svg
-  String get icPointShopChar2 => 'assets/icons/ic_point_shop_char2.svg';
+  SvgGenImage get icPointShopChar2 =>
+      const SvgGenImage('assets/icons/ic_point_shop_char2.svg');
 
   /// File path: assets/icons/ic_point_shop_char3.svg
-  String get icPointShopChar3 => 'assets/icons/ic_point_shop_char3.svg';
+  SvgGenImage get icPointShopChar3 =>
+      const SvgGenImage('assets/icons/ic_point_shop_char3.svg');
 
   /// File path: assets/icons/ic_reading_challenge_char1.svg
-  String get icReadingChallengeChar1 =>
-      'assets/icons/ic_reading_challenge_char1.svg';
+  SvgGenImage get icReadingChallengeChar1 =>
+      const SvgGenImage('assets/icons/ic_reading_challenge_char1.svg');
 
   /// File path: assets/icons/ic_reading_challenge_char2.svg
-  String get icReadingChallengeChar2 =>
-      'assets/icons/ic_reading_challenge_char2.svg';
+  SvgGenImage get icReadingChallengeChar2 =>
+      const SvgGenImage('assets/icons/ic_reading_challenge_char2.svg');
 
   /// File path: assets/icons/ic_reading_challenge_char3.svg
-  String get icReadingChallengeChar3 =>
-      'assets/icons/ic_reading_challenge_char3.svg';
+  SvgGenImage get icReadingChallengeChar3 =>
+      const SvgGenImage('assets/icons/ic_reading_challenge_char3.svg');
 
   /// File path: assets/icons/ic_reading_complete.svg
-  String get icReadingComplete => 'assets/icons/ic_reading_complete.svg';
+  SvgGenImage get icReadingComplete =>
+      const SvgGenImage('assets/icons/ic_reading_complete.svg');
 
   /// File path: assets/icons/ic_withdrawal.svg
-  String get icWithdrawal => 'assets/icons/ic_withdrawal.svg';
+  SvgGenImage get icWithdrawal =>
+      const SvgGenImage('assets/icons/ic_withdrawal.svg');
 
   /// File path: assets/icons/kakao.svg
-  String get kakao => 'assets/icons/kakao.svg';
+  SvgGenImage get kakao => const SvgGenImage('assets/icons/kakao.svg');
 
   /// List of all assets
-  List<String> get values => [
+  List<SvgGenImage> get values => [
     apple,
     google,
     icBookpickChatCharacter,
@@ -168,6 +190,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/hero_book_pick@3x.png
+  AssetGenImage get heroBookPick3x =>
+      const AssetGenImage('assets/images/hero_book_pick@3x.png');
+
   /// File path: assets/images/hero_look_forward@3x.png
   AssetGenImage get heroLookForward3x =>
       const AssetGenImage('assets/images/hero_look_forward@3x.png');
@@ -175,6 +201,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/hero_look_up@3x.png
   AssetGenImage get heroLookUp3x =>
       const AssetGenImage('assets/images/hero_look_up@3x.png');
+
+  /// File path: assets/images/ic_search_colored@3x.png
+  AssetGenImage get icSearchColored3x =>
+      const AssetGenImage('assets/images/ic_search_colored@3x.png');
+
+  /// File path: assets/images/ic_search_uncolored@3x.png
+  AssetGenImage get icSearchUncolored3x =>
+      const AssetGenImage('assets/images/ic_search_uncolored@3x.png');
 
   /// File path: assets/images/nav_book_log_selected@3x.png
   AssetGenImage get navBookLogSelected3x =>
@@ -228,8 +262,11 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    heroBookPick3x,
     heroLookForward3x,
     heroLookUp3x,
+    icSearchColored3x,
+    icSearchUncolored3x,
     navBookLogSelected3x,
     navBookLogUnselected3x,
     navBookPickSelected3x,
@@ -316,6 +353,78 @@ class AssetGenImage {
 
   ImageProvider provider({AssetBundle? bundle, String? package}) {
     return AssetImage(_assetName, bundle: bundle, package: package);
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class SvgGenImage {
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = false;
+
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = true;
+
+  final String _assetName;
+  final Size? size;
+  final Set<String> flavors;
+  final bool _isVecFormat;
+
+  _svg.SvgPicture svg({
+    Key? key,
+    bool matchTextDirection = false,
+    AssetBundle? bundle,
+    String? package,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.contain,
+    AlignmentGeometry alignment = Alignment.center,
+    bool allowDrawingOutsideViewBox = false,
+    WidgetBuilder? placeholderBuilder,
+    String? semanticsLabel,
+    bool excludeFromSemantics = false,
+    _svg.SvgTheme? theme,
+    ColorFilter? colorFilter,
+    Clip clipBehavior = Clip.hardEdge,
+    @deprecated Color? color,
+    @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated bool cacheColorFilter = false,
+  }) {
+    final _svg.BytesLoader loader;
+    if (_isVecFormat) {
+      loader = _vg.AssetBytesLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+      );
+    } else {
+      loader = _svg.SvgAssetLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+        theme: theme,
+      );
+    }
+    return _svg.SvgPicture(
+      loader,
+      key: key,
+      matchTextDirection: matchTextDirection,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+      allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+      placeholderBuilder: placeholderBuilder,
+      semanticsLabel: semanticsLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      colorFilter:
+          colorFilter ??
+          (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
+      clipBehavior: clipBehavior,
+      cacheColorFilter: cacheColorFilter,
+    );
   }
 
   String get path => _assetName;
