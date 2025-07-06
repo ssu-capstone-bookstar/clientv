@@ -7,13 +7,13 @@ part 'profile_with_counts.g.dart';
 abstract class ProfileWithCounts with _$ProfileWithCounts {
   const factory ProfileWithCounts({
     @Default(0) int id,
-    required int memberId,
-    required String nickName,
-    required String profileImageUrl,
+    @Default(0) int memberId,
+    @Default('') String nickName,
+    @Default('') String profileImageUrl,
     @Default('') String introduction,
-    required int followingCount,
-    required int followerCount,
-    required int diaryCount,
+    @Default(0) int followingCount,
+    @Default(0) int followerCount,
+    @Default(0) int diaryCount,
   }) = _ProfileWithCounts;
 
   factory ProfileWithCounts.fromJson(Map<String, dynamic> json) =>

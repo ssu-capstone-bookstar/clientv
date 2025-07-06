@@ -149,13 +149,13 @@ class _$ProfileWithCountsCopyWithImpl<$Res>
 class _ProfileWithCounts implements ProfileWithCounts {
   const _ProfileWithCounts(
       {this.id = 0,
-      required this.memberId,
-      required this.nickName,
-      required this.profileImageUrl,
+      this.memberId = 0,
+      this.nickName = '',
+      this.profileImageUrl = '',
       this.introduction = '',
-      required this.followingCount,
-      required this.followerCount,
-      required this.diaryCount});
+      this.followingCount = 0,
+      this.followerCount = 0,
+      this.diaryCount = 0});
   factory _ProfileWithCounts.fromJson(Map<String, dynamic> json) =>
       _$ProfileWithCountsFromJson(json);
 
@@ -163,19 +163,25 @@ class _ProfileWithCounts implements ProfileWithCounts {
   @JsonKey()
   final int id;
   @override
+  @JsonKey()
   final int memberId;
   @override
+  @JsonKey()
   final String nickName;
   @override
+  @JsonKey()
   final String profileImageUrl;
   @override
   @JsonKey()
   final String introduction;
   @override
+  @JsonKey()
   final int followingCount;
   @override
+  @JsonKey()
   final int followerCount;
   @override
+  @JsonKey()
   final int diaryCount;
 
   /// Create a copy of ProfileWithCounts

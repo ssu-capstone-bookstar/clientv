@@ -1,14 +1,20 @@
-import '../model/book_log_models.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:book/modules/profile/view_model/profile_view_model.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
+import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:book/modules/profile/model/profile_with_counts.dart';
 
-part 'book_log_view_model.g.dart';
+// Provider for profile (delegates to profileProvider)
+final bookLogProfileProvider =
+    FutureProvider.family<ProfileWithCounts, int>((ref, memberId) async {
+  final profile = await ref.watch(profileProvider(memberId).future);
+  return profile ?? const ProfileWithCounts();
+});
 
-@riverpod
-class BookLogViewModel extends _$BookLogViewModel {
-  @override
-  List<DiaryResponse> build() {
-    // TODO: 실제 구현에서는 repository에서 fetch
-    return dummyDiaries;
-  }
-}
+// Provider for diaries (delegates to reading_diary repository)
+final bookLogDiariesProvider =
+    FutureProvider.family<List<DiaryResponse>, int>((ref, memberId) async {
+  final repo = ref.watch(readingDiaryRepositoryProvider);
+  final response = await repo.getMemberDiaries(memberId);
+  return response.data;
+});

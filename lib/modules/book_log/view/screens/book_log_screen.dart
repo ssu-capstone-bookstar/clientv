@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common/theme/app_colors.dart';
 import '../../../auth/view_model/auth_state.dart';
-import '../../../profile/view_model/profile_with_counts_provider.dart';
-import '../../../reading_diary/viewmodels/member_diaries_provider.dart';
+import '../../../auth/view_model/auth_view_model.dart';
+import '../../view_model/book_log_view_model.dart';
 import '../../model/book_log_models.dart';
 import '../../widgets/speech_bubble_overlay.dart';
 import '../widgets/profile_stat.dart';
@@ -14,10 +14,8 @@ import '../widgets/profile_edit_button.dart';
 // TODO: 실제 데이터 연동, 상태관리 연동 등 필요한 부분에 주석 추가
 
 class BookLogScreen extends ConsumerStatefulWidget {
-  final int memberId;
   final bool showAppBar;
-  const BookLogScreen(
-      {super.key, required this.memberId, this.showAppBar = true});
+  const BookLogScreen({super.key, this.showAppBar = true});
 
   @override
   ConsumerState<BookLogScreen> createState() => _BookLogScreenState();
@@ -65,9 +63,12 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
 
   @override
   Widget build(BuildContext context) {
-    final bool isMyProfile = watchUser(ref) != null && watchUser(ref)?.memberId == widget.memberId;
-    final profileAsync = ref.watch(profileWithCountsProvider(widget.memberId));
-    final diariesAsync = ref.watch(memberDiariesProvider(widget.memberId));
+    final user = ref.watch(authViewModelProvider).value;
+    final memberId = (user is AuthSuccess) ? user.memberId : 0;
+    final bool isMyProfile =
+        user != null && (user is AuthSuccess) && user.memberId == memberId;
+    final profileAsync = ref.watch(bookLogProfileProvider(memberId));
+    final diariesAsync = ref.watch(bookLogDiariesProvider(memberId));
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBlack,

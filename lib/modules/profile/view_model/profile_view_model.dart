@@ -2,50 +2,47 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../auth/view_model/auth_state.dart';
 import '../../auth/view_model/auth_view_model.dart';
-import '../model/profile_response.dart';
+import '../model/profile_with_counts.dart';
 import '../model/update_profile_request.dart';
 import '../repository/profile_repository.dart';
 
-class ProfileNotifier extends AsyncNotifier<ProfileResponse?> {
-  final ProfileRepository _repository;
-
-  ProfileNotifier(this._repository);
-
+class ProfileNotifier extends FamilyAsyncNotifier<ProfileWithCounts?, int?> {
   @override
-  Future<ProfileResponse?> build() async {
-    final authState = ref.watch(authViewModelProvider).value;
-    if (authState is! AuthSuccess) return null;
-    final response = await _repository.getProfileById(authState.memberId.toString());
-    final profile = response.data;
-    // ProfileWithCounts -> ProfileResponse 변환
-    return ProfileResponse(
-      memberId: profile.memberId,
-      nickName: profile.nickName,
-      profileImageUrl: profile.profileImageUrl,
-      introduction: profile.introduction,
-    );
+  Future<ProfileWithCounts?> build(int? memberId) async {
+    // memberId가 제공되면 해당 사용자의 프로필, 아니면 현재 로그인한 사용자
+    final targetMemberId = memberId ?? _getCurrentMemberId();
+    if (targetMemberId == null) return null;
+
+    final repository = ref.watch(profileRepositoryProvider);
+    final response = await repository.getProfileById(targetMemberId.toString());
+    return response.data;
   }
 
-  Future<void> updateProfile(ProfileResponse newProfile) async {
+  int? _getCurrentMemberId() {
+    final authState = ref.watch(authViewModelProvider).value;
+    if (authState is! AuthSuccess) return null;
+    return authState.memberId;
+  }
+
+  Future<void> updateProfile(ProfileWithCounts newProfile) async {
     state = const AsyncValue.loading();
     try {
+      final repository = ref.read(profileRepositoryProvider);
       final request = UpdateProfileRequest(
         nickName: newProfile.nickName,
         profileImageUrl: newProfile.profileImageUrl,
         introduction: newProfile.introduction,
       );
-      final response = await _repository.updateMyProfile(request);
-      final updated = response.data;
-      state = AsyncValue.data(updated);
+      final response = await repository.updateMyProfile(request);
+      // 업데이트 후 프로필 다시 로드
+      await build(arg);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
   }
 }
 
-final profileProvider = AsyncNotifierProvider<ProfileNotifier, ProfileResponse?>(
-  () => ProfileNotifier(
-    // 의존성 주입: profileRepositoryProvider를 읽어서 전달
-    ProviderContainer().read(profileRepositoryProvider),
-  ),
+final profileProvider =
+    AsyncNotifierProvider.family<ProfileNotifier, ProfileWithCounts?, int?>(
+  () => ProfileNotifier(),
 );

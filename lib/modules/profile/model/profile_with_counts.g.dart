@@ -9,13 +9,13 @@ part of 'profile_with_counts.dart';
 _ProfileWithCounts _$ProfileWithCountsFromJson(Map<String, dynamic> json) =>
     _ProfileWithCounts(
       id: (json['id'] as num?)?.toInt() ?? 0,
-      memberId: (json['memberId'] as num).toInt(),
-      nickName: json['nickName'] as String,
-      profileImageUrl: json['profileImageUrl'] as String,
+      memberId: (json['memberId'] as num?)?.toInt() ?? 0,
+      nickName: json['nickName'] as String? ?? '',
+      profileImageUrl: json['profileImageUrl'] as String? ?? '',
       introduction: json['introduction'] as String? ?? '',
-      followingCount: (json['followingCount'] as num).toInt(),
-      followerCount: (json['followerCount'] as num).toInt(),
-      diaryCount: (json['diaryCount'] as num).toInt(),
+      followingCount: (json['followingCount'] as num?)?.toInt() ?? 0,
+      followerCount: (json['followerCount'] as num?)?.toInt() ?? 0,
+      diaryCount: (json['diaryCount'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$ProfileWithCountsToJson(_ProfileWithCounts instance) =>

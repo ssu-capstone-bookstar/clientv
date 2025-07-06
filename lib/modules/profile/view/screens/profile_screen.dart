@@ -10,6 +10,15 @@ import 'profile_nickname_field.dart';
 import 'profile_introduction_field.dart';
 import 'profile_image_section.dart';
 import 'profile_book_section.dart';
+import '../../../auth/view_model/auth_state.dart';
+import '../../../auth/view_model/auth_view_model.dart';
+import '../../../book_log/view_model/book_log_view_model.dart';
+
+void invalidateMyProfileProviders(WidgetRef ref, int myMemberId) {
+  ref.invalidate(profileProvider(null));
+  ref.invalidate(profileProvider(myMemberId));
+  ref.invalidate(bookLogProfileProvider(myMemberId));
+}
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -79,7 +88,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       );
       await repository.updateMyProfile(request);
       if (context.mounted) {
-        ref.invalidate(profileProvider);
+        // 내 memberId 가져오기
+        final authState = ref.read(authViewModelProvider).value;
+        final myMemberId =
+            (authState is AuthSuccess) ? authState.memberId : null;
+        if (myMemberId != null) {
+          invalidateMyProfileProviders(ref, myMemberId);
+        } else {
+          ref.invalidate(profileProvider(null));
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('프로필이 저장되었습니다.')),
         );
@@ -97,7 +114,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profileAsync = ref.watch(profileProvider);
+    final profileAsync = ref.watch(profileProvider(null));
     return Scaffold(
       appBar: AppBar(
         title: const Text('프로필 편집'),
