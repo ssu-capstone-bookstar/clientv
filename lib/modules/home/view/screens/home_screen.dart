@@ -1,3 +1,4 @@
+import 'package:book/common/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
       ),
-      body: navigationShell,
+      body: Padding(padding: AppPaddings.HOME_BODY_PADDING, child: navigationShell), // NOTE(현호): 20으로 조정 (앱바-바디 간 간격 통일)
       bottomNavigationBar: navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
           ? null
           : HomeBottomNavBar(

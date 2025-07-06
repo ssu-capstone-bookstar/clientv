@@ -26,7 +26,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       leading: isBookLog && !Navigator.canPop(context) ? BackButton(onPressed: onBackTap) : null,
       title: Text(label, style: AppTexts.b5),
-      centerTitle: !isBookLog,
       actions: !Navigator.canPop(context)
           ? [
               IconButton(

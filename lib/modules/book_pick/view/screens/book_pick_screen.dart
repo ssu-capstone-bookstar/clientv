@@ -12,7 +12,6 @@ class BookPickScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
           Text(
             '책 찾기',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22),

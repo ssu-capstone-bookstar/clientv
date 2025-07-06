@@ -20,7 +20,7 @@ class HomeBottomNavBar extends StatelessWidget {
       borderRadius: AppBorders.BOTTOM_NAV_BAR_BORDER_RADIUS,
       child: BottomAppBar(
         color: ColorName.g7,
-        height: AppSizes.BOTTOM_NAV_BAR_HEIGHT, // 현호: 70으로 조정 (65 - 오버플로우 발생)
+        height: AppSizes.BOTTOM_NAV_BAR_HEIGHT, // NOTE(현호): 70으로 조정 (65 - 오버플로우 발생)
         padding: AppPaddings.BOTTOM_NAV_BAR_TOP_PADDING,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

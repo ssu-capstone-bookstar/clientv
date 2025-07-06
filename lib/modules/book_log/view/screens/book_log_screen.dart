@@ -88,7 +88,6 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 24),
                 // 북로그 헤더 : 프로필 이미지, 닉네임, 통계,
                 BookLogHeaderSection(
                   profileImageUrl: profile.profileImageUrl,
