@@ -1,3 +1,5 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 /// 말풍선을 오버레이로 띄우는 위젯
@@ -55,7 +57,7 @@ class _SpeechBubble extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
               text,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: AppTexts.b11.copyWith(color: ColorName.w1),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
