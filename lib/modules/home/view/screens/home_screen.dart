@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../gen/assets.gen.dart';
+import '../../model/home_bottom_nav_menu.dart';
+import '../widgets/home_bottom_nav_bar.dart';
+import '../widgets/home_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -16,25 +18,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _lastVisitedTabIndex = 2; // 기본값: 책픽
+  int _lastVisitedTabIndex = HomeBottomNavMenu.bookPick.index;
 
-  String _getCurrentTitle(int index) {
-    switch (index) {
-      case 0:
-        return '책로그';
-      case 1:
-        return '책톡';
-      case 2:
-        return '책픽';
-      case 3:
-        return '딥타임';
-      case 4:
-        return '리딩챌린지';
-      default:
-        return '';
-    }
-  }
-
+  // NOTE(현호): 개선 필요
   void _onTabTapped(int index) {
     if (index != 0) {
       setState(() {
@@ -51,60 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final navigationShell = widget.navigationShell;
     return Scaffold(
-      appBar: navigationShell.currentIndex == 0
-          ? AppBar(
-              leading: !Navigator.canPop(context)
-                  ? BackButton(
-                      onPressed: () {
-                        navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
-                      },
-                    )
-                  : null,
-              title: const Text(
-                '책로그',
-              ),
-              actions: [
-                // TO-DO: 프로필 편집 버튼 제거
-              ],
-            )
-          : AppBar(
-              title: Text(_getCurrentTitle(navigationShell.currentIndex)),
-              elevation: 0,
-              centerTitle: true,
-            ),
+      // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
+      appBar: HomeAppBar(
+        currentIndex: navigationShell.currentIndex,
+        onBackTap: () {
+          navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
+        },
+      ),
       body: navigationShell,
-      bottomNavigationBar: navigationShell.currentIndex == 0
+      bottomNavigationBar: navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
           ? null
-          : BottomNavigationBar(
-              currentIndex: navigationShell.currentIndex,
-              onTap: _onTabTapped,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Assets.images.navBookLogUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navBookLogSelected3x.image(scale: 3),
-                  label: '책로그',
-                ),
-                BottomNavigationBarItem(
-                  icon: Assets.images.navBookTalkUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navBookTalkSelected3x.image(scale: 3),
-                  label: '책톡',
-                ),
-                BottomNavigationBarItem(
-                  icon: Assets.images.navBookPickUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navBookPickSelected3x.image(scale: 3),
-                  label: '책픽',
-                ),
-                BottomNavigationBarItem(
-                  icon: Assets.images.navDeepTimeUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navDeepTimeSelected3x.image(scale: 3),
-                  label: '딥타임',
-                ),
-                BottomNavigationBarItem(
-                  icon: Assets.images.navReadingChallengeUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navReadingChallengeSelected3x.image(scale: 3),
-                  label: '리딩챌린지',
-                ),
-              ],
+          : HomeBottomNavBar(
+              currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
+              onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
             ),
     );
   }
