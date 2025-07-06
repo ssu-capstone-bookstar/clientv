@@ -1,3 +1,5 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileStat extends StatelessWidget {
@@ -13,16 +15,8 @@ class ProfileStat extends StatelessWidget {
       child: Text(
         '$label $value',
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          height: 1.6, // 160%
-          letterSpacing: -0.015,
-          color: Color(0xFF6B6B75),
-        ),
+        style: AppTexts.b10.copyWith(color: ColorName.g3),
       ),
     );
   }
 }
-// TODO: 디자인/기능 확장 필요시 이 파일에서 작업

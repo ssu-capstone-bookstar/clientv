@@ -10,7 +10,7 @@ class BookStatusBadge extends StatelessWidget {
     Color bgColor = ColorName.g7;
     Color borderColor = ColorName.g6;
     return Container(
-      height: 18,
+      height: 17,
       padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 3),
       decoration: BoxDecoration(
         color: bgColor,

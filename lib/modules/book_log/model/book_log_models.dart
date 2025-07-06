@@ -152,14 +152,5 @@ final dummyDiaries = [
     images: [],
     decoration: '',
     createdAt: DateTime.now(),
-  ),
-  DiaryResponse(
-    diaryId: 9,
-    startPage: 81,
-    endPage: 90,
-    content: '더미 다이어리 9',
-    images: [],
-    decoration: '',
-    createdAt: DateTime.now(),
-  ),
+  )
 ];

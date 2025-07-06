@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileEditButton extends StatelessWidget {
-  const ProfileEditButton({super.key});
+  final VoidCallback? onPressed;
+  const ProfileEditButton({super.key, this.onPressed});
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -21,16 +22,16 @@ class ProfileEditButton extends StatelessWidget {
           padding: EdgeInsets.zero,
           elevation: 0,
         ),
-        onPressed: () => GoRouter.of(context)
-            .go('/book-log/profile'), // TODO: 라우팅/기능 확장 필요시 수정
-        child: const SizedBox(
-          width: 65,
+        onPressed:
+            onPressed ?? () => GoRouter.of(context).go('/book-log/profile'),
+        child: SizedBox(
+          width: 55,
           height: 19,
           child: Center(
             child: Text(
               '프로필 편집',
               textAlign: TextAlign.center,
-              style: AppTexts.b9,
+              style: AppTexts.b9.copyWith(color: ColorName.w1),
             ),
           ),
         ),
@@ -38,4 +39,3 @@ class ProfileEditButton extends StatelessWidget {
     );
   }
 }
-// TODO: 라우팅/기능 확장 필요시 이 파일에서 작업
