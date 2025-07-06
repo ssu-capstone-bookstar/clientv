@@ -56,16 +56,22 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: !Navigator.canPop(context)
                   ? BackButton(
                       onPressed: () {
-                        navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
+                        navigationShell.goBranch(_lastVisitedTabIndex,
+                            initialLocation: true);
                       },
                     )
                   : null,
               title: const Text(
                 '책로그',
               ),
-              actions: [
-                // TO-DO: 프로필 편집 버튼 제거
-              ],
+              actions: !Navigator.canPop(context)
+                  ? [
+                      IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {}, // TODO: 마이페이지로 이동
+                      )
+                    ]
+                  : [BackButton()],
             )
           : AppBar(
               title: Text(_getCurrentTitle(navigationShell.currentIndex)),
@@ -81,27 +87,33 @@ class _HomeScreenState extends State<HomeScreen> {
               items: [
                 BottomNavigationBarItem(
                   icon: Assets.images.navBookLogUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navBookLogSelected3x.image(scale: 3),
+                  activeIcon:
+                      Assets.images.navBookLogSelected3x.image(scale: 3),
                   label: '책로그',
                 ),
                 BottomNavigationBarItem(
                   icon: Assets.images.navBookTalkUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navBookTalkSelected3x.image(scale: 3),
+                  activeIcon:
+                      Assets.images.navBookTalkSelected3x.image(scale: 3),
                   label: '책톡',
                 ),
                 BottomNavigationBarItem(
                   icon: Assets.images.navBookPickUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navBookPickSelected3x.image(scale: 3),
+                  activeIcon:
+                      Assets.images.navBookPickSelected3x.image(scale: 3),
                   label: '책픽',
                 ),
                 BottomNavigationBarItem(
                   icon: Assets.images.navDeepTimeUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navDeepTimeSelected3x.image(scale: 3),
+                  activeIcon:
+                      Assets.images.navDeepTimeSelected3x.image(scale: 3),
                   label: '딥타임',
                 ),
                 BottomNavigationBarItem(
-                  icon: Assets.images.navReadingChallengeUnselected3x.image(scale: 3),
-                  activeIcon: Assets.images.navReadingChallengeSelected3x.image(scale: 3),
+                  icon: Assets.images.navReadingChallengeUnselected3x
+                      .image(scale: 3),
+                  activeIcon: Assets.images.navReadingChallengeSelected3x
+                      .image(scale: 3),
                   label: '리딩챌린지',
                 ),
               ],
