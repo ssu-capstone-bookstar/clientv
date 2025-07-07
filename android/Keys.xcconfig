@@ -1,0 +1,12 @@
+//
+//  Keys.xcconfig
+//  Runner
+//
+//  Created by 신현호 on 7/5/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+GOOGLE_CLIENT_ID=119504330253-v89qfipl8inhuvm0b3uns5j83s51u190.apps.googleusercontent.com
+GOOGLE_REVERSED_CLIENT_ID=com.googleusercontent.apps.119504330253-v89qfipl8inhuvm0b3uns5j83s51u190
