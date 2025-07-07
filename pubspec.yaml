@@ -45,6 +45,7 @@ dependencies:
   # Firebase
   firebase_auth:
   firebase_core:
+  sleek_circular_slider: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +94,7 @@ flutter:
     - assets/env/.env
     - assets/images/
     - assets/icons/
+    - assets/fonts/
     - assets/images/sample_book.jpg
 
 flutter_gen:

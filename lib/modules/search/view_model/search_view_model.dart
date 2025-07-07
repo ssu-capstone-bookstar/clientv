@@ -50,7 +50,9 @@ class SearchViewModel extends _$SearchViewModel {
     if (_isFetchingPage) return;
 
     final currentState = state.value;
-    if (currentState == null || !currentState.hasNext || currentState.query == null) {
+    if (currentState == null ||
+        !currentState.hasNext ||
+        currentState.query == null) {
       return;
     }
 

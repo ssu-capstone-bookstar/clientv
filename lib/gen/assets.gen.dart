@@ -22,6 +22,50 @@ class $AssetsEnvGen {
   List<String> get values => [aEnv];
 }
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/Pretendard-Black.otf
+  String get pretendardBlack => 'assets/fonts/Pretendard-Black.otf';
+
+  /// File path: assets/fonts/Pretendard-Bold.otf
+  String get pretendardBold => 'assets/fonts/Pretendard-Bold.otf';
+
+  /// File path: assets/fonts/Pretendard-ExtraBold.otf
+  String get pretendardExtraBold => 'assets/fonts/Pretendard-ExtraBold.otf';
+
+  /// File path: assets/fonts/Pretendard-ExtraLight.otf
+  String get pretendardExtraLight => 'assets/fonts/Pretendard-ExtraLight.otf';
+
+  /// File path: assets/fonts/Pretendard-Light.otf
+  String get pretendardLight => 'assets/fonts/Pretendard-Light.otf';
+
+  /// File path: assets/fonts/Pretendard-Medium.otf
+  String get pretendardMedium => 'assets/fonts/Pretendard-Medium.otf';
+
+  /// File path: assets/fonts/Pretendard-Regular.otf
+  String get pretendardRegular => 'assets/fonts/Pretendard-Regular.otf';
+
+  /// File path: assets/fonts/Pretendard-SemiBold.otf
+  String get pretendardSemiBold => 'assets/fonts/Pretendard-SemiBold.otf';
+
+  /// File path: assets/fonts/Pretendard-Thin.otf
+  String get pretendardThin => 'assets/fonts/Pretendard-Thin.otf';
+
+  /// List of all assets
+  List<String> get values => [
+    pretendardBlack,
+    pretendardBold,
+    pretendardExtraBold,
+    pretendardExtraLight,
+    pretendardLight,
+    pretendardMedium,
+    pretendardRegular,
+    pretendardSemiBold,
+    pretendardThin,
+  ];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -83,6 +127,10 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeCharFront =>
       const SvgGenImage('assets/icons/ic_deeptype_char_front.svg');
 
+  /// File path: assets/icons/ic_deeptype_fire.svg
+  SvgGenImage get icDeeptypeFire =>
+      const SvgGenImage('assets/icons/ic_deeptype_fire.svg');
+
   /// File path: assets/icons/ic_deeptype_notification1.svg
   SvgGenImage get icDeeptypeNotification1 =>
       const SvgGenImage('assets/icons/ic_deeptype_notification1.svg');
@@ -91,21 +139,17 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeNotification2 =>
       const SvgGenImage('assets/icons/ic_deeptype_notification2.svg');
 
-  /// File path: assets/icons/ic_deeptype_sticker1.svg
-  SvgGenImage get icDeeptypeSticker1 =>
-      const SvgGenImage('assets/icons/ic_deeptype_sticker1.svg');
+  /// File path: assets/icons/ic_deeptype_sticker_book.svg
+  SvgGenImage get icDeeptypeStickerBook =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker_book.svg');
 
-  /// File path: assets/icons/ic_deeptype_sticker2.svg
-  SvgGenImage get icDeeptypeSticker2 =>
-      const SvgGenImage('assets/icons/ic_deeptype_sticker2.svg');
+  /// File path: assets/icons/ic_deeptype_sticker_clock.svg
+  SvgGenImage get icDeeptypeStickerClock =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker_clock.svg');
 
-  /// File path: assets/icons/ic_deeptype_sticker3.svg
-  SvgGenImage get icDeeptypeSticker3 =>
-      const SvgGenImage('assets/icons/ic_deeptype_sticker3.svg');
-
-  /// File path: assets/icons/ic_deeptype_sticker4.svg
-  SvgGenImage get icDeeptypeSticker4 =>
-      const SvgGenImage('assets/icons/ic_deeptype_sticker4.svg');
+  /// File path: assets/icons/ic_deeptype_sticker_cloud.svg
+  SvgGenImage get icDeeptypeStickerCloud =>
+      const SvgGenImage('assets/icons/ic_deeptype_sticker_cloud.svg');
 
   /// File path: assets/icons/ic_login_char_front.svg
   SvgGenImage get icLoginCharFront =>
@@ -167,12 +211,12 @@ class $AssetsIconsGen {
     icDeeptypeCharBottom,
     icDeeptypeCharBw,
     icDeeptypeCharFront,
+    icDeeptypeFire,
     icDeeptypeNotification1,
     icDeeptypeNotification2,
-    icDeeptypeSticker1,
-    icDeeptypeSticker2,
-    icDeeptypeSticker3,
-    icDeeptypeSticker4,
+    icDeeptypeStickerBook,
+    icDeeptypeStickerClock,
+    icDeeptypeStickerCloud,
     icLoginCharFront,
     icLoginCharTop,
     icPointShopChar1,
@@ -286,6 +330,7 @@ class Assets {
   const Assets._();
 
   static const $AssetsEnvGen env = $AssetsEnvGen();
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

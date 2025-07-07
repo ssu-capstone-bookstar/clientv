@@ -15,7 +15,8 @@ part 'auth_view_model.g.dart';
 class AuthViewModel extends _$AuthViewModel {
   late final AuthRepository _authRepository = ref.read(authRepositoryProvider);
   late final SocialLoginService _socialLoginService = SocialLoginService();
-  late final SecureStorageRepository _secureStorageRepository = ref.read(secureStorageRepositoryProvider);
+  late final SecureStorageRepository _secureStorageRepository =
+      ref.read(secureStorageRepositoryProvider);
 
   @override
   Future<AuthState> build() async {
@@ -39,7 +40,8 @@ class AuthViewModel extends _$AuthViewModel {
         return AuthFailed(errorMsg: '', errorCode: -1);
       }
 
-      final request = LoginRequest(providerType: providerType, idToken: idToken);
+      final request =
+          LoginRequest(providerType: providerType, idToken: idToken);
 
       final response = await _authRepository.login(request);
 
@@ -50,7 +52,10 @@ class AuthViewModel extends _$AuthViewModel {
         refreshToken: authData.refreshToken,
       );
 
-      return AuthSuccess(memberId: authData.memberId, nickName: authData.nickName, profileImage: authData.profileImage);
+      return AuthSuccess(
+          memberId: authData.memberId,
+          nickName: authData.nickName,
+          profileImage: authData.profileImage);
     });
   }
 
@@ -86,7 +91,8 @@ class AuthViewModel extends _$AuthViewModel {
     }
 
     try {
-      final authDataResponse = await _authRepository.renewToken('Bearer $oldRefreshToken');
+      final authDataResponse =
+          await _authRepository.renewToken('Bearer $oldRefreshToken');
 
       final authData = authDataResponse.data;
 
@@ -110,7 +116,7 @@ class AuthViewModel extends _$AuthViewModel {
       );
 
       return authData;
-    } catch (e, t) {
+    } catch (e, _) {
       await signOut();
 
       return null;
