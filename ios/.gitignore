@@ -35,3 +35,6 @@ Runner/GeneratedPluginRegistrant.*
 
 Runner/GoogleService-Info.plist
 Keys.xcconfig
+
+android/Keys.xcconfig
+android/app/google-services.json
