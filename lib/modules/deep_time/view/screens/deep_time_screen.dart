@@ -51,53 +51,55 @@ class DeepTimeScreen extends ConsumerWidget {
             ? state.remainingDuration
             : state.settingDuration;
 
-    return LayoutBuilder(builder: (context, constraints) {
-      final timerSize = constraints.maxWidth * 0.75;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            const Spacer(flex: 2),
-            _buildTodayTotalTime(state.todayTotalSeconds),
-            const Spacer(flex: 4),
-            SizedBox(
-              width: timerSize,
-              height: timerSize,
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  CircularTimer(size: timerSize),
-                  _buildTimeMarker('0', const Alignment(0, -1.25)),
-                  _buildTimeMarker('15', const Alignment(1.25, 0)),
-                  _buildTimeMarker('30', const Alignment(0, 1.25)),
-                  _buildTimeMarker('45', const Alignment(-1.25, 0)),
-                  TimerCharacter(status: status),
-                ],
+    return SafeArea(
+      child: LayoutBuilder(builder: (context, constraints) {
+        final timerSize = constraints.maxWidth * 0.7;
+
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+          child: Column(
+            children: [
+              SizedBox(height: screenHeight * 0.01),
+              _buildTodayTotalTime(state.todayTotalSeconds),
+              SizedBox(height: screenHeight * 0.05),
+              SizedBox(
+                width: timerSize,
+                height: timerSize,
+                child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    CircularTimer(size: timerSize),
+                    _buildTimeMarker('0', const Alignment(0, -1.25)),
+                    _buildTimeMarker('15', const Alignment(1.25, 0)),
+                    _buildTimeMarker('30', const Alignment(0, 1.25)),
+                    _buildTimeMarker('45', const Alignment(-1.25, 0)),
+                    TimerCharacter(status: status),
+                  ],
+                ),
               ),
-            ),
-            const Spacer(flex: 2),
-            _buildStatusText(status, displayDuration),
-            const Spacer(),
-            if (state.settingDuration > Duration.zero) ...[
-              const TimerControls(),
-              const SizedBox(height: 24),
+              SizedBox(height: screenHeight * 0.05),
+              if (displayDuration == Duration.zero)
+                _buildStatusText(status, displayDuration),
+              SizedBox(height: screenHeight * 0.002),
+              if (state.settingDuration > Duration.zero) ...[
+                const TimerControls(),
+                SizedBox(height: screenHeight * 0.00005),
+              ],
+              _TimerDisplay(
+                status: status,
+                displayDuration: displayDuration,
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              CtaButtonL1(text: '플레이리스트', onPressed: () {}),
             ],
-            _TimerDisplay(
-              status: status,
-              displayDuration: displayDuration,
-            ),
-            const SizedBox(height: 36),
-            CtaButtonL1(
-              text: '플레이 리스트',
-              onPressed: () {},
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      );
-    });
+          ),
+        );
+      }),
+    );
   }
 
   Widget _buildTimeMarker(String text, Alignment alignment) {
@@ -127,22 +129,33 @@ class DeepTimeScreen extends ConsumerWidget {
 
   Widget _buildTodayTotalTime(int totalSeconds) {
     final duration = Duration(seconds: totalSeconds);
-    final timeStr =
-        '${duration.inHours}시간 ${duration.inMinutes.remainder(60)}분';
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '오늘의 누적 시간',
-          style: AppTexts.b8.copyWith(color: ColorName.g4),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          timeStr,
-          style: AppTexts.b7.copyWith(color: ColorName.w1),
-        ),
-      ],
+    // Format to HH:MM:SS
+    final hours = duration.inHours.toString().padLeft(2, '0');
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    final timeStr = '$hours:$minutes:$seconds';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: ColorName.b1,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '오늘의 누적 시간',
+            style: AppTexts.b8.copyWith(color: ColorName.w1),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            timeStr,
+            style: AppTexts.b7.copyWith(color: ColorName.p1),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -158,14 +171,25 @@ class _TimerDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final timerTextStyle = TextStyle(
+      fontFamily: 'Pretendard',
+      fontWeight: FontWeight.w900, // Black weight
+      fontSize: 50,
+      color: ColorName.p1,
+    );
+
     final timerText = Text(
       FormatUtils.formatDuration(displayDuration),
-      style: (status == DeepTimeStatus.running ? AppTexts.h1 : AppTexts.h2)
-          .copyWith(color: ColorName.g2),
+      style: timerTextStyle,
     );
 
     if (status != DeepTimeStatus.running) {
-      return timerText;
+      return Text(
+        FormatUtils.formatDuration(displayDuration),
+        style: timerTextStyle.copyWith(
+          color: ColorName.g5,
+        ),
+      );
     }
 
     return SizedBox(

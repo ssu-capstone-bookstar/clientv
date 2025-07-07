@@ -30,9 +30,9 @@ class CircularTimer extends ConsumerWidget {
       return SleekCircularSlider(
         appearance: CircularSliderAppearance(
           customWidths: CustomSliderWidths(
-            trackWidth: 2,
-            progressBarWidth: 10,
-            handlerSize: 8,
+            trackWidth: size * 0.03,
+            progressBarWidth: size * 0.04,
+            handlerSize: size * 0.03,
             shadowWidth: 0,
           ),
           customColors: CustomSliderColors(
@@ -61,6 +61,7 @@ class CircularTimer extends ConsumerWidget {
       return CustomPaint(
         size: Size(size, size),
         painter: _ShrinkingTimerPainter(
+          size: size,
           remainingDuration: remainingDuration,
         ),
       );
@@ -69,9 +70,11 @@ class CircularTimer extends ConsumerWidget {
 }
 
 class _ShrinkingTimerPainter extends CustomPainter {
+  final double size;
   final Duration remainingDuration;
 
   _ShrinkingTimerPainter({
+    required this.size,
     required this.remainingDuration,
   });
 
@@ -79,13 +82,13 @@ class _ShrinkingTimerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    const strokeWidth = 10.0;
+    final strokeWidth = this.size * 0.04;
 
     // 1. 희미한 배경 트랙 그리기
     final trackPaint = Paint()
       ..color = ColorName.g6
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = this.size * 0.04;
     canvas.drawCircle(center, radius, trackPaint);
 
     // 2. 60분 기준의 원을 기반으로 진행률 계산
@@ -125,6 +128,7 @@ class _ShrinkingTimerPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _ShrinkingTimerPainter oldDelegate) {
     // 남은 시간이 변경될 때만 다시 그립니다.
-    return oldDelegate.remainingDuration != remainingDuration;
+    return oldDelegate.remainingDuration != remainingDuration ||
+        oldDelegate.size != size;
   }
 }

@@ -95,11 +95,11 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
   }
 
   // 타이머 리셋 (X 버튼 등)
-  void resetTimer() {
+  Future<void> resetTimer() async {
     _timer?.cancel();
     // 리셋 시에는 현재까지의 시간을 기록하고 상태를 초기화합니다.
     if (state.value != null && state.value!.settingDuration.inSeconds > 0) {
-      _postTimerDuration();
+      await _postTimerDuration();
     }
     
     final currentVal = state.value;
