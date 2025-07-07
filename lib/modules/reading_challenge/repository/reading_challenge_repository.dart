@@ -1,10 +1,11 @@
+import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../infra/network/dio_client.dart';
 import '../../../common/models/response_form.dart';
+import '../../../infra/network/dio_client.dart';
 import '../model/challenge_response.dart';
 import '../model/rating_request.dart';
 
@@ -18,11 +19,12 @@ ReadingChallengeRepository readingChallengeRepository(Ref ref) {
 
 @RestApi()
 abstract class ReadingChallengeRepository {
-  factory ReadingChallengeRepository(Dio dio, {String baseUrl}) = _ReadingChallengeRepository;
+  factory ReadingChallengeRepository(Dio dio, {String baseUrl}) =
+      _ReadingChallengeRepository;
 
   @POST('/api/v2/reading-challenges')
   Future<ResponseForm<ChallengeResponse>> createChallenge(
-    @Query('bookId') int bookId,
+    @Body() ReadingChallengeRequest request,
   );
 
   @GET('/api/v2/reading-challenges/ongoing')

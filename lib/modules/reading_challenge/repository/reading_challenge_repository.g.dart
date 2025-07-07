@@ -18,11 +18,13 @@ class _ReadingChallengeRepository implements ReadingChallengeRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ResponseForm<ChallengeResponse>> createChallenge(int bookId) async {
+  Future<ResponseForm<ChallengeResponse>> createChallenge(
+    ReadingChallengeRequest request,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'bookId': bookId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final _data = request;
     final _options = _setStreamType<ResponseForm<ChallengeResponse>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

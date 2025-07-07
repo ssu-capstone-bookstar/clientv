@@ -6,17 +6,23 @@ import '../../model/search_book_response.dart';
 
 class BookSearchResultCard extends StatelessWidget {
   final SearchBookResponse book;
+  final String? from;
 
   const BookSearchResultCard({
     super.key,
     required this.book,
+    this.from,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push('/book-pick/search/book-overview/${book.bookId}');
+        if (from == 'challenge') {
+          context.push('/reading-challenge/start', extra: book);
+        } else {
+          context.push('/book-pick/search/book-overview/${book.bookId}');
+        }
       },
       child: AspectRatio(
         aspectRatio: 2 / 3,

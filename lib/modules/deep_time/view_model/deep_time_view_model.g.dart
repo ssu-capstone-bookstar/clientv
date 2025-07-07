@@ -6,7 +6,7 @@ part of 'deep_time_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$deepTimeViewModelHash() => r'894fade57e2338309982aef88b1bbff9cbb5ec86';
+String _$deepTimeViewModelHash() => r'35acb923376da5de9370498e35b80e52a74dd46f';
 
 /// See also [DeepTimeViewModel].
 @ProviderFor(DeepTimeViewModel)
