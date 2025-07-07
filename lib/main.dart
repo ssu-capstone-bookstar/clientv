@@ -21,7 +21,7 @@ void main() async {
     nativeAppKey: dotenv.env['KAKAO_NATIVE_KEY'],
   );
 
-  await FlutterSecureStorage().deleteAll();
+  // await FlutterSecureStorage().deleteAll();
 
   FlutterError.onError = (FlutterErrorDetails details) {
     print('[onError] ${details.exception}');

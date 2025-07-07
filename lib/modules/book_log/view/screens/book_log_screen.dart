@@ -49,8 +49,8 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
     final double bubbleWidth = 100;
     final double bubbleHeight = 38;
     final Offset bubbleOffset = Offset(
-      position.dx + (size.width / 2) - (bubbleWidth / 2) + 80,
-      position.dy - bubbleHeight - 110,
+      position.dx + 86,
+      position.dy - AppSizes.APP_BAR_HEIGHT - 86 - 10,
     );
     _speechBubbleEntry = SpeechBubbleOverlay.show(
       context: context,
@@ -72,45 +72,43 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBlack,
-      body: SafeArea(
-        child: profileAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, st) => Center(
-              child: Text('프로필 정보를 불러올 수 없습니다.',
-                  style: TextStyle(color: AppColors.textGrey))),
-          data: (profile) {
-            if (!_speechBubbleShown) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _removeSpeechBubble();
-                _showSpeechBubble(context);
-              });
-              _speechBubbleShown = true;
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 10),
-                // 북로그 헤더 : 프로필 이미지, 닉네임, 통계,
-                BookLogHeaderSection(
-                  profileImageUrl: profile.profileImageUrl,
-                  nickName: profile.nickName,
-                  diaryCount: profile.diaryCount,
-                  followingCount: profile.followingCount,
-                  followerCount: profile.followerCount,
-                  isMyProfile: isMyProfile,
-                  onEdit: () => GoRouter.of(context).go('/book-log/profile'),
-                  profileImageKey: _profileImageKey,
-                ),
-                const SizedBox(height: 25),
-                // 책장(Bookshelf)
-                BookLogMidSection(books: dummyBooks),
-                const SizedBox(height: 20),
-                // 책로그 그리드
-                BookLogLowSection(),
-              ],
-            );
-          },
-        ),
+      body: profileAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(
+            child: Text('프로필 정보를 불러올 수 없습니다.',
+                style: TextStyle(color: AppColors.textGrey))),
+        data: (profile) {
+          if (!_speechBubbleShown) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _removeSpeechBubble();
+              _showSpeechBubble(context);
+            });
+            _speechBubbleShown = true;
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 15),
+              // 북로그 헤더 : 프로필 이미지, 닉네임, 통계,
+              BookLogHeaderSection(
+                profileImageUrl: profile.profileImageUrl,
+                nickName: profile.nickName,
+                diaryCount: profile.diaryCount,
+                followingCount: profile.followingCount,
+                followerCount: profile.followerCount,
+                isMyProfile: isMyProfile,
+                onEdit: () => GoRouter.of(context).go('/book-log/profile'),
+                profileImageKey: _profileImageKey,
+              ),
+              const SizedBox(height: 25),
+              // 책장(Bookshelf)
+              BookLogMidSection(books: dummyBooks),
+              const SizedBox(height: 20),
+              // 책로그 그리드
+              BookLogLowSection(),
+            ],
+          );
+        },
       ),
     );
   }
