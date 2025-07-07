@@ -1,5 +1,5 @@
 import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/text_button.dart';
+import 'package:book/common/components/cta_button_l2.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
@@ -12,48 +12,42 @@ class DeepTimePauseDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Dialog(
       backgroundColor: ColorName.g6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.06,
+          vertical: 24,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('딥타임 중단', style: AppTexts.b4.copyWith(color: ColorName.w1)),
+            Text('딥타임 중단', style: AppTexts.b6.copyWith(color: ColorName.w1)),
             const SizedBox(height: 8),
             Text(
               '정말 딥타임을 멈출까요?',
-              style: AppTexts.b6.copyWith(color: ColorName.g4),
+              style: AppTexts.b1.copyWith(color: ColorName.w1),
             ),
             const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Assets.icons.icBookpickChatCharacter.svg(width: 60),
-                const SizedBox(width: 16),
-                // TODO: Add user profile image
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: ColorName.g6,
-                  ),
-                )
-              ],
-            ),
+            Assets.icons.icDeeptypeNotification1.svg(width: 60),
             const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
-                  child: CustomTextButton(
-                    label: '멈추기',
-                    onTap: () {
-                      ref.read(deepTimeViewModelProvider.notifier).pauseTimer();
-                      Navigator.of(context).pop();
+                  child: CtaButtonL2(
+                    text: '멈추기',
+                    onPressed: () async {
+                      await ref
+                          .read(deepTimeViewModelProvider.notifier)
+                          .resetTimer();
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
                     },
                   ),
                 ),

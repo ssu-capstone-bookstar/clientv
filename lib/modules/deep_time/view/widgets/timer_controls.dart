@@ -10,6 +10,9 @@ class TimerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth * 0.18;
+
     final state = ref.watch(deepTimeViewModelProvider).value;
     if (state == null) {
       return const SizedBox.shrink();
@@ -53,13 +56,13 @@ class TimerControls extends ConsumerWidget {
                 Icons.pause_circle_filled,
                 key: const ValueKey('pause'),
                 color: ColorName.p1,
-                size: 72,
+                size: iconSize,
               )
             : Icon(
                 Icons.play_circle_filled,
                 key: const ValueKey('play'),
                 color: isSetting ? ColorName.g5 : ColorName.p1,
-                size: 72,
+                size: iconSize,
               ),
       ),
     );
