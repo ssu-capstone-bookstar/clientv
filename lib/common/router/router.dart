@@ -13,7 +13,10 @@ import '../../modules/chat/view/screens/book_talk_screen.dart';
 import '../../modules/deep_time/view/screens/deep_time_screen.dart';
 import '../../modules/home/view/screens/home_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_progress_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_start_screen.dart';
+import '../../modules/search/model/search_book_response.dart';
 import '../../modules/search/view/screens/search_detail_screen.dart';
 
 part 'router.g.dart';
@@ -104,7 +107,10 @@ GoRouter router(Ref ref) {
                   GoRoute(
                     path: 'search',
                     parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const SearchDetailScreen(),
+                    builder: (context, state) {
+                      final from = state.uri.queryParameters['from'];
+                      return SearchDetailScreen(from: from);
+                    },
                     routes: [
                       GoRoute(
                         path: 'book-overview/:bookId',
@@ -134,6 +140,29 @@ GoRouter router(Ref ref) {
               GoRoute(
                 path: '/reading-challenge',
                 builder: (context, state) => const ReadingChallengeScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'start',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final book = state.extra as SearchBookResponse;
+                      return ReadingChallengeStartScreen(book: book);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'second',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final extra = state.extra as Map<String, dynamic>;
+                      final book = extra['book'] as SearchBookResponse;
+                      final totalPages = extra['totalPages'] as int;
+                      return ReadingChallengeProgressScreen(
+                        book: book,
+                        totalPages: totalPages,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

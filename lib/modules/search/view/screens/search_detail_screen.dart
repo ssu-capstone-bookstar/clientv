@@ -11,7 +11,12 @@ import '../../view_model/search_view_model.dart';
 import '../widgets/book_search_result_card.dart';
 
 class SearchDetailScreen extends ConsumerStatefulWidget {
-  const SearchDetailScreen({super.key});
+  const SearchDetailScreen({
+    super.key,
+    this.from,
+  });
+
+  final String? from;
 
   @override
   ConsumerState<SearchDetailScreen> createState() => _SearchDetailScreenState();
@@ -189,7 +194,10 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               if (bookIndex < books.length) {
                 rowItems.add(
                   Expanded(
-                    child: BookSearchResultCard(book: books[bookIndex]),
+                    child: BookSearchResultCard(
+                      book: books[bookIndex],
+                      from: widget.from,
+                    ),
                   ),
                 );
               } else {
