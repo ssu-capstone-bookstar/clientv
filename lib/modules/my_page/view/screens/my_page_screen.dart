@@ -36,13 +36,13 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
               CustomTextButton(
                 label: '로그인 정보',
                 onTap: () {
-                  // TODO: 로그인 정보 페이지로 이동
+                  context.go('/book-log/my-page/login-info');
                 },
               ),
               CustomTextButton(
                 label: '회원 탈퇴',
                 onTap: () {
-                  // TODO: 회원 탈퇴 페이지로 이동
+                  context.go('/book-log/my-page/delete-account');
                 },
               ),
               const SizedBox(height: 35),
@@ -51,7 +51,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
               CustomTextButton(
                 label: '고객 센터',
                 onTap: () {
-                  // TODO: 고객 센터 페이지로 이동
+                  context.go('/book-log/my-page/customer-support');
                 },
               ),
               const SizedBox(height: 35),
@@ -60,25 +60,25 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
               CustomTextButton(
                 label: '좋아요 누른 다이어리',
                 onTap: () {
-                  // TODO: 좋아요 누른 다이어리 페이지로 이동
+                  context.go('/book-log/my-page/liked-diaries');
                 },
               ),
               CustomTextButton(
                 label: '스크랩한 다이어리',
                 onTap: () {
-                  // TODO: 스크랩한 다이어리 페이지로 이동
+                  context.go('/book-log/my-page/scrapped-diaries');
                 },
               ),
               CustomTextButton(
                 label: '팔로워 관리',
                 onTap: () {
-                  // TODO: 팔로워 관리 페이지로 이동
+                  context.go('/book-log/my-page/follower-management');
                 },
               ),
               CustomTextButton(
                 label: '챌린지 중단 도서',
                 onTap: () {
-                  // TODO: 챌린지 중단 도서 페이지로 이동
+                  context.go('/book-log/my-page/challenge-quit-books');
                 },
               ),
               const Spacer(),

@@ -44,7 +44,6 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
     final RenderBox box =
         _profileImageKey.currentContext!.findRenderObject() as RenderBox;
     final Offset position = box.localToGlobal(Offset.zero);
-    final Size size = box.size;
     // 말풍선 중앙이 프로필 이미지 중앙에 오도록 Figma 기준 위치 조정
     final double bubbleWidth = 100;
     final double bubbleHeight = 38;

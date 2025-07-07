@@ -16,6 +16,13 @@ import '../../modules/profile/view/screens/profile_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
 import '../../modules/search/view/screens/search_detail_screen.dart';
 import '../../modules/my_page/view/screens/my_page_screen.dart';
+import '../../modules/my_page/view/screens/challenge_quit_books_screen.dart';
+import '../../modules/my_page/view/screens/customer_support_screen.dart';
+import '../../modules/my_page/view/screens/delete_account_screen.dart';
+import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
+import '../../modules/my_page/view/screens/follower_management_screen.dart';
+import '../../modules/my_page/view/screens/liked_diaries_screen.dart';
+import '../../modules/my_page/view/screens/login_info_screen.dart';
 
 part 'router.g.dart';
 
@@ -88,6 +95,48 @@ GoRouter router(Ref ref) {
                     path: 'my-page',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const MyPageScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'challenge-quit-books',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const ChallengeQuitBooksScreen(),
+                      ),
+                      GoRoute(
+                        path: 'customer-support',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const CustomerSupportScreen(),
+                      ),
+                      GoRoute(
+                        path: 'delete-account',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const DeleteAccountScreen(),
+                      ),
+                      GoRoute(
+                        path: 'scrapped-diaries',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const ScrappedDiariesScreen(),
+                      ),
+                      GoRoute(
+                        path: 'follower-management',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const FollowerManagementScreen(),
+                      ),
+                      GoRoute(
+                        path: 'liked-diaries',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) => const LikedDiariesScreen(),
+                      ),
+                      GoRoute(
+                        path: 'login-info',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) => const LoginInfoScreen(),
+                      ),
+                    ],
                   ),
                 ],
               ),

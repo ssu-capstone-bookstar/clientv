@@ -16,8 +16,11 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _SectionContainer(
       child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
         onTap: () {
-          // TODO: 카테고리별 편집 페이지로 이동
           if (onTap != null) onTap!();
         },
         child: Row(
