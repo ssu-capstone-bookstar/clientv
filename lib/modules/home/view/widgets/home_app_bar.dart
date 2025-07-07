@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../common/theme/app_style.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../model/home_bottom_nav_menu.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -21,6 +22,19 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final label = HomeBottomNavMenu.values[currentIndex].label;
+    final isDeepTime = currentIndex == HomeBottomNavMenu.deepTime.index;
+
+    if (isDeepTime) {
+      return AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: onBackTap,
+          icon: const Icon(Icons.close, color: ColorName.w1),
+        ),
+        title: Text('딥타임', style: AppTexts.b5),
+        centerTitle: true,
+      );
+    }
 
     return AppBar(
       automaticallyImplyLeading: false,

@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_view_model.dart';
+part of 'deep_time_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authViewModelHash() => r'888b05a8c0591e1e142de402d6e2e07978693d22';
+String _$deepTimeViewModelHash() => r'894fade57e2338309982aef88b1bbff9cbb5ec86';
 
-/// See also [AuthViewModel].
-@ProviderFor(AuthViewModel)
-final authViewModelProvider =
-    AsyncNotifierProvider<AuthViewModel, AuthState>.internal(
-  AuthViewModel.new,
-  name: r'authViewModelProvider',
+/// See also [DeepTimeViewModel].
+@ProviderFor(DeepTimeViewModel)
+final deepTimeViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<DeepTimeViewModel, DeepTimeState>.internal(
+  DeepTimeViewModel.new,
+  name: r'deepTimeViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$authViewModelHash,
+      : _$deepTimeViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthViewModel = AsyncNotifier<AuthState>;
+typedef _$DeepTimeViewModel = AutoDisposeAsyncNotifier<DeepTimeState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

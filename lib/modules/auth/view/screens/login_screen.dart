@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide IconAlignment;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../common/extension/string_extensions.dart';
 import '../../../../common/theme/app_style.dart';

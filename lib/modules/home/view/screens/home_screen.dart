@@ -23,11 +23,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // NOTE(현호): 개선 필요
   void _onTabTapped(int index) {
-    if (index != 0) {
+    // 딥타임 같이 전체 화면을 사용하는 뷰로 이동할 때, 현재 탭(이전 탭이 될)을 저장합니다.
+    final previousIndex = widget.navigationShell.currentIndex;
+    if (index == HomeBottomNavMenu.deepTime.index) {
       setState(() {
-        _lastVisitedTabIndex = index;
+        _lastVisitedTabIndex = previousIndex;
       });
     }
+
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,

@@ -15,7 +15,6 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$DualCursorPageResponse<T> {
-  @JsonKey(name: 'data')
   List<T> get data;
   int? get nextCursor;
   Object? get nextSubCursor;
@@ -67,10 +66,7 @@ abstract mixin class $DualCursorPageResponseCopyWith<T, $Res> {
       _$DualCursorPageResponseCopyWithImpl;
   @useResult
   $Res call(
-      {@JsonKey(name: 'data') List<T> data,
-      int? nextCursor,
-      Object? nextSubCursor,
-      bool hasNext});
+      {List<T> data, int? nextCursor, Object? nextSubCursor, bool hasNext});
 }
 
 /// @nodoc
@@ -114,7 +110,7 @@ class _$DualCursorPageResponseCopyWithImpl<T, $Res>
 @JsonSerializable(genericArgumentFactories: true)
 class _DualCursorPageResponse<T> implements DualCursorPageResponse<T> {
   const _DualCursorPageResponse(
-      {@JsonKey(name: 'data') required final List<T> data,
+      {required final List<T> data,
       required this.nextCursor,
       this.nextSubCursor,
       required this.hasNext})
@@ -125,7 +121,6 @@ class _DualCursorPageResponse<T> implements DualCursorPageResponse<T> {
 
   final List<T> _data;
   @override
-  @JsonKey(name: 'data')
   List<T> get data {
     if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
@@ -191,10 +186,7 @@ abstract mixin class _$DualCursorPageResponseCopyWith<T, $Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'data') List<T> data,
-      int? nextCursor,
-      Object? nextSubCursor,
-      bool hasNext});
+      {List<T> data, int? nextCursor, Object? nextSubCursor, bool hasNext});
 }
 
 /// @nodoc
