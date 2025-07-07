@@ -6,6 +6,7 @@ class AppPaddings {
 
   // SCREEN
   static const EdgeInsets SCREEN_BODY_PADDING = EdgeInsets.only(left: 16.0, top: 20.0, right: 16.0);
+  static const EdgeInsets BOOK_LOG_SCREEN_BODY_PADDING = EdgeInsets.only(top: 20.0);
 
   // APPBAR
   static const EdgeInsets BOTTOM_NAV_BAR_TOP_PADDING = EdgeInsets.only(top: 20);
