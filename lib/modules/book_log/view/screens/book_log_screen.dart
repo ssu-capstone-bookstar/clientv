@@ -47,9 +47,11 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
     // 말풍선 중앙이 프로필 이미지 중앙에 오도록 Figma 기준 위치 조정
     final double bubbleWidth = 100;
     final double bubbleHeight = 38;
+    final double appBarHeight = 56.0;
+    final double y = MediaQuery.of(context).padding.top + appBarHeight + 4;
     final Offset bubbleOffset = Offset(
-      position.dx + (size.width / 2) - (bubbleWidth / 2) + 100,
-      position.dy - bubbleHeight + 8 - 60, // 8px 겹치게 조정
+      position.dx + (size.width / 2) - (bubbleWidth / 2) + 90,
+      y,
     );
     _speechBubbleEntry = SpeechBubbleOverlay.show(
       context: context,
@@ -97,6 +99,7 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
                   followerCount: profile.followerCount,
                   isMyProfile: isMyProfile,
                   onEdit: () => GoRouter.of(context).go('/book-log/profile'),
+                  profileImageKey: _profileImageKey,
                 ),
                 const SizedBox(height: 25),
                 // 책장(Bookshelf)

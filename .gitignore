@@ -32,6 +32,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
 
 # Secret files
 assets/env/.env

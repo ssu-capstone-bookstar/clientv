@@ -13,6 +13,7 @@ class BookLogHeaderSection extends StatelessWidget {
   final int followerCount;
   final bool isMyProfile;
   final VoidCallback? onEdit;
+  final Key? profileImageKey;
 
   const BookLogHeaderSection({
     required this.profileImageUrl,
@@ -22,6 +23,7 @@ class BookLogHeaderSection extends StatelessWidget {
     required this.followerCount,
     this.isMyProfile = false,
     this.onEdit,
+    this.profileImageKey,
     super.key,
   });
 
@@ -39,6 +41,7 @@ class BookLogHeaderSection extends StatelessWidget {
             width: 86,
             height: 86,
             child: CircleAvatar(
+              key: profileImageKey,
               backgroundColor: ColorName.g7,
               backgroundImage: profileImageUrl.isNotEmpty
                   ? NetworkImage(profileImageUrl)
