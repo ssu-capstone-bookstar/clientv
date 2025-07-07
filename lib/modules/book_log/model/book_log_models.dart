@@ -140,12 +140,57 @@ final dummyDiaries = [
     startPage: 61,
     endPage: 70,
     content: '더미 다이어리 7',
-    images: [],
+    images: [
+      DiaryImageResponse(
+        id: 7,
+        imageUrl: 'https://picsum.photos/200/300',
+        sequence: 1,
+      ),
+    ],
     decoration: '',
     createdAt: DateTime.now(),
   ),
   DiaryResponse(
     diaryId: 8,
+    startPage: 71,
+    endPage: 80,
+    content: '더미 다이어리 8',
+    images: [
+      DiaryImageResponse(
+        id: 8,
+        imageUrl: 'https://picsum.photos/200/300',
+        sequence: 1,
+      ),
+    ],
+    decoration: '',
+    createdAt: DateTime.now(),
+  ),
+  DiaryResponse(
+    diaryId: 9,
+    startPage: 1,
+    endPage: 10,
+    content: '더미 다이어리 9',
+    images: [
+      DiaryImageResponse(
+        id: 9,
+        imageUrl: 'https://picsum.photos/200/300',
+        sequence: 1,
+      ),
+    ],
+    decoration: '',
+    createdAt: DateTime.now(),
+  ),
+  DiaryResponse(
+    diaryId: 10,
+    startPage: 61,
+    endPage: 70,
+    content: '더미 다이어리 7',
+    images: [],
+    decoration: '',
+    createdAt: DateTime.now(),
+  ),
+  DiaryResponse(
+    diaryId: 11,
     startPage: 71,
     endPage: 80,
     content: '더미 다이어리 8',

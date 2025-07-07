@@ -1,3 +1,4 @@
+import 'package:book/common/theme/style/app_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,11 +48,9 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
     // 말풍선 중앙이 프로필 이미지 중앙에 오도록 Figma 기준 위치 조정
     final double bubbleWidth = 100;
     final double bubbleHeight = 38;
-    final double appBarHeight = 56.0;
-    final double y = MediaQuery.of(context).padding.top + appBarHeight + 4;
     final Offset bubbleOffset = Offset(
-      position.dx + (size.width / 2) - (bubbleWidth / 2) + 90,
-      y,
+      position.dx + (size.width / 2) - (bubbleWidth / 2) + 80,
+      position.dy - bubbleHeight - 110,
     );
     _speechBubbleEntry = SpeechBubbleOverlay.show(
       context: context,
@@ -90,6 +89,7 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 10),
                 // 북로그 헤더 : 프로필 이미지, 닉네임, 통계,
                 BookLogHeaderSection(
                   profileImageUrl: profile.profileImageUrl,
