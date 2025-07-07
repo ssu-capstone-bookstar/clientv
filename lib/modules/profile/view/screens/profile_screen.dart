@@ -1,3 +1,5 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,12 +8,12 @@ import '../../model/update_profile_request.dart';
 import '../../repository/profile_repository.dart';
 import '../../view_model/profile_view_model.dart';
 import '../../../../common/components/cta_button_l1.dart';
-import 'profile_image_section.dart';
 import '../../../../common/components/text_button.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/profile/view/widgets/profile_name_and_introduction_field.dart';
+import 'package:book/modules/profile/view/widgets/profile_image_section.dart';
 
 void invalidateMyProfileProviders(WidgetRef ref, int myMemberId) {
   ref.invalidate(profileProvider(null));
@@ -117,6 +119,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('프로필 편집'),
+        titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
         leading: IconButton(
           icon: const BackButton(),
           onPressed: () => context.pop(),

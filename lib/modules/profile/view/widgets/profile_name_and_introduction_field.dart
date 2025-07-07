@@ -15,6 +15,7 @@ class ProfileNameAndIntroductionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double titleWidth = 40; // 고정 너비로 맞춤
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -30,8 +31,11 @@ class ProfileNameAndIntroductionField extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ProfileSectionTitle('닉네임'),
-                const SizedBox(width: 18),
+                SizedBox(
+                  width: titleWidth,
+                  child: ProfileSectionTitle('닉네임'),
+                ),
+                const SizedBox(width: 14),
                 Expanded(
                   child: TextField(
                     controller: nicknameController,
@@ -58,8 +62,11 @@ class ProfileNameAndIntroductionField extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ProfileSectionTitle('소개'),
-                const SizedBox(width: 18),
+                SizedBox(
+                  width: titleWidth,
+                  child: ProfileSectionTitle('소개'),
+                ),
+                const SizedBox(width: 14),
                 Expanded(
                   child: TextField(
                     controller: introductionController,

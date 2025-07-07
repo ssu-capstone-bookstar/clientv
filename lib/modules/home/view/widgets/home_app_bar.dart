@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/colors.gen.dart';
@@ -38,14 +39,16 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
-      leading: (isBookLog && !Navigator.canPop(context)) ? BackButton(onPressed: onBackTap) : null,
+      leading: (isBookLog && !Navigator.canPop(context))
+          ? BackButton(onPressed: onBackTap)
+          : null,
       title: Text(label, style: AppTexts.b5),
       actions: !Navigator.canPop(context)
           ? [
               if (isBookLog)
                 IconButton(
                   icon: const Icon(Icons.menu),
-                  onPressed: () {}, // TODO: 마이페이지로 이동
+                  onPressed: () => context.go('/book-log/my-page'), // 마이페이지로 이동
                 )
             ]
           : [BackButton()],

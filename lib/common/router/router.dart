@@ -15,6 +15,7 @@ import '../../modules/home/view/screens/home_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
 import '../../modules/search/view/screens/search_detail_screen.dart';
+import '../../modules/my_page/view/screens/my_page_screen.dart';
 
 part 'router.g.dart';
 
@@ -82,6 +83,11 @@ GoRouter router(Ref ref) {
                     path: 'profile',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const ProfileScreen(),
+                  ),
+                  GoRoute(
+                    path: 'my-page',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const MyPageScreen(),
                   ),
                 ],
               ),
