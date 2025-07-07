@@ -9,12 +9,12 @@ import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
+import '../../modules/book_pick/view/screens/book_pick_search_screen.dart';
 import '../../modules/chat/view/screens/book_talk_screen.dart';
 import '../../modules/deep_time/view/screens/deep_time_screen.dart';
 import '../../modules/home/view/screens/home_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
-import '../../modules/search/view/screens/search_detail_screen.dart';
 
 part 'router.g.dart';
 

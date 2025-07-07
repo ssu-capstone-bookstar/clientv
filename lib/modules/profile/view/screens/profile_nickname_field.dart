@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../common/theme/app_colors.dart';
+import '../../../../common/theme/style/app_colors.dart';
+import '../../../../gen/colors.gen.dart';
 
 class ProfileNicknameField extends StatelessWidget {
   final TextEditingController controller;
@@ -16,14 +17,14 @@ class ProfileNicknameField extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            color: AppColors.backgroundBlack,
+            color: ColorName.b2,
             child: TextFormField(
               controller: controller,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: '닉네임을 입력하세요',
                 border: InputBorder.none,
                 filled: true,
-                fillColor: AppColors.backgroundBlack,
+                fillColor: ColorName.b2,
               ),
               maxLines: 1,
             ),

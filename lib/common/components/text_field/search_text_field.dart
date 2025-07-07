@@ -56,6 +56,7 @@ class SearchTextField extends StatelessWidget {
           disabledBorder: outlineInputBorder,
           enabledBorder: outlineInputBorder,
           focusedBorder: outlineInputBorder,
+          filled: true,
         ),
         onSubmitted: onSubmitted,
         readOnly: readOnly,

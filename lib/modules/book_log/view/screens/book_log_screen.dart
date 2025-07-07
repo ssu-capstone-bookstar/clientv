@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/theme/app_colors.dart';
+import '../../../../common/theme/style/app_colors.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../view_model/book_log_view_model.dart';
@@ -71,13 +72,13 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
     final profileAsync = ref.watch(bookLogProfileProvider(memberId));
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundBlack,
+      backgroundColor: ColorName.b2,
       body: SafeArea(
         child: profileAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, st) => Center(
               child: Text('프로필 정보를 불러올 수 없습니다.',
-                  style: TextStyle(color: AppColors.textGrey))),
+                  style: TextStyle(color:ColorName.g3))),
           data: (profile) {
             if (!_speechBubbleShown) {
               WidgetsBinding.instance.addPostFrameCallback((_) {

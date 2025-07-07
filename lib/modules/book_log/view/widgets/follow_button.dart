@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:book/common/theme/app_colors.dart';
+import 'package:book/common/theme/style/app_colors.dart';
+
+import '../../../../gen/colors.gen.dart';
 
 class FollowButton extends StatelessWidget {
   const FollowButton({super.key});
@@ -7,8 +9,8 @@ class FollowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryPurple,
-        foregroundColor: AppColors.white,
+        backgroundColor: ColorName.p1,
+        foregroundColor: ColorName.w1,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
         minimumSize: const Size(0, 36),
