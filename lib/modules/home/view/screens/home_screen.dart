@@ -48,13 +48,16 @@ class _HomeScreenState extends State<HomeScreen> {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
       ),
-      body: Padding(padding: navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index ? AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING : AppPaddings.SCREEN_BODY_PADDING, child: navigationShell), // NOTE(현호): 패딩 조정
-      bottomNavigationBar: navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
-          ? null
-          : HomeBottomNavBar(
-              currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
-              onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
-            ),
+      body: Padding(
+          padding:
+              navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
+                  ? AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING
+                  : AppPaddings.SCREEN_BODY_PADDING,
+          child: navigationShell), // NOTE(현호): 패딩 조정
+      bottomNavigationBar: HomeBottomNavBar(
+        currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
+        onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+      ),
     );
   }
 }
