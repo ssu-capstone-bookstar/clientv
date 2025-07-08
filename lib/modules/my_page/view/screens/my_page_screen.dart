@@ -1,3 +1,4 @@
+import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,10 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: AppPaddings.SCREEN_BODY_PADDING,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 32),
               Text('회원 정보', style: AppTexts.b5.copyWith(color: ColorName.w1)),
               const SizedBox(height: 8),
               CustomTextButton(
