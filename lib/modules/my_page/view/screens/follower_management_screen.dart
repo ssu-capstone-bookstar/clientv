@@ -10,7 +10,6 @@ class FollowerManagementScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('팔로워 관리'),
-        titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
         leading: IconButton(
           icon: const BackButton(),
           onPressed: () => Navigator.of(context).pop(),

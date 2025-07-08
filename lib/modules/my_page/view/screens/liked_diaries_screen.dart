@@ -10,7 +10,6 @@ class LikedDiariesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('좋아요 누른 다이어리'),
-        titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
         leading: IconButton(
           icon: const BackButton(),
           onPressed: () => Navigator.of(context).pop(),

@@ -18,7 +18,6 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('마이페이지'),
-        titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
         leading: IconButton(
           icon: const BackButton(),
           onPressed: () => context.pop(),

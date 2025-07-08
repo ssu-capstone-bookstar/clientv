@@ -10,7 +10,6 @@ class CustomerSupportScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('고객 센터'),
-        titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
         leading: IconButton(
           icon: const BackButton(),
           onPressed: () => Navigator.of(context).pop(),

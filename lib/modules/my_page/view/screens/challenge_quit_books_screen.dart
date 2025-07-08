@@ -10,7 +10,6 @@ class ChallengeQuitBooksScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('챌린지 중단 도서'),
-        titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
         leading: IconButton(
           icon: const BackButton(),
           onPressed: () => Navigator.of(context).pop(),

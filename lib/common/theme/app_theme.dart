@@ -1,4 +1,6 @@
 import 'package:book/common/theme/app_colors.dart';
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -6,15 +8,11 @@ class AppTheme {
     primaryColor: AppColors.primaryPurple,
     scaffoldBackgroundColor: AppColors.backgroundBlack,
     brightness: Brightness.dark,
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: AppColors.backgroundBlack,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: TextStyle(
-        color: AppColors.white,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+      titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
       iconTheme: IconThemeData(
         color: AppColors.appbarGray,
       ),
