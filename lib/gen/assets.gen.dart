@@ -115,6 +115,9 @@ class $AssetsIconsGen {
   SvgGenImage get icChatNotification =>
       const SvgGenImage('assets/icons/ic_chat_notification.svg');
 
+  /// File path: assets/icons/ic_check.svg
+  SvgGenImage get icCheck => const SvgGenImage('assets/icons/ic_check.svg');
+
   /// File path: assets/icons/ic_deeptype_char_bottom.svg
   SvgGenImage get icDeeptypeCharBottom =>
       const SvgGenImage('assets/icons/ic_deeptype_char_bottom.svg');
@@ -208,6 +211,7 @@ class $AssetsIconsGen {
     icCategoryScienceTech,
     icCategorySocialSciences,
     icChatNotification,
+    icCheck,
     icDeeptypeCharBottom,
     icDeeptypeCharBw,
     icDeeptypeCharFront,

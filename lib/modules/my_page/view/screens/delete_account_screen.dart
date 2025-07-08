@@ -1,3 +1,5 @@
+import 'package:book/common/components/checkbox_2.dart';
+import 'package:book/common/components/cta_button_l1.dart';
 import 'package:book/modules/my_page/view/widgets/radio_button_1_static.dart';
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
@@ -5,8 +7,15 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class DeleteAccountScreen extends StatelessWidget {
+class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
+
+  @override
+  State<DeleteAccountScreen> createState() => _DeleteAccountScreenState();
+}
+
+class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +68,28 @@ class DeleteAccountScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            const Spacer(),
+            Center(
+              child: CheckBox2(
+                label: '위 주의사항을 모두 숙지했으며 탈퇴에 동의해요',
+                value: isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    isChecked = value;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
+        child: CtaButtonL1(
+          text: '탈퇴하기',
+          onPressed: () {},
         ),
       ),
     );
