@@ -22,7 +22,6 @@ class LoginInfoScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              // GoRouter를 사용한 라우팅
               GoRouter.of(context).go('/book-log');
             },
           ),
@@ -45,7 +44,7 @@ class LoginInfoScreen extends StatelessWidget {
                   const SizedBox(width: 18),
                   Expanded(
                       child: TextField(
-                    enabled: false, // 입력 비활성화
+                    enabled: false,
                     maxLines: 1,
                     minLines: 1,
                     style: AppTexts.b6.copyWith(color: ColorName.w1),
@@ -53,7 +52,7 @@ class LoginInfoScreen extends StatelessWidget {
                       border: InputBorder.none,
                       filled: true,
                       fillColor: Colors.transparent,
-                      hintText: 'xxx.gmail.com',
+                      hintText: 'xxx.gmail.com', // TODO: 이메일 주소 정보 모델 추가
                       hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
                       isCollapsed: true,
                       contentPadding: EdgeInsets.zero,
@@ -83,7 +82,7 @@ class LoginInfoScreen extends StatelessWidget {
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.transparent,
-                        hintText: '연동 상태',
+                        hintText: '연동 상태', // TODO: 연동 상태 정보 모델 추가
                         hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
                         isCollapsed: true,
                         contentPadding: EdgeInsets.zero,
