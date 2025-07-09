@@ -1,8 +1,8 @@
-import 'package:book/common/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common/components/text_field/search_text_field.dart';
+import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../model/search_state.dart';
@@ -36,8 +36,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       ref.read(searchViewModelProvider.notifier).fetchNextPage();
     }
   }
@@ -77,8 +76,10 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
       body: Padding(
         padding: AppPaddings.SCREEN_BODY_PADDING,
         child: Column(
-          spacing: 35,
+          spacing: 15,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text('책 찾기', style: AppTexts.h4),
             SearchTextField(
               controller: _textController,
               hintText: '읽고 싶은 책을 검색해 보세요',
@@ -88,19 +89,16 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
                   : Assets.images.icSearchUncolored3x.image(scale: 3),
               onSubmitted: _onSearchSubmitted,
             ),
+            const SizedBox(height: 20),
             Expanded(
               child: searchState.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 orElse: () {
                   final showSearchResults = searchState.maybeWhen(
-                    data: (data) =>
-                        data.books.isNotEmpty &&
-                        data.query == _textController.text,
+                    data: (data) => data.books.isNotEmpty && data.query == _textController.text,
                     orElse: () => false,
                   );
-                  return showSearchResults
-                      ? _buildSearchResults()
-                      : _buildSearchHistory();
+                  return showSearchResults ? _buildSearchResults() : _buildSearchHistory();
                 },
               ),
             ),
@@ -145,9 +143,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               trailing: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  ref
-                      .read(searchHistoryViewModelProvider.notifier)
-                      .removeHistory(history.queries);
+                  ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries);
                 },
               ),
             );
@@ -155,8 +151,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           separatorBuilder: (context, index) => const Divider(height: 1),
         );
       },
-      error: (error, stack) =>
-          const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
+      error: (error, stack) => const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
@@ -215,8 +210,12 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           },
           separatorBuilder: (context, index) {
             return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Divider(height: 1),
+              padding: EdgeInsets.only(top: 4.0, bottom: 30),
+              child: Divider(
+                thickness: 7,
+                radius: AppBorders.DIVIDER_BORDER_RADIUS,
+                color: AppColors.DIVIDER_COLOR,
+              ),
             );
           },
         );
