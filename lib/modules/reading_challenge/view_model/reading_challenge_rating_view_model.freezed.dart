@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'image_request.dart';
+part of 'reading_challenge_rating_view_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,80 +13,71 @@ part of 'image_request.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ImageRequest {
-  String get image;
-  int get sequence;
+mixin _$ReadingChallengeRatingState {
+  double get rating;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of ReadingChallengeRatingState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ImageRequestCopyWith<ImageRequest> get copyWith =>
-      _$ImageRequestCopyWithImpl<ImageRequest>(
-          this as ImageRequest, _$identity);
-
-  /// Serializes this ImageRequest to a JSON map.
-  Map<String, dynamic> toJson();
+  $ReadingChallengeRatingStateCopyWith<ReadingChallengeRatingState>
+      get copyWith => _$ReadingChallengeRatingStateCopyWithImpl<
+              ReadingChallengeRatingState>(
+          this as ReadingChallengeRatingState, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ImageRequest &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.sequence, sequence) ||
-                other.sequence == sequence));
+            other is ReadingChallengeRatingState &&
+            (identical(other.rating, rating) || other.rating == rating));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, image, sequence);
+  int get hashCode => Object.hash(runtimeType, rating);
 
   @override
   String toString() {
-    return 'ImageRequest(image: $image, sequence: $sequence)';
+    return 'ReadingChallengeRatingState(rating: $rating)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ImageRequestCopyWith<$Res> {
-  factory $ImageRequestCopyWith(
-          ImageRequest value, $Res Function(ImageRequest) _then) =
-      _$ImageRequestCopyWithImpl;
+abstract mixin class $ReadingChallengeRatingStateCopyWith<$Res> {
+  factory $ReadingChallengeRatingStateCopyWith(
+          ReadingChallengeRatingState value,
+          $Res Function(ReadingChallengeRatingState) _then) =
+      _$ReadingChallengeRatingStateCopyWithImpl;
   @useResult
-  $Res call({String image, int sequence});
+  $Res call({double rating});
 }
 
 /// @nodoc
-class _$ImageRequestCopyWithImpl<$Res> implements $ImageRequestCopyWith<$Res> {
-  _$ImageRequestCopyWithImpl(this._self, this._then);
+class _$ReadingChallengeRatingStateCopyWithImpl<$Res>
+    implements $ReadingChallengeRatingStateCopyWith<$Res> {
+  _$ReadingChallengeRatingStateCopyWithImpl(this._self, this._then);
 
-  final ImageRequest _self;
-  final $Res Function(ImageRequest) _then;
+  final ReadingChallengeRatingState _self;
+  final $Res Function(ReadingChallengeRatingState) _then;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of ReadingChallengeRatingState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? image = null,
-    Object? sequence = null,
+    Object? rating = null,
   }) {
     return _then(_self.copyWith(
-      image: null == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-      sequence: null == sequence
-          ? _self.sequence
-          : sequence // ignore: cast_nullable_to_non_nullable
-              as int,
+      rating: null == rating
+          ? _self.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [ImageRequest].
-extension ImageRequestPatterns on ImageRequest {
+/// Adds pattern-matching-related methods to [ReadingChallengeRatingState].
+extension ReadingChallengeRatingStatePatterns on ReadingChallengeRatingState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -101,12 +92,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ImageRequest value)? $default, {
+    TResult Function(_ReadingChallengeRatingState value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
+      case _ReadingChallengeRatingState() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -128,11 +119,11 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ImageRequest value) $default,
+    TResult Function(_ReadingChallengeRatingState value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest():
+      case _ReadingChallengeRatingState():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -153,11 +144,11 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ImageRequest value)? $default,
+    TResult? Function(_ReadingChallengeRatingState value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
+      case _ReadingChallengeRatingState() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -178,13 +169,13 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String image, int sequence)? $default, {
+    TResult Function(double rating)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
-        return $default(_that.image, _that.sequence);
+      case _ReadingChallengeRatingState() when $default != null:
+        return $default(_that.rating);
       case _:
         return orElse();
     }
@@ -205,12 +196,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String image, int sequence) $default,
+    TResult Function(double rating) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest():
-        return $default(_that.image, _that.sequence);
+      case _ReadingChallengeRatingState():
+        return $default(_that.rating);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -230,12 +221,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String image, int sequence)? $default,
+    TResult? Function(double rating)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ImageRequest() when $default != null:
-        return $default(_that.image, _that.sequence);
+      case _ReadingChallengeRatingState() when $default != null:
+        return $default(_that.rating);
       case _:
         return null;
     }
@@ -243,90 +234,72 @@ extension ImageRequestPatterns on ImageRequest {
 }
 
 /// @nodoc
-@JsonSerializable()
-class _ImageRequest implements ImageRequest {
-  const _ImageRequest({this.image = '', this.sequence = 1});
-  factory _ImageRequest.fromJson(Map<String, dynamic> json) =>
-      _$ImageRequestFromJson(json);
+
+class _ReadingChallengeRatingState implements ReadingChallengeRatingState {
+  const _ReadingChallengeRatingState({this.rating = 0.0});
 
   @override
   @JsonKey()
-  final String image;
-  @override
-  @JsonKey()
-  final int sequence;
+  final double rating;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of ReadingChallengeRatingState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ImageRequestCopyWith<_ImageRequest> get copyWith =>
-      __$ImageRequestCopyWithImpl<_ImageRequest>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$ImageRequestToJson(
-      this,
-    );
-  }
+  _$ReadingChallengeRatingStateCopyWith<_ReadingChallengeRatingState>
+      get copyWith => __$ReadingChallengeRatingStateCopyWithImpl<
+          _ReadingChallengeRatingState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ImageRequest &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.sequence, sequence) ||
-                other.sequence == sequence));
+            other is _ReadingChallengeRatingState &&
+            (identical(other.rating, rating) || other.rating == rating));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, image, sequence);
+  int get hashCode => Object.hash(runtimeType, rating);
 
   @override
   String toString() {
-    return 'ImageRequest(image: $image, sequence: $sequence)';
+    return 'ReadingChallengeRatingState(rating: $rating)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ImageRequestCopyWith<$Res>
-    implements $ImageRequestCopyWith<$Res> {
-  factory _$ImageRequestCopyWith(
-          _ImageRequest value, $Res Function(_ImageRequest) _then) =
-      __$ImageRequestCopyWithImpl;
+abstract mixin class _$ReadingChallengeRatingStateCopyWith<$Res>
+    implements $ReadingChallengeRatingStateCopyWith<$Res> {
+  factory _$ReadingChallengeRatingStateCopyWith(
+          _ReadingChallengeRatingState value,
+          $Res Function(_ReadingChallengeRatingState) _then) =
+      __$ReadingChallengeRatingStateCopyWithImpl;
   @override
   @useResult
-  $Res call({String image, int sequence});
+  $Res call({double rating});
 }
 
 /// @nodoc
-class __$ImageRequestCopyWithImpl<$Res>
-    implements _$ImageRequestCopyWith<$Res> {
-  __$ImageRequestCopyWithImpl(this._self, this._then);
+class __$ReadingChallengeRatingStateCopyWithImpl<$Res>
+    implements _$ReadingChallengeRatingStateCopyWith<$Res> {
+  __$ReadingChallengeRatingStateCopyWithImpl(this._self, this._then);
 
-  final _ImageRequest _self;
-  final $Res Function(_ImageRequest) _then;
+  final _ReadingChallengeRatingState _self;
+  final $Res Function(_ReadingChallengeRatingState) _then;
 
-  /// Create a copy of ImageRequest
+  /// Create a copy of ReadingChallengeRatingState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? image = null,
-    Object? sequence = null,
+    Object? rating = null,
   }) {
-    return _then(_ImageRequest(
-      image: null == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String,
-      sequence: null == sequence
-          ? _self.sequence
-          : sequence // ignore: cast_nullable_to_non_nullable
-              as int,
+    return _then(_ReadingChallengeRatingState(
+      rating: null == rating
+          ? _self.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }

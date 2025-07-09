@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'reading_challenge_request.dart';
+part of 'challenge_detail_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,81 +13,91 @@ part of 'reading_challenge_request.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ReadingChallengeRequest {
-  int get bookId;
+mixin _$ChallengeDetailResponse {
   int get totalPages;
+  String get challengeId;
+  int get lastReadPage;
 
-  /// Create a copy of ReadingChallengeRequest
+  /// Create a copy of ChallengeDetailResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ReadingChallengeRequestCopyWith<ReadingChallengeRequest> get copyWith =>
-      _$ReadingChallengeRequestCopyWithImpl<ReadingChallengeRequest>(
-          this as ReadingChallengeRequest, _$identity);
+  $ChallengeDetailResponseCopyWith<ChallengeDetailResponse> get copyWith =>
+      _$ChallengeDetailResponseCopyWithImpl<ChallengeDetailResponse>(
+          this as ChallengeDetailResponse, _$identity);
 
-  /// Serializes this ReadingChallengeRequest to a JSON map.
+  /// Serializes this ChallengeDetailResponse to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ReadingChallengeRequest &&
-            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            other is ChallengeDetailResponse &&
             (identical(other.totalPages, totalPages) ||
-                other.totalPages == totalPages));
+                other.totalPages == totalPages) &&
+            (identical(other.challengeId, challengeId) ||
+                other.challengeId == challengeId) &&
+            (identical(other.lastReadPage, lastReadPage) ||
+                other.lastReadPage == lastReadPage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, totalPages);
+  int get hashCode =>
+      Object.hash(runtimeType, totalPages, challengeId, lastReadPage);
 
   @override
   String toString() {
-    return 'ReadingChallengeRequest(bookId: $bookId, totalPages: $totalPages)';
+    return 'ChallengeDetailResponse(totalPages: $totalPages, challengeId: $challengeId, lastReadPage: $lastReadPage)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ReadingChallengeRequestCopyWith<$Res> {
-  factory $ReadingChallengeRequestCopyWith(ReadingChallengeRequest value,
-          $Res Function(ReadingChallengeRequest) _then) =
-      _$ReadingChallengeRequestCopyWithImpl;
+abstract mixin class $ChallengeDetailResponseCopyWith<$Res> {
+  factory $ChallengeDetailResponseCopyWith(ChallengeDetailResponse value,
+          $Res Function(ChallengeDetailResponse) _then) =
+      _$ChallengeDetailResponseCopyWithImpl;
   @useResult
-  $Res call({int bookId, int totalPages});
+  $Res call({int totalPages, String challengeId, int lastReadPage});
 }
 
 /// @nodoc
-class _$ReadingChallengeRequestCopyWithImpl<$Res>
-    implements $ReadingChallengeRequestCopyWith<$Res> {
-  _$ReadingChallengeRequestCopyWithImpl(this._self, this._then);
+class _$ChallengeDetailResponseCopyWithImpl<$Res>
+    implements $ChallengeDetailResponseCopyWith<$Res> {
+  _$ChallengeDetailResponseCopyWithImpl(this._self, this._then);
 
-  final ReadingChallengeRequest _self;
-  final $Res Function(ReadingChallengeRequest) _then;
+  final ChallengeDetailResponse _self;
+  final $Res Function(ChallengeDetailResponse) _then;
 
-  /// Create a copy of ReadingChallengeRequest
+  /// Create a copy of ChallengeDetailResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bookId = null,
     Object? totalPages = null,
+    Object? challengeId = null,
+    Object? lastReadPage = null,
   }) {
     return _then(_self.copyWith(
-      bookId: null == bookId
-          ? _self.bookId
-          : bookId // ignore: cast_nullable_to_non_nullable
-              as int,
       totalPages: null == totalPages
           ? _self.totalPages
           : totalPages // ignore: cast_nullable_to_non_nullable
+              as int,
+      challengeId: null == challengeId
+          ? _self.challengeId
+          : challengeId // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastReadPage: null == lastReadPage
+          ? _self.lastReadPage
+          : lastReadPage // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [ReadingChallengeRequest].
-extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
+/// Adds pattern-matching-related methods to [ChallengeDetailResponse].
+extension ChallengeDetailResponsePatterns on ChallengeDetailResponse {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -102,12 +112,12 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ReadingChallengeRequest value)? $default, {
+    TResult Function(_ChallengeDetailResponse value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeRequest() when $default != null:
+      case _ChallengeDetailResponse() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -129,11 +139,11 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ReadingChallengeRequest value) $default,
+    TResult Function(_ChallengeDetailResponse value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeRequest():
+      case _ChallengeDetailResponse():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -154,11 +164,11 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ReadingChallengeRequest value)? $default,
+    TResult? Function(_ChallengeDetailResponse value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeRequest() when $default != null:
+      case _ChallengeDetailResponse() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -179,13 +189,15 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int bookId, int totalPages)? $default, {
+    TResult Function(int totalPages, String challengeId, int lastReadPage)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeRequest() when $default != null:
-        return $default(_that.bookId, _that.totalPages);
+      case _ChallengeDetailResponse() when $default != null:
+        return $default(
+            _that.totalPages, _that.challengeId, _that.lastReadPage);
       case _:
         return orElse();
     }
@@ -206,12 +218,14 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int bookId, int totalPages) $default,
+    TResult Function(int totalPages, String challengeId, int lastReadPage)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeRequest():
-        return $default(_that.bookId, _that.totalPages);
+      case _ChallengeDetailResponse():
+        return $default(
+            _that.totalPages, _that.challengeId, _that.lastReadPage);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -231,12 +245,14 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int bookId, int totalPages)? $default,
+    TResult? Function(int totalPages, String challengeId, int lastReadPage)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeRequest() when $default != null:
-        return $default(_that.bookId, _that.totalPages);
+      case _ChallengeDetailResponse() when $default != null:
+        return $default(
+            _that.totalPages, _that.challengeId, _that.lastReadPage);
       case _:
         return null;
     }
@@ -245,29 +261,33 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
 /// @nodoc
 @JsonSerializable()
-class _ReadingChallengeRequest implements ReadingChallengeRequest {
-  const _ReadingChallengeRequest(
-      {required this.bookId, required this.totalPages});
-  factory _ReadingChallengeRequest.fromJson(Map<String, dynamic> json) =>
-      _$ReadingChallengeRequestFromJson(json);
+class _ChallengeDetailResponse implements ChallengeDetailResponse {
+  const _ChallengeDetailResponse(
+      {required this.totalPages,
+      required this.challengeId,
+      required this.lastReadPage});
+  factory _ChallengeDetailResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChallengeDetailResponseFromJson(json);
 
-  @override
-  final int bookId;
   @override
   final int totalPages;
+  @override
+  final String challengeId;
+  @override
+  final int lastReadPage;
 
-  /// Create a copy of ReadingChallengeRequest
+  /// Create a copy of ChallengeDetailResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ReadingChallengeRequestCopyWith<_ReadingChallengeRequest> get copyWith =>
-      __$ReadingChallengeRequestCopyWithImpl<_ReadingChallengeRequest>(
+  _$ChallengeDetailResponseCopyWith<_ChallengeDetailResponse> get copyWith =>
+      __$ChallengeDetailResponseCopyWithImpl<_ChallengeDetailResponse>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ReadingChallengeRequestToJson(
+    return _$ChallengeDetailResponseToJson(
       this,
     );
   }
@@ -276,57 +296,66 @@ class _ReadingChallengeRequest implements ReadingChallengeRequest {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ReadingChallengeRequest &&
-            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            other is _ChallengeDetailResponse &&
             (identical(other.totalPages, totalPages) ||
-                other.totalPages == totalPages));
+                other.totalPages == totalPages) &&
+            (identical(other.challengeId, challengeId) ||
+                other.challengeId == challengeId) &&
+            (identical(other.lastReadPage, lastReadPage) ||
+                other.lastReadPage == lastReadPage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, totalPages);
+  int get hashCode =>
+      Object.hash(runtimeType, totalPages, challengeId, lastReadPage);
 
   @override
   String toString() {
-    return 'ReadingChallengeRequest(bookId: $bookId, totalPages: $totalPages)';
+    return 'ChallengeDetailResponse(totalPages: $totalPages, challengeId: $challengeId, lastReadPage: $lastReadPage)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ReadingChallengeRequestCopyWith<$Res>
-    implements $ReadingChallengeRequestCopyWith<$Res> {
-  factory _$ReadingChallengeRequestCopyWith(_ReadingChallengeRequest value,
-          $Res Function(_ReadingChallengeRequest) _then) =
-      __$ReadingChallengeRequestCopyWithImpl;
+abstract mixin class _$ChallengeDetailResponseCopyWith<$Res>
+    implements $ChallengeDetailResponseCopyWith<$Res> {
+  factory _$ChallengeDetailResponseCopyWith(_ChallengeDetailResponse value,
+          $Res Function(_ChallengeDetailResponse) _then) =
+      __$ChallengeDetailResponseCopyWithImpl;
   @override
   @useResult
-  $Res call({int bookId, int totalPages});
+  $Res call({int totalPages, String challengeId, int lastReadPage});
 }
 
 /// @nodoc
-class __$ReadingChallengeRequestCopyWithImpl<$Res>
-    implements _$ReadingChallengeRequestCopyWith<$Res> {
-  __$ReadingChallengeRequestCopyWithImpl(this._self, this._then);
+class __$ChallengeDetailResponseCopyWithImpl<$Res>
+    implements _$ChallengeDetailResponseCopyWith<$Res> {
+  __$ChallengeDetailResponseCopyWithImpl(this._self, this._then);
 
-  final _ReadingChallengeRequest _self;
-  final $Res Function(_ReadingChallengeRequest) _then;
+  final _ChallengeDetailResponse _self;
+  final $Res Function(_ChallengeDetailResponse) _then;
 
-  /// Create a copy of ReadingChallengeRequest
+  /// Create a copy of ChallengeDetailResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? bookId = null,
     Object? totalPages = null,
+    Object? challengeId = null,
+    Object? lastReadPage = null,
   }) {
-    return _then(_ReadingChallengeRequest(
-      bookId: null == bookId
-          ? _self.bookId
-          : bookId // ignore: cast_nullable_to_non_nullable
-              as int,
+    return _then(_ChallengeDetailResponse(
       totalPages: null == totalPages
           ? _self.totalPages
           : totalPages // ignore: cast_nullable_to_non_nullable
+              as int,
+      challengeId: null == challengeId
+          ? _self.challengeId
+          : challengeId // ignore: cast_nullable_to_non_nullable
+              as String,
+      lastReadPage: null == lastReadPage
+          ? _self.lastReadPage
+          : lastReadPage // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }

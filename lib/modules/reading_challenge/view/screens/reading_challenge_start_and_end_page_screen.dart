@@ -2,15 +2,18 @@ import 'package:book/common/components/cta_button_l1.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
+import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
+import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:book/modules/reading_challenge/view_model/reading_challenge_progress_state.dart';
 import 'package:book/modules/reading_challenge/view_model/reading_challenge_progress_view_model.dart';
 import 'package:book/modules/search/model/search_book_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ReadingChallengeProgressScreen extends ConsumerWidget {
-  const ReadingChallengeProgressScreen({
+class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
+  const ReadingChallengeStartAndEndPageScreen({
     super.key,
     required this.book,
     required this.totalPages,
@@ -20,15 +23,43 @@ class ReadingChallengeProgressScreen extends ConsumerWidget {
   final int totalPages;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReadingChallengeStartAndEndPageScreen> createState() =>
+      _ReadingChallengeStartAndEndPageScreenState();
+}
+
+class _ReadingChallengeStartAndEndPageScreenState
+    extends ConsumerState<ReadingChallengeStartAndEndPageScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref
+            .read(currentChallengeViewModelProvider.notifier)
+            .setChallenge(widget.book, widget.totalPages);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(readingChallengeProgressViewModelProvider);
     final viewModel =
         ref.read(readingChallengeProgressViewModelProvider.notifier);
+    final book = widget.book;
+    final totalPages = widget.totalPages;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('리딩 챌린지 중'),
-        leading: const BackButton(),
+        title: Text("리딩 챌린지"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              context.go('/reading-challenge');
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -37,10 +68,15 @@ class ReadingChallengeProgressScreen extends ConsumerWidget {
           children: [
             const SizedBox(height: 20),
             ChallengeBookInfoWidget(book: book),
+            const SizedBox(height: 16),
+            const StepProgressIndicator(
+              totalSteps: 3,
+              currentStep: 2,
+            ),
             const SizedBox(height: 40),
             _buildPageInputSection(viewModel),
             const Spacer(),
-            _buildBottomButtonSection(state),
+            _buildBottomButtonSection(context, state, book, totalPages),
           ],
         ),
       ),
@@ -102,7 +138,12 @@ class ReadingChallengeProgressScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomButtonSection(ReadingChallengeProgressState state) {
+  Widget _buildBottomButtonSection(
+    BuildContext context,
+    ReadingChallengeProgressState state,
+    SearchBookResponse book,
+    int totalPages,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -111,9 +152,25 @@ class ReadingChallengeProgressScreen extends ConsumerWidget {
           text: '기록하기',
           enabled: state.isButtonEnabled,
           onPressed: () {
-            // TODO: Handle challenge logging
+            if (state.endPage != null &&
+                int.tryParse(state.endPage!) != null &&
+                int.parse(state.endPage!) >= totalPages) {
+              context.push(
+                '/reading-challenge/rating',
+                extra: book,
+              );
+            } else {
+              context.push('/reading-challenge/diary-encourage', extra: false);
+            }
           },
         ),
+        const SizedBox(height: 8),
+        CtaButtonL1(
+            text: '다음에 기록하기',
+            enabled: !state.isButtonEnabled,
+            onPressed: () {
+              context.go('/reading-challenge');
+            }),
         const SizedBox(height: 34),
       ],
     );

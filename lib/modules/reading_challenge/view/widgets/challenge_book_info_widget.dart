@@ -18,7 +18,7 @@ class ChallengeBookInfoWidget extends StatelessWidget {
       children: [
         Center(
           child: SizedBox(
-            width: 150,
+            width: 180,
             child: AspectRatio(
               aspectRatio: 2 / 3,
               child: Container(
@@ -28,6 +28,13 @@ class ChallengeBookInfoWidget extends StatelessWidget {
                     image: CachedNetworkImageProvider(book.bookCover),
                     fit: BoxFit.cover,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.white.withOpacity(0.2),
+                      blurRadius: 15.0,
+                      spreadRadius: 5.0,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -48,4 +55,4 @@ class ChallengeBookInfoWidget extends StatelessWidget {
       ],
     );
   }
-} 
+}

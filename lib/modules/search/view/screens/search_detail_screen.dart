@@ -1,6 +1,8 @@
 import 'package:book/common/theme/app_style.dart';
+import 'package:book/modules/search/model/search_screen_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/components/text_field/search_text_field.dart';
 import '../../../../gen/assets.gen.dart';
@@ -13,10 +15,10 @@ import '../widgets/book_search_result_card.dart';
 class SearchDetailScreen extends ConsumerStatefulWidget {
   const SearchDetailScreen({
     super.key,
-    this.from,
+    required this.type,
   });
 
-  final String? from;
+  final SearchScreenType type;
 
   @override
   ConsumerState<SearchDetailScreen> createState() => _SearchDetailScreenState();
@@ -56,6 +58,33 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
     super.dispose();
   }
 
+  String get _appBarTitle {
+    switch (widget.type) {
+      case SearchScreenType.bookPick:
+        return '책픽';
+      case SearchScreenType.readingChallengeNewBook:
+        return '리딩 챌린지';
+    }
+  }
+
+  String get _title {
+    switch (widget.type) {
+      case SearchScreenType.bookPick:
+        return '어떤 도서를 찾고 계신가요?';
+      case SearchScreenType.readingChallengeNewBook:
+        return '새로운 챌린지 도서를 찾아보세요';
+    }
+  }
+
+  String get _hintText {
+    switch (widget.type) {
+      case SearchScreenType.bookPick:
+        return '읽고 싶은 책을 검색해 보세요';
+      case SearchScreenType.readingChallengeNewBook:
+        return '어떤 책으로 도전할까요?';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<SearchState>>(searchViewModelProvider, (previous, _) {
@@ -70,18 +99,20 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(AppSizes.APP_BAR_HEIGHT),
         child: AppBar(
-          title: const Text('책픽', style: AppTexts.b5),
-          leading: BackButton(),
+          title: Text(_appBarTitle, style: AppTexts.b5),
+          leading: const BackButton(),
         ),
       ),
       body: Padding(
         padding: AppPaddings.SCREEN_BODY_PADDING,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 35,
           children: [
+            Text(_title, style: AppTexts.h4),
             SearchTextField(
               controller: _textController,
-              hintText: '읽고 싶은 책을 검색해 보세요',
+              hintText: _hintText,
               hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
               suffixIcon: _textController.text.isNotEmpty
                   ? Assets.images.icSearchColored3x.image(scale: 3)
@@ -118,16 +149,18 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
         final histories = historyData.data;
 
         if (histories == null || histories.isEmpty) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 12,
-            children: [
-              Assets.icons.icBookpickSearchCharacter.svg(),
-              Text(
-                '어떤 도서를 찾고 계신가요?',
-                style: AppTexts.b8.copyWith(color: ColorName.g3),
-              ),
-            ],
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 12,
+              children: [
+                Assets.icons.icBookpickSearchCharacter.svg(),
+                Text(
+                  '어떤 도서를 찾고 계신가요?',
+                  style: AppTexts.b8.copyWith(color: ColorName.g3),
+                ),
+              ],
+            ),
           );
         }
 
@@ -192,11 +225,26 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
             for (int i = 0; i < 3; i++) {
               final bookIndex = startIndex + i;
               if (bookIndex < books.length) {
+                final book = books[bookIndex];
                 rowItems.add(
                   Expanded(
                     child: BookSearchResultCard(
-                      book: books[bookIndex],
-                      from: widget.from,
+                      book: book,
+                      onTap: (selectedBook) async {
+                        switch (widget.type) {
+                          case SearchScreenType.bookPick:
+                            context.push(
+                              '/book-pick/search/book-overview/${selectedBook.bookId}',
+                            );
+                            break;
+                          case SearchScreenType.readingChallengeNewBook:
+                            context.push(
+                              '/reading-challenge/total-page',
+                              extra: selectedBook,
+                            );
+                            break;
+                        }
+                      },
                     ),
                   ),
                 );

@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/response_form.dart';
 import '../../../infra/network/dio_client.dart';
+import '../model/challenge_detail_response.dart';
 import '../model/challenge_response.dart';
 import '../model/rating_request.dart';
 
@@ -60,5 +61,10 @@ abstract class ReadingChallengeRepository {
   @DELETE('/api/v2/reading-challenges/{challengeId}')
   Future<ResponseForm<dynamic>> deleteChallenge(
     @Path('challengeId') int challengeId,
+  );
+
+  @GET('/api/v2/reading-challenges/books/{bookId}')
+  Future<ResponseForm<ChallengeDetailResponse>> getChallengeByBookId(
+    @Path('bookId') String bookId,
   );
 }

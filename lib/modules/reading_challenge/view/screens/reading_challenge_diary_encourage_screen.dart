@@ -1,0 +1,122 @@
+import 'package:book/common/components/cta_button_l1.dart';
+import 'package:book/common/components/cta_button_l2.dart';
+import 'package:book/common/components/custom_dialog.dart';
+import 'package:book/common/theme/app_style.dart';
+import 'package:book/gen/assets.gen.dart';
+import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
+  const ReadingChallengeDiaryEncourageScreen({
+    super.key,
+    required this.isChallengeCompleted,
+  });
+
+  final bool isChallengeCompleted;
+
+  static const path = '/reading-challenge/diary-encourage';
+  static const name = 'ReadingChallengeDiaryEncourageScreen';
+
+  @override
+  Widget build(BuildContext context) {
+    final title = isChallengeCompleted ? '리딩 챌린지 중 (3/챌린지 성공)' : '리딩 챌린지';
+    final subtitle = isChallengeCompleted ? '완독하셨네요! 챌린지 성공을 축하드려요' : null;
+    final image = isChallengeCompleted
+        ? Assets.icons.icReadingChallengeCompleted.svg()
+        : Assets.icons.icReadingChallengeNotCompleted.svg();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        leading: BackButton(
+          onPressed: context.pop,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              context.go('/reading-challenge');
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 32),
+              Text(
+                '오늘 읽은 내용을\n다이어리에 기록해 보세요',
+                style: AppTexts.h2.copyWith(color: ColorName.w1),
+              ),
+              if (subtitle != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  // TODO: 보라색 그라데이션 효과
+                  child: Text(
+                    subtitle,
+                    style: AppTexts.h4.copyWith(color: ColorName.p1),
+                  ),
+                ),
+              const SizedBox(height: 12),
+              const StepProgressIndicator(
+                totalSteps: 3,
+                currentStep: 3,
+              ),
+              const Spacer(),
+              image,
+              const Spacer(),
+              _buildBottomButtons(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomButtons(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        CtaButtonL2(
+          text: '나중에 하기',
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (_) => CustomDialog(
+                title: '나중에 하기',
+                content: '독서 다이어리를 작성하지 않으면\n리딩 챌린지 참여가 인정되지 않아요',
+                confirmButtonText: '바로 작성하기',
+                cancelButtonText: '나중에 하기',
+                onConfirm: () {
+                  context.pop();
+                  // TODO: 다이어리 작성 화면으로 이동
+                },
+                onCancel: () {
+                  context.go('/reading-challenge');
+                },
+                icon: Assets.icons.icReadingChallengeChar3.svg(
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 8),
+        CtaButtonL1(
+          text: '작성하기',
+          onPressed: () {
+            // TODO: 다이어리 작성 화면으로 이동 with book data
+          },
+        ),
+        const SizedBox(height: 34),
+      ],
+    );
+  }
+}

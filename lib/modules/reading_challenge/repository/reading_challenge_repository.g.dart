@@ -320,6 +320,39 @@ class _ReadingChallengeRepository implements ReadingChallengeRepository {
     return _value;
   }
 
+  @override
+  Future<ResponseForm<ChallengeDetailResponse>> getChallengeByBookId(
+    String bookId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<ChallengeDetailResponse>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/v2/reading-challenges/books/${bookId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<ChallengeDetailResponse> _value;
+    try {
+      _value = ResponseForm<ChallengeDetailResponse>.fromJson(
+        _result.data!,
+        (json) =>
+            ChallengeDetailResponse.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
