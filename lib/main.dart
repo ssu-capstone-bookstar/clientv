@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 import 'common/router/router.dart';
+import 'common/theme/app_theme.dart';
 import 'gen/assets.gen.dart';
 import 'gen/colors.gen.dart';
 
@@ -49,12 +50,7 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Book SNS App',
-      theme: ThemeData(
-        primaryColor: ColorName.p1,
-        scaffoldBackgroundColor: ColorName.b2,
-        appBarTheme: AppBarTheme(backgroundColor: ColorName.b2),
-        brightness: Brightness.dark,
-      ),
+      theme: AppTheme.themeData,
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
     );

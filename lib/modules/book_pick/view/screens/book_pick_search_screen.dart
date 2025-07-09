@@ -234,7 +234,8 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               padding: EdgeInsets.only(top: 4.0, bottom: 30),
               child: Divider(
                 thickness: 7,
-                // [Note] 정순원, 오류나서 잠시 주석 처리해두겠습니다 radius: AppBorders.DIVIDER_BORDER_RADIUS,
+                // [Note] 정순원, 오류나서 잠시 주석 처리해두겠습니다
+                radius: AppBorders.DIVIDER_BORDER_RADIUS,
                 color: AppColors.DIVIDER_COLOR,
               ),
             );
