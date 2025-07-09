@@ -1,16 +1,21 @@
+<<<<<<< HEAD:lib/modules/search/view/screens/search_detail_screen.dart
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/modules/search/model/search_screen_type.dart';
+=======
+>>>>>>> c3338dc4b76bb63ac02d1cc607afe86f33bdb5eb:lib/modules/book_pick/view/screens/book_pick_search_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/components/text_field/search_text_field.dart';
+import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../model/search_state.dart';
 import '../../view_model/search_history_view_model.dart';
 import '../../view_model/search_view_model.dart';
 import '../widgets/book_search_result_card.dart';
+// import '../widgets/book_search_result_card.dart';
 
 class SearchDetailScreen extends ConsumerStatefulWidget {
   const SearchDetailScreen({
@@ -38,8 +43,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       ref.read(searchViewModelProvider.notifier).fetchNextPage();
     }
   }
@@ -106,10 +110,17 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
       body: Padding(
         padding: AppPaddings.SCREEN_BODY_PADDING,
         child: Column(
+<<<<<<< HEAD:lib/modules/search/view/screens/search_detail_screen.dart
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 35,
           children: [
             Text(_title, style: AppTexts.h4),
+=======
+          spacing: 15,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('책 찾기', style: AppTexts.h4),
+>>>>>>> c3338dc4b76bb63ac02d1cc607afe86f33bdb5eb:lib/modules/book_pick/view/screens/book_pick_search_screen.dart
             SearchTextField(
               controller: _textController,
               hintText: _hintText,
@@ -119,19 +130,16 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
                   : Assets.images.icSearchUncolored3x.image(scale: 3),
               onSubmitted: _onSearchSubmitted,
             ),
+            const SizedBox(height: 20),
             Expanded(
               child: searchState.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 orElse: () {
                   final showSearchResults = searchState.maybeWhen(
-                    data: (data) =>
-                        data.books.isNotEmpty &&
-                        data.query == _textController.text,
+                    data: (data) => data.books.isNotEmpty && data.query == _textController.text,
                     orElse: () => false,
                   );
-                  return showSearchResults
-                      ? _buildSearchResults()
-                      : _buildSearchHistory();
+                  return showSearchResults ? _buildSearchResults() : _buildSearchHistory();
                 },
               ),
             ),
@@ -178,9 +186,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               trailing: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  ref
-                      .read(searchHistoryViewModelProvider.notifier)
-                      .removeHistory(history.queries);
+                  ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries);
                 },
               ),
             );
@@ -188,8 +194,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           separatorBuilder: (context, index) => const Divider(height: 1),
         );
       },
-      error: (error, stack) =>
-          const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
+      error: (error, stack) => const Center(child: Text('검색 기록을 불러오는데 실패했습니다.')),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
@@ -263,8 +268,12 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           },
           separatorBuilder: (context, index) {
             return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Divider(height: 1),
+              padding: EdgeInsets.only(top: 4.0, bottom: 30),
+              child: Divider(
+                thickness: 7,
+                radius: AppBorders.DIVIDER_BORDER_RADIUS,
+                color: AppColors.DIVIDER_COLOR,
+              ),
             );
           },
         );

@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 import 'common/router/router.dart';
-import 'common/theme/app_theme.dart';
-
 import 'gen/assets.gen.dart';
+import 'gen/colors.gen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +49,12 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Book SNS App',
-      theme: AppTheme.themeData,
+      theme: ThemeData(
+        primaryColor: ColorName.p1,
+        scaffoldBackgroundColor: ColorName.b2,
+        appBarTheme: AppBarTheme(backgroundColor: ColorName.b2),
+        brightness: Brightness.dark,
+      ),
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
     );

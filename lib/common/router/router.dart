@@ -1,5 +1,3 @@
-import 'package:book/modules/search/model/search_book_response.dart';
-import 'package:book/modules/search/model/search_screen_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +8,9 @@ import '../../modules/auth/view_model/auth_state.dart';
 import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
+import '../../modules/book_pick/model/search_book_response.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
+import '../../modules/book_pick/view/screens/book_pick_search_screen.dart';
 import '../../modules/chat/view/screens/book_talk_screen.dart';
 import '../../modules/deep_time/view/screens/deep_time_screen.dart';
 import '../../modules/home/view/screens/home_screen.dart';
@@ -23,13 +23,12 @@ import '../../modules/my_page/view/screens/login_info_screen.dart';
 import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
+import '../../modules/reading_challenge/view/screens/ongoing_challenge_list_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_diary_encourage_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_rating_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
-import '../../modules/search/view/screens/search_detail_screen.dart';
-import '../../modules/reading_challenge/view/screens/ongoing_challenge_list_screen.dart';
 
 part 'router.g.dart';
 
@@ -167,9 +166,8 @@ GoRouter router(Ref ref) {
                     path: 'search',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      return const SearchDetailScreen(
-                        type: SearchScreenType.bookPick,
-                      );
+                      final from = state.uri.queryParameters['from'];
+                      return SearchDetailScreen(from: from);
                     },
                     routes: [
                       GoRoute(
@@ -205,9 +203,7 @@ GoRouter router(Ref ref) {
                     path: 'search-new',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      return const SearchDetailScreen(
-                        type: SearchScreenType.readingChallengeNewBook,
-                      );
+                      return const SearchDetailScreen();
                     },
                   ),
                   GoRoute(

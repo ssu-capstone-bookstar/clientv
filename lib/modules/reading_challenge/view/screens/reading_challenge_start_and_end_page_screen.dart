@@ -12,8 +12,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
-  const ReadingChallengeStartAndEndPageScreen({
+import '../../../../common/components/cta_button_l1.dart';
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../book_pick/model/search_book_response.dart';
+import '../../view_model/reading_challenge_progress_state.dart';
+import '../../view_model/reading_challenge_progress_view_model.dart';
+import '../widgets/challenge_book_info_widget.dart';
+
+class ReadingChallengeProgressScreen extends ConsumerWidget {
+  const ReadingChallengeProgressScreen({
     super.key,
     required this.book,
     required this.totalPages,
