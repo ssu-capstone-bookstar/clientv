@@ -162,8 +162,6 @@ class _ReadingChallengeStartAndEndPageScreenState
                 await currentChallengeVM.createChallenge();
               }
 
-              // TODO: 챌린지 생성 후 독서 기록 API 호출 필요
-
               if (state.endPage != null &&
                   int.tryParse(state.endPage!) != null &&
                   int.parse(state.endPage!) >= totalPages) {

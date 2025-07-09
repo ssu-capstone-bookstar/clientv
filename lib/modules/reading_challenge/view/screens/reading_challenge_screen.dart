@@ -51,12 +51,12 @@ class ReadingChallengeScreen extends ConsumerWidget {
           onTap: () => viewModel.selectOption(ReadingChallengeType.newBook),
         ),
         const SizedBox(height: 16),
-        ChallengeOptionCard(
-          title: '모든 포인트 확인',
-          subtitle: '챌린지에 참여하고 받은 포인트를 확인해 보세요',
-          selected: selectedOption == ReadingChallengeType.allPoints,
-          onTap: () => viewModel.selectOption(ReadingChallengeType.allPoints),
-        ),
+        // ChallengeOptionCard(
+        //   title: '모든 포인트 확인',
+        //   subtitle: '챌린지에 참여하고 받은 포인트를 확인해 보세요',
+        //   selected: selectedOption == ReadingChallengeType.allPoints,
+        //   onTap: () => viewModel.selectOption(ReadingChallengeType.allPoints),
+        // ),
       ],
     );
   }
