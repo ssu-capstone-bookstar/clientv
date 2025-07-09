@@ -1,4 +1,3 @@
-import 'package:book/modules/search/model/search_book_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'challenge_detail_response.freezed.dart';

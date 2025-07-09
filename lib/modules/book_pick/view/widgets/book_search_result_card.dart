@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
-import 'book_preview_info.dart';
 import 'book_detail_info.dart';
+import 'book_preview_info.dart';
 
 class BookSearchResultCard extends StatefulWidget {
   final SearchBookResponse book;
@@ -32,10 +32,11 @@ class _BookSearchResultCardState extends State<BookSearchResultCard> {
 
   void _handleTap() {
     if (widget.from == 'challenge') {
-      context.push('/reading-challenge/start', extra: widget.book);
+      context.push('/reading-challenge/total-page', extra: widget.book);
     } else {
       context.push('/book-pick/search/book-overview/${widget.book.bookId}');
-    }  }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

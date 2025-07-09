@@ -72,7 +72,9 @@ class ReadingChallengeScreen extends ConsumerWidget {
           enabled: selectedOption != null,
           onPressed: () {
             if (selectedOption == ReadingChallengeType.newBook) {
-              context.go('/reading-challenge/search-new');
+              context.go(
+                '/book-pick/search?from=challenge',
+              );
             } else if (selectedOption == ReadingChallengeType.reading) {
               context.go('/reading-challenge/continue-list');
             } else {

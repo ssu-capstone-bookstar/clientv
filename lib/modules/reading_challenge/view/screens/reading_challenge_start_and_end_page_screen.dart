@@ -1,27 +1,19 @@
 import 'package:book/common/components/cta_button_l1.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
 import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
 import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:book/modules/reading_challenge/view_model/reading_challenge_progress_state.dart';
 import 'package:book/modules/reading_challenge/view_model/reading_challenge_progress_view_model.dart';
-import 'package:book/modules/search/model/search_book_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/components/cta_button_l1.dart';
-import '../../../../common/theme/app_style.dart';
-import '../../../../gen/colors.gen.dart';
-import '../../../book_pick/model/search_book_response.dart';
-import '../../view_model/reading_challenge_progress_state.dart';
-import '../../view_model/reading_challenge_progress_view_model.dart';
-import '../widgets/challenge_book_info_widget.dart';
-
-class ReadingChallengeProgressScreen extends ConsumerWidget {
-  const ReadingChallengeProgressScreen({
+class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
+  const ReadingChallengeStartAndEndPageScreen({
     super.key,
     required this.book,
     required this.totalPages,

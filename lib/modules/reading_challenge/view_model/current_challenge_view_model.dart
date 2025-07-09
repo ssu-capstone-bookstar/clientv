@@ -1,6 +1,5 @@
-import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
+import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
-import 'package:book/modules/search/model/search_book_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

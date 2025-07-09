@@ -203,7 +203,8 @@ GoRouter router(Ref ref) {
                     path: 'search-new',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      return const SearchDetailScreen();
+                      final from = state.uri.queryParameters['from'];
+                      return SearchDetailScreen(from: from);
                     },
                   ),
                   GoRoute(
