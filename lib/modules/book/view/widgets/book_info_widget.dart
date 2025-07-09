@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../../common/theme/app_colors.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../model/book_overview_response.dart';
 
 class BookInfoWidget extends StatelessWidget {
@@ -70,7 +70,7 @@ class BookInfoWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: AppColors.primaryPurple, size: 16),
+          Icon(icon, color: ColorName.p1, size: 16),
           const SizedBox(width: 4),
           Text(text, style: const TextStyle(color: Colors.white)),
         ],

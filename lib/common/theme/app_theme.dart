@@ -1,29 +1,26 @@
-import 'package:book/common/theme/app_colors.dart';
-import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
+import 'style/app_texts.dart';
+
 class AppTheme {
   static final ThemeData themeData = ThemeData(
-    primaryColor: AppColors.primaryPurple,
-    scaffoldBackgroundColor: AppColors.backgroundBlack,
+    primaryColor: ColorName.p1,
+    scaffoldBackgroundColor: ColorName.b2,
     brightness: Brightness.dark,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.backgroundBlack,
+      backgroundColor: ColorName.b2,
+      surfaceTintColor: ColorName.b2,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),
-      iconTheme: IconThemeData(
-        color: AppColors.appbarGray,
-      ),
-      actionsIconTheme: IconThemeData(
-        color: AppColors.appbarGray,
-      ),
+      iconTheme: IconThemeData(color: ColorName.g7),
+      actionsIconTheme: IconThemeData(color: ColorName.g7),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: AppColors.widgetBlack,
-      selectedItemColor: AppColors.primaryPurple,
-      unselectedItemColor: AppColors.textGrey,
+      backgroundColor: ColorName.g7,
+      selectedItemColor: ColorName.p1,
+      unselectedItemColor: ColorName.g3,
       type: BottomNavigationBarType.fixed,
       selectedLabelStyle: TextStyle(
         fontWeight: FontWeight.bold,
@@ -31,19 +28,13 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.widgetBlack,
-      hintStyle: const TextStyle(color: AppColors.textGrey),
+      fillColor: ColorName.g7,
+      hintStyle: const TextStyle(color: ColorName.g3),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30.0),
         borderSide: BorderSide.none,
       ),
-      prefixIconColor: AppColors.textGrey,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.white),
-      bodyMedium: TextStyle(color: AppColors.white),
-      titleLarge:
-          TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+      prefixIconColor: ColorName.g3,
     ),
   );
 }
