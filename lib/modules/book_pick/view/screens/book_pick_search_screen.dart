@@ -9,6 +9,7 @@ import '../../model/search_state.dart';
 import '../../view_model/search_history_view_model.dart';
 import '../../view_model/search_view_model.dart';
 import '../widgets/book_search_result_card.dart';
+// import '../widgets/book_search_result_card.dart';
 
 class SearchDetailScreen extends ConsumerStatefulWidget {
   const SearchDetailScreen({

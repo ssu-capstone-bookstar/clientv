@@ -1,8 +1,9 @@
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/search/model/search_book_response.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../book_pick/model/search_book_response.dart';
 
 class ChallengeBookInfoWidget extends StatelessWidget {
   const ChallengeBookInfoWidget({

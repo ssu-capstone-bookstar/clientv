@@ -9,10 +9,12 @@ import 'book_detail_info.dart';
 
 class BookSearchResultCard extends StatefulWidget {
   final SearchBookResponse book;
+  final String? from;
 
   const BookSearchResultCard({
     super.key,
     required this.book,
+    this.from,
   });
 
   @override
@@ -28,9 +30,12 @@ class _BookSearchResultCardState extends State<BookSearchResultCard> {
     });
   }
 
-  void _handleDoubleTap() {
-    context.push('/book-pick/search/book-overview/${widget.book.bookId}');
-  }
+  void _handleTap() {
+    if (widget.from == 'challenge') {
+      context.push('/reading-challenge/start', extra: widget.book);
+    } else {
+      context.push('/book-pick/search/book-overview/${widget.book.bookId}');
+    }  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +47,8 @@ class _BookSearchResultCardState extends State<BookSearchResultCard> {
           color: Colors.transparent,
           child: GestureDetector(
             onLongPress: _handleSingleTap,
-            onDoubleTap: _handleDoubleTap,
+            onTap: _handleTap,
+            onDoubleTap: _handleTap,
             child: Stack(
               fit: StackFit.expand,
               children: [
