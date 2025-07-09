@@ -66,25 +66,34 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
     });
 
     final searchState = ref.watch(searchViewModelProvider);
+    final isFromChallenge = widget.from == 'challenge';
 
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(AppSizes.APP_BAR_HEIGHT),
         child: AppBar(
-          title: const Text('책픽', style: AppTexts.b5),
-          leading: BackButton(),
+          title: Text(
+            isFromChallenge ? '리딩 챌린지' : '책픽',
+            style: AppTexts.b5,
+          ),
+          leading: const BackButton(),
         ),
       ),
       body: Padding(
         padding: AppPaddings.SCREEN_BODY_PADDING,
         child: Column(
-          spacing: 15,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('책 찾기', style: AppTexts.h4),
+            const SizedBox(height: 15),
+            Text(
+              isFromChallenge ? '새롭게 읽은 책을 찾아보세요' : '책 찾기',
+              style: AppTexts.h4,
+            ),
+            const SizedBox(height: 15),
             SearchTextField(
               controller: _textController,
-              hintText: '읽고 싶은 책을 검색해 보세요',
+              hintText:
+                  isFromChallenge ? '내가 읽은 책을 검색해 보세요' : '읽고 싶은 책을 검색해 보세요',
               hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
               suffixIcon: _textController.text.isNotEmpty
                   ? Assets.images.icSearchColored3x.image(scale: 3)
@@ -122,16 +131,19 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
         final histories = historyData.data;
 
         if (histories == null || histories.isEmpty) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 12,
-            children: [
-              Assets.icons.icBookpickSearchCharacter.svg(),
-              Text(
-                '어떤 도서를 찾고 계신가요?',
-                style: AppTexts.b8.copyWith(color: ColorName.g3),
-              ),
-            ],
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Assets.icons.icBookpickSearchCharacter.svg(),
+                const SizedBox(height: 12),
+                Text(
+                  '어떤 도서를 찾고 계신가요?',
+                  style: AppTexts.b8.copyWith(color: ColorName.g3),
+                ),
+              ],
+            ),
           );
         }
 

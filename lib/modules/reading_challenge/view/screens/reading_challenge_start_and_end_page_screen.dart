@@ -1,4 +1,5 @@
 import 'package:book/common/components/cta_button_l1.dart';
+import 'package:book/common/components/custom_dialog.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
@@ -144,6 +145,9 @@ class _ReadingChallengeStartAndEndPageScreenState
     SearchBookResponse book,
     int totalPages,
   ) {
+    final currentChallengeVM =
+        ref.read(currentChallengeViewModelProvider.notifier);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -151,26 +155,55 @@ class _ReadingChallengeStartAndEndPageScreenState
         CtaButtonL1(
           text: '기록하기',
           enabled: state.isButtonEnabled,
-          onPressed: () {
-            if (state.endPage != null &&
-                int.tryParse(state.endPage!) != null &&
-                int.parse(state.endPage!) >= totalPages) {
-              context.push(
-                '/reading-challenge/rating',
-                extra: book,
-              );
-            } else {
-              context.push('/reading-challenge/diary-encourage', extra: false);
+          onPressed: () async {
+            try {
+              if (ref.read(currentChallengeViewModelProvider).challengeId ==
+                  null) {
+                await currentChallengeVM.createChallenge();
+              }
+
+              // TODO: 챌린지 생성 후 독서 기록 API 호출 필요
+
+              if (state.endPage != null &&
+                  int.tryParse(state.endPage!) != null &&
+                  int.parse(state.endPage!) >= totalPages) {
+                context.push(
+                  '/reading-challenge/rating',
+                  extra: book,
+                );
+              } else {
+                context.push('/reading-challenge/diary-encourage',
+                    extra: false);
+              }
+            } catch (e) {
+              // Handle error, e.g., show an error dialog
+              print('Failed to create challenge: $e');
             }
           },
         ),
         const SizedBox(height: 8),
         CtaButtonL1(
-            text: '다음에 기록하기',
-            enabled: !state.isButtonEnabled,
-            onPressed: () {
-              context.go('/reading-challenge');
-            }),
+          text: '다음에 기록하기',
+          enabled: !state.isButtonEnabled,
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CustomDialog(
+                  title: '알림',
+                  content: '챌린지 생성이 안됩니다. 괜찮으신가요?',
+                  confirmButtonText: '확인',
+                  cancelButtonText: '취소',
+                  onConfirm: () {
+                    Navigator.of(context).pop();
+                    context.go('/reading-challenge');
+                  },
+                  onCancel: () => Navigator.of(context).pop(),
+                );
+              },
+            );
+          },
+        ),
         const SizedBox(height: 34),
       ],
     );

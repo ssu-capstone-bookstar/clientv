@@ -1,13 +1,16 @@
+import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/components/custom_dialog.dart';
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
 import 'book_detail_info.dart';
 import 'book_preview_info.dart';
 
-class BookSearchResultCard extends StatefulWidget {
+class BookSearchResultCard extends ConsumerStatefulWidget {
   final SearchBookResponse book;
   final String? from;
 
@@ -18,10 +21,11 @@ class BookSearchResultCard extends StatefulWidget {
   });
 
   @override
-  State<BookSearchResultCard> createState() => _BookSearchResultCardState();
+  ConsumerState<BookSearchResultCard> createState() =>
+      _BookSearchResultCardState();
 }
 
-class _BookSearchResultCardState extends State<BookSearchResultCard> {
+class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
   bool isSelected = false;
 
   void _handleSingleTap() {
@@ -30,9 +34,23 @@ class _BookSearchResultCardState extends State<BookSearchResultCard> {
     });
   }
 
-  void _handleTap() {
+  Future<void> _handleTap() async {
     if (widget.from == 'challenge') {
-      context.push('/reading-challenge/total-page', extra: widget.book);
+      final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
+      final challengeExists =
+          await viewModel.checkChallengeExists(widget.book.bookId.toString());
+
+      if (challengeExists) {
+        // 챌린지가 존재하면 커스텀 토스트 표시
+        if (mounted) {
+          OverlayUtils.showCustomToast(context, '이미 진행중인 챌린지입니다.');
+        }
+      } else {
+        // 챌린지가 존재하지 않으면 다음 화면으로 이동
+        if (mounted) {
+          context.push('/reading-challenge/total-page', extra: widget.book);
+        }
+      }
     } else {
       context.push('/book-pick/search/book-overview/${widget.book.bookId}');
     }

@@ -1,4 +1,5 @@
 import 'package:book/modules/book_pick/model/search_book_response.dart';
+import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,7 +17,7 @@ abstract class CurrentChallengeState with _$CurrentChallengeState {
   }) = _CurrentChallengeState;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
   @override
   CurrentChallengeState build() {
@@ -40,6 +41,35 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
 
   void setLastReadPage(int lastReadPage) {
     state = state.copyWith(lastReadPage: lastReadPage);
+  }
+
+  Future<void> createChallenge() async {
+    if (state.book == null || state.totalPages == null) {
+      throw Exception(
+          'Book and total pages must be set before creating a challenge.');
+    }
+    if (state.challengeId != null) {
+      return;
+    }
+
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    try {
+      final request = ReadingChallengeRequest(
+        bookId: state.book!.bookId,
+        totalPages: state.totalPages!,
+      );
+      final res = await repo.createChallenge(request);
+      state = state.copyWith(challengeId: res.data.challengeId.toString());
+    } catch (e) {
+      print('Failed to create challenge: $e');
+      rethrow;
+    }
+  }
+
+  Future<bool> checkChallengeExists(String bookId) async {
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    final response = await repo.checkChallengeExists(bookId);
+    return response.data ?? false;
   }
 
   Future<void> fetchAndSetChallenge(String bookId) async {

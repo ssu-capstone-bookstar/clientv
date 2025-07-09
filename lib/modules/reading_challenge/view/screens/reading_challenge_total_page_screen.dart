@@ -118,62 +118,25 @@ class _ReadingChallengeTotalPageScreenState
   }
 
   Widget _buildBottomButtonSection() {
-    ref.listen<AsyncValue<void>>(challengeCreationViewModelProvider,
-        (previous, next) {
-      if (next.hasError) {
-        // TODO: Show error dialog
-      } else if (!next.isLoading && previous != null && previous.isLoading) {
-        final totalPages = int.tryParse(_textController.text);
-        if (totalPages != null && mounted) {
-          context.push(
-            '/reading-challenge/start-and-end',
-            extra: {
-              'book': widget.book,
-              'totalPages': totalPages,
-            },
-          );
-        }
-      }
-    });
-
-    final state = ref.watch(challengeCreationViewModelProvider);
-    final viewModel = ref.read(challengeCreationViewModelProvider.notifier);
-    final isLoading = state.isLoading;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            CtaButtonL1(
-              // TODO: 이미 존재하는 챌린지라면 기존에 존재했다는 거 알라고 독서 일지 작성으로 자연스럽게 넘어가기 혹은 다른 방법
-              text: isLoading ? '' : '챌린지 생성하기',
-              enabled: _isButtonEnabled && !isLoading,
-              onPressed: () {
-                final totalPages = int.tryParse(_textController.text);
-                if (totalPages == null) {
-                  // TODO: Handle parsing error
-                  return;
-                }
-
-                viewModel.createChallenge(
-                  bookId: widget.book.bookId,
-                  totalPages: totalPages,
-                );
-              },
-            ),
-            if (isLoading)
-              const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2.0,
-                ),
-              ),
-          ],
+        CtaButtonL1(
+          text: '다음',
+          enabled: _isButtonEnabled,
+          onPressed: () {
+            final totalPages = int.tryParse(_textController.text);
+            if (totalPages != null && mounted) {
+              context.push(
+                '/reading-challenge/start-and-end',
+                extra: {
+                  'book': widget.book,
+                  'totalPages': totalPages,
+                },
+              );
+            }
+          },
         ),
         const SizedBox(height: 34),
       ],

@@ -6,6 +6,7 @@ import 'package:book/modules/reading_challenge/view/widgets/ongoing_challenge_ca
 import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:book/gen/assets.gen.dart';
 
 class OngoingChallengeListScreen extends ConsumerWidget {
   const OngoingChallengeListScreen({super.key});
@@ -160,13 +161,34 @@ class OngoingChallengeListScreen extends ConsumerWidget {
         return CustomDialog(
           title: '챌린지 중단',
           content: '선택한 ${count}개의 챌린지를 중단하시겠어요?',
+          icon: Assets.icons.icReadingChallengeChar1.svg(),
           onCancel: () => Navigator.of(context).pop(),
-          onConfirm: () {
-            viewModel.deleteSelectedChallenges();
-            Navigator.of(context).pop();
+          onConfirm: () async {
+            Navigator.of(context).pop(); // Close the first dialog
+            await viewModel.deleteSelectedChallenges();
+            if (context.mounted) {
+              _showDeleteSuccessDialog(context);
+            }
           },
           confirmButtonText: '중단',
           cancelButtonText: '취소',
+        );
+      },
+    );
+  }
+
+  void _showDeleteSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return CustomDialog(
+          title: '리딩 챌린지 중단',
+          content: '리딩 챌린지를 중단되었어요',
+          icon: Assets.icons.icReadingChallengeChar2.svg(),
+          onConfirm: () => Navigator.of(context).pop(),
+          onCancel: () => Navigator.of(context).pop(),
+          confirmButtonText: '확인',
+          cancelButtonText: '',
         );
       },
     );

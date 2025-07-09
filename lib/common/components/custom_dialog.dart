@@ -50,13 +50,14 @@ class CustomDialog extends StatelessWidget {
             const SizedBox(height: 24),
             Row(
               children: [
-                Expanded(
-                  child: CtaButtonL2(
-                    text: cancelButtonText,
-                    onPressed: onCancel,
+                if (cancelButtonText.isNotEmpty)
+                  Expanded(
+                    child: CtaButtonL2(
+                      text: cancelButtonText,
+                      onPressed: onCancel,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
+                if (cancelButtonText.isNotEmpty) const SizedBox(width: 8),
                 Expanded(
                   child: CtaButtonL1(
                     text: confirmButtonText,

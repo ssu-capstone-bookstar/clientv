@@ -67,4 +67,9 @@ abstract class ReadingChallengeRepository {
   Future<ResponseForm<ChallengeDetailResponse>> getChallengeByBookId(
     @Path('bookId') String bookId,
   );
+
+  @GET('/api/v2/reading-challenges/exists/books/{bookId}')
+  Future<ResponseForm<bool>> checkChallengeExists(
+    @Path('bookId') String bookId,
+  );
 }
