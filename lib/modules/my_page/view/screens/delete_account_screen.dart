@@ -8,6 +8,8 @@ import 'package:book/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book/common/theme/style/app_sizes.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -134,6 +136,23 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 height: 137.0982208251953,
               ),
             ),
+          if (isDeleted)
+            Positioned(
+              left: 14,
+              right: 14,
+              bottom: 10,
+              child: CtaButtonL1(
+                text: '북스타 종료하기',
+                enabled: true,
+                onPressed: () {
+                  if (Platform.isAndroid) {
+                    SystemNavigator.pop();
+                  } else if (Platform.isIOS) {
+                    GoRouter.of(context).go('/login');
+                  }
+                },
+              ),
+            ),
         ],
       ),
       bottomNavigationBar: Padding(
@@ -153,6 +172,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       });
                     }
                   : null,
+          backgroundColor: isDeleted ? ColorName.g7 : null,
+          borderColor: isDeleted ? ColorName.g6 : null,
         ),
       ),
     );
