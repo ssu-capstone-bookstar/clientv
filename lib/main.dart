@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,7 +7,6 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'common/router/router.dart';
 import 'common/theme/app_theme.dart';
 import 'gen/assets.gen.dart';
-import 'gen/colors.gen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,18 +18,6 @@ void main() async {
   );
 
   // await FlutterSecureStorage().deleteAll();
-
-  FlutterError.onError = (FlutterErrorDetails details) {
-    print('[onError] ${details.exception}');
-
-    FlutterError.presentError(details);
-  };
-
-  PlatformDispatcher.instance.onError = (error, stack) {
-    print('[onError] ${error}');
-
-    return true;
-  };
 
   runApp(
     const ProviderScope(

@@ -383,7 +383,6 @@ class _ChallengeResponse implements ChallengeResponse {
   final int challengeId;
   @override
   final BookSummary book;
-//TODO: publishedDate 추가 필요
   @override
   @JsonKey()
   final int currentPage;
