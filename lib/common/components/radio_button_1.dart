@@ -10,15 +10,15 @@
 //   enabled: true,
 //   interactive: true, // 또는 생략
 // )
-import 'package:flutter/material.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
+import 'package:flutter/material.dart';
 
 class RadioButton1<T> extends StatefulWidget {
   final String title;
   final String description;
   final T value;
-  final T groupValue;
+  final T? groupValue;
   final ValueChanged<T?>? onChanged;
   final bool enabled;
   final bool interactive;

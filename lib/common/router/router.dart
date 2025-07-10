@@ -29,6 +29,9 @@ import '../../modules/reading_challenge/view/screens/reading_challenge_rating_sc
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
+import '../../modules/reading_diary/screens/reading_diary_entry_screen.dart';
+import '../../modules/reading_diary/screens/reading_diary_photo_screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'router.g.dart';
 
@@ -229,9 +232,11 @@ GoRouter router(Ref ref) {
                       final extra = state.extra as Map<String, dynamic>;
                       final book = extra['book'] as SearchBookResponse;
                       final totalPages = extra['totalPages'] as int;
+                      final challengeId = extra['challengeId'] as int?; // challengeId를 안전하게 추출
                       return ReadingChallengeStartAndEndPageScreen(
                         book: book,
                         totalPages: totalPages,
+                        challengeId: challengeId, // challengeId 전달
                       );
                     },
                   ),
@@ -252,6 +257,21 @@ GoRouter router(Ref ref) {
                       return ReadingChallengeDiaryEncourageScreen(
                         isChallengeCompleted: isChallengeCompleted,
                       );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'reading-diary-photo',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const ReadingDiaryPhotoScreen(),
+                  ),
+                  GoRoute(
+                    path: ReadingDiaryEntryScreen.routeName,
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final imagePaths = state.extra as List<String>;
+                      final images =
+                          imagePaths.map((path) => XFile(path)).toList();
+                      return ReadingDiaryEntryScreen(images: images);
                     },
                   ),
                 ],

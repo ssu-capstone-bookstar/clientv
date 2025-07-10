@@ -63,5 +63,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>프로필 및 다이어리 사진 등록을 위해 카메라에 접근합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>프로필 및 다이어리 사진 등록을 위해 앨범에 접근합니다.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>동영상 촬영을 위해 마이크에 접근합니다.</string>
 </dict>
 </plist>

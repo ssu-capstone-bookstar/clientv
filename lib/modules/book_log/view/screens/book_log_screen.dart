@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/theme/style/app_sizes.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
-import '../../view_model/book_log_view_model.dart';
 import '../../model/book_log_models.dart';
-import '../../widgets/speech_bubble_overlay.dart';
+import '../../view_model/book_log_view_model.dart';
 import '../widgets/book_log_header_section.dart';
-import '../widgets/book_log_mid_section.dart';
 import '../widgets/book_log_low_section.dart';
+import '../widgets/book_log_mid_section.dart';
 // TODO: 실제 데이터 연동, 상태관리 연동 등 필요한 부분에 주석 추가
 
 class BookLogScreen extends ConsumerStatefulWidget {
@@ -68,12 +66,15 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
   Widget build(BuildContext context) {
     final user = ref.watch(authViewModelProvider).value;
     final memberId = (user is AuthSuccess) ? user.memberId : 0;
-    final bool isMyProfile = user != null && (user is AuthSuccess) && user.memberId == memberId;
+    final bool isMyProfile =
+        user != null && (user is AuthSuccess) && user.memberId == memberId;
     final profileAsync = ref.watch(bookLogProfileProvider(memberId));
 
     return profileAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, st) => Center(child: Text('프로필 정보를 불러올 수 없습니다.', style: TextStyle(color: ColorName.g3))),
+      error: (e, st) => Center(
+          child: Text('프로필 정보를 불러올 수 없습니다.',
+              style: TextStyle(color: ColorName.g3))),
       data: (profile) {
         // if (!_speechBubbleShown) {
         //   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -82,7 +83,7 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
         //   });
         //   _speechBubbleShown = true;
         // }
-        
+
         return Stack(
           children: [
             Column(
@@ -109,7 +110,10 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> with UserState {
                 BookLogLowSection(),
               ],
             ),
-            if (true) Align(alignment: Alignment.topCenter, child: ProfileSpeechBubble(text: '책을 읽자'))
+            if (true)
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: ProfileSpeechBubble(text: '책을 읽자'))
           ],
         );
       },

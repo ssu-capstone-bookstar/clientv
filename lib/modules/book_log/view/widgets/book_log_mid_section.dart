@@ -1,8 +1,9 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+
 import '../../model/book_log_models.dart';
 import 'book_status_badge.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
 
 class BookLogMidSection extends StatelessWidget {
   final List<DummyBook> books;

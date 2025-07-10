@@ -18,10 +18,12 @@ class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
     super.key,
     required this.book,
     required this.totalPages,
+    this.challengeId,
   });
 
   final SearchBookResponse book;
   final int totalPages;
+  final int? challengeId;
 
   @override
   ConsumerState<ReadingChallengeStartAndEndPageScreen> createState() =>
@@ -42,13 +44,31 @@ class _ReadingChallengeStartAndEndPageScreenState
     });
   }
 
+  void _showSkipDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomDialog(
+          title: '알림',
+          content: '챌린지 생성이 안됩니다. 괜찮으신가요?',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+          onConfirm: () {
+            Navigator.of(context).pop();
+            context.go('/reading-challenge');
+          },
+          onCancel: () => Navigator.of(context).pop(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(readingChallengeProgressViewModelProvider);
     final viewModel =
         ref.read(readingChallengeProgressViewModelProvider.notifier);
     final book = widget.book;
-    final totalPages = widget.totalPages;
 
     return Scaffold(
       appBar: AppBar(
@@ -57,28 +77,47 @@ class _ReadingChallengeStartAndEndPageScreenState
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              context.go('/reading-challenge');
+              if (widget.challengeId != null) {
+                // 진행 중인 챌린지에서 왔다면 바로 이전 화면으로
+                context.pop();
+              } else {
+                // 신규 챌린지라면 확인 다이얼로그 표시
+                _showSkipDialog();
+              }
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 20),
-            ChallengeBookInfoWidget(book: book),
-            const SizedBox(height: 16),
-            const StepProgressIndicator(
-              totalSteps: 3,
-              currentStep: 2,
-            ),
-            const SizedBox(height: 40),
-            _buildPageInputSection(viewModel),
-            const Spacer(),
-            _buildBottomButtonSection(context, state, book, totalPages),
-          ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 20),
+                      ChallengeBookInfoWidget(book: book),
+                      const SizedBox(height: 16),
+                      const StepProgressIndicator(
+                        totalSteps: 3,
+                        currentStep: 2,
+                      ),
+                      const SizedBox(height: 40),
+                      _buildPageInputSection(viewModel),
+                      const SizedBox(height: 24),
+                      _buildBottomButtonSection(
+                          context, state, book, widget.totalPages),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -157,8 +196,8 @@ class _ReadingChallengeStartAndEndPageScreenState
           enabled: state.isButtonEnabled,
           onPressed: () async {
             try {
-              if (ref.read(currentChallengeViewModelProvider).challengeId ==
-                  null) {
+              // challengeId가 없는 경우(신규)에만 챌린지를 생성
+              if (widget.challengeId == null) {
                 await currentChallengeVM.createChallenge();
               }
 
@@ -175,31 +214,8 @@ class _ReadingChallengeStartAndEndPageScreenState
               }
             } catch (e) {
               // Handle error, e.g., show an error dialog
-              print('Failed to create challenge: $e');
+              print('Failed to process reading record: $e');
             }
-          },
-        ),
-        const SizedBox(height: 8),
-        CtaButtonL1(
-          text: '다음에 기록하기',
-          enabled: !state.isButtonEnabled,
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return CustomDialog(
-                  title: '알림',
-                  content: '챌린지 생성이 안됩니다. 괜찮으신가요?',
-                  confirmButtonText: '확인',
-                  cancelButtonText: '취소',
-                  onConfirm: () {
-                    Navigator.of(context).pop();
-                    context.go('/reading-challenge');
-                  },
-                  onCancel: () => Navigator.of(context).pop(),
-                );
-              },
-            );
           },
         ),
         const SizedBox(height: 34),

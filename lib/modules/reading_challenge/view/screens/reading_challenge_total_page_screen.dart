@@ -4,7 +4,6 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
 import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
-import 'package:book/modules/reading_challenge/view_model/challenge_creation_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,38 +47,56 @@ class _ReadingChallengeTotalPageScreenState
   Widget build(BuildContext context) {
     final book = widget.book;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("리딩 챌린지"),
-        leading: BackButton(
-          onPressed: context.pop,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              context.go('/reading-challenge');
-            },
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("리딩 챌린지"),
+          leading: BackButton(
+            onPressed: context.pop,
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 20),
-            ChallengeBookInfoWidget(book: book),
-            const SizedBox(height: 16),
-            const StepProgressIndicator(
-              totalSteps: 3,
-              currentStep: 1,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                context.go('/reading-challenge');
+              },
             ),
-            const SizedBox(height: 60),
-            _buildPageInputSection(),
-            const Spacer(),
-            _buildBottomButtonSection(),
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                    (AppBar().preferredSize.height +
+                        MediaQuery.of(context).padding.top +
+                        MediaQuery.of(context).padding.bottom),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 20),
+                      ChallengeBookInfoWidget(book: book),
+                      const SizedBox(height: 16),
+                      const StepProgressIndicator(
+                        totalSteps: 3,
+                        currentStep: 1,
+                      ),
+                      const SizedBox(height: 60),
+                      _buildPageInputSection(),
+                    ],
+                  ),
+                  _buildBottomButtonSection(),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

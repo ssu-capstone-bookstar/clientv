@@ -95,7 +95,7 @@ class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
                 cancelButtonText: '나중에 하기',
                 onConfirm: () {
                   context.pop();
-                  // TODO: 다이어리 작성 화면으로 이동
+                  context.push('/reading-challenge/reading-diary-photo');
                 },
                 onCancel: () {
                   context.go('/reading-challenge');
@@ -112,7 +112,7 @@ class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
         CtaButtonL1(
           text: '작성하기',
           onPressed: () {
-            // TODO: 다이어리 작성 화면으로 이동 with book data
+            context.push('/reading-challenge/reading-diary-photo');
           },
         ),
         const SizedBox(height: 34),
