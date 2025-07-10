@@ -62,8 +62,8 @@ class ImageGrid extends StatelessWidget {
                       height: double.infinity,
                     )
                   : const Center(
-                      child:
-                          Icon(Icons.menu_book, color: ColorName.g7, size: 36),
+                      child: Icon(Icons.image_not_supported,
+                          color: ColorName.g7, size: 36),
                     ),
             );
           },

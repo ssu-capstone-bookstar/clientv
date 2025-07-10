@@ -235,7 +235,7 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
               child: Divider(
                 thickness: 7,
                 // [Note] 정순원, 오류나서 잠시 주석 처리해두겠습니다
-                radius: AppBorders.DIVIDER_BORDER_RADIUS,
+                // radius: AppBorders.DIVIDER_BORDER_RADIUS,
                 color: AppColors.DIVIDER_COLOR,
               ),
             );
