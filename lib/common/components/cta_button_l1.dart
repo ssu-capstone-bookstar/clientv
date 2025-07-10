@@ -6,12 +6,16 @@ class CtaButtonL1 extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool enabled;
+  final Color? backgroundColor;
+  final Color? borderColor;
 
   const CtaButtonL1({
     Key? key,
     required this.text,
     this.onPressed,
     this.enabled = true,
+    this.backgroundColor,
+    this.borderColor,
   }) : super(key: key);
 
   @override
@@ -29,17 +33,27 @@ class _CtaButtonL1State extends State<CtaButtonL1> {
     Color backgroundColor;
     Color borderColor;
 
-    if (isDisabled) {
+    if (widget.backgroundColor != null) {
+      backgroundColor = widget.backgroundColor!;
+    } else if (isDisabled) {
       backgroundColor = ColorName.g7;
-      borderColor = ColorName.g6;
     } else if (_isPressed) {
       backgroundColor = const Color(0xFF654AEF);
-      borderColor = const Color(0xFF7C63F5);
     } else if (_isHovered) {
       backgroundColor = const Color(0xFF8972FF);
-      borderColor = const Color(0xFFA393FF);
     } else {
       backgroundColor = ColorName.p1;
+    }
+
+    if (widget.borderColor != null) {
+      borderColor = widget.borderColor!;
+    } else if (isDisabled) {
+      borderColor = ColorName.g6;
+    } else if (_isPressed) {
+      borderColor = const Color(0xFF7C63F5);
+    } else if (_isHovered) {
+      borderColor = const Color(0xFFA393FF);
+    } else {
       borderColor = ColorName.p3;
     }
 
@@ -74,7 +88,7 @@ class _CtaButtonL1State extends State<CtaButtonL1> {
             widget.text,
             style: isDisabled
                 ? AppTexts.b7.copyWith(color: ColorName.g3)
-                : AppTexts.b7,
+                : AppTexts.b7.copyWith(color: ColorName.w1),
           ),
         ),
       ),

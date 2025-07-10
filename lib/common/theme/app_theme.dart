@@ -6,11 +6,11 @@ import 'style/app_texts.dart';
 class AppTheme {
   static final ThemeData themeData = ThemeData(
     primaryColor: ColorName.p1,
-    scaffoldBackgroundColor: ColorName.b2,
+    scaffoldBackgroundColor: ColorName.b1,
     brightness: Brightness.dark,
     appBarTheme: AppBarTheme(
-      backgroundColor: ColorName.b2,
-      surfaceTintColor: ColorName.b2,
+      backgroundColor: ColorName.b1,
+      surfaceTintColor: ColorName.b1,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: AppTexts.b5.copyWith(color: ColorName.w1),

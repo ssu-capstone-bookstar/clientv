@@ -7,8 +7,8 @@ import '../../../../common/components/custom_dialog.dart';
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
-import 'book_detail_info.dart';
-import 'book_preview_info.dart';
+import 'book_cover_detail_info.dart';
+import 'book_cover_preview_info.dart';
 
 class BookSearchResultCard extends ConsumerStatefulWidget {
   final SearchBookResponse book;
@@ -88,7 +88,7 @@ class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
     return isSelected
         ? [
             OverlayUtils.fullBlackOverlay(),
-            BookDetailInfo(
+            BookCoverDetailInfo(
               title: widget.book.title,
               author: widget.book.author,
               rating: 2.9,
@@ -96,7 +96,7 @@ class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
           ]
         : [
             OverlayUtils.linearGradientOverlay(),
-            BookPreviewInfo(title: widget.book.title),
+            BookCoverPreviewInfo(title: widget.book.title),
           ];
   }
 }
