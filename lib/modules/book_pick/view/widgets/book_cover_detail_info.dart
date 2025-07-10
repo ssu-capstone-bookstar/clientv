@@ -4,12 +4,12 @@ import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 
-class BookDetailInfo extends StatelessWidget {
+class BookCoverDetailInfo extends StatelessWidget {
   final String title;
   final String author;
   final double rating;
 
-  const BookDetailInfo({
+  const BookCoverDetailInfo({
     super.key,
     required this.title,
     required this.author,

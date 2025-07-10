@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../common/theme/style/app_texts.dart';
 
-class BookPreviewInfo extends StatelessWidget {
+class BookCoverPreviewInfo extends StatelessWidget {
   final String title;
 
-  const BookPreviewInfo({super.key, required this.title});
+  const BookCoverPreviewInfo({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

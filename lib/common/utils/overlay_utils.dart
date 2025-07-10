@@ -1,3 +1,4 @@
+import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,7 @@ class OverlayUtils {
     AlignmentGeometry alignment = Alignment.bottomCenter,
     AlignmentGeometry begin = Alignment.topCenter,
     AlignmentGeometry end = Alignment.bottomCenter,
-    List<Color> colors = const [Colors.transparent, Colors.black],
+    List<Color> colors = const [Colors.transparent, AppColors.OVERLAY_COLOR],
     double height = 80,
   }) {
     return Align(
@@ -24,9 +25,9 @@ class OverlayUtils {
     );
   }
 
-  static Widget fullBlackOverlay({int alpha = 230}) {
+  static Widget fullBlackOverlay({Color overlayColor = AppColors.OVERLAY_COLOR, int alpha = 230}) { // 230 ~= 90%
     return Container(
-      color: Colors.black.withAlpha(alpha),
+      color: overlayColor.withAlpha(alpha),
     );
   }
 
