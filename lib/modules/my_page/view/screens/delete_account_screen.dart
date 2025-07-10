@@ -25,17 +25,21 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('회원 탈퇴'),
-        leading: IconButton(
-          icon: const BackButton(),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: isDeleted
+            ? null
+            : IconButton(
+                icon: const BackButton(),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+        automaticallyImplyLeading: !isDeleted,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              GoRouter.of(context).go('/book-log');
-            },
-          ),
+          if (!isDeleted)
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                GoRouter.of(context).go('/book-log');
+              },
+            ),
         ],
       ),
       body: Stack(
