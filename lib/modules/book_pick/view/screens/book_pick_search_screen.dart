@@ -130,11 +130,9 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
       listBuilder: (List<SearchHistoryResponse> histories) => histories,
       itemBuilder: (history) => ListTile(
         title: Text(history.queries),
-        trailing: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries);
-          },
+        trailing: GestureDetector(
+          child: Icon(Icons.clear),
+          onTap: () => ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries),
         ),
       ),
       onTap: (history) {
