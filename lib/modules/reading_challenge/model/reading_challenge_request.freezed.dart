@@ -16,6 +16,8 @@ T _$identity<T>(T value) => value;
 mixin _$ReadingChallengeRequest {
   int get bookId;
   int get totalPages;
+  int get startPage;
+  int get endPage;
 
   /// Create a copy of ReadingChallengeRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -35,16 +37,20 @@ mixin _$ReadingChallengeRequest {
             other is ReadingChallengeRequest &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.totalPages, totalPages) ||
-                other.totalPages == totalPages));
+                other.totalPages == totalPages) &&
+            (identical(other.startPage, startPage) ||
+                other.startPage == startPage) &&
+            (identical(other.endPage, endPage) || other.endPage == endPage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, totalPages);
+  int get hashCode =>
+      Object.hash(runtimeType, bookId, totalPages, startPage, endPage);
 
   @override
   String toString() {
-    return 'ReadingChallengeRequest(bookId: $bookId, totalPages: $totalPages)';
+    return 'ReadingChallengeRequest(bookId: $bookId, totalPages: $totalPages, startPage: $startPage, endPage: $endPage)';
   }
 }
 
@@ -54,7 +60,7 @@ abstract mixin class $ReadingChallengeRequestCopyWith<$Res> {
           $Res Function(ReadingChallengeRequest) _then) =
       _$ReadingChallengeRequestCopyWithImpl;
   @useResult
-  $Res call({int bookId, int totalPages});
+  $Res call({int bookId, int totalPages, int startPage, int endPage});
 }
 
 /// @nodoc
@@ -72,6 +78,8 @@ class _$ReadingChallengeRequestCopyWithImpl<$Res>
   $Res call({
     Object? bookId = null,
     Object? totalPages = null,
+    Object? startPage = null,
+    Object? endPage = null,
   }) {
     return _then(_self.copyWith(
       bookId: null == bookId
@@ -81,6 +89,14 @@ class _$ReadingChallengeRequestCopyWithImpl<$Res>
       totalPages: null == totalPages
           ? _self.totalPages
           : totalPages // ignore: cast_nullable_to_non_nullable
+              as int,
+      startPage: null == startPage
+          ? _self.startPage
+          : startPage // ignore: cast_nullable_to_non_nullable
+              as int,
+      endPage: null == endPage
+          ? _self.endPage
+          : endPage // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -179,13 +195,15 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int bookId, int totalPages)? $default, {
+    TResult Function(int bookId, int totalPages, int startPage, int endPage)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ReadingChallengeRequest() when $default != null:
-        return $default(_that.bookId, _that.totalPages);
+        return $default(
+            _that.bookId, _that.totalPages, _that.startPage, _that.endPage);
       case _:
         return orElse();
     }
@@ -206,12 +224,14 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int bookId, int totalPages) $default,
+    TResult Function(int bookId, int totalPages, int startPage, int endPage)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ReadingChallengeRequest():
-        return $default(_that.bookId, _that.totalPages);
+        return $default(
+            _that.bookId, _that.totalPages, _that.startPage, _that.endPage);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -231,12 +251,14 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int bookId, int totalPages)? $default,
+    TResult? Function(int bookId, int totalPages, int startPage, int endPage)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ReadingChallengeRequest() when $default != null:
-        return $default(_that.bookId, _that.totalPages);
+        return $default(
+            _that.bookId, _that.totalPages, _that.startPage, _that.endPage);
       case _:
         return null;
     }
@@ -247,7 +269,10 @@ extension ReadingChallengeRequestPatterns on ReadingChallengeRequest {
 @JsonSerializable()
 class _ReadingChallengeRequest implements ReadingChallengeRequest {
   const _ReadingChallengeRequest(
-      {required this.bookId, required this.totalPages});
+      {required this.bookId,
+      required this.totalPages,
+      required this.startPage,
+      required this.endPage});
   factory _ReadingChallengeRequest.fromJson(Map<String, dynamic> json) =>
       _$ReadingChallengeRequestFromJson(json);
 
@@ -255,6 +280,10 @@ class _ReadingChallengeRequest implements ReadingChallengeRequest {
   final int bookId;
   @override
   final int totalPages;
+  @override
+  final int startPage;
+  @override
+  final int endPage;
 
   /// Create a copy of ReadingChallengeRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -279,16 +308,20 @@ class _ReadingChallengeRequest implements ReadingChallengeRequest {
             other is _ReadingChallengeRequest &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.totalPages, totalPages) ||
-                other.totalPages == totalPages));
+                other.totalPages == totalPages) &&
+            (identical(other.startPage, startPage) ||
+                other.startPage == startPage) &&
+            (identical(other.endPage, endPage) || other.endPage == endPage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, totalPages);
+  int get hashCode =>
+      Object.hash(runtimeType, bookId, totalPages, startPage, endPage);
 
   @override
   String toString() {
-    return 'ReadingChallengeRequest(bookId: $bookId, totalPages: $totalPages)';
+    return 'ReadingChallengeRequest(bookId: $bookId, totalPages: $totalPages, startPage: $startPage, endPage: $endPage)';
   }
 }
 
@@ -300,7 +333,7 @@ abstract mixin class _$ReadingChallengeRequestCopyWith<$Res>
       __$ReadingChallengeRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({int bookId, int totalPages});
+  $Res call({int bookId, int totalPages, int startPage, int endPage});
 }
 
 /// @nodoc
@@ -318,6 +351,8 @@ class __$ReadingChallengeRequestCopyWithImpl<$Res>
   $Res call({
     Object? bookId = null,
     Object? totalPages = null,
+    Object? startPage = null,
+    Object? endPage = null,
   }) {
     return _then(_ReadingChallengeRequest(
       bookId: null == bookId
@@ -327,6 +362,14 @@ class __$ReadingChallengeRequestCopyWithImpl<$Res>
       totalPages: null == totalPages
           ? _self.totalPages
           : totalPages // ignore: cast_nullable_to_non_nullable
+              as int,
+      startPage: null == startPage
+          ? _self.startPage
+          : startPage // ignore: cast_nullable_to_non_nullable
+              as int,
+      endPage: null == endPage
+          ? _self.endPage
+          : endPage // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }

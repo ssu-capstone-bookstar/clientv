@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'diary_request.dart';
+part of 'challenge_progress_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,88 +13,74 @@ part of 'diary_request.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$DiaryRequest {
+mixin _$ChallengeProgressResponse {
   int get progressId;
-  String get content;
-  List<ImageRequest> get images;
 
-  /// Create a copy of DiaryRequest
+  /// Create a copy of ChallengeProgressResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $DiaryRequestCopyWith<DiaryRequest> get copyWith =>
-      _$DiaryRequestCopyWithImpl<DiaryRequest>(
-          this as DiaryRequest, _$identity);
+  $ChallengeProgressResponseCopyWith<ChallengeProgressResponse> get copyWith =>
+      _$ChallengeProgressResponseCopyWithImpl<ChallengeProgressResponse>(
+          this as ChallengeProgressResponse, _$identity);
 
-  /// Serializes this DiaryRequest to a JSON map.
+  /// Serializes this ChallengeProgressResponse to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is DiaryRequest &&
+            other is ChallengeProgressResponse &&
             (identical(other.progressId, progressId) ||
-                other.progressId == progressId) &&
-            (identical(other.content, content) || other.content == content) &&
-            const DeepCollectionEquality().equals(other.images, images));
+                other.progressId == progressId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, progressId, content,
-      const DeepCollectionEquality().hash(images));
+  int get hashCode => Object.hash(runtimeType, progressId);
 
   @override
   String toString() {
-    return 'DiaryRequest(progressId: $progressId, content: $content, images: $images)';
+    return 'ChallengeProgressResponse(progressId: $progressId)';
   }
 }
 
 /// @nodoc
-abstract mixin class $DiaryRequestCopyWith<$Res> {
-  factory $DiaryRequestCopyWith(
-          DiaryRequest value, $Res Function(DiaryRequest) _then) =
-      _$DiaryRequestCopyWithImpl;
+abstract mixin class $ChallengeProgressResponseCopyWith<$Res> {
+  factory $ChallengeProgressResponseCopyWith(ChallengeProgressResponse value,
+          $Res Function(ChallengeProgressResponse) _then) =
+      _$ChallengeProgressResponseCopyWithImpl;
   @useResult
-  $Res call({int progressId, String content, List<ImageRequest> images});
+  $Res call({int progressId});
 }
 
 /// @nodoc
-class _$DiaryRequestCopyWithImpl<$Res> implements $DiaryRequestCopyWith<$Res> {
-  _$DiaryRequestCopyWithImpl(this._self, this._then);
+class _$ChallengeProgressResponseCopyWithImpl<$Res>
+    implements $ChallengeProgressResponseCopyWith<$Res> {
+  _$ChallengeProgressResponseCopyWithImpl(this._self, this._then);
 
-  final DiaryRequest _self;
-  final $Res Function(DiaryRequest) _then;
+  final ChallengeProgressResponse _self;
+  final $Res Function(ChallengeProgressResponse) _then;
 
-  /// Create a copy of DiaryRequest
+  /// Create a copy of ChallengeProgressResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? progressId = null,
-    Object? content = null,
-    Object? images = null,
   }) {
     return _then(_self.copyWith(
       progressId: null == progressId
           ? _self.progressId
           : progressId // ignore: cast_nullable_to_non_nullable
               as int,
-      content: null == content
-          ? _self.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      images: null == images
-          ? _self.images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<ImageRequest>,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [DiaryRequest].
-extension DiaryRequestPatterns on DiaryRequest {
+/// Adds pattern-matching-related methods to [ChallengeProgressResponse].
+extension ChallengeProgressResponsePatterns on ChallengeProgressResponse {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -109,12 +95,12 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_DiaryRequest value)? $default, {
+    TResult Function(_ChallengeProgressResponse value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _DiaryRequest() when $default != null:
+      case _ChallengeProgressResponse() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -136,11 +122,11 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_DiaryRequest value) $default,
+    TResult Function(_ChallengeProgressResponse value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _DiaryRequest():
+      case _ChallengeProgressResponse():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -161,11 +147,11 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_DiaryRequest value)? $default,
+    TResult? Function(_ChallengeProgressResponse value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _DiaryRequest() when $default != null:
+      case _ChallengeProgressResponse() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -186,14 +172,13 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int progressId, String content, List<ImageRequest> images)?
-        $default, {
+    TResult Function(int progressId)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _DiaryRequest() when $default != null:
-        return $default(_that.progressId, _that.content, _that.images);
+      case _ChallengeProgressResponse() when $default != null:
+        return $default(_that.progressId);
       case _:
         return orElse();
     }
@@ -214,13 +199,12 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int progressId, String content, List<ImageRequest> images)
-        $default,
+    TResult Function(int progressId) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _DiaryRequest():
-        return $default(_that.progressId, _that.content, _that.images);
+      case _ChallengeProgressResponse():
+        return $default(_that.progressId);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -240,14 +224,12 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            int progressId, String content, List<ImageRequest> images)?
-        $default,
+    TResult? Function(int progressId)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _DiaryRequest() when $default != null:
-        return $default(_that.progressId, _that.content, _that.images);
+      case _ChallengeProgressResponse() when $default != null:
+        return $default(_that.progressId);
       case _:
         return null;
     }
@@ -256,40 +238,27 @@ extension DiaryRequestPatterns on DiaryRequest {
 
 /// @nodoc
 @JsonSerializable()
-class _DiaryRequest implements DiaryRequest {
-  const _DiaryRequest(
-      {required this.progressId,
-      this.content = '',
-      final List<ImageRequest> images = const []})
-      : _images = images;
-  factory _DiaryRequest.fromJson(Map<String, dynamic> json) =>
-      _$DiaryRequestFromJson(json);
+class _ChallengeProgressResponse implements ChallengeProgressResponse {
+  const _ChallengeProgressResponse({required this.progressId});
+  factory _ChallengeProgressResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChallengeProgressResponseFromJson(json);
 
   @override
   final int progressId;
-  @override
-  @JsonKey()
-  final String content;
-  final List<ImageRequest> _images;
-  @override
-  @JsonKey()
-  List<ImageRequest> get images {
-    if (_images is EqualUnmodifiableListView) return _images;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_images);
-  }
 
-  /// Create a copy of DiaryRequest
+  /// Create a copy of ChallengeProgressResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$DiaryRequestCopyWith<_DiaryRequest> get copyWith =>
-      __$DiaryRequestCopyWithImpl<_DiaryRequest>(this, _$identity);
+  _$ChallengeProgressResponseCopyWith<_ChallengeProgressResponse>
+      get copyWith =>
+          __$ChallengeProgressResponseCopyWithImpl<_ChallengeProgressResponse>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$DiaryRequestToJson(
+    return _$ChallengeProgressResponseToJson(
       this,
     );
   }
@@ -298,65 +267,52 @@ class _DiaryRequest implements DiaryRequest {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _DiaryRequest &&
+            other is _ChallengeProgressResponse &&
             (identical(other.progressId, progressId) ||
-                other.progressId == progressId) &&
-            (identical(other.content, content) || other.content == content) &&
-            const DeepCollectionEquality().equals(other._images, _images));
+                other.progressId == progressId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, progressId, content,
-      const DeepCollectionEquality().hash(_images));
+  int get hashCode => Object.hash(runtimeType, progressId);
 
   @override
   String toString() {
-    return 'DiaryRequest(progressId: $progressId, content: $content, images: $images)';
+    return 'ChallengeProgressResponse(progressId: $progressId)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$DiaryRequestCopyWith<$Res>
-    implements $DiaryRequestCopyWith<$Res> {
-  factory _$DiaryRequestCopyWith(
-          _DiaryRequest value, $Res Function(_DiaryRequest) _then) =
-      __$DiaryRequestCopyWithImpl;
+abstract mixin class _$ChallengeProgressResponseCopyWith<$Res>
+    implements $ChallengeProgressResponseCopyWith<$Res> {
+  factory _$ChallengeProgressResponseCopyWith(_ChallengeProgressResponse value,
+          $Res Function(_ChallengeProgressResponse) _then) =
+      __$ChallengeProgressResponseCopyWithImpl;
   @override
   @useResult
-  $Res call({int progressId, String content, List<ImageRequest> images});
+  $Res call({int progressId});
 }
 
 /// @nodoc
-class __$DiaryRequestCopyWithImpl<$Res>
-    implements _$DiaryRequestCopyWith<$Res> {
-  __$DiaryRequestCopyWithImpl(this._self, this._then);
+class __$ChallengeProgressResponseCopyWithImpl<$Res>
+    implements _$ChallengeProgressResponseCopyWith<$Res> {
+  __$ChallengeProgressResponseCopyWithImpl(this._self, this._then);
 
-  final _DiaryRequest _self;
-  final $Res Function(_DiaryRequest) _then;
+  final _ChallengeProgressResponse _self;
+  final $Res Function(_ChallengeProgressResponse) _then;
 
-  /// Create a copy of DiaryRequest
+  /// Create a copy of ChallengeProgressResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
     Object? progressId = null,
-    Object? content = null,
-    Object? images = null,
   }) {
-    return _then(_DiaryRequest(
+    return _then(_ChallengeProgressResponse(
       progressId: null == progressId
           ? _self.progressId
           : progressId // ignore: cast_nullable_to_non_nullable
               as int,
-      content: null == content
-          ? _self.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      images: null == images
-          ? _self._images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<ImageRequest>,
     ));
   }
 }

@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'challenge_creation_view_model.dart';
+part of 'create_diary_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$challengeCreationViewModelHash() =>
-    r'6d3207ec461c9f83cf40ac2d4918c262746209d7';
+String _$createDiaryViewModelHash() =>
+    r'e7b172b7f6669d5548c34385510cac624a65eebc';
 
-/// See also [ChallengeCreationViewModel].
-@ProviderFor(ChallengeCreationViewModel)
-final challengeCreationViewModelProvider = AutoDisposeNotifierProvider<
-    ChallengeCreationViewModel, AsyncValue<void>>.internal(
-  ChallengeCreationViewModel.new,
-  name: r'challengeCreationViewModelProvider',
+/// See also [CreateDiaryViewModel].
+@ProviderFor(CreateDiaryViewModel)
+final createDiaryViewModelProvider =
+    AutoDisposeNotifierProvider<CreateDiaryViewModel, bool>.internal(
+  CreateDiaryViewModel.new,
+  name: r'createDiaryViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$challengeCreationViewModelHash,
+      : _$createDiaryViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ChallengeCreationViewModel = AutoDisposeNotifier<AsyncValue<void>>;
+typedef _$CreateDiaryViewModel = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

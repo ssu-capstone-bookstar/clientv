@@ -25,9 +25,8 @@ ReadingDiaryRepository readingDiaryRepository(Ref ref) {
 abstract class ReadingDiaryRepository {
   factory ReadingDiaryRepository(Dio dio, {String baseUrl}) = _ReadingDiaryRepository;
 
-  @POST('/api/v2/reading-diaries/challenges/{challengeId}')
+  @POST('/api/v2/reading-diaries/challenges')
   Future<ResponseForm<DiaryResponse>> createDiary(
-    @Path('challengeId') int challengeId,
     @Body() DiaryRequest request,
   );
 

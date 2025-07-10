@@ -1148,18 +1148,18 @@ packages:
     dependency: "direct main"
     description:
       name: retrofit
-      sha256: f56124c1bda4eec3a68548957aa1a0d3f6cd728511e81d4215a4167de7197fdd
+      sha256: "84d70114a5b6bae5f4c1302335f9cb610ebeb1b02023d5e7e87697aaff52926a"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.0"
+    version: "4.6.0"
   retrofit_generator:
     dependency: "direct dev"
     description:
       name: retrofit_generator
-      sha256: "2bd4cb2db83d461c313b1081659a64e10f0eb835895ef21e73ddf29539003ed2"
+      sha256: "9abcf21acb95bf7040546eafff87f60cf0aee20b05101d71f99876fc4df1f522"
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.0"
+    version: "9.7.0"
   riverpod:
     dependency: transitive
     description:

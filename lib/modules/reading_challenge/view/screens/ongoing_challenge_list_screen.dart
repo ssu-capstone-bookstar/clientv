@@ -87,20 +87,11 @@ class OngoingChallengeListScreen extends ConsumerWidget {
             final challenge = challenges[challengeIndex];
             rowItems.add(
               Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    if (screenState.isSelectionMode) {
-                      viewModel.toggleChallengeSelection(challenge.challengeId);
-                    } else {
-                      // TODO: Navigate to detail page
-                    }
-                  },
-                  child: OngoingChallengeCard(
-                    challenge: challenge,
-                    isSelectionMode: screenState.isSelectionMode,
-                    isSelected: screenState.selectedChallengeIds
-                        .contains(challenge.challengeId),
-                  ),
+                child: OngoingChallengeCard(
+                  challenge: challenge,
+                  isSelectionMode: screenState.isSelectionMode,
+                  isSelected: screenState.selectedChallengeIds
+                      .contains(challenge.challengeId),
                 ),
               ),
             );

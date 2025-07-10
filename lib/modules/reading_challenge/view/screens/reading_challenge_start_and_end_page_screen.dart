@@ -6,8 +6,6 @@ import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
 import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
 import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
-import 'package:book/modules/reading_challenge/view_model/reading_challenge_progress_state.dart';
-import 'package:book/modules/reading_challenge/view_model/reading_challenge_progress_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,9 +35,11 @@ class _ReadingChallengeStartAndEndPageScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        ref
-            .read(currentChallengeViewModelProvider.notifier)
-            .setChallenge(widget.book, widget.totalPages);
+        ref.read(currentChallengeViewModelProvider.notifier).initializeChallenge(
+              book: widget.book,
+              totalPages: widget.totalPages,
+              challengeId: widget.challengeId,
+            );
       }
     });
   }
@@ -65,9 +65,7 @@ class _ReadingChallengeStartAndEndPageScreenState
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(readingChallengeProgressViewModelProvider);
-    final viewModel =
-        ref.read(readingChallengeProgressViewModelProvider.notifier);
+    final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
     final book = widget.book;
 
     return Scaffold(
@@ -111,7 +109,7 @@ class _ReadingChallengeStartAndEndPageScreenState
                       _buildPageInputSection(viewModel),
                       const SizedBox(height: 24),
                       _buildBottomButtonSection(
-                          context, state, book, widget.totalPages),
+                          context, book, widget.totalPages),
                     ],
                   ),
                 ),
@@ -123,7 +121,7 @@ class _ReadingChallengeStartAndEndPageScreenState
     );
   }
 
-  Widget _buildPageInputSection(ReadingChallengeProgressViewModel viewModel) {
+  Widget _buildPageInputSection(CurrentChallengeViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -180,12 +178,11 @@ class _ReadingChallengeStartAndEndPageScreenState
 
   Widget _buildBottomButtonSection(
     BuildContext context,
-    ReadingChallengeProgressState state,
     SearchBookResponse book,
     int totalPages,
   ) {
-    final currentChallengeVM =
-        ref.read(currentChallengeViewModelProvider.notifier);
+    final state = ref.watch(currentChallengeViewModelProvider);
+    final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -193,28 +190,38 @@ class _ReadingChallengeStartAndEndPageScreenState
       children: [
         CtaButtonL1(
           text: '기록하기',
-          enabled: state.isButtonEnabled,
+          enabled: viewModel.isButtonEnabled,
           onPressed: () async {
             try {
-              // challengeId가 없는 경우(신규)에만 챌린지를 생성
+              final int progressId;
               if (widget.challengeId == null) {
-                await currentChallengeVM.createChallenge();
+                progressId = await viewModel.createChallenge();
+              } else {
+                progressId = await viewModel.updateChallengeProgress();
               }
 
-              if (state.endPage != null &&
+              if (!context.mounted) return;
+
+              final isChallengeCompleted = state.endPage != null &&
                   int.tryParse(state.endPage!) != null &&
-                  int.parse(state.endPage!) >= totalPages) {
+                  int.parse(state.endPage!) >= totalPages;
+
+              if (isChallengeCompleted) {
                 context.push(
                   '/reading-challenge/rating',
                   extra: book,
                 );
               } else {
-                context.push('/reading-challenge/diary-encourage',
-                    extra: false);
+                context.push(
+                  '/reading-challenge/diary-encourage',
+                  extra: {
+                    'isChallengeCompleted': isChallengeCompleted,
+                    'progressId': progressId,
+                  },
+                );
               }
             } catch (e) {
-              // Handle error, e.g., show an error dialog
-              print('Failed to process reading record: $e');
+              debugPrint('Failed to process reading record: $e');
             }
           },
         ),

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'reading_challenge_progress_state.dart';
+part of 'challenge_progress_request.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,57 +13,59 @@ part of 'reading_challenge_progress_state.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ReadingChallengeProgressState {
-  String get startPage;
-  String get endPage;
+mixin _$ChallengeProgressRequest {
+  int get startPage;
+  int get endPage;
 
-  /// Create a copy of ReadingChallengeProgressState
+  /// Create a copy of ChallengeProgressRequest
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ReadingChallengeProgressStateCopyWith<ReadingChallengeProgressState>
-      get copyWith => _$ReadingChallengeProgressStateCopyWithImpl<
-              ReadingChallengeProgressState>(
-          this as ReadingChallengeProgressState, _$identity);
+  $ChallengeProgressRequestCopyWith<ChallengeProgressRequest> get copyWith =>
+      _$ChallengeProgressRequestCopyWithImpl<ChallengeProgressRequest>(
+          this as ChallengeProgressRequest, _$identity);
+
+  /// Serializes this ChallengeProgressRequest to a JSON map.
+  Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ReadingChallengeProgressState &&
+            other is ChallengeProgressRequest &&
             (identical(other.startPage, startPage) ||
                 other.startPage == startPage) &&
             (identical(other.endPage, endPage) || other.endPage == endPage));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, startPage, endPage);
 
   @override
   String toString() {
-    return 'ReadingChallengeProgressState(startPage: $startPage, endPage: $endPage)';
+    return 'ChallengeProgressRequest(startPage: $startPage, endPage: $endPage)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ReadingChallengeProgressStateCopyWith<$Res> {
-  factory $ReadingChallengeProgressStateCopyWith(
-          ReadingChallengeProgressState value,
-          $Res Function(ReadingChallengeProgressState) _then) =
-      _$ReadingChallengeProgressStateCopyWithImpl;
+abstract mixin class $ChallengeProgressRequestCopyWith<$Res> {
+  factory $ChallengeProgressRequestCopyWith(ChallengeProgressRequest value,
+          $Res Function(ChallengeProgressRequest) _then) =
+      _$ChallengeProgressRequestCopyWithImpl;
   @useResult
-  $Res call({String startPage, String endPage});
+  $Res call({int startPage, int endPage});
 }
 
 /// @nodoc
-class _$ReadingChallengeProgressStateCopyWithImpl<$Res>
-    implements $ReadingChallengeProgressStateCopyWith<$Res> {
-  _$ReadingChallengeProgressStateCopyWithImpl(this._self, this._then);
+class _$ChallengeProgressRequestCopyWithImpl<$Res>
+    implements $ChallengeProgressRequestCopyWith<$Res> {
+  _$ChallengeProgressRequestCopyWithImpl(this._self, this._then);
 
-  final ReadingChallengeProgressState _self;
-  final $Res Function(ReadingChallengeProgressState) _then;
+  final ChallengeProgressRequest _self;
+  final $Res Function(ChallengeProgressRequest) _then;
 
-  /// Create a copy of ReadingChallengeProgressState
+  /// Create a copy of ChallengeProgressRequest
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -75,18 +77,17 @@ class _$ReadingChallengeProgressStateCopyWithImpl<$Res>
       startPage: null == startPage
           ? _self.startPage
           : startPage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       endPage: null == endPage
           ? _self.endPage
           : endPage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [ReadingChallengeProgressState].
-extension ReadingChallengeProgressStatePatterns
-    on ReadingChallengeProgressState {
+/// Adds pattern-matching-related methods to [ChallengeProgressRequest].
+extension ChallengeProgressRequestPatterns on ChallengeProgressRequest {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -101,12 +102,12 @@ extension ReadingChallengeProgressStatePatterns
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ReadingChallengeProgressState value)? $default, {
+    TResult Function(_ChallengeProgressRequest value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeProgressState() when $default != null:
+      case _ChallengeProgressRequest() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -128,11 +129,11 @@ extension ReadingChallengeProgressStatePatterns
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ReadingChallengeProgressState value) $default,
+    TResult Function(_ChallengeProgressRequest value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeProgressState():
+      case _ChallengeProgressRequest():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -153,11 +154,11 @@ extension ReadingChallengeProgressStatePatterns
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ReadingChallengeProgressState value)? $default,
+    TResult? Function(_ChallengeProgressRequest value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeProgressState() when $default != null:
+      case _ChallengeProgressRequest() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -178,12 +179,12 @@ extension ReadingChallengeProgressStatePatterns
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String startPage, String endPage)? $default, {
+    TResult Function(int startPage, int endPage)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeProgressState() when $default != null:
+      case _ChallengeProgressRequest() when $default != null:
         return $default(_that.startPage, _that.endPage);
       case _:
         return orElse();
@@ -205,11 +206,11 @@ extension ReadingChallengeProgressStatePatterns
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String startPage, String endPage) $default,
+    TResult Function(int startPage, int endPage) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeProgressState():
+      case _ChallengeProgressRequest():
         return $default(_that.startPage, _that.endPage);
       case _:
         throw StateError('Unexpected subclass');
@@ -230,11 +231,11 @@ extension ReadingChallengeProgressStatePatterns
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String startPage, String endPage)? $default,
+    TResult? Function(int startPage, int endPage)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ReadingChallengeProgressState() when $default != null:
+      case _ChallengeProgressRequest() when $default != null:
         return $default(_that.startPage, _that.endPage);
       case _:
         return null;
@@ -243,67 +244,74 @@ extension ReadingChallengeProgressStatePatterns
 }
 
 /// @nodoc
-
-class _ReadingChallengeProgressState extends ReadingChallengeProgressState {
-  const _ReadingChallengeProgressState({this.startPage = '', this.endPage = ''})
-      : super._();
+@JsonSerializable()
+class _ChallengeProgressRequest implements ChallengeProgressRequest {
+  const _ChallengeProgressRequest(
+      {required this.startPage, required this.endPage});
+  factory _ChallengeProgressRequest.fromJson(Map<String, dynamic> json) =>
+      _$ChallengeProgressRequestFromJson(json);
 
   @override
-  @JsonKey()
-  final String startPage;
+  final int startPage;
   @override
-  @JsonKey()
-  final String endPage;
+  final int endPage;
 
-  /// Create a copy of ReadingChallengeProgressState
+  /// Create a copy of ChallengeProgressRequest
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ReadingChallengeProgressStateCopyWith<_ReadingChallengeProgressState>
-      get copyWith => __$ReadingChallengeProgressStateCopyWithImpl<
-          _ReadingChallengeProgressState>(this, _$identity);
+  _$ChallengeProgressRequestCopyWith<_ChallengeProgressRequest> get copyWith =>
+      __$ChallengeProgressRequestCopyWithImpl<_ChallengeProgressRequest>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ChallengeProgressRequestToJson(
+      this,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ReadingChallengeProgressState &&
+            other is _ChallengeProgressRequest &&
             (identical(other.startPage, startPage) ||
                 other.startPage == startPage) &&
             (identical(other.endPage, endPage) || other.endPage == endPage));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, startPage, endPage);
 
   @override
   String toString() {
-    return 'ReadingChallengeProgressState(startPage: $startPage, endPage: $endPage)';
+    return 'ChallengeProgressRequest(startPage: $startPage, endPage: $endPage)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ReadingChallengeProgressStateCopyWith<$Res>
-    implements $ReadingChallengeProgressStateCopyWith<$Res> {
-  factory _$ReadingChallengeProgressStateCopyWith(
-          _ReadingChallengeProgressState value,
-          $Res Function(_ReadingChallengeProgressState) _then) =
-      __$ReadingChallengeProgressStateCopyWithImpl;
+abstract mixin class _$ChallengeProgressRequestCopyWith<$Res>
+    implements $ChallengeProgressRequestCopyWith<$Res> {
+  factory _$ChallengeProgressRequestCopyWith(_ChallengeProgressRequest value,
+          $Res Function(_ChallengeProgressRequest) _then) =
+      __$ChallengeProgressRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({String startPage, String endPage});
+  $Res call({int startPage, int endPage});
 }
 
 /// @nodoc
-class __$ReadingChallengeProgressStateCopyWithImpl<$Res>
-    implements _$ReadingChallengeProgressStateCopyWith<$Res> {
-  __$ReadingChallengeProgressStateCopyWithImpl(this._self, this._then);
+class __$ChallengeProgressRequestCopyWithImpl<$Res>
+    implements _$ChallengeProgressRequestCopyWith<$Res> {
+  __$ChallengeProgressRequestCopyWithImpl(this._self, this._then);
 
-  final _ReadingChallengeProgressState _self;
-  final $Res Function(_ReadingChallengeProgressState) _then;
+  final _ChallengeProgressRequest _self;
+  final $Res Function(_ChallengeProgressRequest) _then;
 
-  /// Create a copy of ReadingChallengeProgressState
+  /// Create a copy of ChallengeProgressRequest
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -311,15 +319,15 @@ class __$ReadingChallengeProgressStateCopyWithImpl<$Res>
     Object? startPage = null,
     Object? endPage = null,
   }) {
-    return _then(_ReadingChallengeProgressState(
+    return _then(_ChallengeProgressRequest(
       startPage: null == startPage
           ? _self.startPage
           : startPage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       endPage: null == endPage
           ? _self.endPage
           : endPage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }

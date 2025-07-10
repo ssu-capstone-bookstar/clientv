@@ -2,7 +2,6 @@ import 'package:book/common/components/radio_button_1.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,21 +10,17 @@ enum PhotoSelection {
   noPhoto,
 }
 
-class ReadingDiaryPhotoScreen extends ConsumerStatefulWidget {
-  const ReadingDiaryPhotoScreen({
-    super.key,
-    required this.progressId,
-  });
+class ReadingDiaryPhotoScreen extends StatefulWidget {
+  const ReadingDiaryPhotoScreen({super.key});
 
-  final int progressId;
+  static String get routeName => '/reading_diary_photo';
 
   @override
-  ConsumerState<ReadingDiaryPhotoScreen> createState() =>
+  State<ReadingDiaryPhotoScreen> createState() =>
       _ReadingDiaryPhotoScreenState();
 }
 
-class _ReadingDiaryPhotoScreenState
-    extends ConsumerState<ReadingDiaryPhotoScreen> {
+class _ReadingDiaryPhotoScreenState extends State<ReadingDiaryPhotoScreen> {
   PhotoSelection? _selection;
   final ImagePicker _picker = ImagePicker();
 
@@ -54,13 +49,10 @@ class _ReadingDiaryPhotoScreenState
     }
 
     if (pickedFiles.isNotEmpty && mounted) {
-      final imagePaths = pickedFiles.map((f) => f.path).toList();
+      final imagePaths = pickedFiles.map((file) => file.path).toList();
       context.push(
-        '/reading-diary/${widget.progressId}/entry',
-        extra: {
-          'images': imagePaths,
-          'progressId': widget.progressId,
-        },
+        '/reading-challenge/reading-diary-entry',
+        extra: imagePaths,
       );
     }
   }
@@ -116,21 +108,11 @@ class _ReadingDiaryPhotoScreenState
                     value: option['value'],
                     groupValue: _selection,
                     onChanged: (value) {
-                      if (mounted) {
-                        setState(() {
-                          _selection = value;
-                        });
-                      }
+                      setState(() {
+                        _selection = value;
+                      });
                       if (value == PhotoSelection.addPhoto) {
                         _showPhotoSourceSheet();
-                      } else if (mounted) {
-                        context.push(
-                          '/reading-diary/${widget.progressId}/entry',
-                          extra: {
-                            'images': <String>[],
-                            'progressId': widget.progressId,
-                          },
-                        );
                       }
                     },
                   );
@@ -214,4 +196,4 @@ class _PhotoSourceOptions extends StatelessWidget {
       ),
     );
   }
-} 
+}

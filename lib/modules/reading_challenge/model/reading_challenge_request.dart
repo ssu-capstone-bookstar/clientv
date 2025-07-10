@@ -8,6 +8,8 @@ abstract class ReadingChallengeRequest with _$ReadingChallengeRequest {
   const factory ReadingChallengeRequest({
     required int bookId,
     required int totalPages,
+    required int startPage,
+    required int endPage,
   }) = _ReadingChallengeRequest;
 
   factory ReadingChallengeRequest.fromJson(Map<String, dynamic> json) =>

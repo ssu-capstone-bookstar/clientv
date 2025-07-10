@@ -1,11 +1,14 @@
+import 'package:book/common/models/response_form.dart';
+import 'package:book/infra/network/dio_client.dart';
+import 'package:book/modules/reading_challenge/model/challenge_creation_response.dart';
+import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
+import 'package:book/modules/reading_challenge/model/challenge_progress_response.dart';
 import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../common/models/response_form.dart';
-import '../../../infra/network/dio_client.dart';
 import '../model/challenge_detail_response.dart';
 import '../model/challenge_response.dart';
 import '../model/rating_request.dart';
@@ -24,8 +27,14 @@ abstract class ReadingChallengeRepository {
       _ReadingChallengeRepository;
 
   @POST('/api/v2/reading-challenges')
-  Future<ResponseForm<ChallengeResponse>> createChallenge(
+  Future<ResponseForm<ChallengeCreationResponse>> createChallenge(
     @Body() ReadingChallengeRequest request,
+  );
+
+  @POST('/api/v2/reading-challenges/{challengeId}/progress')
+  Future<ResponseForm<ChallengeProgressResponse>> updateChallengeProgress(
+    @Path('challengeId') int challengeId,
+    @Body() ChallengeProgressRequest request,
   );
 
   @GET('/api/v2/reading-challenges/ongoing')

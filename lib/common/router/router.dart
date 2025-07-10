@@ -31,7 +31,6 @@ import '../../modules/reading_challenge/view/screens/reading_challenge_start_and
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
 import '../../modules/reading_diary/screens/reading_diary_entry_screen.dart';
 import '../../modules/reading_diary/screens/reading_diary_photo_screen.dart';
-import 'package:image_picker/image_picker.dart';
 
 part 'router.g.dart';
 
@@ -79,6 +78,29 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/reading-diary/:progressId',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final progressId = int.parse(state.pathParameters['progressId']!);
+          return ReadingDiaryPhotoScreen(progressId: progressId);
+        },
+        routes: [
+          GoRoute(
+            path: 'entry',
+            parentNavigatorKey: rootNavigatorKey,
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              final imagePaths = extra['images'] as List<String>;
+              final progressId = extra['progressId'] as int;
+              return ReadingDiaryEntryScreen(
+                imagePaths: imagePaths,
+                progressId: progressId,
+              );
+            },
+          ),
+        ],
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -232,7 +254,8 @@ GoRouter router(Ref ref) {
                       final extra = state.extra as Map<String, dynamic>;
                       final book = extra['book'] as SearchBookResponse;
                       final totalPages = extra['totalPages'] as int;
-                      final challengeId = extra['challengeId'] as int?; // challengeId를 안전하게 추출
+                      final challengeId =
+                          extra['challengeId'] as int?; // challengeId를 안전하게 추출
                       return ReadingChallengeStartAndEndPageScreen(
                         book: book,
                         totalPages: totalPages,
@@ -252,26 +275,14 @@ GoRouter router(Ref ref) {
                     path: 'diary-encourage',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      final isChallengeCompleted =
-                          state.extra as bool? ?? false;
+                      final extra = state.extra as Map<String, dynamic>;
+                      final isChallengeCompleted = extra['isChallengeCompleted'] as bool;
+                      final progressId = extra['progressId'] as int;
+
                       return ReadingChallengeDiaryEncourageScreen(
                         isChallengeCompleted: isChallengeCompleted,
+                        progressId: progressId,
                       );
-                    },
-                  ),
-                  GoRoute(
-                    path: 'reading-diary-photo',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const ReadingDiaryPhotoScreen(),
-                  ),
-                  GoRoute(
-                    path: ReadingDiaryEntryScreen.routeName,
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final imagePaths = state.extra as List<String>;
-                      final images =
-                          imagePaths.map((path) => XFile(path)).toList();
-                      return ReadingDiaryEntryScreen(images: images);
                     },
                   ),
                 ],

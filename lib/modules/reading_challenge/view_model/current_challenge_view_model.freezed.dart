@@ -16,8 +16,11 @@ T _$identity<T>(T value) => value;
 mixin _$CurrentChallengeState {
   SearchBookResponse? get book;
   int? get totalPages;
-  String? get challengeId;
+  int? get challengeId;
   int? get lastReadPage;
+  String? get startPage;
+  String? get endPage;
+  int? get progressId;
 
   /// Create a copy of CurrentChallengeState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,16 +41,21 @@ mixin _$CurrentChallengeState {
             (identical(other.challengeId, challengeId) ||
                 other.challengeId == challengeId) &&
             (identical(other.lastReadPage, lastReadPage) ||
-                other.lastReadPage == lastReadPage));
+                other.lastReadPage == lastReadPage) &&
+            (identical(other.startPage, startPage) ||
+                other.startPage == startPage) &&
+            (identical(other.endPage, endPage) || other.endPage == endPage) &&
+            (identical(other.progressId, progressId) ||
+                other.progressId == progressId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, book, totalPages, challengeId, lastReadPage);
+  int get hashCode => Object.hash(runtimeType, book, totalPages, challengeId,
+      lastReadPage, startPage, endPage, progressId);
 
   @override
   String toString() {
-    return 'CurrentChallengeState(book: $book, totalPages: $totalPages, challengeId: $challengeId, lastReadPage: $lastReadPage)';
+    return 'CurrentChallengeState(book: $book, totalPages: $totalPages, challengeId: $challengeId, lastReadPage: $lastReadPage, startPage: $startPage, endPage: $endPage, progressId: $progressId)';
   }
 }
 
@@ -60,8 +68,11 @@ abstract mixin class $CurrentChallengeStateCopyWith<$Res> {
   $Res call(
       {SearchBookResponse? book,
       int? totalPages,
-      String? challengeId,
-      int? lastReadPage});
+      int? challengeId,
+      int? lastReadPage,
+      String? startPage,
+      String? endPage,
+      int? progressId});
 
   $SearchBookResponseCopyWith<$Res>? get book;
 }
@@ -83,6 +94,9 @@ class _$CurrentChallengeStateCopyWithImpl<$Res>
     Object? totalPages = freezed,
     Object? challengeId = freezed,
     Object? lastReadPage = freezed,
+    Object? startPage = freezed,
+    Object? endPage = freezed,
+    Object? progressId = freezed,
   }) {
     return _then(_self.copyWith(
       book: freezed == book
@@ -96,10 +110,22 @@ class _$CurrentChallengeStateCopyWithImpl<$Res>
       challengeId: freezed == challengeId
           ? _self.challengeId
           : challengeId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       lastReadPage: freezed == lastReadPage
           ? _self.lastReadPage
           : lastReadPage // ignore: cast_nullable_to_non_nullable
+              as int?,
+      startPage: freezed == startPage
+          ? _self.startPage
+          : startPage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      endPage: freezed == endPage
+          ? _self.endPage
+          : endPage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      progressId: freezed == progressId
+          ? _self.progressId
+          : progressId // ignore: cast_nullable_to_non_nullable
               as int?,
     ));
   }
@@ -212,16 +238,28 @@ extension CurrentChallengeStatePatterns on CurrentChallengeState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(SearchBookResponse? book, int? totalPages,
-            String? challengeId, int? lastReadPage)?
+    TResult Function(
+            SearchBookResponse? book,
+            int? totalPages,
+            int? challengeId,
+            int? lastReadPage,
+            String? startPage,
+            String? endPage,
+            int? progressId)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _CurrentChallengeState() when $default != null:
-        return $default(_that.book, _that.totalPages, _that.challengeId,
-            _that.lastReadPage);
+        return $default(
+            _that.book,
+            _that.totalPages,
+            _that.challengeId,
+            _that.lastReadPage,
+            _that.startPage,
+            _that.endPage,
+            _that.progressId);
       case _:
         return orElse();
     }
@@ -242,15 +280,27 @@ extension CurrentChallengeStatePatterns on CurrentChallengeState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(SearchBookResponse? book, int? totalPages,
-            String? challengeId, int? lastReadPage)
+    TResult Function(
+            SearchBookResponse? book,
+            int? totalPages,
+            int? challengeId,
+            int? lastReadPage,
+            String? startPage,
+            String? endPage,
+            int? progressId)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _CurrentChallengeState():
-        return $default(_that.book, _that.totalPages, _that.challengeId,
-            _that.lastReadPage);
+        return $default(
+            _that.book,
+            _that.totalPages,
+            _that.challengeId,
+            _that.lastReadPage,
+            _that.startPage,
+            _that.endPage,
+            _that.progressId);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -270,15 +320,27 @@ extension CurrentChallengeStatePatterns on CurrentChallengeState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(SearchBookResponse? book, int? totalPages,
-            String? challengeId, int? lastReadPage)?
+    TResult? Function(
+            SearchBookResponse? book,
+            int? totalPages,
+            int? challengeId,
+            int? lastReadPage,
+            String? startPage,
+            String? endPage,
+            int? progressId)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _CurrentChallengeState() when $default != null:
-        return $default(_that.book, _that.totalPages, _that.challengeId,
-            _that.lastReadPage);
+        return $default(
+            _that.book,
+            _that.totalPages,
+            _that.challengeId,
+            _that.lastReadPage,
+            _that.startPage,
+            _that.endPage,
+            _that.progressId);
       case _:
         return null;
     }
@@ -289,16 +351,28 @@ extension CurrentChallengeStatePatterns on CurrentChallengeState {
 
 class _CurrentChallengeState implements CurrentChallengeState {
   const _CurrentChallengeState(
-      {this.book, this.totalPages, this.challengeId, this.lastReadPage});
+      {this.book,
+      this.totalPages,
+      this.challengeId,
+      this.lastReadPage,
+      this.startPage,
+      this.endPage,
+      this.progressId});
 
   @override
   final SearchBookResponse? book;
   @override
   final int? totalPages;
   @override
-  final String? challengeId;
+  final int? challengeId;
   @override
   final int? lastReadPage;
+  @override
+  final String? startPage;
+  @override
+  final String? endPage;
+  @override
+  final int? progressId;
 
   /// Create a copy of CurrentChallengeState
   /// with the given fields replaced by the non-null parameter values.
@@ -320,16 +394,21 @@ class _CurrentChallengeState implements CurrentChallengeState {
             (identical(other.challengeId, challengeId) ||
                 other.challengeId == challengeId) &&
             (identical(other.lastReadPage, lastReadPage) ||
-                other.lastReadPage == lastReadPage));
+                other.lastReadPage == lastReadPage) &&
+            (identical(other.startPage, startPage) ||
+                other.startPage == startPage) &&
+            (identical(other.endPage, endPage) || other.endPage == endPage) &&
+            (identical(other.progressId, progressId) ||
+                other.progressId == progressId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, book, totalPages, challengeId, lastReadPage);
+  int get hashCode => Object.hash(runtimeType, book, totalPages, challengeId,
+      lastReadPage, startPage, endPage, progressId);
 
   @override
   String toString() {
-    return 'CurrentChallengeState(book: $book, totalPages: $totalPages, challengeId: $challengeId, lastReadPage: $lastReadPage)';
+    return 'CurrentChallengeState(book: $book, totalPages: $totalPages, challengeId: $challengeId, lastReadPage: $lastReadPage, startPage: $startPage, endPage: $endPage, progressId: $progressId)';
   }
 }
 
@@ -344,8 +423,11 @@ abstract mixin class _$CurrentChallengeStateCopyWith<$Res>
   $Res call(
       {SearchBookResponse? book,
       int? totalPages,
-      String? challengeId,
-      int? lastReadPage});
+      int? challengeId,
+      int? lastReadPage,
+      String? startPage,
+      String? endPage,
+      int? progressId});
 
   @override
   $SearchBookResponseCopyWith<$Res>? get book;
@@ -368,6 +450,9 @@ class __$CurrentChallengeStateCopyWithImpl<$Res>
     Object? totalPages = freezed,
     Object? challengeId = freezed,
     Object? lastReadPage = freezed,
+    Object? startPage = freezed,
+    Object? endPage = freezed,
+    Object? progressId = freezed,
   }) {
     return _then(_CurrentChallengeState(
       book: freezed == book
@@ -381,10 +466,22 @@ class __$CurrentChallengeStateCopyWithImpl<$Res>
       challengeId: freezed == challengeId
           ? _self.challengeId
           : challengeId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       lastReadPage: freezed == lastReadPage
           ? _self.lastReadPage
           : lastReadPage // ignore: cast_nullable_to_non_nullable
+              as int?,
+      startPage: freezed == startPage
+          ? _self.startPage
+          : startPage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      endPage: freezed == endPage
+          ? _self.endPage
+          : endPage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      progressId: freezed == progressId
+          ? _self.progressId
+          : progressId // ignore: cast_nullable_to_non_nullable
               as int?,
     ));
   }

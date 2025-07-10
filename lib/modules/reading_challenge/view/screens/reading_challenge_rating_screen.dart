@@ -5,6 +5,7 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
 import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
+import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:book/modules/reading_challenge/view_model/reading_challenge_rating_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -108,9 +109,19 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
           enabled: viewModel.isButtonEnabled,
           onPressed: () {
             // TODO: 별점 저장 API 호출
+            final progressId =
+                ref.read(currentChallengeViewModelProvider).progressId;
+            if (progressId == null) {
+              // Handle error: progressId not found
+              return;
+            }
+
             context.push(
               '/reading-challenge/diary-encourage',
-              extra: true,
+              extra: {
+                'isChallengeCompleted': true,
+                'progressId': progressId,
+              },
             );
           },
         ),

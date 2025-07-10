@@ -18,10 +18,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ResponseForm<DiaryResponse>> createDiary(
-    int challengeId,
-    DiaryRequest request,
-  ) async {
+  Future<ResponseForm<DiaryResponse>> createDiary(DiaryRequest request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -30,7 +27,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/challenges/${challengeId}',
+            '/api/v2/reading-diaries/challenges',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -277,7 +274,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'relatedDiarySort': relatedDiarySort?.name,
+      r'relatedDiarySort': relatedDiarySort,
       r'cursorId': cursorId,
       r'cursorScore': cursorScore,
       r'size': size,

@@ -18,14 +18,14 @@ class _ReadingChallengeRepository implements ReadingChallengeRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ResponseForm<ChallengeResponse>> createChallenge(
+  Future<ResponseForm<ChallengeCreationResponse>> createChallenge(
     ReadingChallengeRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
-    final _options = _setStreamType<ResponseForm<ChallengeResponse>>(
+    final _options = _setStreamType<ResponseForm<ChallengeCreationResponse>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -36,11 +36,46 @@ class _ReadingChallengeRepository implements ReadingChallengeRepository {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<ChallengeResponse> _value;
+    late ResponseForm<ChallengeCreationResponse> _value;
     try {
-      _value = ResponseForm<ChallengeResponse>.fromJson(
+      _value = ResponseForm<ChallengeCreationResponse>.fromJson(
         _result.data!,
-        (json) => ChallengeResponse.fromJson(json as Map<String, dynamic>),
+        (json) =>
+            ChallengeCreationResponse.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<ChallengeProgressResponse>> updateChallengeProgress(
+    int challengeId,
+    ChallengeProgressRequest request,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<ResponseForm<ChallengeProgressResponse>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/v2/reading-challenges/${challengeId}/progress',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<ChallengeProgressResponse> _value;
+    try {
+      _value = ResponseForm<ChallengeProgressResponse>.fromJson(
+        _result.data!,
+        (json) =>
+            ChallengeProgressResponse.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

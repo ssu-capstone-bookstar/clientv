@@ -1,6 +1,8 @@
 import 'package:book/modules/book_pick/model/search_book_response.dart';
+import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
 import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,8 +14,11 @@ abstract class CurrentChallengeState with _$CurrentChallengeState {
   const factory CurrentChallengeState({
     SearchBookResponse? book,
     int? totalPages,
-    String? challengeId,
+    int? challengeId,
     int? lastReadPage,
+    String? startPage,
+    String? endPage,
+    int? progressId,
   }) = _CurrentChallengeState;
 }
 
@@ -24,32 +29,32 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     return const CurrentChallengeState();
   }
 
-  void setBook(SearchBookResponse book) {
-    state = state.copyWith(book: book);
-  }
-
-  void setChallenge(SearchBookResponse book, int totalPages) {
+  void initializeChallenge({
+    required SearchBookResponse book,
+    required int totalPages,
+    int? challengeId,
+  }) {
     state = state.copyWith(
       book: book,
       totalPages: totalPages,
+      challengeId: challengeId,
     );
   }
 
-  void setTotalPages(int totalPages) {
-    state = state.copyWith(totalPages: totalPages);
+  void setStartPage(String value) {
+    state = state.copyWith(startPage: value);
   }
 
-  void setLastReadPage(int lastReadPage) {
-    state = state.copyWith(lastReadPage: lastReadPage);
+  void setEndPage(String value) {
+    state = state.copyWith(endPage: value);
   }
 
-  Future<void> createChallenge() async {
-    if (state.book == null || state.totalPages == null) {
-      throw Exception(
-          'Book and total pages must be set before creating a challenge.');
-    }
-    if (state.challengeId != null) {
-      return;
+  Future<int> createChallenge() async {
+    if (state.book == null ||
+        state.totalPages == null ||
+        state.startPage == null ||
+        state.endPage == null) {
+      throw Exception('Book, total pages, and page ranges must be set.');
     }
 
     final repo = ref.read(readingChallengeRepositoryProvider);
@@ -57,11 +62,41 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       final request = ReadingChallengeRequest(
         bookId: state.book!.bookId,
         totalPages: state.totalPages!,
+        startPage: int.parse(state.startPage!),
+        endPage: int.parse(state.endPage!),
       );
       final res = await repo.createChallenge(request);
-      state = state.copyWith(challengeId: res.data.challengeId.toString());
+      state = state.copyWith(challengeId: res.data.challengeId);
+      return res.data.progressId;
     } catch (e) {
       print('Failed to create challenge: $e');
+      rethrow;
+    }
+  }
+
+  Future<int> updateChallengeProgress() async {
+    if (state.challengeId == null ||
+        state.startPage == null ||
+        state.endPage == null) {
+      throw Exception('Challenge ID and page range must be set for update.');
+    }
+
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    try {
+      final request = ChallengeProgressRequest(
+        startPage: int.parse(state.startPage!),
+        endPage: int.parse(state.endPage!),
+      );
+      final res = await repo.updateChallengeProgress(
+        state.challengeId!,
+        request,
+      );
+      state = state.copyWith(
+        progressId: res.data.progressId,
+      );
+      return res.data.progressId;
+    } catch (e) {
+      debugPrint('Failed to update challenge progress: $e');
       rethrow;
     }
   }
@@ -79,7 +114,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       final challengeDetail = res.data;
       state = state.copyWith(
         totalPages: challengeDetail.totalPages,
-        challengeId: challengeDetail.challengeId,
+        challengeId: int.tryParse(challengeDetail.challengeId ?? ''),
         lastReadPage: challengeDetail.lastReadPage,
       );
     } catch (e) {
@@ -90,5 +125,12 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
 
   void clear() {
     state = const CurrentChallengeState();
+  }
+
+  bool get isButtonEnabled {
+    return state.startPage != null &&
+        state.startPage!.isNotEmpty &&
+        state.endPage != null &&
+        state.endPage!.isNotEmpty;
   }
 }

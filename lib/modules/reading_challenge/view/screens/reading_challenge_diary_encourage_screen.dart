@@ -5,22 +5,26 @@ import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
+import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
+class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
   const ReadingChallengeDiaryEncourageScreen({
     super.key,
     required this.isChallengeCompleted,
+    required this.progressId,
   });
 
   final bool isChallengeCompleted;
+  final int progressId;
 
   static const path = '/reading-challenge/diary-encourage';
   static const name = 'ReadingChallengeDiaryEncourageScreen';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final title = isChallengeCompleted ? '리딩 챌린지 중 (3/챌린지 성공)' : '리딩 챌린지';
     final subtitle = isChallengeCompleted ? '완독하셨네요! 챌린지 성공을 축하드려요' : null;
     final image = isChallengeCompleted
@@ -70,7 +74,7 @@ class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
               const Spacer(),
               image,
               const Spacer(),
-              _buildBottomButtons(context),
+              _buildBottomButtons(context, ref),
             ],
           ),
         ),
@@ -78,7 +82,7 @@ class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomButtons(BuildContext context) {
+  Widget _buildBottomButtons(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,8 +98,11 @@ class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
                 confirmButtonText: '바로 작성하기',
                 cancelButtonText: '나중에 하기',
                 onConfirm: () {
+                  final challengeId =
+                      ref.read(currentChallengeViewModelProvider).challengeId;
+                  if (challengeId == null) return;
                   context.pop();
-                  context.push('/reading-challenge/reading-diary-photo');
+                  context.push('/reading-diary/$progressId');
                 },
                 onCancel: () {
                   context.go('/reading-challenge');
@@ -112,7 +119,10 @@ class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
         CtaButtonL1(
           text: '작성하기',
           onPressed: () {
-            context.push('/reading-challenge/reading-diary-photo');
+            final progressId =
+                ref.read(currentChallengeViewModelProvider).progressId;
+            if (progressId == null) return;
+            context.push('/reading-diary/$progressId');
           },
         ),
         const SizedBox(height: 34),
