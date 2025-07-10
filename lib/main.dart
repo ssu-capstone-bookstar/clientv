@@ -8,8 +8,8 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 import 'common/router/router.dart';
 import 'common/theme/app_theme.dart';
-
 import 'gen/assets.gen.dart';
+import 'gen/colors.gen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

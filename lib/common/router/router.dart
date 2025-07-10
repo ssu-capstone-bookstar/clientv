@@ -8,24 +8,27 @@ import '../../modules/auth/view_model/auth_state.dart';
 import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
+import '../../modules/book_pick/model/search_book_response.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
+import '../../modules/book_pick/view/screens/book_pick_search_screen.dart';
 import '../../modules/chat/view/screens/book_talk_screen.dart';
 import '../../modules/deep_time/view/screens/deep_time_screen.dart';
 import '../../modules/home/view/screens/home_screen.dart';
-import '../../modules/profile/view/screens/profile_screen.dart';
-import '../../modules/reading_challenge/view/screens/reading_challenge_progress_screen.dart';
-import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
-import '../../modules/reading_challenge/view/screens/reading_challenge_start_screen.dart';
-import '../../modules/search/model/search_book_response.dart';
-import '../../modules/search/view/screens/search_detail_screen.dart';
-import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/challenge_quit_books_screen.dart';
 import '../../modules/my_page/view/screens/customer_support_screen.dart';
 import '../../modules/my_page/view/screens/delete_account_screen.dart';
-import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
 import '../../modules/my_page/view/screens/follower_management_screen.dart';
 import '../../modules/my_page/view/screens/liked_diaries_screen.dart';
 import '../../modules/my_page/view/screens/login_info_screen.dart';
+import '../../modules/my_page/view/screens/my_page_screen.dart';
+import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
+import '../../modules/profile/view/screens/profile_screen.dart';
+import '../../modules/reading_challenge/view/screens/ongoing_challenge_list_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_diary_encourage_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_rating_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
 
 part 'router.g.dart';
 
@@ -197,23 +200,57 @@ GoRouter router(Ref ref) {
                 builder: (context, state) => const ReadingChallengeScreen(),
                 routes: [
                   GoRoute(
-                    path: 'start',
+                    path: 'search-new',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      final book = state.extra as SearchBookResponse;
-                      return ReadingChallengeStartScreen(book: book);
+                      final from = state.uri.queryParameters['from'];
+                      return SearchDetailScreen(from: from);
                     },
                   ),
                   GoRoute(
-                    path: 'second',
+                    path: 'continue-list',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      return const OngoingChallengeListScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'total-page',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final book = state.extra as SearchBookResponse;
+                      return ReadingChallengeTotalPageScreen(book: book);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'start-and-end',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       final extra = state.extra as Map<String, dynamic>;
                       final book = extra['book'] as SearchBookResponse;
                       final totalPages = extra['totalPages'] as int;
-                      return ReadingChallengeProgressScreen(
+                      return ReadingChallengeStartAndEndPageScreen(
                         book: book,
                         totalPages: totalPages,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'rating',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final book = state.extra as SearchBookResponse;
+                      return ReadingChallengeRatingScreen(book: book);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'diary-encourage',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final isChallengeCompleted =
+                          state.extra as bool? ?? false;
+                      return ReadingChallengeDiaryEncourageScreen(
+                        isChallengeCompleted: isChallengeCompleted,
                       );
                     },
                   ),

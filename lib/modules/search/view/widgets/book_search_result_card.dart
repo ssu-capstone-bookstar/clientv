@@ -1,27 +1,44 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../model/search_book_response.dart';
-
-class BookSearchResultCard extends StatelessWidget {
+class BookSearchResultCard extends ConsumerStatefulWidget {
   final SearchBookResponse book;
-  final String? from;
+  final Future<void> Function(SearchBookResponse book) onTap;
 
   const BookSearchResultCard({
     super.key,
     required this.book,
-    this.from,
+    required this.onTap,
   });
+
+  @override
+  ConsumerState<BookSearchResultCard> createState() =>
+      _BookSearchResultCardState();
+}
+
+class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (from == 'challenge') {
-          context.push('/reading-challenge/start', extra: book);
-        } else {
-          context.push('/book-pick/search/book-overview/${book.bookId}');
+      onTap: () async {
+        if (_isLoading) return;
+
+        setState(() {
+          _isLoading = true;
+        });
+
+        try {
+          await widget.onTap(widget.book);
+        } finally {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         }
       },
       child: AspectRatio(
@@ -35,7 +52,7 @@ class BookSearchResultCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(
-                    book.bookCover,
+                    widget.book.bookCover,
                     headers: const {
                       'User-Agent':
                           'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
@@ -72,7 +89,7 @@ class BookSearchResultCard extends StatelessWidget {
               left: 8,
               right: 8,
               child: Text(
-                book.title,
+                widget.book.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -82,6 +99,16 @@ class BookSearchResultCard extends StatelessWidget {
                     ),
               ),
             ),
+            if (_isLoading)
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
           ],
         ),
       ),

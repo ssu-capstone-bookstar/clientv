@@ -174,6 +174,10 @@ class $AssetsIconsGen {
   SvgGenImage get icPointShopChar3 =>
       const SvgGenImage('assets/icons/ic_point_shop_char3.svg');
 
+  /// File path: assets/icons/ic_rating_star.svg
+  SvgGenImage get icRatingStar =>
+      const SvgGenImage('assets/icons/ic_rating_star.svg');
+
   /// File path: assets/icons/ic_reading_challenge_char1.svg
   SvgGenImage get icReadingChallengeChar1 =>
       const SvgGenImage('assets/icons/ic_reading_challenge_char1.svg');
@@ -185,6 +189,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_reading_challenge_char3.svg
   SvgGenImage get icReadingChallengeChar3 =>
       const SvgGenImage('assets/icons/ic_reading_challenge_char3.svg');
+
+  /// File path: assets/icons/ic_reading_challenge_completed.svg
+  SvgGenImage get icReadingChallengeCompleted =>
+      const SvgGenImage('assets/icons/ic_reading_challenge_completed.svg');
+
+  /// File path: assets/icons/ic_reading_challenge_not_completed.svg
+  SvgGenImage get icReadingChallengeNotCompleted =>
+      const SvgGenImage('assets/icons/ic_reading_challenge_not_completed.svg');
 
   /// File path: assets/icons/ic_reading_complete.svg
   SvgGenImage get icReadingComplete =>
@@ -226,9 +238,12 @@ class $AssetsIconsGen {
     icPointShopChar1,
     icPointShopChar2,
     icPointShopChar3,
+    icRatingStar,
     icReadingChallengeChar1,
     icReadingChallengeChar2,
     icReadingChallengeChar3,
+    icReadingChallengeCompleted,
+    icReadingChallengeNotCompleted,
     icReadingComplete,
     icWithdrawal,
     kakao,

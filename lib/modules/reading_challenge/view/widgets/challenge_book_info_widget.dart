@@ -1,8 +1,9 @@
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/search/model/search_book_response.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../book_pick/model/search_book_response.dart';
 
 class ChallengeBookInfoWidget extends StatelessWidget {
   const ChallengeBookInfoWidget({
@@ -18,7 +19,7 @@ class ChallengeBookInfoWidget extends StatelessWidget {
       children: [
         Center(
           child: SizedBox(
-            width: 150,
+            width: 180,
             child: AspectRatio(
               aspectRatio: 2 / 3,
               child: Container(
@@ -28,6 +29,13 @@ class ChallengeBookInfoWidget extends StatelessWidget {
                     image: CachedNetworkImageProvider(book.bookCover),
                     fit: BoxFit.cover,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.white.withOpacity(0.2),
+                      blurRadius: 15.0,
+                      spreadRadius: 5.0,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -48,4 +56,4 @@ class ChallengeBookInfoWidget extends StatelessWidget {
       ],
     );
   }
-} 
+}

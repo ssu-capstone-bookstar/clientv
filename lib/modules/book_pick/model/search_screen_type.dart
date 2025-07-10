@@ -1,0 +1,4 @@
+enum SearchScreenType {
+  bookPick,
+  readingChallengeNewBook,
+} 
