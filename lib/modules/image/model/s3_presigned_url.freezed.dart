@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$S3PresignedUrl {
   String get presignedUrl;
-  String get filePathInDB;
+  @JsonKey(name: 'filePathInDB')
+  String get imageUrl;
 
   /// Create a copy of S3PresignedUrl
   /// with the given fields replaced by the non-null parameter values.
@@ -35,17 +36,17 @@ mixin _$S3PresignedUrl {
             other is S3PresignedUrl &&
             (identical(other.presignedUrl, presignedUrl) ||
                 other.presignedUrl == presignedUrl) &&
-            (identical(other.filePathInDB, filePathInDB) ||
-                other.filePathInDB == filePathInDB));
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, presignedUrl, filePathInDB);
+  int get hashCode => Object.hash(runtimeType, presignedUrl, imageUrl);
 
   @override
   String toString() {
-    return 'S3PresignedUrl(presignedUrl: $presignedUrl, filePathInDB: $filePathInDB)';
+    return 'S3PresignedUrl(presignedUrl: $presignedUrl, imageUrl: $imageUrl)';
   }
 }
 
@@ -55,7 +56,8 @@ abstract mixin class $S3PresignedUrlCopyWith<$Res> {
           S3PresignedUrl value, $Res Function(S3PresignedUrl) _then) =
       _$S3PresignedUrlCopyWithImpl;
   @useResult
-  $Res call({String presignedUrl, String filePathInDB});
+  $Res call(
+      {String presignedUrl, @JsonKey(name: 'filePathInDB') String imageUrl});
 }
 
 /// @nodoc
@@ -72,16 +74,16 @@ class _$S3PresignedUrlCopyWithImpl<$Res>
   @override
   $Res call({
     Object? presignedUrl = null,
-    Object? filePathInDB = null,
+    Object? imageUrl = null,
   }) {
     return _then(_self.copyWith(
       presignedUrl: null == presignedUrl
           ? _self.presignedUrl
           : presignedUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      filePathInDB: null == filePathInDB
-          ? _self.filePathInDB
-          : filePathInDB // ignore: cast_nullable_to_non_nullable
+      imageUrl: null == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -180,13 +182,15 @@ extension S3PresignedUrlPatterns on S3PresignedUrl {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String presignedUrl, String filePathInDB)? $default, {
+    TResult Function(String presignedUrl,
+            @JsonKey(name: 'filePathInDB') String imageUrl)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _S3PresignedUrl() when $default != null:
-        return $default(_that.presignedUrl, _that.filePathInDB);
+        return $default(_that.presignedUrl, _that.imageUrl);
       case _:
         return orElse();
     }
@@ -207,12 +211,14 @@ extension S3PresignedUrlPatterns on S3PresignedUrl {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String presignedUrl, String filePathInDB) $default,
+    TResult Function(
+            String presignedUrl, @JsonKey(name: 'filePathInDB') String imageUrl)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _S3PresignedUrl():
-        return $default(_that.presignedUrl, _that.filePathInDB);
+        return $default(_that.presignedUrl, _that.imageUrl);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -232,12 +238,14 @@ extension S3PresignedUrlPatterns on S3PresignedUrl {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String presignedUrl, String filePathInDB)? $default,
+    TResult? Function(String presignedUrl,
+            @JsonKey(name: 'filePathInDB') String imageUrl)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _S3PresignedUrl() when $default != null:
-        return $default(_that.presignedUrl, _that.filePathInDB);
+        return $default(_that.presignedUrl, _that.imageUrl);
       case _:
         return null;
     }
@@ -248,14 +256,16 @@ extension S3PresignedUrlPatterns on S3PresignedUrl {
 @JsonSerializable()
 class _S3PresignedUrl implements S3PresignedUrl {
   const _S3PresignedUrl(
-      {required this.presignedUrl, required this.filePathInDB});
+      {required this.presignedUrl,
+      @JsonKey(name: 'filePathInDB') required this.imageUrl});
   factory _S3PresignedUrl.fromJson(Map<String, dynamic> json) =>
       _$S3PresignedUrlFromJson(json);
 
   @override
   final String presignedUrl;
   @override
-  final String filePathInDB;
+  @JsonKey(name: 'filePathInDB')
+  final String imageUrl;
 
   /// Create a copy of S3PresignedUrl
   /// with the given fields replaced by the non-null parameter values.
@@ -279,17 +289,17 @@ class _S3PresignedUrl implements S3PresignedUrl {
             other is _S3PresignedUrl &&
             (identical(other.presignedUrl, presignedUrl) ||
                 other.presignedUrl == presignedUrl) &&
-            (identical(other.filePathInDB, filePathInDB) ||
-                other.filePathInDB == filePathInDB));
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, presignedUrl, filePathInDB);
+  int get hashCode => Object.hash(runtimeType, presignedUrl, imageUrl);
 
   @override
   String toString() {
-    return 'S3PresignedUrl(presignedUrl: $presignedUrl, filePathInDB: $filePathInDB)';
+    return 'S3PresignedUrl(presignedUrl: $presignedUrl, imageUrl: $imageUrl)';
   }
 }
 
@@ -301,7 +311,8 @@ abstract mixin class _$S3PresignedUrlCopyWith<$Res>
       __$S3PresignedUrlCopyWithImpl;
   @override
   @useResult
-  $Res call({String presignedUrl, String filePathInDB});
+  $Res call(
+      {String presignedUrl, @JsonKey(name: 'filePathInDB') String imageUrl});
 }
 
 /// @nodoc
@@ -318,16 +329,16 @@ class __$S3PresignedUrlCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? presignedUrl = null,
-    Object? filePathInDB = null,
+    Object? imageUrl = null,
   }) {
     return _then(_S3PresignedUrl(
       presignedUrl: null == presignedUrl
           ? _self.presignedUrl
           : presignedUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      filePathInDB: null == filePathInDB
-          ? _self.filePathInDB
-          : filePathInDB // ignore: cast_nullable_to_non_nullable
+      imageUrl: null == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }

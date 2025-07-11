@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ImageRequest {
-  String get image;
+  @JsonKey(name: 'imageUrl')
+  String? get image;
   int get sequence;
 
   /// Create a copy of ImageRequest
@@ -54,7 +55,7 @@ abstract mixin class $ImageRequestCopyWith<$Res> {
           ImageRequest value, $Res Function(ImageRequest) _then) =
       _$ImageRequestCopyWithImpl;
   @useResult
-  $Res call({String image, int sequence});
+  $Res call({@JsonKey(name: 'imageUrl') String? image, int sequence});
 }
 
 /// @nodoc
@@ -69,14 +70,14 @@ class _$ImageRequestCopyWithImpl<$Res> implements $ImageRequestCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? image = null,
+    Object? image = freezed,
     Object? sequence = null,
   }) {
     return _then(_self.copyWith(
-      image: null == image
+      image: freezed == image
           ? _self.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       sequence: null == sequence
           ? _self.sequence
           : sequence // ignore: cast_nullable_to_non_nullable
@@ -178,7 +179,8 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String image, int sequence)? $default, {
+    TResult Function(@JsonKey(name: 'imageUrl') String? image, int sequence)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
@@ -205,7 +207,8 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String image, int sequence) $default,
+    TResult Function(@JsonKey(name: 'imageUrl') String? image, int sequence)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
@@ -230,7 +233,8 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String image, int sequence)? $default,
+    TResult? Function(@JsonKey(name: 'imageUrl') String? image, int sequence)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
@@ -245,13 +249,14 @@ extension ImageRequestPatterns on ImageRequest {
 /// @nodoc
 @JsonSerializable()
 class _ImageRequest implements ImageRequest {
-  const _ImageRequest({this.image = '', this.sequence = 1});
+  const _ImageRequest(
+      {@JsonKey(name: 'imageUrl') this.image, this.sequence = 1});
   factory _ImageRequest.fromJson(Map<String, dynamic> json) =>
       _$ImageRequestFromJson(json);
 
   @override
-  @JsonKey()
-  final String image;
+  @JsonKey(name: 'imageUrl')
+  final String? image;
   @override
   @JsonKey()
   final int sequence;
@@ -299,7 +304,7 @@ abstract mixin class _$ImageRequestCopyWith<$Res>
       __$ImageRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({String image, int sequence});
+  $Res call({@JsonKey(name: 'imageUrl') String? image, int sequence});
 }
 
 /// @nodoc
@@ -315,14 +320,14 @@ class __$ImageRequestCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? image = null,
+    Object? image = freezed,
     Object? sequence = null,
   }) {
     return _then(_ImageRequest(
-      image: null == image
+      image: freezed == image
           ? _self.image
           : image // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       sequence: null == sequence
           ? _self.sequence
           : sequence // ignore: cast_nullable_to_non_nullable

@@ -9,7 +9,9 @@ part of 'reading_diary_repository.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
 class _ReadingDiaryRepository implements ReadingDiaryRepository {
-  _ReadingDiaryRepository(this._dio, {this.baseUrl, this.errorLogger});
+  _ReadingDiaryRepository(this._dio, {this.baseUrl, this.errorLogger}) {
+    baseUrl ??= '/api/v2';
+  }
 
   final Dio _dio;
 
@@ -27,7 +29,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/challenges',
+            '/reading-diaries/challenges',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -57,7 +59,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/${diaryId}',
+            '/reading-diaries/${diaryId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -78,7 +80,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<List<DiaryResponse>>> getMemberDiaries(
+  Future<ResponseForm<List<DiaryThumbnail>>> getMemberDiaries(
     int memberId, {
     int? cursorId,
     int? size,
@@ -91,25 +93,25 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ResponseForm<List<DiaryResponse>>>(
+    final _options = _setStreamType<ResponseForm<List<DiaryThumbnail>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/members/${memberId}',
+            '/reading-diaries/members/${memberId}',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<List<DiaryResponse>> _value;
+    late ResponseForm<List<DiaryThumbnail>> _value;
     try {
-      _value = ResponseForm<List<DiaryResponse>>.fromJson(
+      _value = ResponseForm<List<DiaryThumbnail>>.fromJson(
         _result.data!,
         (json) => json is List<dynamic>
             ? json
-                .map<DiaryResponse>(
-                  (i) => DiaryResponse.fromJson(i as Map<String, dynamic>),
+                .map<DiaryThumbnail>(
+                  (i) => DiaryThumbnail.fromJson(i as Map<String, dynamic>),
                 )
                 .toList()
             : List.empty(),
@@ -122,36 +124,96 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<List<DiaryResponse>>> getDiariesByChallenge(
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>> getBookDiaries(
+    int bookId, {
+    int? cursorId,
+    int? size,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursorId': cursorId,
+      r'size': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options =
+        _setStreamType<ResponseForm<CursorPageResponse<DiaryResponse>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reading-diaries/books/${bookId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<CursorPageResponse<DiaryResponse>> _value;
+    try {
+      _value = ResponseForm<CursorPageResponse<DiaryResponse>>.fromJson(
+        _result.data!,
+        (json) => CursorPageResponse<DiaryResponse>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => DiaryResponse.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<DualCursorPageResponse<ChallengeDiaryThumbnailResponse>>>
+      getDiariesByChallenge(
     int memberId,
-    int challengeId,
-  ) async {
+    int challengeId, {
+    RelatedDiarySort? sort,
+    int? cursorId,
+    double? cursorScore,
+    int? size,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'sort': sort,
+      r'cursorId': cursorId,
+      r'cursorScore': cursorScore,
+      r'size': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ResponseForm<List<DiaryResponse>>>(
+    final _options = _setStreamType<
+        ResponseForm<DualCursorPageResponse<ChallengeDiaryThumbnailResponse>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/members/${memberId}/challenges/${challengeId}',
+            '/reading-diaries/members/${memberId}/challenges/${challengeId}',
             queryParameters: queryParameters,
             data: _data,
           )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<List<DiaryResponse>> _value;
+    late ResponseForm<DualCursorPageResponse<ChallengeDiaryThumbnailResponse>>
+        _value;
     try {
-      _value = ResponseForm<List<DiaryResponse>>.fromJson(
+      _value = ResponseForm<
+          DualCursorPageResponse<ChallengeDiaryThumbnailResponse>>.fromJson(
         _result.data!,
-        (json) => json is List<dynamic>
-            ? json
-                .map<DiaryResponse>(
-                  (i) => DiaryResponse.fromJson(i as Map<String, dynamic>),
-                )
-                .toList()
-            : List.empty(),
+        (json) =>
+            DualCursorPageResponse<ChallengeDiaryThumbnailResponse>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => ChallengeDiaryThumbnailResponse.fromJson(
+            json as Map<String, dynamic>,
+          ),
+        ),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
@@ -161,28 +223,25 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<dynamic>> likeDiary(int diaryId) async {
+  Future<ResponseForm<void>> likeDiary(int diaryId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ResponseForm<dynamic>>(
+    final _options = _setStreamType<ResponseForm<void>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/${diaryId}/like',
+            '/reading-diaries/${diaryId}/like',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<dynamic> _value;
+    late ResponseForm<void> _value;
     try {
-      _value = ResponseForm<dynamic>.fromJson(
-        _result.data!,
-        (json) => json as dynamic,
-      );
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -191,28 +250,25 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<dynamic>> unlikeDiary(int diaryId) async {
+  Future<ResponseForm<void>> unlikeDiary(int diaryId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ResponseForm<dynamic>>(
+    final _options = _setStreamType<ResponseForm<void>>(
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/${diaryId}/like',
+            '/reading-diaries/${diaryId}/like',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<dynamic> _value;
+    late ResponseForm<void> _value;
     try {
-      _value = ResponseForm<dynamic>.fromJson(
-        _result.data!,
-        (json) => json as dynamic,
-      );
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -238,7 +294,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-diaries/me',
+            '/reading-diaries/me',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -287,7 +343,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/books/${bookId}/related/reading-diaries',
+            '/books/${bookId}/related/reading-diaries',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -4,11 +4,14 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book/view/widgets/book_info_widget.dart';
 import 'package:book/modules/book/view_model/book_overview_view_model.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
+import 'package:book/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/style/app_texts.dart';
+import '../../../auth/view_model/auth_state.dart';
+import '../../../auth/view_model/auth_view_model.dart';
 
 class ReadingChallengeDetailScreen extends ConsumerWidget {
   const ReadingChallengeDetailScreen({
@@ -25,15 +28,13 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookState = ref.watch(bookOverviewViewModelProvider(bookId));
+    final authState = ref.watch(authViewModelProvider);
 
-    final List<String> diaryImageUrls = [
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150',
-      'https://via.placeholder.com/150',
-    ];
+    final int? memberId = authState.when(
+      data: (data) => (data is AuthSuccess) ? data.memberId : null,
+      loading: () => null,
+      error: (e, st) => null,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -45,24 +46,21 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: bookState.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('오류가 발생했습니다: $error')),
-        data: (book) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
+      body: SingleChildScrollView(
+        child: bookState.when(
+          data: (book) {
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BookInfoWidget(book: book),
-                const SizedBox(height: 24),
+                if (book != null) BookInfoWidget(book: book),
                 _buildPointsSection(),
-                const SizedBox(height: 40),
-                _buildDiarySection(diaryImageUrls),
+                if (memberId != null) _buildDiarySection(ref, memberId, challengeId),
               ],
-            ),
-          );
-        },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('오류가 발생했습니다: $error')),
+        ),
       ),
       bottomNavigationBar: bookState.maybeWhen(
         data: (book) => Padding(
@@ -134,29 +132,51 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDiarySection(List<String> imageUrls) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('내가 쓴 독서 다이어리', style: AppTexts.b5),
-        const SizedBox(height: 8),
-        Text('해당 도서를 읽고 쓴 독서 다이어리를 확인해 보세요',
-            style: AppTexts.b8.copyWith(color: ColorName.g3)),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 300, // Or calculate dynamically
-          child: ImageGrid(
-            imageUrls: imageUrls,
-            crossAxisCount: 3,
-            emptyWidget: const Center(
-              child: Text(
-                '작성한 독서 다이어리가 없습니다.',
-                style: TextStyle(color: ColorName.g3),
-              ),
+  Widget _buildDiarySection(WidgetRef ref, int memberId, int challengeId) {
+    final diariesState = ref.watch(challengeDiariesViewModelProvider(
+      memberId: memberId,
+      challengeId: challengeId,
+    ));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('내가 쓴 독서 다이어리', style: AppTexts.b5),
+          const SizedBox(height: 8),
+          Text('해당 도서를 읽고 쓴 독서 다이어리를 확인해 보세요',
+              style: AppTexts.b8.copyWith(color: ColorName.g3)),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 300, // Or calculate dynamically
+            child: diariesState.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(child: Text('독서 다이어리를 불러오는 중 오류가 발생했습니다: $error')),
+              data: (diariesPage) {
+                final imageUrls = diariesPage.data
+                    .map((e) => e.firstImage?.imageUrl ?? '')
+                    .where((url) => url.isNotEmpty)
+                    .toList();
+                
+                // 디버깅을 위한 print문
+                print('Diaries Page Data: ${diariesPage.data}');
+                print('Processed Image URLs: $imageUrls');
+
+                return ImageGrid(
+                  imageUrls: imageUrls,
+                  crossAxisCount: 3,
+                  emptyWidget: const Center(
+                    child: Text(
+                      '작성한 독서 다이어리가 없습니다.',
+                      style: TextStyle(color: ColorName.g3),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

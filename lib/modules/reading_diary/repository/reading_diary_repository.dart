@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../infra/network/dio_client.dart';
+import '../../../../infra/network/dio_client.dart';
 import '../../../common/models/cursor_page_response.dart';
 import '../../../common/models/dual_cursor_page_response.dart';
 import '../../../common/models/response_form.dart';
+import '../model/challenge_diary_thumbnail_response.dart';
 import '../model/diary_request.dart';
 import '../model/diary_response.dart';
+import '../model/diary_thumbnail_response.dart';
 import '../model/liked_diary_response.dart';
 import '../model/related_diary_sort.dart';
 import '../model/related_diary_thumbnail.dart';
@@ -21,45 +23,59 @@ ReadingDiaryRepository readingDiaryRepository(Ref ref) {
   return ReadingDiaryRepository(dio);
 }
 
-@RestApi()
+@RestApi(baseUrl: '/api/v2')
 abstract class ReadingDiaryRepository {
-  factory ReadingDiaryRepository(Dio dio, {String baseUrl}) = _ReadingDiaryRepository;
+  factory ReadingDiaryRepository(Dio dio, {String baseUrl}) =
+      _ReadingDiaryRepository;
 
-  @POST('/api/v2/reading-diaries/challenges')
+  @POST('/reading-diaries/challenges')
   Future<ResponseForm<DiaryResponse>> createDiary(
     @Body() DiaryRequest request,
   );
 
-  @DELETE('/api/v2/reading-diaries/{diaryId}')
+  @DELETE('/reading-diaries/{diaryId}')
   Future<ResponseForm<dynamic>> deleteDiary(@Path('diaryId') int diaryId);
 
-  @GET('/api/v2/reading-diaries/members/{memberId}')
-  Future<ResponseForm<List<DiaryResponse>>> getMemberDiaries(
+  @GET('/reading-diaries/members/{memberId}')
+  Future<ResponseForm<List<DiaryThumbnail>>> getMemberDiaries(
     @Path('memberId') int memberId, {
     @Query('cursorId') int? cursorId,
     @Query('size') int? size,
   });
 
-  @GET('/api/v2/reading-diaries/members/{memberId}/challenges/{challengeId}')
-  Future<ResponseForm<List<DiaryResponse>>> getDiariesByChallenge(
+  @GET('/reading-diaries/books/{bookId}')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>> getBookDiaries(
+    @Path('bookId') int bookId, {
+    @Query('cursorId') int? cursorId,
+    @Query('size') int? size,
+  });
+
+  @GET('/reading-diaries/members/{memberId}/challenges/{challengeId}')
+  Future<ResponseForm<DualCursorPageResponse<ChallengeDiaryThumbnailResponse>>>
+      getDiariesByChallenge(
     @Path('memberId') int memberId,
-    @Path('challengeId') int challengeId,
-  );
+    @Path('challengeId') int challengeId, {
+    @Query('sort') RelatedDiarySort? sort,
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
 
-  @POST('/api/v2/reading-diaries/{diaryId}/like')
-  Future<ResponseForm<dynamic>> likeDiary(@Path('diaryId') int diaryId);
+  @POST('/reading-diaries/{diaryId}/like')
+  Future<ResponseForm<void>> likeDiary(@Path('diaryId') int diaryId);
 
-  @DELETE('/api/v2/reading-diaries/{diaryId}/like')
-  Future<ResponseForm<dynamic>> unlikeDiary(@Path('diaryId') int diaryId);
+  @DELETE('/reading-diaries/{diaryId}/like')
+  Future<ResponseForm<void>> unlikeDiary(@Path('diaryId') int diaryId);
 
-  @GET('/api/v2/reading-diaries/me')
+  @GET('/reading-diaries/me')
   Future<ResponseForm<CursorPageResponse<LikedDiaryResponse>>> getLikedDiaries({
     @Query('cursorId') int? cursorId,
     @Query('size') int? size,
   });
 
-  @GET('/api/v2/books/{bookId}/related/reading-diaries')
-  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>> getRelatedDiaries(
+  @GET('/books/{bookId}/related/reading-diaries')
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getRelatedDiaries(
     @Path('bookId') int bookId, {
     @Query('relatedDiarySort') RelatedDiarySort? relatedDiarySort,
     @Query('cursorId') int? cursorId,

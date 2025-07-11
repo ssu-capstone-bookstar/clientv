@@ -43,6 +43,7 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
           'DIARY_IMAGE',
           PresignedUrlRequest(fileName: fileName),
         );
+        debugPrint('##### Presigned URL Response: ${presignedUrlResponse.data}');
         final presignedData = presignedUrlResponse.data;
 
         await s3Repo.uploadFileToS3(
@@ -51,7 +52,7 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
         );
 
         return ImageRequest(
-          image: presignedData.filePathInDB,
+          image: presignedData.imageUrl,
           sequence: index + 1,
         );
       }));
