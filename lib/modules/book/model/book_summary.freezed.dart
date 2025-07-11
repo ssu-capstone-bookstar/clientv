@@ -14,6 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$BookSummary {
+  @JsonKey(name: 'bookId')
   int get id;
   String get title;
   String get author;
@@ -57,7 +58,11 @@ abstract mixin class $BookSummaryCopyWith<$Res> {
           BookSummary value, $Res Function(BookSummary) _then) =
       _$BookSummaryCopyWithImpl;
   @useResult
-  $Res call({int id, String title, String author, String thumbnailUrl});
+  $Res call(
+      {@JsonKey(name: 'bookId') int id,
+      String title,
+      String author,
+      String thumbnailUrl});
 }
 
 /// @nodoc
@@ -191,7 +196,8 @@ extension BookSummaryPatterns on BookSummary {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int id, String title, String author, String thumbnailUrl)?
+    TResult Function(@JsonKey(name: 'bookId') int id, String title,
+            String author, String thumbnailUrl)?
         $default, {
     required TResult orElse(),
   }) {
@@ -220,7 +226,8 @@ extension BookSummaryPatterns on BookSummary {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int id, String title, String author, String thumbnailUrl)
+    TResult Function(@JsonKey(name: 'bookId') int id, String title,
+            String author, String thumbnailUrl)
         $default,
   ) {
     final _that = this;
@@ -247,7 +254,8 @@ extension BookSummaryPatterns on BookSummary {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int id, String title, String author, String thumbnailUrl)?
+    TResult? Function(@JsonKey(name: 'bookId') int id, String title,
+            String author, String thumbnailUrl)?
         $default,
   ) {
     final _that = this;
@@ -265,12 +273,15 @@ extension BookSummaryPatterns on BookSummary {
 @JsonSerializable()
 class _BookSummary implements BookSummary {
   const _BookSummary(
-      {this.id = 0, this.title = '', this.author = '', this.thumbnailUrl = ''});
+      {@JsonKey(name: 'bookId') this.id = 0,
+      this.title = '',
+      this.author = '',
+      this.thumbnailUrl = ''});
   factory _BookSummary.fromJson(Map<String, dynamic> json) =>
       _$BookSummaryFromJson(json);
 
   @override
-  @JsonKey()
+  @JsonKey(name: 'bookId')
   final int id;
   @override
   @JsonKey()
@@ -327,7 +338,11 @@ abstract mixin class _$BookSummaryCopyWith<$Res>
       __$BookSummaryCopyWithImpl;
   @override
   @useResult
-  $Res call({int id, String title, String author, String thumbnailUrl});
+  $Res call(
+      {@JsonKey(name: 'bookId') int id,
+      String title,
+      String author,
+      String thumbnailUrl});
 }
 
 /// @nodoc

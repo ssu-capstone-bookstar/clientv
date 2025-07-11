@@ -6,11 +6,12 @@ part 'book_summary.g.dart';
 @freezed
 abstract class BookSummary with _$BookSummary {
   const factory BookSummary({
-    @Default(0) int id,
+    @JsonKey(name: 'bookId') @Default(0) int id,
     @Default('') String title,
     @Default('') String author,
     @Default('') String thumbnailUrl,
   }) = _BookSummary;
 
-  factory BookSummary.fromJson(Map<String, dynamic> json) => _$BookSummaryFromJson(json);
+  factory BookSummary.fromJson(Map<String, dynamic> json) =>
+      _$BookSummaryFromJson(json);
 }

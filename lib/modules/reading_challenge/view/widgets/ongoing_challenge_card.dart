@@ -1,5 +1,4 @@
 import 'package:book/common/theme/app_style.dart';
-import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -22,25 +21,14 @@ class OngoingChallengeCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (!isSelectionMode) {
-          // BookSummary -> SearchBookResponse 변환
-          final bookForRoute = SearchBookResponse(
-            bookId: challenge.book.id,
-            title: challenge.book.title,
-            author: challenge.book.author,
-            bookCover: challenge.book.thumbnailUrl,
-            // BookSummary에 없는 필드는 기본값으로 설정
-            pubDate: '',
-            publisher: '',
-          );
-
-          context.push(
-            '/reading-challenge/start-and-end',
-            extra: {
-              'book': bookForRoute,
-              'totalPages': challenge.totalPages,
-              'challengeId': challenge.challengeId,
+          final uri = Uri(
+            path: '/reading-challenge/detail/${challenge.book.id}',
+            queryParameters: {
+              'challengeId': challenge.challengeId.toString(),
+              'totalPages': challenge.totalPages.toString(),
             },
           );
+          context.push(uri.toString());
         }
       },
       child: ClipRRect(

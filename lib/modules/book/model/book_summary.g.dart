@@ -7,7 +7,7 @@ part of 'book_summary.dart';
 // **************************************************************************
 
 _BookSummary _$BookSummaryFromJson(Map<String, dynamic> json) => _BookSummary(
-      id: (json['id'] as num?)?.toInt() ?? 0,
+      id: (json['bookId'] as num?)?.toInt() ?? 0,
       title: json['title'] as String? ?? '',
       author: json['author'] as String? ?? '',
       thumbnailUrl: json['thumbnailUrl'] as String? ?? '',
@@ -15,7 +15,7 @@ _BookSummary _$BookSummaryFromJson(Map<String, dynamic> json) => _BookSummary(
 
 Map<String, dynamic> _$BookSummaryToJson(_BookSummary instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'bookId': instance.id,
       'title': instance.title,
       'author': instance.author,
       'thumbnailUrl': instance.thumbnailUrl,

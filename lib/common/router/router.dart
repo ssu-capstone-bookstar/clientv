@@ -24,6 +24,7 @@ import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
 import '../../modules/reading_challenge/view/screens/ongoing_challenge_list_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_detail_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_diary_encourage_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_rating_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
@@ -224,6 +225,20 @@ GoRouter router(Ref ref) {
                 path: '/reading-challenge',
                 builder: (context, state) => const ReadingChallengeScreen(),
                 routes: [
+                  GoRoute(
+                    path: 'detail/:bookId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final bookId = int.parse(state.pathParameters['bookId']!);
+                      final challengeId = int.parse(state.uri.queryParameters['challengeId'] ?? '0');
+                      final totalPages = int.parse(state.uri.queryParameters['totalPages'] ?? '0');
+                      return ReadingChallengeDetailScreen(
+                        bookId: bookId,
+                        challengeId: challengeId,
+                        totalPages: totalPages,
+                      );
+                    },
+                  ),
                   GoRoute(
                     path: 'search-new',
                     parentNavigatorKey: rootNavigatorKey,
