@@ -75,6 +75,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.svg
   SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
 
+  /// File path: assets/icons/ic_add_pick.svg
+  SvgGenImage get icAddPick =>
+      const SvgGenImage('assets/icons/ic_add_pick.svg');
+
   /// File path: assets/icons/ic_bookpick_chat_character.svg
   SvgGenImage get icBookpickChatCharacter =>
       const SvgGenImage('assets/icons/ic_bookpick_chat_character.svg');
@@ -213,6 +217,7 @@ class $AssetsIconsGen {
   List<SvgGenImage> get values => [
     apple,
     google,
+    icAddPick,
     icBookpickChatCharacter,
     icBookpickSearchCharacter,
     icBooktalkSearchCharacter,

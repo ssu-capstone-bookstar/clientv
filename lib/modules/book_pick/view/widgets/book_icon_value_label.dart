@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common/theme/style/app_paddings.dart';
-import '../../../../common/theme/style/app_texts.dart';
-import '../../../../gen/assets.gen.dart';
-import '../../../../gen/colors.gen.dart';
-
 class BookIconValueLabel extends StatelessWidget {
   final Widget icon;
   final String value;
+  final TextStyle? valueStyle;
+  final Decoration? decoration;
+  final EdgeInsetsGeometry padding;
+  final double spacing;
 
   const BookIconValueLabel({
     super.key,
     required this.icon,
     required this.value,
+    this.valueStyle,
+    this.decoration,
+    this.padding = EdgeInsets.zero,
+    this.spacing = 3.0,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppPaddings.BOOK_PICK_DETAIL_INFO_PADDING,
-      decoration: BoxDecoration(
-        color: ColorName.w3,
-        borderRadius: BorderRadius.circular(4),
-      ),
+      padding: padding,
+      decoration: decoration,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        spacing: 2.0,
+        spacing: spacing,
         children: [
-          Assets.icons.icRatingStar.svg(),
-          Text(value, style: AppTexts.cap1.copyWith(color: ColorName.p1)),
+          icon,
+          Text(value, style: valueStyle),
         ],
       ),
     );

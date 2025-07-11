@@ -20,7 +20,7 @@ class BookRelatedDiariesGridView extends ConsumerWidget {
     final sort = ref.watch(relatedDiarySortStateProvider);
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: postsState.when(
         data: (state) {
           return Column(
@@ -30,7 +30,7 @@ class BookRelatedDiariesGridView extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '관련 독서일기',
+                    '관련 게시물',
                     style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   GestureDetector(
@@ -49,7 +49,7 @@ class BookRelatedDiariesGridView extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '북스타 유저들이 공유한 관련 독서일기를 확인해 보세요',
+                '북스타 유저들이 공유한 관련 게시물을 확인해 보세요',
                 style: textTheme.bodySmall,
               ),
               const SizedBox(height: 16),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../common/theme/style/app_colors.dart';
+
 typedef GridItemBuilder<TItem> = Widget Function(TItem item);
 typedef SliverDividerBuilder = Widget Function();
 typedef ListExtractor<T, TItem> = List<TItem> Function(T data);
@@ -80,9 +82,13 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
                 if (row < rowCount - 1 || hasNext)
                   SliverToBoxAdapter(
                     child: dividerBuilder?.call() ??
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 4.0, bottom: 30),
-                          child: Divider(thickness: 7, color: Colors.grey),
+                          child: Divider(
+                            thickness: 7,
+                            color: AppColors.DIVIDER_COLOR,
+                            radius: BorderRadius.circular(5.0),
+                          ),
                         ),
                   ),
               ],

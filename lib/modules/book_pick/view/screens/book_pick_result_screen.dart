@@ -76,10 +76,7 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 15,
           children: [
-            Text(
-              '책 찾기',
-              style: AppTexts.h4,
-            ),
+            Text('책 찾기', style: AppTexts.h4),
             SearchTextField(
               controller: _textController,
               hintText: '읽고 싶은 책을 검색해 보세요',
@@ -89,10 +86,7 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
                   : Assets.images.icSearchUncolored3x.image(scale: 3),
               onSubmitted: _onSearchSubmitted,
             ),
-            /// TODO: 작업중, 오버뷰 병합, 데이터 모델(별점, 카운트?)
-            // BookInfoWidget(book: widget.book),
             BookResultInfo(book: widget.book),
-            // RelatedDiariesWidget(bookId: widget.book.bookId),
             BookRelatedDiariesGridView(bookId: widget.book.bookId),
           ],
         ),
