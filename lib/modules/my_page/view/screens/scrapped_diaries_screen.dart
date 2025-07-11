@@ -1,14 +1,18 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:go_router/go_router.dart';
+import 'package:book/common/components/image_grid.dart';
+import 'package:book/modules/book_log/model/book_log_models.dart';
 
 class ScrappedDiariesScreen extends StatelessWidget {
   const ScrappedDiariesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // TODO: 더미 다이어리 삭제 필요
+    final List<String> imageUrls = dummyDiaries
+        .expand((diary) => diary.images.map((image) => image.imageUrl))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('스크랩한 다이어리'),
@@ -26,8 +30,12 @@ class ScrappedDiariesScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: AppPaddings.SCREEN_BODY_PADDING,
-        child: const Text('스크랩한 다이어리 화면'),
+        padding: EdgeInsets.zero,
+        child: ImageGrid(
+          imageUrls: imageUrls,
+          crossAxisCount: 3,
+          spacing: 0,
+        ),
       ),
     );
   }

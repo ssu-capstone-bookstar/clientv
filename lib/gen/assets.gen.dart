@@ -162,6 +162,9 @@ class $AssetsIconsGen {
   SvgGenImage get icLoginCharTop =>
       const SvgGenImage('assets/icons/ic_login_char_top.svg');
 
+  /// File path: assets/icons/ic_mail.svg
+  SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
+
   /// File path: assets/icons/ic_point_shop_char1.svg
   SvgGenImage get icPointShopChar1 =>
       const SvgGenImage('assets/icons/ic_point_shop_char1.svg');
@@ -235,6 +238,7 @@ class $AssetsIconsGen {
     icDeeptypeStickerCloud,
     icLoginCharFront,
     icLoginCharTop,
+    icMail,
     icPointShopChar1,
     icPointShopChar2,
     icPointShopChar3,
