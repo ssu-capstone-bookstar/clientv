@@ -189,7 +189,7 @@ class _OngoingChallengeListScreenState extends ConsumerState<OngoingChallengeLis
       builder: (_) {
         return CustomDialog(
           title: '챌린지 중단',
-          content: '선택한  ${count}개의 챌린지를 중단하시겠어요?',
+          content: '선택한 ${count}개의 챌린지를 중단하시겠어요?',
           icon: Assets.icons.icReadingChallengeChar1.svg(),
           onCancel: () => Navigator.of(context).pop(),
           onConfirm: () async {
