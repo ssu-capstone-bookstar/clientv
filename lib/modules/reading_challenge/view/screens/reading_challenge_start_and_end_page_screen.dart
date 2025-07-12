@@ -35,7 +35,9 @@ class _ReadingChallengeStartAndEndPageScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        ref.read(currentChallengeViewModelProvider.notifier).initializeChallenge(
+        ref
+            .read(currentChallengeViewModelProvider.notifier)
+            .initializeChallenge(
               book: widget.book,
               totalPages: widget.totalPages,
               challengeId: widget.challengeId,
@@ -195,7 +197,7 @@ class _ReadingChallengeStartAndEndPageScreenState
             try {
               final int progressId;
               if (widget.challengeId == null) {
-                progressId = await viewModel.createChallenge();
+                progressId = await viewModel.createChallenge(ref);
               } else {
                 progressId = await viewModel.updateChallengeProgress();
               }

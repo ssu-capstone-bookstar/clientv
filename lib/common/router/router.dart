@@ -230,8 +230,10 @@ GoRouter router(Ref ref) {
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       final bookId = int.parse(state.pathParameters['bookId']!);
-                      final challengeId = int.parse(state.uri.queryParameters['challengeId'] ?? '0');
-                      final totalPages = int.parse(state.uri.queryParameters['totalPages'] ?? '0');
+                      final challengeId = int.parse(
+                          state.uri.queryParameters['challengeId'] ?? '0');
+                      final totalPages = int.parse(
+                          state.uri.queryParameters['totalPages'] ?? '0');
                       return ReadingChallengeDetailScreen(
                         bookId: bookId,
                         challengeId: challengeId,
@@ -291,7 +293,8 @@ GoRouter router(Ref ref) {
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       final extra = state.extra as Map<String, dynamic>;
-                      final isChallengeCompleted = extra['isChallengeCompleted'] as bool;
+                      final isChallengeCompleted =
+                          extra['isChallengeCompleted'] as bool;
                       final progressId = extra['progressId'] as int;
 
                       return ReadingChallengeDiaryEncourageScreen(
