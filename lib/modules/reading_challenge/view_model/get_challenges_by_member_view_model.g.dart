@@ -7,7 +7,7 @@ part of 'get_challenges_by_member_view_model.dart';
 // **************************************************************************
 
 String _$getChallengesByMemberViewModelHash() =>
-    r'6a6a1c3bedae8629fc0afd0fdb6f5897dcd83e77';
+    r'cd097ae58c0146124494c83bd97d3ca875736d55';
 
 /// Copied from Dart SDK
 class _SystemHash {

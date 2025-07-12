@@ -8,7 +8,10 @@ import 'package:book/modules/reading_diary/model/diary_request.dart';
 import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
 
 part 'create_diary_view_model.g.dart';
 
@@ -43,7 +46,8 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
           'DIARY_IMAGE',
           PresignedUrlRequest(fileName: fileName),
         );
-        debugPrint('##### Presigned URL Response: ${presignedUrlResponse.data}');
+        debugPrint(
+            '##### Presigned URL Response: ${presignedUrlResponse.data}');
         final presignedData = presignedUrlResponse.data;
 
         await s3Repo.uploadFileToS3(
@@ -64,6 +68,17 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
       );
       await diaryRepo.createDiary(diaryRequest);
 
+      // 현재 로그인한 유저의 memberId로 invalidate
+      final authState = ref.read(authViewModelProvider);
+      final int? memberId = authState.when(
+        data: (data) => (data is AuthSuccess) ? data.memberId : null,
+        loading: () => null,
+        error: (e, st) => null,
+      );
+      if (memberId != null) {
+        ref.invalidate(bookLogDiariesProvider(memberId));
+      }
+
       state = false; // 로딩 종료
       return true; // 성공
     } catch (e) {
@@ -72,4 +87,4 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
       return false; // 실패
     }
   }
-} 
+}

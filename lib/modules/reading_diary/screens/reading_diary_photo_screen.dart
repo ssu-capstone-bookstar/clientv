@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:book/common/components/photo_source_modal.dart';
 
 enum PhotoSelection {
   addPhoto,
@@ -65,19 +66,6 @@ class _ReadingDiaryPhotoScreenState
     }
   }
 
-  void _showPhotoSourceSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: ColorName.g6,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (_) {
-        return _PhotoSourceOptions(onPick: _pickImages);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,7 +110,7 @@ class _ReadingDiaryPhotoScreenState
                         });
                       }
                       if (value == PhotoSelection.addPhoto) {
-                        _showPhotoSourceSheet();
+                        PhotoSourceModal.show(context, onPick: _pickImages);
                       } else if (mounted) {
                         context.push(
                           '/reading-diary/${widget.progressId}/entry',
@@ -145,73 +133,3 @@ class _ReadingDiaryPhotoScreenState
     );
   }
 }
-
-class _PhotoSourceOptions extends StatelessWidget {
-  const _PhotoSourceOptions({required this.onPick});
-
-  final Future<void> Function(ImageSource source) onPick;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '사진 선택하기',
-              style: AppTexts.h4.copyWith(color: ColorName.w1),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildOption(
-                  context,
-                  icon: Icons.camera_alt_outlined,
-                  label: '카메라',
-                  onTap: () => onPick(ImageSource.camera),
-                ),
-                const SizedBox(width: 40),
-                _buildOption(
-                  context,
-                  icon: Icons.photo_library_outlined,
-                  label: '사진',
-                  onTap: () => onPick(ImageSource.gallery),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOption(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).pop();
-        onTap();
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 48, color: ColorName.w1),
-            const SizedBox(height: 8),
-            Text(label, style: AppTexts.b2.copyWith(color: ColorName.w1)),
-          ],
-        ),
-      ),
-    );
-  }
-} 

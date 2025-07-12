@@ -8,12 +8,17 @@ import '../../model/update_profile_request.dart';
 import '../../repository/profile_repository.dart';
 import '../../view_model/profile_view_model.dart';
 import '../../../../common/components/cta_button_l1.dart';
-import '../../../../common/components/text_button.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/profile/view/widgets/profile_name_and_introduction_field.dart';
 import 'package:book/modules/profile/view/widgets/profile_image_section.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../../../../common/components/photo_source_modal.dart';
+import '../../../image/repository/image_repository.dart';
+import '../../../image/repository/s3_repository.dart';
+import '../../../image/model/presigned_url_request.dart';
 
 void invalidateMyProfileProviders(WidgetRef ref, int myMemberId) {
   ref.invalidate(profileProvider(null));
@@ -36,6 +41,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   String? _originalIntroduction;
   bool _isEdited = false;
 
+  String? _localProfileImageUrl; // for preview and upload
+  XFile? _pickedImageFile; // for upload
+
   @override
   void initState() {
     super.initState();
@@ -50,8 +58,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       _isEdited =
           (_nicknameController.text.trim() != (_originalNickname ?? '')) ||
               (_introductionController.text.trim() !=
-                  (_originalIntroduction ?? ''));
+                  (_originalIntroduction ?? '')) ||
+              (_localProfileImageUrl != null); // image changed
     });
+  }
+
+  Future<void> _onTapProfileImage() async {
+    await PhotoSourceModal.show(
+      context,
+      onPick: (source) async {
+        final picker = ImagePicker();
+        final XFile? picked =
+            await picker.pickImage(source: source, imageQuality: 90);
+        if (picked != null) {
+          setState(() {
+            _pickedImageFile = picked;
+            _localProfileImageUrl = picked.path; // local preview
+            _onEdit();
+          });
+        }
+      },
+    );
+  }
+
+  Future<String?> _uploadProfileImage(XFile file) async {
+    final imageRepo = ref.read(imageRepositoryProvider);
+    final s3Repo = ref.read(s3RepositoryProvider);
+    final fileName = file.name;
+    final presigned = await imageRepo.getPresignedUrl(
+        'MEMBER_PROFILE', PresignedUrlRequest(fileName: fileName));
+    final presignedData = presigned.data;
+    await s3Repo.uploadFileToS3(
+        presignedUrl: presignedData.presignedUrl, file: File(file.path));
+    return presignedData.imageUrl;
   }
 
   @override
@@ -75,9 +114,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
     final profile = profileAsync.value;
     if (profile == null) return;
+    String imageUrl = profile.profileImageUrl;
+    if (_pickedImageFile != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
+      try {
+        final uploadedUrl = await _uploadProfileImage(_pickedImageFile!);
+        imageUrl = uploadedUrl ?? imageUrl;
+      } catch (e) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('이미지 업로드 실패: $e')),
+        );
+        return;
+      }
+      Navigator.of(context).pop();
+    }
     final request = UpdateProfileRequest(
       nickName: nickname,
-      profileImageUrl: '', // TODO: 이미지 변경 하도록 바꾸기
+      profileImageUrl: imageUrl,
       introduction: introduction,
     );
     final repository = ref.read(profileRepositoryProvider);
@@ -89,7 +147,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       );
       await repository.updateMyProfile(request);
       if (context.mounted) {
-        // 내 memberId 가져오기
         final authState = ref.read(authViewModelProvider).value;
         final myMemberId =
             (authState is AuthSuccess) ? authState.memberId : null;
@@ -101,11 +158,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('프로필이 저장되었습니다.')),
         );
-        context.pop(); // 이전 화면으로 이동
+        context.pop();
       }
     } catch (e) {
       if (context.mounted) {
-        Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('저장 실패: $e')),
         );
@@ -142,6 +199,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               if (mounted) setState(() => _isEdited = false);
             });
           }
+          final displayImageUrl =
+              _localProfileImageUrl ?? profile.profileImageUrl;
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -149,29 +208,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  ProfileImageSection(imageUrl: profile.profileImageUrl),
+                  ProfileImageSection(
+                    imageUrl: displayImageUrl,
+                    onTap: _onTapProfileImage,
+                  ),
                   const SizedBox(height: 24),
                   ProfileNameAndIntroductionField(
                     nicknameController: _nicknameController,
                     introductionController: _introductionController,
-                  ),
-                  CustomTextButton(
-                    label: '픽한 도서 편집',
-                    onTap: () {
-                      // TODO: 픽한 도서 편집 페이지로 이동
-                    },
-                  ),
-                  CustomTextButton(
-                    label: '독서 중 도서 편집',
-                    onTap: () {
-                      // TODO: 독서 중 도서 편집 페이지로 이동
-                    },
-                  ),
-                  CustomTextButton(
-                    label: '완독 도서 편집',
-                    onTap: () {
-                      // TODO: 완독 도서 편집 페이지로 이동
-                    },
                   ),
                   const Spacer(),
                 ],

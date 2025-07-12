@@ -2,11 +2,13 @@ import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/book_log_models.dart';
+import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'book_status_badge.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 
 class BookLogMidSection extends StatelessWidget {
-  final List<DummyBook> books;
+  final List<ChallengeResponse> books;
   const BookLogMidSection({required this.books, super.key});
 
   @override
@@ -21,12 +23,16 @@ class BookLogMidSection extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (int i = 0; i < books.length; i++) ...[
-                _BookShelfItem(book: books[i]),
-                if (i != books.length - 1) const SizedBox(width: 12),
-              ],
-            ],
+            children: List.generate(
+              books.length,
+              (i) => Row(
+                children: [
+                  _BookShelfItem(
+                      key: ValueKey(books[i].book.title), challenge: books[i]),
+                  if (i != books.length - 1) const SizedBox(width: 12),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -35,70 +41,102 @@ class BookLogMidSection extends StatelessWidget {
 }
 
 class _BookShelfItem extends StatelessWidget {
-  final DummyBook book;
-  const _BookShelfItem({required this.book});
+  final ChallengeResponse challenge;
+  const _BookShelfItem({super.key, required this.challenge});
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 92,
-        minWidth: 0,
-        minHeight: 69,
-        maxHeight: 69,
-      ),
-      child: IntrinsicWidth(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 45,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: const BoxDecoration(
-                      color: ColorName.g7,
-                      shape: BoxShape.circle,
+    final book = challenge.book;
+    String status;
+    if (challenge.completed) {
+      status = '완독';
+    } else if (challenge.currentPage == 0) {
+      status = '픽';
+    } else if (challenge.currentPage > 0) {
+      status = '독서중';
+    } else {
+      status = '';
+    }
+    return GestureDetector(
+      onTap: () {
+        context.push(
+            '/reading-challenge/detail/${book.id}?challengeId=${challenge.challengeId}&totalPages=${challenge.totalPages}');
+      },
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 92,
+          maxHeight: 69,
+        ),
+        child: IntrinsicWidth(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 45,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: const BoxDecoration(
+                        color: ColorName.g7,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                  book.imageUrl.isNotEmpty
-                      ? ClipOval(
-                          child: Image.asset(
-                            book.imageUrl,
-                            width: 45,
-                            height: 45,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : const Icon(Icons.book, color: ColorName.g7, size: 28),
-                ],
+                    book.thumbnailUrl.isNotEmpty
+                        ? ClipOval(
+                            child: book.thumbnailUrl.startsWith('http')
+                                ? CachedNetworkImage(
+                                    imageUrl: book.thumbnailUrl,
+                                    width: 45,
+                                    height: 45,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.broken_image,
+                                            color: ColorName.g7, size: 28),
+                                  )
+                                : Image.asset(
+                                    book.thumbnailUrl,
+                                    width: 45,
+                                    height: 45,
+                                    fit: BoxFit.cover,
+                                  ),
+                          )
+                        : const Icon(Icons.book, color: ColorName.g7, size: 28),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 6),
-            SizedBox(
-              height: 18,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  BookStatusBadge(status: book.status),
-                  const SizedBox(width: 3),
-                  Flexible(
-                    child: Text(
-                      book.title,
-                      style: AppTexts.b11.copyWith(color: ColorName.g2),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+              const SizedBox(height: 6),
+              SizedBox(
+                height: 18,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BookStatusBadge(status: status),
+                    const SizedBox(width: 3),
+                    Flexible(
+                      child: Text(
+                        book.title,
+                        style: AppTexts.b11.copyWith(color: ColorName.g2),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
