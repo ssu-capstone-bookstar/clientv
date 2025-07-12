@@ -54,7 +54,8 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
               children: [
                 if (book != null) BookInfoWidget(book: book),
                 _buildPointsSection(),
-                if (memberId != null) _buildDiarySection(ref, memberId, challengeId),
+                if (memberId != null)
+                  _buildDiarySection(ref, memberId, challengeId),
               ],
             );
           },
@@ -151,16 +152,16 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
             height: 300, // Or calculate dynamically
             child: diariesState.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(child: Text('독서 다이어리를 불러오는 중 오류가 발생했습니다: $error')),
+              error: (error, stack) =>
+                  Center(child: Text('독서 다이어리를 불러오는 중 오류가 발생했습니다: $error')),
               data: (diariesPage) {
                 final imageUrls = diariesPage.data
                     .map((e) => e.firstImage?.imageUrl ?? '')
                     .where((url) => url.isNotEmpty)
                     .toList();
-                
-                // 디버깅을 위한 print문
+
                 print('Diaries Page Data: ${diariesPage.data}');
-                print('Processed Image URLs: $imageUrls');
+                print('ImageUrls: $imageUrls');
 
                 return ImageGrid(
                   imageUrls: imageUrls,

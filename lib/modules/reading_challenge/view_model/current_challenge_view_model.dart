@@ -5,6 +5,10 @@ import 'package:book/modules/reading_challenge/repository/reading_challenge_repo
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part 'current_challenge_view_model.freezed.dart';
 part 'current_challenge_view_model.g.dart';
@@ -49,7 +53,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     state = state.copyWith(endPage: value);
   }
 
-  Future<int> createChallenge() async {
+  Future<int> createChallenge(WidgetRef ref) async {
     if (state.book == null ||
         state.totalPages == null ||
         state.startPage == null ||
@@ -67,6 +71,10 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       );
       final res = await repo.createChallenge(request);
       state = state.copyWith(challengeId: res.data.challengeId);
+      final user = ref.read(authViewModelProvider).value;
+      final memberId = (user is AuthSuccess) ? user.memberId : 0;
+      ref.invalidate(
+          getChallengesByMemberViewModelProvider(memberId: memberId));
       return res.data.progressId;
     } catch (e) {
       print('Failed to create challenge: $e');
@@ -104,7 +112,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
   Future<bool> checkChallengeExists(String bookId) async {
     final repo = ref.read(readingChallengeRepositoryProvider);
     final response = await repo.checkChallengeExists(bookId);
-    return response.data ?? false;
+    return response.data;
   }
 
   Future<void> fetchAndSetChallenge(String bookId) async {

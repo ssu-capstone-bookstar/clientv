@@ -87,6 +87,9 @@ class $AssetsIconsGen {
   SvgGenImage get icBooktalkSearchCharacter =>
       const SvgGenImage('assets/icons/ic_booktalk_search_character.svg');
 
+  /// File path: assets/icons/ic_camera.svg
+  SvgGenImage get icCamera => const SvgGenImage('assets/icons/ic_camera.svg');
+
   /// File path: assets/icons/ic_category_art_hobby.svg
   SvgGenImage get icCategoryArtHobby =>
       const SvgGenImage('assets/icons/ic_category_art_hobby.svg');
@@ -165,6 +168,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
 
+  /// File path: assets/icons/ic_photo_library.svg
+  SvgGenImage get icPhotoLibrary =>
+      const SvgGenImage('assets/icons/ic_photo_library.svg');
+
   /// File path: assets/icons/ic_point_shop_char1.svg
   SvgGenImage get icPointShopChar1 =>
       const SvgGenImage('assets/icons/ic_point_shop_char1.svg');
@@ -219,6 +226,7 @@ class $AssetsIconsGen {
     icBookpickChatCharacter,
     icBookpickSearchCharacter,
     icBooktalkSearchCharacter,
+    icCamera,
     icCategoryArtHobby,
     icCategoryBestseller,
     icCategoryChildren,
@@ -239,6 +247,7 @@ class $AssetsIconsGen {
     icLoginCharFront,
     icLoginCharTop,
     icMail,
+    icPhotoLibrary,
     icPointShopChar1,
     icPointShopChar2,
     icPointShopChar3,

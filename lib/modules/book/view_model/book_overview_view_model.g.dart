@@ -7,7 +7,7 @@ part of 'book_overview_view_model.dart';
 // **************************************************************************
 
 String _$bookOverviewViewModelHash() =>
-    r'294c8e87f43786a98d54ea9b4a35588c6b59c6f4';
+    r'acb9ddcb074540a63902ff1a2985f7474fb7461c';
 
 /// Copied from Dart SDK
 class _SystemHash {

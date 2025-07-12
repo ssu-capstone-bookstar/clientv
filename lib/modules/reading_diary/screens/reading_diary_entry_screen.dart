@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
 
 class ReadingDiaryEntryScreen extends ConsumerStatefulWidget {
   const ReadingDiaryEntryScreen({
@@ -92,8 +96,7 @@ class _ReadingDiaryEntryScreenState
 
   Widget _buildBody(bool isKeyboardVisible) {
     final canSubmit = _textController.text.trim().isNotEmpty;
-    final isSaveButtonVisible =
-        !isKeyboardVisible && (_isEditing || canSubmit);
+    final isSaveButtonVisible = !isKeyboardVisible && (_isEditing || canSubmit);
 
     return SafeArea(
       child: Column(
@@ -211,14 +214,27 @@ class _ReadingDiaryEntryScreenState
         enabled: _textController.text.trim().isNotEmpty && !isLoading,
         onPressed: () async {
           final images = widget.imagePaths.map((path) => XFile(path)).toList();
-          final success = await ref
-              .read(createDiaryViewModelProvider.notifier)
-              .submitDiary(
-                progressId: widget.progressId,
-                images: images,
-                content: _textController.text,
-              );
+          final success =
+              await ref.read(createDiaryViewModelProvider.notifier).submitDiary(
+                    progressId: widget.progressId,
+                    images: images,
+                    content: _textController.text,
+                  );
           if (success && mounted) {
+            final authState = ref.read(authViewModelProvider);
+            final int? memberId = authState.when(
+              data: (data) => (data is AuthSuccess) ? data.memberId : null,
+              loading: () => null,
+              error: (e, st) => null,
+            );
+            final challengeId =
+                ref.read(currentChallengeViewModelProvider).challengeId;
+            if (memberId != null && challengeId != null) {
+              ref.invalidate(challengeDiariesViewModelProvider(
+                memberId: memberId,
+                challengeId: challengeId,
+              ));
+            }
             context.go('/reading-challenge');
           } else if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -243,4 +259,4 @@ class _ReadingDiaryEntryScreenState
       ],
     );
   }
-} 
+}

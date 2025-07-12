@@ -64,7 +64,7 @@ class CustomerSupportScreen extends StatelessWidget {
                       border: InputBorder.none,
                       filled: true,
                       fillColor: Colors.transparent,
-                      hintText: 'abc1234@gmail.com', // TODO: 메일 받을 줏 정보 편집
+                      hintText: 'bookstar816@gmail.com',
                       hintStyle: AppTexts.b7.copyWith(color: ColorName.w1),
                       isCollapsed: true,
                       contentPadding: EdgeInsets.zero,

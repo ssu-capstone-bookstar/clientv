@@ -7,6 +7,9 @@ import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:book/gen/assets.gen.dart';
+import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
 
 class OngoingChallengeListScreen extends ConsumerWidget {
   const OngoingChallengeListScreen({super.key});
@@ -39,7 +42,7 @@ class OngoingChallengeListScreen extends ConsumerWidget {
               ),
             ),
             if (isSelectionMode)
-              _buildBottomDeleteButton(context, state, viewModel),
+              _buildBottomDeleteButton(context, state, viewModel, ref),
           ],
         ),
       ),
@@ -116,15 +119,18 @@ class OngoingChallengeListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomDeleteButton(BuildContext context,
-      OngoingChallengeScreenState state, OngoingChallengeViewModel viewModel) {
+  Widget _buildBottomDeleteButton(
+      BuildContext context,
+      OngoingChallengeScreenState state,
+      OngoingChallengeViewModel viewModel,
+      WidgetRef ref) {
     final bool isEnabled = state.selectedChallengeIds.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 34),
       child: GestureDetector(
         onTap: isEnabled
             ? () => _showDeleteConfirmDialog(
-                context, viewModel, state.selectedChallengeIds.length)
+                context, viewModel, state.selectedChallengeIds.length, ref)
             : null,
         child: Container(
           height: 56,
@@ -144,8 +150,8 @@ class OngoingChallengeListScreen extends ConsumerWidget {
     );
   }
 
-  void _showDeleteConfirmDialog(
-      BuildContext context, OngoingChallengeViewModel viewModel, int count) {
+  void _showDeleteConfirmDialog(BuildContext context,
+      OngoingChallengeViewModel viewModel, int count, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (_) {
@@ -157,6 +163,11 @@ class OngoingChallengeListScreen extends ConsumerWidget {
           onConfirm: () async {
             Navigator.of(context).pop(); // Close the first dialog
             await viewModel.deleteSelectedChallenges();
+            // BookLogScreen의 챌린지 목록 Provider invalidate
+            final user = ref.read(authViewModelProvider).value;
+            final memberId = (user is AuthSuccess) ? user.memberId : 0;
+            ref.invalidate(
+                getChallengesByMemberViewModelProvider(memberId: memberId));
             if (context.mounted) {
               _showDeleteSuccessDialog(context);
             }

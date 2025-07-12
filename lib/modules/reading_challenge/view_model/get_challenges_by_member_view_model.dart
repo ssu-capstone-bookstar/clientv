@@ -2,6 +2,9 @@ import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part 'get_challenges_by_member_view_model.freezed.dart';
 part 'get_challenges_by_member_view_model.g.dart';
@@ -57,7 +60,7 @@ class GetChallengesByMemberViewModel extends _$GetChallengesByMemberViewModel {
     state = state.copyWith(selectedChallengeIds: newSelection);
   }
 
-  Future<void> deleteSelectedChallenges() async {
+  Future<void> deleteSelectedChallenges(WidgetRef ref) async {
     final repo = ref.read(readingChallengeRepositoryProvider);
     final idsToDelete = List<int>.from(state.selectedChallengeIds);
 
@@ -71,6 +74,8 @@ class GetChallengesByMemberViewModel extends _$GetChallengesByMemberViewModel {
       selectedChallengeIds: {},
       isSelectionMode: false,
     );
-    ref.invalidateSelf();
+    final user = ref.read(authViewModelProvider).value;
+    final memberId = (user is AuthSuccess) ? user.memberId : 0;
+    ref.invalidate(getChallengesByMemberViewModelProvider(memberId: memberId));
   }
 }

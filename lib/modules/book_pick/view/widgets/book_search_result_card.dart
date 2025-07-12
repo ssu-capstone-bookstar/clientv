@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/components/custom_dialog.dart';
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
