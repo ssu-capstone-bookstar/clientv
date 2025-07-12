@@ -89,13 +89,13 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
           spacing: 15,
           children: [
             Text(
-              isFromChallenge ? '새롭게 읽은 책을 찾아보세요' : '책 찾기',
+              isFromChallenge ? '새롭게 읽을 책을 찾아보세요' : '책 찾기',
               style: AppTexts.h4,
             ),
             SearchTextField(
               controller: _textController,
               hintText:
-                  isFromChallenge ? '내가 읽은 책을 검색해 보세요' : '읽고 싶은 책을 검색해 보세요',
+                  isFromChallenge ? '내가 읽을 책을 검색해 보세요' : '읽고 싶은 책을 검색해 보세요',
               hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
               suffixIcon: _textController.text.isNotEmpty
                   ? Assets.images.icSearchColored3x.image(scale: 3)
