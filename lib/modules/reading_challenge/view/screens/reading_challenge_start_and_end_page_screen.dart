@@ -161,7 +161,6 @@ class _ReadingChallengeStartAndEndPageScreenState
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(
               filled: false,
-              hintText: '페이지',
               hintStyle: AppTexts.h3.copyWith(color: ColorName.g6),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: ColorName.g6),
@@ -169,6 +168,7 @@ class _ReadingChallengeStartAndEndPageScreenState
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: ColorName.p1),
               ),
+              suffixText: '페이지',
             ),
           ),
         ),
