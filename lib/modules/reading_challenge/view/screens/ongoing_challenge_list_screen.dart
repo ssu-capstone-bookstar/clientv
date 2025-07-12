@@ -1,3 +1,4 @@
+import 'package:book/common/components/cta_button_l1.dart';
 import 'package:book/common/components/cta_button_l2.dart';
 import 'package:book/common/components/custom_dialog.dart';
 import 'package:book/common/theme/app_style.dart';
@@ -41,6 +42,7 @@ class OngoingChallengeListScreen extends ConsumerWidget {
             ),
             if (isSelectionMode)
               _buildBottomDeleteButton(context, state, viewModel),
+              const SizedBox(height: 34),
           ],
         ),
       ),
@@ -96,6 +98,9 @@ class OngoingChallengeListScreen extends ConsumerWidget {
                   isSelectionMode: screenState.isSelectionMode,
                   isSelected: screenState.selectedChallengeIds
                       .contains(challenge.challengeId),
+                  onToggle: () {
+                    viewModel.toggleChallengeSelection(challenge.challengeId);
+                  },
                 ),
               ),
             );
@@ -125,26 +130,13 @@ class OngoingChallengeListScreen extends ConsumerWidget {
     final bool isEnabled = state.selectedChallengeIds.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 34),
-      child: GestureDetector(
-        onTap: isEnabled
+      child: CtaButtonL1(
+        text: '챌린지 중단하기',
+        onPressed: isEnabled
             ? () => _showDeleteConfirmDialog(
                 context, viewModel, state.selectedChallengeIds.length)
             : null,
-        child: Container(
-          height: 56,
-          decoration: BoxDecoration(
-            color: isEnabled ? ColorName.g6 : ColorName.g7,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            '챌린지 중단하기',
-            style: AppTexts.b7.copyWith(
-              color: isEnabled ? ColorName.p1 : ColorName.g4,
-            ),
-          ),
-        ),
-      ),
+      )
     );
   }
 
