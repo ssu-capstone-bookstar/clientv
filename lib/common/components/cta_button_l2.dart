@@ -6,12 +6,23 @@ class CtaButtonL2 extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool enabled;
-
+  final double width;
+  final double height;
+  final TextStyle textStyle;
+  final Color defaultTextColor;
+  final double borderRadius;
+  final Color defaultBackgroundColor;
   const CtaButtonL2({
     Key? key,
     required this.text,
     this.onPressed,
     this.enabled = true,
+    this.width = 341,
+    this.height = 56,
+    this.textStyle = AppTexts.b7,
+    this.defaultTextColor = ColorName.g2,
+    this.borderRadius = 10,
+    this.defaultBackgroundColor = ColorName.g6,
   }) : super(key: key);
 
   @override
@@ -43,9 +54,10 @@ class _CtaButtonL2State extends State<CtaButtonL2> {
       borderColor = ColorName.g6;
       textColor = ColorName.g3;
     } else {
-      backgroundColor = ColorName.g6;
+      backgroundColor = widget.defaultBackgroundColor;
       borderColor = const Color(0xFF4D4F55);
-      textColor = ColorName.g2;
+      // textColor = ColorName.g2;
+      textColor = widget.defaultTextColor;
     }
 
     return MouseRegion(
@@ -67,17 +79,17 @@ class _CtaButtonL2State extends State<CtaButtonL2> {
         onTap: isDisabled ? null : widget.onPressed,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
-          width: 341,
-          height: 56,
+          width: widget.width,
+          height: widget.height,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
             border: Border.all(color: borderColor, width: 1),
           ),
           alignment: Alignment.center,
           child: Text(
             widget.text,
-            style: AppTexts.b7.copyWith(color: textColor),
+            style: widget.textStyle.copyWith(color: textColor),
           ),
         ),
       ),
