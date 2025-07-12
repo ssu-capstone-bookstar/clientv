@@ -1,3 +1,4 @@
+import 'package:book/common/components/cta_button_l2.dart';
 import 'package:book/common/components/custom_dialog.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
@@ -55,12 +56,15 @@ class OngoingChallengeListScreen extends ConsumerWidget {
         const SizedBox(height: 8),
         Align(
           alignment: Alignment.centerRight,
-          child: TextButton(
+          child: CtaButtonL2(
+            text: isSelectionMode ? '선택 취소' : '챌린지 중단하기',
             onPressed: viewModel.toggleSelectionMode,
-            child: Text(
-              isSelectionMode ? '선택 취소' : '챌린지 중단하기',
-              style: AppTexts.b6.copyWith(color: ColorName.g3),
-            ),
+            width: 76,
+            height: 27,
+            textStyle: AppTexts.b12,
+            defaultTextColor: ColorName.p1,
+            borderRadius: 5,
+            defaultBackgroundColor: ColorName.g7,
           ),
         ),
       ],
