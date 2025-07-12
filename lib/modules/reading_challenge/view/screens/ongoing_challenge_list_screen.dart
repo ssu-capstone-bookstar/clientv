@@ -1,5 +1,4 @@
 import 'package:book/common/components/custom_dialog.dart';
-import 'package:book/common/components/text_field/search_text_field.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
@@ -9,42 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:book/gen/assets.gen.dart';
 
-class OngoingChallengeListScreen extends ConsumerStatefulWidget {
+class OngoingChallengeListScreen extends ConsumerWidget {
   const OngoingChallengeListScreen({super.key});
 
   @override
-  ConsumerState<OngoingChallengeListScreen> createState() => _OngoingChallengeListScreenState();
-}
-
-class _OngoingChallengeListScreenState extends ConsumerState<OngoingChallengeListScreen> {
-  final TextEditingController _textController = TextEditingController();
-  String searchQuery = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _textController.addListener(() {
-      setState(() {
-        searchQuery = _textController.text;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(ongoingChallengeViewModelProvider);
     final viewModel = ref.read(ongoingChallengeViewModelProvider.notifier);
     final isSelectionMode = state.isSelectionMode;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('리딩 챌린지', style: AppTexts.b5),
+        title: const Text('리딩 챌린지', style: AppTexts.b5),
         leading: const BackButton(),
       ),
       body: Padding(
@@ -52,15 +27,12 @@ class _OngoingChallengeListScreenState extends ConsumerState<OngoingChallengeLis
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildTopSection(viewModel, isSelectionMode, _textController),
+            _buildTopSection(viewModel, isSelectionMode),
             const SizedBox(height: 16),
             Expanded(
               child: state.challenges.when(
-                data: (challenges) => _buildChallengeGrid(
-                  challenges.where((challenge) => challenge.book.title.contains(searchQuery)).toList(),
-                  state,
-                  viewModel,
-                ),
+                data: (challenges) =>
+                    _buildChallengeGrid(challenges, state, viewModel),
                 error: (error, stack) =>
                     const Center(child: Text('챌린지를 불러오는데 실패했습니다.')),
                 loading: () => const Center(child: CircularProgressIndicator()),
@@ -75,21 +47,11 @@ class _OngoingChallengeListScreenState extends ConsumerState<OngoingChallengeLis
   }
 
   Widget _buildTopSection(
-      OngoingChallengeViewModel viewModel, bool isSelectionMode, TextEditingController textController) {
+      OngoingChallengeViewModel viewModel, bool isSelectionMode) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('완독에 도전 중인 도서를 찾아보세요', style: AppTexts.h4),
-        const SizedBox(height: 8),
-        SearchTextField(
-          controller: textController,
-          hintText:
-              '읽던 책을 검색해 보세요',
-          hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
-          suffixIcon: textController.text.isNotEmpty
-              ? Assets.images.icSearchColored3x.image(scale: 3)
-              : Assets.images.icSearchUncolored3x.image(scale: 3),
-        ),
         const SizedBox(height: 8),
         Align(
           alignment: Alignment.centerRight,
@@ -189,7 +151,7 @@ class _OngoingChallengeListScreenState extends ConsumerState<OngoingChallengeLis
       builder: (_) {
         return CustomDialog(
           title: '챌린지 중단',
-          content: '선택한  ${count}개의 챌린지를 중단하시겠어요?',
+          content: '선택한 ${count}개의 챌린지를 중단하시겠어요?',
           icon: Assets.icons.icReadingChallengeChar1.svg(),
           onCancel: () => Navigator.of(context).pop(),
           onConfirm: () async {

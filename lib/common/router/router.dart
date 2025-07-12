@@ -251,7 +251,7 @@ GoRouter router(Ref ref) {
                     path: 'continue-list',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      return OngoingChallengeListScreen();
+                      return const OngoingChallengeListScreen();
                     },
                   ),
                   GoRoute(
