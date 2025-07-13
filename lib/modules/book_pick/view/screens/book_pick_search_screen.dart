@@ -14,8 +14,8 @@ import '../widgets/book_cover_grid_view.dart';
 import '../widgets/book_history_list_view.dart';
 import '../widgets/book_search_result_card.dart';
 
-class SearchDetailScreen extends ConsumerStatefulWidget {
-  const SearchDetailScreen({
+class BookPickSearchScreen extends ConsumerStatefulWidget {
+  const BookPickSearchScreen({
     super.key,
     this.from,
   });
@@ -23,10 +23,10 @@ class SearchDetailScreen extends ConsumerStatefulWidget {
   final String? from;
 
   @override
-  ConsumerState<SearchDetailScreen> createState() => _SearchDetailScreenState();
+  ConsumerState<BookPickSearchScreen> createState() => _BookPickSearchScreenState();
 }
 
-class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
+class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -137,13 +137,9 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
       listBuilder: (List<SearchHistoryResponse> histories) => histories,
       itemBuilder: (history) => ListTile(
         title: Text(history.queries),
-        trailing: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            ref
-                .read(searchHistoryViewModelProvider.notifier)
-                .removeHistory(history.queries);
-          },
+        trailing: GestureDetector(
+          child: Icon(Icons.clear),
+          onTap: () => ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries),
         ),
       ),
       onTap: (history) {
@@ -156,10 +152,10 @@ class _SearchDetailScreenState extends ConsumerState<SearchDetailScreen> {
 
   Widget _buildSearchResults() {
     final searchState = ref.watch(searchViewModelProvider);
+
     return BookCoverGridView<SearchState, SearchBookResponse>(
       asyncValue: searchState,
-      itemBuilder: (book) =>
-          BookSearchResultCard(book: book, from: widget.from),
+      itemBuilder: (book) => BookSearchResultCard(book: book, from: widget.from),
       listBuilder: (SearchState data) => data.books,
       hasNext: searchState.asData?.value.hasNext ?? false,
       scrollController: _scrollController,

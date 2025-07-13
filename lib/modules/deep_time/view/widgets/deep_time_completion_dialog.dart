@@ -1,11 +1,12 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/cta_button_l2.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../common/components/button/cta_button_l2.dart';
 
 class DeepTimeCompletionDialog extends ConsumerWidget {
   const DeepTimeCompletionDialog({super.key});

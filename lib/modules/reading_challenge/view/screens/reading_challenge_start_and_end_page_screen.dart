@@ -1,5 +1,5 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/custom_dialog.dart';
+import 'package:book/common/components/button/cta_button_l1.dart';
+import 'package:book/common/components/dialog/custom_dialog.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';

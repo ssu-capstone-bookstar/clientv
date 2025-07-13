@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../common/theme/style/app_colors.dart';
+
 typedef GridItemBuilder<TItem> = Widget Function(TItem item);
 typedef SliverDividerBuilder = Widget Function();
 typedef ListExtractor<T, TItem> = List<TItem> Function(T data);
@@ -19,7 +21,7 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
     this.dividerBuilder,
     this.scrollController,
     this.gridPadding = const EdgeInsets.only(top: 20),
-    this.itemPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    this.itemPadding = const EdgeInsets.symmetric(horizontal: 5),
     this.crossAxisSpacing = 16,
     this.mainAxisSpacing = 0,
     this.childAspectRatio = 0.65,
@@ -62,7 +64,7 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
                   padding: itemPadding,
                   sliver: SliverGrid(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                      (context, index) {
                         final itemIndex = row * crossAxisCount + index;
                         if (itemIndex >= items.length) return const SizedBox();
                         return itemBuilder(items[itemIndex]);
@@ -80,11 +82,12 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
                 if (row < rowCount - 1 || hasNext)
                   SliverToBoxAdapter(
                     child: dividerBuilder?.call() ??
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 4.0, bottom: 30),
                           child: Divider(
                             thickness: 7,
-                            color: Colors.grey,
+                            color: AppColors.DIVIDER_COLOR,
+                            radius: BorderRadius.circular(5.0),
                           ),
                         ),
                   ),

@@ -3,32 +3,27 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../repository/search_repository.dart';
-import '../model/search_state.dart';
+import '../state/book_pick_state.dart';
 
-part 'search_view_model.g.dart';
+part 'book_pick_view_model.g.dart';
 
 @riverpod
-class SearchViewModel extends _$SearchViewModel {
+class BookPickViewModel extends _$BookPickViewModel {
   late final SearchRepository _repository;
   bool _isFetchingPage = false;
   bool _isBusy = false;
 
   @override
-  FutureOr<SearchState> build() async {
+  FutureOr<BookPickState> build() async {
     _repository = ref.watch(searchRepositoryProvider);
 
     final response = await _repository.searchBooks('베르');
 
-    state = AsyncValue.data(
-      SearchState(
-        books: response.data.data,
-        start: 2,
-        hasNext: response.data.hasNext,
-      ),
+    return BookPickState(
+      books: response.data.data,
+      start: 2,
+      hasNext: response.data.hasNext,
     );
-
-
-    return const SearchState();
   }
 
   Future<void> searchBooks(String query) async {
@@ -37,7 +32,7 @@ class SearchViewModel extends _$SearchViewModel {
     }
 
     if (query.isEmpty) {
-      state = const AsyncValue.data(SearchState());
+      state = const AsyncValue.data(BookPickState());
       return;
     }
 
@@ -46,7 +41,7 @@ class SearchViewModel extends _$SearchViewModel {
     try {
       final response = await _repository.searchBooks(query);
       state = AsyncValue.data(
-        SearchState(
+        BookPickState(
           books: response.data.data,
           hasNext: response.data.hasNext,
           query: query,

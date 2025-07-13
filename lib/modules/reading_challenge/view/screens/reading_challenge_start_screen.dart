@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/components/cta_button_l1.dart';
+import '../../../../common/components/button/cta_button_l1.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../book_pick/model/search_book_response.dart';
