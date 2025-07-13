@@ -121,34 +121,17 @@ class _ReadingDiaryEntryScreenState
   Widget _buildImageSection() {
     return AspectRatio(
       aspectRatio: 1,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          PageView.builder(
-            itemCount: widget.imagePaths.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(16),
-                child: Image.file(
-                  File(widget.imagePaths[index]),
-                  fit: BoxFit.contain,
-                ),
-              );
-            },
-          ),
-          Container(
-            color: Colors.black.withOpacity(0.4),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildToolButton(Icons.edit_outlined, '그리기'),
-                _buildToolButton(Icons.crop_rotate_outlined, '사진 편집'),
-                _buildToolButton(Icons.emoji_emotions_outlined, '스티커'),
-              ],
+      child: PageView.builder(
+        itemCount: widget.imagePaths.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Image.file(
+              File(widget.imagePaths[index]),
+              fit: BoxFit.contain,
             ),
-          )
-        ],
+          );
+        },
       ),
     );
   }
@@ -174,7 +157,7 @@ class _ReadingDiaryEntryScreenState
               const SizedBox(width: 8),
               Text(
                 '느낀 생각을 마음껏 표현해 보세요',
-                style: AppTexts.b1.copyWith(color: ColorName.g4),
+                style: AppTexts.b10.copyWith(color: ColorName.g4),
               ),
             ],
           ),
@@ -191,10 +174,18 @@ class _ReadingDiaryEntryScreenState
         child: TextField(
           controller: _textController,
           focusNode: _focusNode,
-          style: AppTexts.b1.copyWith(color: ColorName.w1),
-          decoration: const InputDecoration(
-            hintText: '느낀 생각을 마음껏 표현해 보세요',
-            hintStyle: AppTexts.b7,
+          style: AppTexts.b10.copyWith(color: ColorName.w1),
+          decoration: InputDecoration(
+            hint:  Row(
+            children: [
+              const Icon(Icons.edit, color: ColorName.g4, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                '느낀 생각을 마음껏 표현해 보세요',
+                style: AppTexts.b10.copyWith(color: ColorName.g4),
+              ),
+            ],
+          ),
             border: InputBorder.none,
           ),
           maxLines: null,
@@ -247,17 +238,17 @@ class _ReadingDiaryEntryScreenState
     );
   }
 
-  Widget _buildToolButton(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: Colors.white, size: 28),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: AppTexts.b3.copyWith(color: Colors.white),
-        ),
-      ],
-    );
-  }
+  // Widget _buildToolButton(IconData icon, String label) {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       Icon(icon, color: Colors.white, size: 28),
+  //       const SizedBox(height: 4),
+  //       Text(
+  //         label,
+  //         style: AppTexts.b3.copyWith(color: Colors.white),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
