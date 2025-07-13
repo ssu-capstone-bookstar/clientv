@@ -6,12 +6,16 @@ import '../../../../gen/colors.gen.dart';
 class BookLabeledText extends StatelessWidget {
   final String label;
   final String value;
+  final TextStyle? labelStyle;
+  final TextStyle? valueStyle;
   final double gap;
 
   const BookLabeledText({
     super.key,
     required this.label,
     required this.value,
+    this.labelStyle,
+    this.valueStyle,
     this.gap = 6.0,
   });
 
@@ -20,9 +24,9 @@ class BookLabeledText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: label, style: AppTexts.b11.copyWith(color: ColorName.g3)),
+          TextSpan(text: label, style: labelStyle ?? AppTexts.b11.copyWith(color: ColorName.g3)),
           WidgetSpan(child: SizedBox(width: gap)),
-          TextSpan(text: value, style: AppTexts.b11.copyWith(color: ColorName.g2)),
+          TextSpan(text: value, style: valueStyle ?? AppTexts.b11.copyWith(color: ColorName.g2)),
         ],
       ),
       maxLines: 1,

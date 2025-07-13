@@ -165,6 +165,14 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeStickerCloud =>
       const SvgGenImage('assets/icons/ic_deeptype_sticker_cloud.svg');
 
+  /// File path: assets/icons/ic_heart_colored.svg
+  SvgGenImage get icHeartColored =>
+      const SvgGenImage('assets/icons/ic_heart_colored.svg');
+
+  /// File path: assets/icons/ic_heart_uncolored.svg
+  SvgGenImage get icHeartUncolored =>
+      const SvgGenImage('assets/icons/ic_heart_uncolored.svg');
+
   /// File path: assets/icons/ic_login_char_front.svg
   SvgGenImage get icLoginCharFront =>
       const SvgGenImage('assets/icons/ic_login_char_front.svg');
@@ -195,6 +203,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_rating_star.svg
   SvgGenImage get icRatingStar =>
       const SvgGenImage('assets/icons/ic_rating_star.svg');
+
+  /// File path: assets/icons/ic_rating_star_colored.svg
+  SvgGenImage get icRatingStarColored =>
+      const SvgGenImage('assets/icons/ic_rating_star_colored.svg');
+
+  /// File path: assets/icons/ic_rating_star_uncolored.svg
+  SvgGenImage get icRatingStarUncolored =>
+      const SvgGenImage('assets/icons/ic_rating_star_uncolored.svg');
 
   /// File path: assets/icons/ic_reading_challenge_char1.svg
   SvgGenImage get icReadingChallengeChar1 =>
@@ -254,6 +270,8 @@ class $AssetsIconsGen {
     icDeeptypeStickerBook,
     icDeeptypeStickerClock,
     icDeeptypeStickerCloud,
+    icHeartColored,
+    icHeartUncolored,
     icLoginCharFront,
     icLoginCharTop,
     icMail,
@@ -262,6 +280,8 @@ class $AssetsIconsGen {
     icPointShopChar2,
     icPointShopChar3,
     icRatingStar,
+    icRatingStarColored,
+    icRatingStarUncolored,
     icReadingChallengeChar1,
     icReadingChallengeChar2,
     icReadingChallengeChar3,

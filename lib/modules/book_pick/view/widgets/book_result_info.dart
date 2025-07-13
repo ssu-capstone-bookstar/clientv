@@ -9,49 +9,56 @@ import 'book_cover_image.dart';
 import 'book_labeled_text.dart';
 
 class BookResultInfo extends StatelessWidget {
+  final SearchBookResponse book;
+  final VoidCallback? onTap;
+
   const BookResultInfo({
     super.key,
     required this.book,
+    this.onTap,
   });
-
-  final SearchBookResponse book;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0),
-      child: Center(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              width: 250,
-              height: 180,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 16.0,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: BookCoverImage(imageUrl: book.bookCover, tag: '${book.bookId}')),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 12.0,
-                      children: [
-                        _buildInfoSection(),
-                        _buildBookStatsSection(),
-                      ],
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        onDoubleTap: onTap,
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                width: 250,
+                height: 180,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 16.0,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: BookCoverImage(imageUrl: book.bookCover, tag: '${book.bookId}')),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 12.0,
+                        children: [
+                          _buildInfoSection(),
+                          _buildBookStatsSection(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            _buildDividerSection(),
-          ],
+              _buildDividerSection(),
+            ],
+          ),
         ),
       ),
     );

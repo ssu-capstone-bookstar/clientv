@@ -1,10 +1,9 @@
-import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/components/dialog/custom_dialog.dart';
 import '../../../../common/utils/overlay_utils.dart';
+import '../../../reading_challenge/view_model/current_challenge_view_model.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
 import 'book_cover_detail_info.dart';

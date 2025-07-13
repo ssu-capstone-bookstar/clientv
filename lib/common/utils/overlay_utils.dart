@@ -25,7 +25,7 @@ class OverlayUtils {
     );
   }
 
-  static Widget fullBlackOverlay({Color overlayColor = AppColors.OVERLAY_COLOR, int alpha = 230}) { // 230 ~= 90%
+  static Widget fullBlackOverlay({Color overlayColor = AppColors.OVERLAY_COLOR, int alpha = 180}) { // 180 ~= 70%
     return Container(
       color: overlayColor.withAlpha(alpha),
     );

@@ -1,3 +1,4 @@
+import 'package:book/modules/book_pick/view/screens/book_pick_result_detail_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -213,6 +214,15 @@ GoRouter router(Ref ref) {
                           final book = state.extra as SearchBookResponse;
 
                           return BookPickResultScreen(book: book);
+                        },
+                      ),
+                      GoRoute(
+                        path: 'result/detail/:bookId',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) {
+                          final book = state.extra as SearchBookResponse;
+
+                          return BookPickResultDetailScreen(book: book);
                         },
                       ),
                     ],
