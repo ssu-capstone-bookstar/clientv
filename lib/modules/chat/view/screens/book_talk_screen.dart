@@ -1,14 +1,90 @@
+import 'package:book/common/theme/style/app_paddings.dart';
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+
+class ChatCategory {
+  final int roomId;
+  final String name;
+
+  const ChatCategory({
+    required this.roomId,
+    required this.name,
+  });
+}
 
 class BookTalkScreen extends StatelessWidget {
   const BookTalkScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        '책톡 화면',
-        style: TextStyle(fontSize: 24),
+    return Column(
+      spacing: 15,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildCategoryChatRooms(),
+        _buildJoinedChatRooms(),
+      ],
+    );
+  }
+
+  Widget _buildCategoryChatRooms() {
+    List<ChatCategory> categories = [
+     ChatCategory(roomId: 2, name: "문학"),
+     ChatCategory(roomId: 3, name: "인문사회"),
+     ChatCategory(roomId: 4, name: "과학기술"),
+     ChatCategory(roomId: 5, name: "예술취미"),
+     ChatCategory(roomId: 6, name: "아동청소년"),
+     ChatCategory(roomId: 7, name: "베스트셀러"),
+    ];
+
+    return Padding(
+      padding: AppPaddings.SORTABLE_HEADER_PADDING,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('카테고리', style: AppTexts.b3),
+          SizedBox(
+            height: 12,
+          ),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: categories
+                .map((category) => GestureDetector(
+                  onTap: () {
+                    // TODO: 채팅방로 참가
+                  },
+                  child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: ColorName.g7,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(category.name, style: AppTexts.b8.copyWith(color: ColorName.w3)),
+                      ),
+                ))
+                .toList(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildJoinedChatRooms() {
+    return Padding(
+      padding: AppPaddings.SORTABLE_HEADER_PADDING,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('참여한 채팅방', style: AppTexts.b3),
+          Text('참여 중인 채팅방을 확인해 보세요',
+              style: AppTexts.b10.copyWith(color: ColorName.g2)),
+          SizedBox(
+            height: 12,
+          )
+        ],
       ),
     );
   }
