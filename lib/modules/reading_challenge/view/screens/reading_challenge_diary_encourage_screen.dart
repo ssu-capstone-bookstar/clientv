@@ -120,9 +120,9 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
         CtaButtonL1(
           text: '작성하기',
           onPressed: () {
-            final progressId =
-                ref.read(currentChallengeViewModelProvider).progressId;
-            if (progressId == null) return;
+            final challengeId =
+                ref.read(currentChallengeViewModelProvider).challengeId;
+            if (challengeId == null) return;
             context.push('/reading-diary/$progressId');
           },
         ),
