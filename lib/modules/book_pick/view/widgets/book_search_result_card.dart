@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/components/custom_dialog.dart';
+import '../../../../common/components/dialog/custom_dialog.dart';
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
@@ -42,22 +42,16 @@ class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
 
       if (challengeExists) {
         // 챌린지가 존재하면 커스텀 토스트 표시
-        print('#1');
-
         if (mounted) {
           OverlayUtils.showCustomToast(context, '이미 진행중인 챌린지입니다.');
         }
       } else {
-        print('#2');
-
         // 챌린지가 존재하지 않으면 다음 화면으로 이동
         if (mounted) {
           context.push('/reading-challenge/total-page', extra: widget.book);
         }
       }
     } else {
-      print('#3');
-
       // context.push('/book-pick/search/book-overview/${widget.book.bookId}');
       context.push('/book-pick/search/result/${widget.book.bookId}', extra: widget.book);
     }

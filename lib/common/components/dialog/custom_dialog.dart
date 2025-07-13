@@ -1,8 +1,9 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/cta_button_l2.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+
+import '../../../gen/colors.gen.dart';
+import '../../theme/app_style.dart';
+import '../button/cta_button_l1.dart';
+import '../button/cta_button_l2.dart';
 
 class CustomDialog extends StatelessWidget {
   const CustomDialog({

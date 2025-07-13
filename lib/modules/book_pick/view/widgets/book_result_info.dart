@@ -18,38 +18,41 @@ class BookResultInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            width: 250,
-            height: 180,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 16.0,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: BookCoverImage(imageUrl: book.bookCover, tag: '${book.bookId}')),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 12.0,
-                    children: [
-                      _buildInfoSection(),
-                      _buildBookStatsSection(),
-                    ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Center(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              width: 250,
+              height: 180,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 16.0,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: BookCoverImage(imageUrl: book.bookCover, tag: '${book.bookId}')),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 12.0,
+                      children: [
+                        _buildInfoSection(),
+                        _buildBookStatsSection(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          _buildDividerSection(),
-        ],
+            _buildDividerSection(),
+          ],
+        ),
       ),
     );
   }
@@ -58,7 +61,11 @@ class BookResultInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(book.title, style: AppTexts.b3),
+        Text(
+          book.title,
+          style: AppTexts.b3.copyWith(overflow: TextOverflow.ellipsis),
+          maxLines: 2,
+        ),
         const SizedBox(height: 12.0),
         BookLabeledText(label: '작가', value: book.author),
         BookLabeledText(label: '출판사', value: book.publisher),

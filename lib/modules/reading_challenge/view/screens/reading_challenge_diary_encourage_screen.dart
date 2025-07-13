@@ -1,12 +1,13 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/cta_button_l2.dart';
-import 'package:book/common/components/custom_dialog.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../common/components/button/cta_button_l2.dart';
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../common/components/dialog/custom_dialog.dart';
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../../gen/colors.gen.dart';
+import '../widgets/step_progress_indicator.dart';
 
 class ReadingChallengeDiaryEncourageScreen extends StatelessWidget {
   const ReadingChallengeDiaryEncourageScreen({

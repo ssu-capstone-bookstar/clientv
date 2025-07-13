@@ -1,18 +1,17 @@
-import 'package:book/modules/book_log/view/widgets/profile_speech_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/theme/style/app_sizes.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../view_model/book_log_view_model.dart';
 import '../../model/book_log_models.dart';
-import '../../widgets/speech_bubble_overlay.dart';
 import '../widgets/book_log_header_section.dart';
 import '../widgets/book_log_mid_section.dart';
 import '../widgets/book_log_low_section.dart';
+import '../widgets/profile_speech_bubble.dart';
+
 // TODO: 실제 데이터 연동, 상태관리 연동 등 필요한 부분에 주석 추가
 
 class BookLogScreen extends ConsumerStatefulWidget {

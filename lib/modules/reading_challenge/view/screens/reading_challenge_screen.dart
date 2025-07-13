@@ -1,4 +1,4 @@
-import 'package:book/common/components/cta_button_l1.dart';
+import 'package:book/common/components/button/cta_button_l1.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_option_card.dart';
 import 'package:book/modules/reading_challenge/view_model/reading_challenge_view_model.dart';

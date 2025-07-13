@@ -1,15 +1,16 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/cta_button_l2.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/book_pick/model/search_book_response.dart';
-import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
-import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
-import 'package:book/modules/reading_challenge/view_model/reading_challenge_rating_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../common/components/button/cta_button_l2.dart';
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../book_pick/model/search_book_response.dart';
+import '../../view_model/reading_challenge_rating_view_model.dart';
+import '../widgets/challenge_book_info_widget.dart';
+import '../widgets/step_progress_indicator.dart';
 
 class ReadingChallengeRatingScreen extends ConsumerWidget {
   const ReadingChallengeRatingScreen({

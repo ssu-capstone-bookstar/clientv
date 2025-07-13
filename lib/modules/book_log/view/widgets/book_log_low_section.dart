@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:book/common/components/image_grid.dart';
-import '../../model/book_log_models.dart';
+import 'package:book/common/components/grid/image_grid.dart';
 import 'package:book/gen/colors.gen.dart';
+
+import '../../model/book_log_models.dart';
 
 class BookLogLowSection extends StatelessWidget {
   // TODO: 실제 데이터 모델로 교체 필요. 현재는 dummyDiaries 사용

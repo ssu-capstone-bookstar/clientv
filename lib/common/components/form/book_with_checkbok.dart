@@ -15,9 +15,10 @@
 // padding: AppPaddings.SCREEN_BODY_PADDING.copyWith(left: 0, right: 0)
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/common/components/checkbox_1.dart';
+
+import '../../../gen/colors.gen.dart';
+import '../../theme/style/app_texts.dart';
+import 'checkbox_1.dart';
 
 class BookWithCheckbox extends StatelessWidget {
   final String thumbnailUrl;
