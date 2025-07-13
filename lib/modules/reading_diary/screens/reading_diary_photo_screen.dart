@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../common/theme/style/app_texts.dart';
-import '../../../common/components/photo_source_modal.dart';
+import '../../../common/components/modal/photo_source_modal.dart';
 import '../../../common/components/button/radio_button_1.dart';
 import '../../../gen/colors.gen.dart';
 
