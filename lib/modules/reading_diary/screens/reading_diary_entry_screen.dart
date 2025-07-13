@@ -1,17 +1,18 @@
 import 'dart:io';
 
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/reading_diary/view_model/create_diary_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/auth/view_model/auth_state.dart';
-import 'package:book/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
+
+import '../../../common/theme/style/app_texts.dart';
+import '../../../common/components/button/cta_button_l1.dart';
+import '../../../gen/colors.gen.dart';
+import '../../reading_challenge/view_model/current_challenge_view_model.dart';
+import '../../auth/view_model/auth_view_model.dart';
+import '../../auth/view_model/auth_state.dart';
+import '../view_model/create_diary_view_model.dart';
+import '../view_model/challenge_diaries_view_model.dart';
 
 class ReadingDiaryEntryScreen extends ConsumerStatefulWidget {
   const ReadingDiaryEntryScreen({

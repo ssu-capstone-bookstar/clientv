@@ -1,16 +1,17 @@
-import 'package:book/common/components/custom_dialog.dart';
-import 'package:book/common/components/text_field/search_text_field.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/reading_challenge/model/challenge_response.dart';
-import 'package:book/modules/reading_challenge/view/widgets/ongoing_challenge_card.dart';
-import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/auth/view_model/auth_state.dart';
+
+import '../../../../common/components/dialog/custom_dialog.dart';
+import '../../../../common/components/text_field/search_text_field.dart';
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../auth/view_model/auth_view_model.dart';
+import '../../../auth/view_model/auth_state.dart';
+import '../../model/challenge_response.dart';
+import '../../view_model/get_challenges_by_member_view_model.dart';
+import '../../view_model/ongoing_challenge_view_model.dart';
+import '../widgets/ongoing_challenge_card.dart';
 
 class OngoingChallengeListScreen extends ConsumerStatefulWidget {
   const OngoingChallengeListScreen({super.key});

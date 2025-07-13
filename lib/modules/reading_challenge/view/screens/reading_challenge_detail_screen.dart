@@ -1,17 +1,17 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/image_grid.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/book/view/widgets/book_info_widget.dart';
-import 'package:book/modules/book/view_model/book_overview_view_model.dart';
-import 'package:book/modules/book_pick/model/search_book_response.dart';
-import 'package:book/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../common/components/grid/image_grid.dart';
 import '../../../../common/theme/style/app_texts.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
+import '../../../book/view/widgets/book_info_widget.dart';
+import '../../../book/view_model/book_overview_view_model.dart';
+import '../../../book_pick/model/search_book_response.dart';
+import '../../../reading_diary/view_model/challenge_diaries_view_model.dart';
 
 class ReadingChallengeDetailScreen extends ConsumerWidget {
   const ReadingChallengeDetailScreen({

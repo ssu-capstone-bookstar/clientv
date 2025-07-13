@@ -1,24 +1,25 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:image_picker/image_picker.dart";
 
-import '../../model/update_profile_request.dart';
-import '../../repository/profile_repository.dart';
-import '../../view_model/profile_view_model.dart';
-import '../../../../common/components/cta_button_l1.dart';
+import '../../../../common/theme/style/app_texts.dart';
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../common/components/photo_source_modal.dart';
+import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book_log/view_model/book_log_view_model.dart';
-import 'package:book/modules/profile/view/widgets/profile_name_and_introduction_field.dart';
-import 'package:book/modules/profile/view/widgets/profile_image_section.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import '../../../../common/components/photo_source_modal.dart';
 import '../../../image/repository/image_repository.dart';
 import '../../../image/repository/s3_repository.dart';
 import '../../../image/model/presigned_url_request.dart';
+import '../../model/update_profile_request.dart';
+import '../../repository/profile_repository.dart';
+import '../../view_model/profile_view_model.dart';
+import '../widgets/profile_name_and_introduction_field.dart';
+import '../widgets/profile_image_section.dart';
 
 void invalidateMyProfileProviders(WidgetRef ref, int myMemberId) {
   ref.invalidate(profileProvider(null));

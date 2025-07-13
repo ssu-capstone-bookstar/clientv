@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../../common/theme/style/app_texts.dart';
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../gen/colors.gen.dart';
 
 class ReadingDiaryEntryScreen extends StatefulWidget {
   const ReadingDiaryEntryScreen({
