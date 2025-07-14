@@ -14,7 +14,7 @@ class ProfileSpeechBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayText = text.isEmpty ? '책을 읽자' : text;
+    final displayText = text.isEmpty ? '소개를 작성해 보세요' : text;
     return Padding(
       padding: EdgeInsets.only(left: 188), // 프로필 이미지 너비
       child: SizedBox(

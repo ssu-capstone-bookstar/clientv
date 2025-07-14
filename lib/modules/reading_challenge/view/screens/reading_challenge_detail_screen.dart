@@ -10,8 +10,11 @@ import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book/view/widgets/book_info_widget.dart';
 import '../../../book/view_model/book_overview_view_model.dart';
+import '../../../book/repository/book_repository.dart';
 import '../../../book_pick/model/search_book_response.dart';
 import '../../../reading_diary/view_model/challenge_diaries_view_model.dart';
+import '../../../../common/models/cursor_page_response.dart';
+import '../../../reading_diary/model/diary_thumbnail_response.dart';
 
 class ReadingChallengeDetailScreen extends ConsumerWidget {
   const ReadingChallengeDetailScreen({
@@ -54,8 +57,7 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
               children: [
                 if (book != null) BookInfoWidget(book: book),
                 _buildPointsSection(),
-                if (memberId != null)
-                  _buildDiarySection(ref, memberId, challengeId),
+                if (memberId != null) _buildDiarySection(ref, bookId),
               ],
             );
           },
@@ -133,42 +135,35 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDiarySection(WidgetRef ref, int memberId, int challengeId) {
-    final diariesState = ref.watch(challengeDiariesViewModelProvider(
-      memberId: memberId,
-      challengeId: challengeId,
-    ));
+  Widget _buildDiarySection(WidgetRef ref, int bookId) {
+    final diariesAsync = ref.watch(_relatedDiaryThumbnailsProvider(bookId));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('내가 쓴 독서 다이어리', style: AppTexts.b5),
+          Text('관련 독서 다이어리 썸네일', style: AppTexts.b5),
           const SizedBox(height: 8),
-          Text('해당 도서를 읽고 쓴 독서 다이어리를 확인해 보세요',
+          Text('이 책과 관련된 독서 다이어리 썸네일을 확인해 보세요',
               style: AppTexts.b8.copyWith(color: ColorName.g3)),
           const SizedBox(height: 16),
           SizedBox(
-            height: 300, // Or calculate dynamically
-            child: diariesState.when(
+            height: 300,
+            child: diariesAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) =>
                   Center(child: Text('독서 다이어리를 불러오는 중 오류가 발생했습니다: $error')),
-              data: (diariesPage) {
-                final imageUrls = diariesPage.data
-                    .map((e) => e.firstImage?.imageUrl ?? '')
+              data: (page) {
+                final imageUrls = (page.data ?? [])
+                    .map((e) => e.firstImage.imageUrl)
                     .where((url) => url.isNotEmpty)
                     .toList();
-
-                print('Diaries Page Data: ${diariesPage.data}');
-                print('ImageUrls: $imageUrls');
-
                 return ImageGrid(
                   imageUrls: imageUrls,
                   crossAxisCount: 3,
                   emptyWidget: const Center(
                     child: Text(
-                      '작성한 독서 다이어리가 없습니다.',
+                      '관련 독서 다이어리가 없습니다.',
                       style: TextStyle(color: ColorName.g3),
                     ),
                   ),
@@ -181,3 +176,11 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
     );
   }
 }
+
+final _relatedDiaryThumbnailsProvider =
+    FutureProvider.family<CursorPageResponse<DiaryThumbnail>, int>(
+        (ref, bookId) async {
+  final repo = ref.watch(bookRepositoryProvider);
+  final response = await repo.getRelatedLatestDiaryThumbnailsByBook(bookId);
+  return response.data;
+});
