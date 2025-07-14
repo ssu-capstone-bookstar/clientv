@@ -4,16 +4,9 @@ import 'package:book/modules/chat/model/chat_room_response.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ChatCategory {
-  final int roomId;
-  final String name;
 
-  const ChatCategory({
-    required this.roomId,
-    required this.name,
-  });
-}
 
 class BookTalkScreen extends ConsumerStatefulWidget {
   const BookTalkScreen({super.key});
@@ -49,7 +42,8 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCategoryChatRooms(),
+              _buildCategoryChatRooms(
+                  context, ref, data.myChatRooms.map((v) => v.id).toSet()),
               SizedBox(height: 60),
               _buildJoinedChatRooms(data.myChatRooms)
             ],
@@ -61,15 +55,8 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
     );
   }
 
-  Widget _buildCategoryChatRooms() {
-    List<ChatCategory> categories = [
-      ChatCategory(roomId: 2, name: "문학"),
-      ChatCategory(roomId: 3, name: "인문사회"),
-      ChatCategory(roomId: 4, name: "과학기술"),
-      ChatCategory(roomId: 5, name: "예술취미"),
-      ChatCategory(roomId: 6, name: "아동청소년"),
-      ChatCategory(roomId: 7, name: "베스트셀러"),
-    ];
+  Widget _buildCategoryChatRooms(
+      BuildContext ctx, WidgetRef ref, Set<int> myChatRooms) {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,10 +66,15 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
         Wrap(
           spacing: 12,
           runSpacing: 12,
-          children: categories
+          children: ChatViewModel.categories
               .map((category) => GestureDetector(
-                    onTap: () {
-                      // TODO: 채팅방로 참가
+                    onTap: () async {
+                      if (!myChatRooms.contains(category.roomId)) {
+                        await ref
+                            .read(chatViewModelProvider.notifier)
+                            .joinChatRoom(category.roomId);
+                      }
+                      ctx.push('/book-talk/chat-room/${category.roomId}');
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(

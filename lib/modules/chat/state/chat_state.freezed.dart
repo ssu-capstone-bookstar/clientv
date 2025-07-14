@@ -15,6 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatState {
   List<ChatRoomResponse> get myChatRooms;
+  CursorPageResponse<ChatMessageResponse> get chatHistory;
+  ChatParticipantResponse get chatParticipants;
 
   /// Create a copy of ChatState
   /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +31,23 @@ mixin _$ChatState {
         (other.runtimeType == runtimeType &&
             other is ChatState &&
             const DeepCollectionEquality()
-                .equals(other.myChatRooms, myChatRooms));
+                .equals(other.myChatRooms, myChatRooms) &&
+            (identical(other.chatHistory, chatHistory) ||
+                other.chatHistory == chatHistory) &&
+            (identical(other.chatParticipants, chatParticipants) ||
+                other.chatParticipants == chatParticipants));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(myChatRooms));
+      runtimeType,
+      const DeepCollectionEquality().hash(myChatRooms),
+      chatHistory,
+      chatParticipants);
 
   @override
   String toString() {
-    return 'ChatState(myChatRooms: $myChatRooms)';
+    return 'ChatState(myChatRooms: $myChatRooms, chatHistory: $chatHistory, chatParticipants: $chatParticipants)';
   }
 }
 
@@ -47,7 +56,13 @@ abstract mixin class $ChatStateCopyWith<$Res> {
   factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) _then) =
       _$ChatStateCopyWithImpl;
   @useResult
-  $Res call({List<ChatRoomResponse> myChatRooms});
+  $Res call(
+      {List<ChatRoomResponse> myChatRooms,
+      CursorPageResponse<ChatMessageResponse> chatHistory,
+      ChatParticipantResponse chatParticipants});
+
+  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory;
+  $ChatParticipantResponseCopyWith<$Res> get chatParticipants;
 }
 
 /// @nodoc
@@ -63,13 +78,45 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
   @override
   $Res call({
     Object? myChatRooms = null,
+    Object? chatHistory = null,
+    Object? chatParticipants = null,
   }) {
     return _then(_self.copyWith(
       myChatRooms: null == myChatRooms
           ? _self.myChatRooms
           : myChatRooms // ignore: cast_nullable_to_non_nullable
               as List<ChatRoomResponse>,
+      chatHistory: null == chatHistory
+          ? _self.chatHistory
+          : chatHistory // ignore: cast_nullable_to_non_nullable
+              as CursorPageResponse<ChatMessageResponse>,
+      chatParticipants: null == chatParticipants
+          ? _self.chatParticipants
+          : chatParticipants // ignore: cast_nullable_to_non_nullable
+              as ChatParticipantResponse,
     ));
+  }
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory {
+    return $CursorPageResponseCopyWith<ChatMessageResponse, $Res>(
+        _self.chatHistory, (value) {
+      return _then(_self.copyWith(chatHistory: value));
+    });
+  }
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatParticipantResponseCopyWith<$Res> get chatParticipants {
+    return $ChatParticipantResponseCopyWith<$Res>(_self.chatParticipants,
+        (value) {
+      return _then(_self.copyWith(chatParticipants: value));
+    });
   }
 }
 
@@ -166,13 +213,18 @@ extension ChatStatePatterns on ChatState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<ChatRoomResponse> myChatRooms)? $default, {
+    TResult Function(
+            List<ChatRoomResponse> myChatRooms,
+            CursorPageResponse<ChatMessageResponse> chatHistory,
+            ChatParticipantResponse chatParticipants)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ChatState() when $default != null:
-        return $default(_that.myChatRooms);
+        return $default(
+            _that.myChatRooms, _that.chatHistory, _that.chatParticipants);
       case _:
         return orElse();
     }
@@ -193,12 +245,17 @@ extension ChatStatePatterns on ChatState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<ChatRoomResponse> myChatRooms) $default,
+    TResult Function(
+            List<ChatRoomResponse> myChatRooms,
+            CursorPageResponse<ChatMessageResponse> chatHistory,
+            ChatParticipantResponse chatParticipants)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatState():
-        return $default(_that.myChatRooms);
+        return $default(
+            _that.myChatRooms, _that.chatHistory, _that.chatParticipants);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -218,12 +275,17 @@ extension ChatStatePatterns on ChatState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<ChatRoomResponse> myChatRooms)? $default,
+    TResult? Function(
+            List<ChatRoomResponse> myChatRooms,
+            CursorPageResponse<ChatMessageResponse> chatHistory,
+            ChatParticipantResponse chatParticipants)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatState() when $default != null:
-        return $default(_that.myChatRooms);
+        return $default(
+            _that.myChatRooms, _that.chatHistory, _that.chatParticipants);
       case _:
         return null;
     }
@@ -233,7 +295,10 @@ extension ChatStatePatterns on ChatState {
 /// @nodoc
 
 class _ChatState implements ChatState {
-  const _ChatState({final List<ChatRoomResponse> myChatRooms = const []})
+  const _ChatState(
+      {final List<ChatRoomResponse> myChatRooms = const [],
+      this.chatHistory = const CursorPageResponse(data: [], hasNext: false),
+      this.chatParticipants = const ChatParticipantResponse()})
       : _myChatRooms = myChatRooms;
 
   final List<ChatRoomResponse> _myChatRooms;
@@ -244,6 +309,13 @@ class _ChatState implements ChatState {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_myChatRooms);
   }
+
+  @override
+  @JsonKey()
+  final CursorPageResponse<ChatMessageResponse> chatHistory;
+  @override
+  @JsonKey()
+  final ChatParticipantResponse chatParticipants;
 
   /// Create a copy of ChatState
   /// with the given fields replaced by the non-null parameter values.
@@ -259,16 +331,23 @@ class _ChatState implements ChatState {
         (other.runtimeType == runtimeType &&
             other is _ChatState &&
             const DeepCollectionEquality()
-                .equals(other._myChatRooms, _myChatRooms));
+                .equals(other._myChatRooms, _myChatRooms) &&
+            (identical(other.chatHistory, chatHistory) ||
+                other.chatHistory == chatHistory) &&
+            (identical(other.chatParticipants, chatParticipants) ||
+                other.chatParticipants == chatParticipants));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_myChatRooms));
+      runtimeType,
+      const DeepCollectionEquality().hash(_myChatRooms),
+      chatHistory,
+      chatParticipants);
 
   @override
   String toString() {
-    return 'ChatState(myChatRooms: $myChatRooms)';
+    return 'ChatState(myChatRooms: $myChatRooms, chatHistory: $chatHistory, chatParticipants: $chatParticipants)';
   }
 }
 
@@ -280,7 +359,15 @@ abstract mixin class _$ChatStateCopyWith<$Res>
       __$ChatStateCopyWithImpl;
   @override
   @useResult
-  $Res call({List<ChatRoomResponse> myChatRooms});
+  $Res call(
+      {List<ChatRoomResponse> myChatRooms,
+      CursorPageResponse<ChatMessageResponse> chatHistory,
+      ChatParticipantResponse chatParticipants});
+
+  @override
+  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory;
+  @override
+  $ChatParticipantResponseCopyWith<$Res> get chatParticipants;
 }
 
 /// @nodoc
@@ -296,13 +383,45 @@ class __$ChatStateCopyWithImpl<$Res> implements _$ChatStateCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? myChatRooms = null,
+    Object? chatHistory = null,
+    Object? chatParticipants = null,
   }) {
     return _then(_ChatState(
       myChatRooms: null == myChatRooms
           ? _self._myChatRooms
           : myChatRooms // ignore: cast_nullable_to_non_nullable
               as List<ChatRoomResponse>,
+      chatHistory: null == chatHistory
+          ? _self.chatHistory
+          : chatHistory // ignore: cast_nullable_to_non_nullable
+              as CursorPageResponse<ChatMessageResponse>,
+      chatParticipants: null == chatParticipants
+          ? _self.chatParticipants
+          : chatParticipants // ignore: cast_nullable_to_non_nullable
+              as ChatParticipantResponse,
     ));
+  }
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory {
+    return $CursorPageResponseCopyWith<ChatMessageResponse, $Res>(
+        _self.chatHistory, (value) {
+      return _then(_self.copyWith(chatHistory: value));
+    });
+  }
+
+  /// Create a copy of ChatState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatParticipantResponseCopyWith<$Res> get chatParticipants {
+    return $ChatParticipantResponseCopyWith<$Res>(_self.chatParticipants,
+        (value) {
+      return _then(_self.copyWith(chatParticipants: value));
+    });
   }
 }
 
