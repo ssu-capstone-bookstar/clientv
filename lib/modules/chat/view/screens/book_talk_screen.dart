@@ -32,23 +32,24 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(chatViewModelProvider);
-
     return state.when(
-      data: (data) => CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverToBoxAdapter(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildCategoryChatRooms(
-                  context, ref, data.myChatRooms.map((v) => v.id).toSet()),
-              SizedBox(height: 60),
-              _buildJoinedChatRooms(context, data.myChatRooms),
-            ],
-          )),
-        ],
-      ),
+      data: (data) {
+        Set<int> myChatRooms = data.myChatRooms.map((v) => v.id).toSet();
+        return CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverToBoxAdapter(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCategoryChatRooms(context, ref, myChatRooms),
+                SizedBox(height: 60),
+                _buildJoinedChatRooms(context, data.myChatRooms),
+              ],
+            )),
+          ],
+        );
+      },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Center(child: Text('Error: $err')),
     );

@@ -45,9 +45,9 @@ class ChatViewModel extends _$ChatViewModel {
   /// 참여한 채팅방 목록 조회
   Future<void> getMyChatRooms() async {
     _repository = ref.watch(chatRepositoryProvider);
+    final prev = state.value ?? ChatState();
     state = AsyncValue.loading();
     final response = await _repository.getMyChatRooms();
-    final prev = state.value ?? ChatState();
     state = AsyncValue.data(prev.copyWith(myChatRooms: response.data));
   }
 
@@ -60,9 +60,10 @@ class ChatViewModel extends _$ChatViewModel {
 
   /// 채팅방 참여 직후, 필요 데이터 취득
   Future<void> fetchChatRoomState(int roomId) async {
+    final prev = state.value ?? ChatState();
+    state = AsyncValue.loading();
     final chatHistory = await getChatHistory(roomId);
     final chatParticipants = await getChatParticipants(roomId);
-    final prev = state.value ?? ChatState();
     state = AsyncValue.data(prev.copyWith(
         chatHistory: chatHistory, chatParticipants: chatParticipants));
   }
