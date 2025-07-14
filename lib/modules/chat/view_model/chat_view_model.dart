@@ -1,8 +1,11 @@
 import 'package:book/common/models/cursor_page_response.dart';
+import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/chat/model/chat_message_response.dart';
 import 'package:book/modules/chat/model/chat_participant_response.dart';
+import 'package:book/modules/chat/model/chat_room_response.dart';
 import 'package:book/modules/chat/repository/chat_repository.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_view_model.g.dart';
@@ -10,10 +13,14 @@ part 'chat_view_model.g.dart';
 class ChatCategory {
   final int roomId;
   final String name;
+  final SvgPicture icon;
+  final ChatRoomCategory category;
 
   const ChatCategory({
     required this.roomId,
     required this.name,
+    required this.icon,
+    required this.category,
   });
 }
 
@@ -21,13 +28,43 @@ class ChatCategory {
 class ChatViewModel extends _$ChatViewModel {
   late final ChatRepository _repository;
 
+  static final ChatCategory defaultCategory = ChatCategory(
+      roomId: 2,
+      name: "",
+      icon: Assets.icons.icCategoryLiterature.svg(height: 21),
+      category: ChatRoomCategory.literature);
+
   static final List<ChatCategory> categories = [
-    ChatCategory(roomId: 2, name: "문학"),
-    ChatCategory(roomId: 3, name: "인문사회"),
-    ChatCategory(roomId: 4, name: "과학기술"),
-    ChatCategory(roomId: 5, name: "예술취미"),
-    ChatCategory(roomId: 6, name: "아동청소년"),
-    ChatCategory(roomId: 7, name: "베스트셀러"),
+    ChatCategory(
+        roomId: 2,
+        name: "문학",
+        icon: Assets.icons.icCategoryLiterature.svg(height: 21),
+        category: ChatRoomCategory.literature),
+    ChatCategory(
+        roomId: 3,
+        name: "인문사회",
+        icon: Assets.icons.icCategorySocialSciences.svg(height: 21),
+        category: ChatRoomCategory.humanitiesSociety),
+    ChatCategory(
+        roomId: 4,
+        name: "과학기술",
+        icon: Assets.icons.icCategoryScienceTech.svg(height: 21),
+        category: ChatRoomCategory.scienceTechnology),
+    ChatCategory(
+        roomId: 5,
+        name: "예술취미",
+        icon: Assets.icons.icCategoryArtHobby.svg(height: 21),
+        category: ChatRoomCategory.artHobby),
+    ChatCategory(
+        roomId: 6,
+        name: "아동청소년",
+        icon: Assets.icons.icCategoryChildren.svg(height: 21),
+        category: ChatRoomCategory.childrenYouth),
+    ChatCategory(
+        roomId: 7,
+        name: "베스트셀러",
+        icon: Assets.icons.icCategoryBestseller.svg(height: 21),
+        category: ChatRoomCategory.bestseller),
   ];
 
   @override

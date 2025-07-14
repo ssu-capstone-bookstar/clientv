@@ -1,5 +1,6 @@
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/chat/model/chat_room_response.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
@@ -126,10 +127,9 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
   }
 
   Widget _buildJoinedChatRoomItem(ChatRoomResponse item) {
-    // ChatCategory category = ChatViewModel.categories
-    //     .firstWhere((v) => v.roomId == item.id,
-    //         orElse: () => ChatCategory(roomId: -1, name: ""))
-    //     ;
+    ChatCategory category = ChatViewModel.categories.firstWhere(
+        (v) => v.roomId == item.id,
+        orElse: () => ChatViewModel.defaultCategory);
 
     return Padding(
       padding: AppPaddings.JOINED_CHAT_ROOM_ITEM_PADDING,
@@ -140,8 +140,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              // TODO: update icon
-              // Assets.images.icSearchColored3x.image(height: 12),
+              category.icon,
               SizedBox(
                 width: 6,
               ),
@@ -151,8 +150,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              // TODO: update icon
-              // Assets.images.icSearchColored3x.image(height: 12),
+              Assets.icons.icPersonCount.svg(height: 12),
               SizedBox(
                 width: 2,
               ),

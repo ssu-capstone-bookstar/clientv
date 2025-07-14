@@ -41,7 +41,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     final state = ref.watch(chatViewModelProvider);
     String roomName = ChatViewModel.categories
         .firstWhere((item) => item.roomId == widget.roomId,
-            orElse: () => ChatCategory(roomId: -1, name: ""))
+            orElse: () => ChatViewModel.defaultCategory)
         .name;
 
     return Scaffold(

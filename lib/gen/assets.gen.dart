@@ -176,6 +176,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
 
+  /// File path: assets/icons/ic_person_count.svg
+  SvgGenImage get icPersonCount =>
+      const SvgGenImage('assets/icons/ic_person_count.svg');
+
   /// File path: assets/icons/ic_photo_library.svg
   SvgGenImage get icPhotoLibrary =>
       const SvgGenImage('assets/icons/ic_photo_library.svg');
@@ -257,6 +261,7 @@ class $AssetsIconsGen {
     icLoginCharFront,
     icLoginCharTop,
     icMail,
+    icPersonCount,
     icPhotoLibrary,
     icPointShopChar1,
     icPointShopChar2,
