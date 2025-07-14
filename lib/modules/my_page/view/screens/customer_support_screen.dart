@@ -4,6 +4,7 @@ import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 
 class CustomerSupportScreen extends StatelessWidget {
   const CustomerSupportScreen({super.key});
@@ -54,22 +55,23 @@ class CustomerSupportScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                      child: TextField(
-                    enabled: false,
-                    maxLines: 1,
-                    minLines: 1,
-                    style: AppTexts.b7.copyWith(color: ColorName.w1),
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      hintText: 'bookstar816@gmail.com',
-                      hintStyle: AppTexts.b7.copyWith(color: ColorName.w1),
-                      isCollapsed: true,
-                      contentPadding: EdgeInsets.zero,
+                    child: GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(
+                            const ClipboardData(text: 'bookstar816@gmail.com'));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('이메일이 복사되었습니다!')),
+                        );
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'bookstar816@gmail.com',
+                          style: AppTexts.b7.copyWith(color: ColorName.w1),
+                        ),
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
             ),

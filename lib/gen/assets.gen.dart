@@ -165,6 +165,9 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeStickerCloud =>
       const SvgGenImage('assets/icons/ic_deeptype_sticker_cloud.svg');
 
+  /// File path: assets/icons/ic_heart.svg
+  SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
+
   /// File path: assets/icons/ic_login_char_front.svg
   SvgGenImage get icLoginCharFront =>
       const SvgGenImage('assets/icons/ic_login_char_front.svg');
@@ -175,6 +178,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
+
+  /// File path: assets/icons/ic_message.svg
+  SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
 
   /// File path: assets/icons/ic_person_count.svg
   SvgGenImage get icPersonCount =>
@@ -224,6 +230,12 @@ class $AssetsIconsGen {
   SvgGenImage get icReadingComplete =>
       const SvgGenImage('assets/icons/ic_reading_complete.svg');
 
+  /// File path: assets/icons/ic_scrap.svg
+  SvgGenImage get icScrap => const SvgGenImage('assets/icons/ic_scrap.svg');
+
+  /// File path: assets/icons/ic_star.svg
+  SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
+
   /// File path: assets/icons/ic_withdrawal.svg
   SvgGenImage get icWithdrawal =>
       const SvgGenImage('assets/icons/ic_withdrawal.svg');
@@ -258,9 +270,11 @@ class $AssetsIconsGen {
     icDeeptypeStickerBook,
     icDeeptypeStickerClock,
     icDeeptypeStickerCloud,
+    icHeart,
     icLoginCharFront,
     icLoginCharTop,
     icMail,
+    icMessage,
     icPersonCount,
     icPhotoLibrary,
     icPointShopChar1,
@@ -273,6 +287,8 @@ class $AssetsIconsGen {
     icReadingChallengeCompleted,
     icReadingChallengeNotCompleted,
     icReadingComplete,
+    icScrap,
+    icStar,
     icWithdrawal,
     kakao,
   ];
