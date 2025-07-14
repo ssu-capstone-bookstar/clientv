@@ -1,4 +1,5 @@
 import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
+import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -180,6 +181,16 @@ GoRouter router(Ref ref) {
               GoRoute(
                 path: '/book-talk',
                 builder: (context, state) => const BookTalkScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'chat-room/:roomId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final roomId = int.parse(state.pathParameters['roomId']!);
+                      return BookTalkChatRoomScreen(roomId: roomId);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

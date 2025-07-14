@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../infra/network/dio_client.dart';
 import '../../../common/models/cursor_page_response.dart';
 import '../../../common/models/response_form.dart';
+import '../model/chat_participant_response.dart';
 import '../model/chat_room_response.dart';
 import '../model/ably_token_response.dart';
 import '../model/chat_message_request.dart';
@@ -32,6 +33,11 @@ abstract class ChatRepository {
     @Query('cursorId') int? cursorId,
     @Query('size') int? size,
   });
+
+  @GET('/api/v2/chat/rooms/{roomId}/participants')
+  Future<ResponseForm<ChatParticipantResponse>> getChatParticipants(
+    @Path('roomId') int roomId,
+  );
 
   @POST('/api/v2/chat/rooms/{roomId}/messages')
   Future<ResponseForm<ChatMessageResponse>> sendMessage(
