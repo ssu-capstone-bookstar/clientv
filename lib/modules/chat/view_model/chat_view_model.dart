@@ -42,22 +42,23 @@ class ChatViewModel extends _$ChatViewModel {
     return state.value ?? ChatState();
   }
 
-  /** 참여한 채팅방 목록 조회 */
+  /// 참여한 채팅방 목록 조회
   Future<void> getMyChatRooms() async {
     _repository = ref.watch(chatRepositoryProvider);
+    state = AsyncValue.loading();
     final response = await _repository.getMyChatRooms();
     final prev = state.value ?? ChatState();
     state = AsyncValue.data(prev.copyWith(myChatRooms: response.data));
   }
 
-  /** 채팅방 참여 */
+  /// 채팅방 참여
   Future<void> joinChatRoom(int roomId) async {
     await _repository.joinChatRoom(roomId);
     /** refresh */
     await getMyChatRooms();
   }
 
-  /** 채팅방 참여 직후, 필요 데이터 취득 */
+  /// 채팅방 참여 직후, 필요 데이터 취득
   Future<void> fetchChatRoomState(int roomId) async {
     final chatHistory = await getChatHistory(roomId);
     final chatParticipants = await getChatParticipants(roomId);
@@ -66,7 +67,7 @@ class ChatViewModel extends _$ChatViewModel {
         chatHistory: chatHistory, chatParticipants: chatParticipants));
   }
 
-  /** 채팅 내역 조회 */
+  /// 채팅 내역 조회
   Future<CursorPageResponse<ChatMessageResponse>> getChatHistory(int roomId,
       {int? cursorId, int? size}) async {
     final response = await _repository.getChatHistory(
@@ -77,13 +78,13 @@ class ChatViewModel extends _$ChatViewModel {
     return response.data;
   }
 
-  /** 채팅방 참여자 목록 조회 */
+  /// 채팅방 참여자 목록 조회
   Future<ChatParticipantResponse> getChatParticipants(int roomId) async {
     final response = await _repository.getChatParticipants(roomId);
     return response.data;
   }
 
-  /** 채팅방 나가기 */
+  /// 채팅방 나가기
   Future<void> leaveChatRoom(int roomId) async {
     await _repository.leaveChatRoom(roomId);
     /** refresh */
