@@ -27,6 +27,9 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _textController.addListener(() {
+      setState(() {});
+    });
     Future.microtask(() {
       ref
           .read(chatViewModelProvider.notifier)
@@ -61,21 +64,13 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // 채팅 내역
-            Expanded(
-              child: state.when(
-                data: (data) => _buildChatHistory(_scrollController, data),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(child: Text('Error: $err')),
-              ),
-            ),
-            // 하단 입력 폼
-            _buildChatInput(_textController)
-          ],
+        child: state.when(
+          data: (data) => _buildChatHistory(_scrollController, data),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, stack) => Center(child: Text('Error: $err')),
         ),
       ),
+      bottomSheet: _buildChatInput(_textController),
     );
   }
 
@@ -88,45 +83,71 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
             slivers: [
               SliverToBoxAdapter(
                   child: Text(
-                    "",
-                    style: AppTexts.b1.copyWith(color: ColorName.e0),
-                  ))
+                "",
+                style: AppTexts.b1.copyWith(color: ColorName.e0),
+              ))
             ],
           );
   }
 
   Widget _buildEmptyChatRoom() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Assets.icons.icBookpickChatCharacter.svg(),
-        SizedBox(
-          height: 12
-        ),
-        Text(
-          "채팅을 시작해 보세요",
-          style: AppTexts.b8.copyWith(color: ColorName.g3),
-        ),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Assets.icons.icBookpickChatCharacter.svg(),
+          SizedBox(height: 12),
+          Text(
+            "채팅을 시작해 보세요",
+            style: AppTexts.b8.copyWith(color: ColorName.g3),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildChatInput(TextEditingController textController) {
-    return Padding(
-      padding: AppPaddings.CHAT_INPUT_PADDING,
-      child: Row(
-        children: [
-          Text("data"),
-          Expanded(
-            child: SearchTextField(
-              controller: _textController,
-              hintText: '메세지를 작성해 보세요',
-              hintStyle: AppTexts.b8.copyWith(color: ColorName.g3),
-              // suffixIcon: Assets.images.firefl
+    return Container(
+      height: 129,
+      decoration: BoxDecoration(
+        color: ColorName.g7,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Padding(
+        padding: AppPaddings.CHAT_INPUT_PADDING,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Assets.icons.icBookpickChatOption.svg(),
+            SizedBox(
+              width: 24,
             ),
-          ),
-        ],
+            Expanded(
+              child: SearchTextField(
+                controller: textController,
+                backgroundColor: ColorName.w1,
+                textColor: ColorName.b1,
+                hintText: '메세지를 작성해 보세요',
+                hintStyle: AppTexts.b8.copyWith(color: ColorName.g3),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 13),
+                  child: textController.text.isNotEmpty 
+                  ? Assets.icons.icBookpickChatSendColored
+                      .svg(width: 22, height: 22)
+                  : Assets.icons.icBookpickChatSendDisabled
+                      .svg(width: 22, height: 22),
+                ),
+                onTapSuffixIcon:() {
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
