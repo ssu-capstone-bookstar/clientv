@@ -26,7 +26,9 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    ref.read(chatViewModelProvider.notifier).fetchChatRoomState(widget.roomId);
+    Future.microtask(() {
+      ref.read(chatViewModelProvider.notifier).fetchChatRoomState(widget.roomId);
+    });
   }
 
   @override
@@ -39,6 +41,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(chatViewModelProvider);
+
     String roomName = ChatViewModel.categories
         .firstWhere((item) => item.roomId == widget.roomId,
             orElse: () => ChatViewModel.defaultCategory)

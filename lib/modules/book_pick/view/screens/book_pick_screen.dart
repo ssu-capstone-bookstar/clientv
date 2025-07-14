@@ -36,7 +36,6 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
     }
   }
 
-
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);

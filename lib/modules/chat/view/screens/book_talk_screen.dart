@@ -35,7 +35,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
     final state = ref.watch(chatViewModelProvider);
     return state.when(
       data: (data) {
-        Set<int> myChatRooms = data.myChatRooms.map((v) => v.id).toSet();
+        final Set<int> myChatRoomIds = data.myChatRooms.map((v) => v.id).toSet();
         return CustomScrollView(
           controller: _scrollController,
           slivers: [
@@ -43,9 +43,11 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildCategoryChatRooms(context, ref, myChatRooms),
+                _buildCategoryChatRooms(ref, myChatRoomIds,
+                    (roomId) => context.push('/book-talk/chat-room/${roomId}')),
                 SizedBox(height: 60),
-                _buildJoinedChatRooms(context, data.myChatRooms),
+                _buildJoinedChatRooms(data.myChatRooms,
+                    (roomId) => context.push('/book-talk/chat-room/${roomId}')),
               ],
             )),
           ],
@@ -57,7 +59,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
   }
 
   Widget _buildCategoryChatRooms(
-      BuildContext ctx, WidgetRef ref, Set<int> myChatRooms) {
+      WidgetRef ref, Set<int> myChatRoomIds, Function(int) goToChatRoom) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,12 +71,12 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
           children: ChatViewModel.categories
               .map((category) => GestureDetector(
                     onTap: () async {
-                      if (!myChatRooms.contains(category.roomId)) {
+                      if (!myChatRoomIds.contains(category.roomId)) {
                         await ref
                             .read(chatViewModelProvider.notifier)
                             .joinChatRoom(category.roomId);
                       }
-                      ctx.push('/book-talk/chat-room/${category.roomId}');
+                      goToChatRoom(category.roomId);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -93,7 +95,8 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
     );
   }
 
-  Widget _buildJoinedChatRooms(BuildContext ctx, List<ChatRoomResponse> items) {
+  Widget _buildJoinedChatRooms(
+      List<ChatRoomResponse> items, Function(int) goToChatRoom) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,7 +111,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
             final item = items[index];
             return GestureDetector(
               onTap: () {
-                ctx.push('/book-talk/chat-room/${item.id}');
+                goToChatRoom(item.id);
               },
               child: Container(
                 color: Colors.transparent,
