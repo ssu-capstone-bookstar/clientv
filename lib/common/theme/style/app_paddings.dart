@@ -19,4 +19,6 @@ class AppPaddings {
 
   // HEADER
   static const EdgeInsets SORTABLE_HEADER_PADDING = EdgeInsets.symmetric(horizontal: 16.0);
+  
+  static const EdgeInsets CHAT_INPUT_PADDING = EdgeInsets.symmetric(horizontal: 20.5, vertical: 24);
 }
