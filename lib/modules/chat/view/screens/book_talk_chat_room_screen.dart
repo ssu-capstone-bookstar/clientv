@@ -1,6 +1,7 @@
 import 'package:book/common/components/text_field/search_text_field.dart';
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
@@ -27,7 +28,9 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     super.initState();
     _scrollController = ScrollController();
     Future.microtask(() {
-      ref.read(chatViewModelProvider.notifier).fetchChatRoomState(widget.roomId);
+      ref
+          .read(chatViewModelProvider.notifier)
+          .fetchChatRoomState(widget.roomId);
     });
   }
 
@@ -58,10 +61,10 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
         ],
       ),
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
             // 채팅 내역
-            Positioned.fill(
+            Expanded(
               child: state.when(
                 data: (data) => _buildChatHistory(_scrollController, data),
                 loading: () => const Center(child: CircularProgressIndicator()),
@@ -69,12 +72,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
               ),
             ),
             // 하단 입력 폼
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _buildChatInput(_textController),
-            ),
+            _buildChatInput(_textController)
           ],
         ),
       ),
@@ -82,30 +80,54 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   }
 
   Widget _buildChatHistory(ScrollController scrollController, ChatState data) {
-    // data: (data) => CustomScrollView(
-                //   controller: _scrollController,
-                //   slivers: [
-                //     // ...채팅 내역 Sliver들...
-                //   ],
-                // ),
-    return Container();
+    final messages = data.chatHistory.data;
+    return messages.isEmpty
+        ? _buildEmptyChatRoom()
+        : CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverToBoxAdapter(
+                  child: Text(
+                    "",
+                    style: AppTexts.b1.copyWith(color: ColorName.e0),
+                  ))
+            ],
+          );
+  }
+
+  Widget _buildEmptyChatRoom() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Assets.icons.icBookpickChatCharacter.svg(),
+        SizedBox(
+          height: 12
+        ),
+        Text(
+          "채팅을 시작해 보세요",
+          style: AppTexts.b8.copyWith(color: ColorName.g3),
+        ),
+      ],
+    );
   }
 
   Widget _buildChatInput(TextEditingController textController) {
-    return Padding(padding: AppPaddings.CHAT_INPUT_PADDING,
-    child: Row(
-      children: [
-        Text("data"),
-        Expanded(
-          child: SearchTextField(
+    return Padding(
+      padding: AppPaddings.CHAT_INPUT_PADDING,
+      child: Row(
+        children: [
+          Text("data"),
+          Expanded(
+            child: SearchTextField(
               controller: _textController,
               hintText: '메세지를 작성해 보세요',
               hintStyle: AppTexts.b8.copyWith(color: ColorName.g3),
               // suffixIcon: Assets.images.firefl
             ),
-        ),
-      ],
-    ),
+          ),
+        ],
+      ),
     );
   }
 }
