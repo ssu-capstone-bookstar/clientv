@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:book/common/components/image_grid.dart';
+
 import 'package:book/modules/book_log/model/book_log_models.dart';
+
+import '../../../../common/components/grid/image_grid.dart';
 
 class ScrappedDiariesScreen extends StatelessWidget {
   const ScrappedDiariesScreen({super.key});

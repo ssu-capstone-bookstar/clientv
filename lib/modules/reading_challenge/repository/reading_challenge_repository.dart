@@ -12,6 +12,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/challenge_detail_response.dart';
 import '../model/challenge_response.dart';
 import '../model/rating_request.dart';
+import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:book/modules/reading_diary/model/diary_response.dart';
+import 'package:book/common/models/cursor_page_response.dart';
+import 'package:book/common/models/dual_cursor_page_response.dart';
 
 part 'reading_challenge_repository.g.dart';
 
@@ -81,4 +85,56 @@ abstract class ReadingChallengeRepository {
   Future<ResponseForm<bool>> checkChallengeExists(
     @Path('bookId') String bookId,
   );
+
+  @GET('/reading-diaries/members/{memberId}/thumbnail')
+  Future<ResponseForm<CursorPageResponse<DiaryThumbnail>>> getMemberDiaries(
+    @Path('memberId') int memberId, {
+    @Query('cursorId') int? cursorId,
+    @Query('size') int? size,
+  });
+
+  /// 특정 사용자가 작성한 독서일기 피드 목록을 최신순으로 조회합니다.
+  @GET('/reading-diaries/members/{memberId}/feed')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getLatestDiariesFeedByMember(
+    @Path('memberId') int memberId, {
+    @Query('cursor') int? cursor, // 서버 명세에 따라 파라미터 이름이 다를 수 있음
+    @Query('size') int? size,
+  });
+
+  /// 특정 챌린지의 독서일기 썸네일 목록을 최신순으로 조회합니다.
+  @GET('/challenges/{challengeId}/reading-diaries/thumbnail')
+  Future<ResponseForm<CursorPageResponse<DiaryThumbnail>>>
+      getLatestDiaryThumbnailsByChallenge(
+    @Path('challengeId') int challengeId, {
+    @Query('cursorId') int? cursorId,
+    @Query('size') int? size,
+  });
+
+  /// 특정 챌린지의 독서일기 썸네일 목록을 인기순(Redis 기반)으로 조회합니다.
+  @GET('/challenges/{challengeId}/reading-diaries/thumbnail/popular')
+  Future<ResponseForm<DualCursorPageResponse<DiaryThumbnail>>>
+      getPopularDiaryThumbnailsByChallenge(
+    @Path('challengeId') int challengeId, {
+    @Query('page') int? page,
+    @Query('size') int? size,
+  });
+
+  /// 특정 챌린지의 독서일기 피드 목록을 최신순으로 조회합니다.
+  @GET('/challenges/{challengeId}/reading-diaries/feed')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getLatestDiaryFeedsByChallenge(
+    @Path('challengeId') int challengeId, {
+    @Query('cursorId') int? cursorId,
+    @Query('size') int? size,
+  });
+
+  /// 특정 챌린지의 독서일기 피드 목록을 인기순(Redis 기반)으로 조회합니다.
+  @GET('/challenges/{challengeId}/reading-diaries/feed/popular')
+  Future<ResponseForm<DualCursorPageResponse<DiaryResponse>>>
+      getPopularDiaryFeedsByChallenge(
+    @Path('challengeId') int challengeId, {
+    @Query('page') int? page,
+    @Query('size') int? size,
+  });
 }

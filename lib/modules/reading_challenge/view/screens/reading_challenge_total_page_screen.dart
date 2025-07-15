@@ -1,4 +1,4 @@
-import 'package:book/common/components/cta_button_l1.dart';
+import 'package:book/common/components/button/cta_button_l1.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
@@ -120,7 +120,6 @@ class _ReadingChallengeTotalPageScreenState
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
             filled: false,
-            hintText: '페이지',
             hintStyle: AppTexts.h3.copyWith(color: ColorName.g6),
             enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: ColorName.g6),
@@ -128,6 +127,7 @@ class _ReadingChallengeTotalPageScreenState
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: ColorName.p1),
             ),
+            suffixText: '페이지',
           ),
         ),
       ],

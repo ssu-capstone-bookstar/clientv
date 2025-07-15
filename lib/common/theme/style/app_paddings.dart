@@ -12,7 +12,15 @@ class AppPaddings {
 
   // SCREEN - BOOK_PICK
   static const EdgeInsets BOOK_PICK_DETAIL_INFO_PADDING = EdgeInsets.symmetric(horizontal: 3, vertical: 2);
+  static const EdgeInsets BOOK_PICK_RESULT_SCREEN_PADDING = EdgeInsets.only(top: 20.0);
 
   // APPBAR
   static const EdgeInsets BOTTOM_NAV_BAR_TOP_PADDING = EdgeInsets.only(top: 20);
+
+  // HEADER
+  static const EdgeInsets SORTABLE_HEADER_PADDING = EdgeInsets.symmetric(horizontal: 16.0);
+  
+  static const EdgeInsets CHAT_INPUT_PADDING = EdgeInsets.only(left: 20.5, right: 20.5, top: 24, bottom: 24);
+
+  static const EdgeInsets JOINED_CHAT_ROOM_ITEM_PADDING = EdgeInsets.symmetric(vertical: 18.5);
 }

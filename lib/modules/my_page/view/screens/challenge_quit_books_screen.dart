@@ -1,5 +1,5 @@
-import 'package:book/common/components/book_with_checkbok.dart';
-import 'package:book/common/components/cta_button_l1.dart';
+import 'package:book/common/components/form/book_with_checkbok.dart';
+import 'package:book/common/components/button/cta_button_l1.dart';
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

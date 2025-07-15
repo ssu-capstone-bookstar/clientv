@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/components/dialog/custom_dialog.dart';
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
@@ -51,7 +52,8 @@ class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
         }
       }
     } else {
-      context.push('/book-pick/search/book-overview/${widget.book.bookId}');
+      // context.push('/book-pick/search/book-overview/${widget.book.bookId}');
+      context.push('/book-pick/search/result/${widget.book.bookId}', extra: widget.book);
     }
   }
 

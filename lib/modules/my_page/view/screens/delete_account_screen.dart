@@ -1,15 +1,17 @@
-import 'package:book/common/components/checkbox_2.dart';
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/modules/my_page/view/widgets/radio_button_1_static.dart';
-import 'package:book/common/theme/style/app_paddings.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/gen/assets.gen.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:book/common/theme/style/app_sizes.dart';
 import 'package:flutter/services.dart';
-import 'dart:io';
+
+import '../../../../common/components/button/cta_button_l1.dart';
+import '../../../../common/components/form/checkbox_2.dart';
+import '../../../../common/theme/style/app_paddings.dart';
+import '../../../../common/theme/style/app_sizes.dart';
+import '../../../../common/theme/style/app_texts.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../../gen/assets.gen.dart';
+import '../widgets/radio_button_1_static.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});

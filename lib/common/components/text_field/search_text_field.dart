@@ -6,8 +6,10 @@ import '../../theme/style/app_texts.dart';
 class SearchTextField extends StatelessWidget {
   final TextEditingController? controller;
   final Widget? suffixIcon;
+  
   final String? hintText;
   final TextStyle? hintStyle;
+  final Color? textColor;
   final Color backgroundColor;
   final Color focusColor;
   final Color color;
@@ -15,7 +17,10 @@ class SearchTextField extends StatelessWidget {
   final double height;
   final bool readOnly;
   final void Function(String)? onSubmitted;
+  final VoidCallback? onTapSuffixIcon;
   final VoidCallback? onTap;
+  final TextInputType? keyboardType; 
+  final int? maxLines; 
 
   const SearchTextField({
     super.key,
@@ -23,6 +28,7 @@ class SearchTextField extends StatelessWidget {
     this.suffixIcon,
     this.hintText,
     this.hintStyle = AppTexts.b6,
+    this.textColor,
     this.backgroundColor = ColorName.g7,
     this.focusColor = ColorName.p1,
     this.color = ColorName.g3,
@@ -30,7 +36,10 @@ class SearchTextField extends StatelessWidget {
     this.height = 48,
     this.readOnly = false,
     this.onSubmitted,
+    this.onTapSuffixIcon,
     this.onTap,
+    this.keyboardType,
+    this.maxLines = 1,
   });
 
   @override
@@ -47,10 +56,16 @@ class SearchTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         onTap: onTap,
+        style: TextStyle(
+          color: textColor,
+        ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: hintStyle,
-          suffixIcon: suffixIcon,
+          suffixIcon: GestureDetector(
+            onTap: controller?.text.isNotEmpty ?? false ? onTapSuffixIcon : null,
+            child: suffixIcon,
+          ),
           fillColor: backgroundColor,
           border: outlineInputBorder,
           disabledBorder: outlineInputBorder,
@@ -60,6 +75,8 @@ class SearchTextField extends StatelessWidget {
         ),
         onSubmitted: onSubmitted,
         readOnly: readOnly,
+        keyboardType: keyboardType,
+        maxLines: maxLines,
       ),
     );
   }

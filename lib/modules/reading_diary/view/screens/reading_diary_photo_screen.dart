@@ -1,9 +1,10 @@
-import 'package:book/common/components/radio_button_1.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../../common/components/button/radio_button_1.dart';
+import '../../../../common/theme/style/app_texts.dart';
+import '../../../../gen/colors.gen.dart';
 
 enum PhotoSelection {
   addPhoto,

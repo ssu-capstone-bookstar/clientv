@@ -75,9 +75,33 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.svg
   SvgGenImage get google => const SvgGenImage('assets/icons/google.svg');
 
+  /// File path: assets/icons/ic_add_pick.svg
+  SvgGenImage get icAddPick =>
+      const SvgGenImage('assets/icons/ic_add_pick.svg');
+
+  /// File path: assets/icons/ic_arrow_up_down.svg
+  SvgGenImage get icArrowUpDown =>
+      const SvgGenImage('assets/icons/ic_arrow_up_down.svg');
+
   /// File path: assets/icons/ic_bookpick_chat_character.svg
   SvgGenImage get icBookpickChatCharacter =>
       const SvgGenImage('assets/icons/ic_bookpick_chat_character.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_option.svg
+  SvgGenImage get icBookpickChatOption =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_option.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_option_picture.svg
+  SvgGenImage get icBookpickChatOptionPicture =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_option_picture.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_send_colored.svg
+  SvgGenImage get icBookpickChatSendColored =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_send_colored.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_send_disabled.svg
+  SvgGenImage get icBookpickChatSendDisabled =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_send_disabled.svg');
 
   /// File path: assets/icons/ic_bookpick_search_character.svg
   SvgGenImage get icBookpickSearchCharacter =>
@@ -157,6 +181,9 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeStickerCloud =>
       const SvgGenImage('assets/icons/ic_deeptype_sticker_cloud.svg');
 
+  /// File path: assets/icons/ic_heart.svg
+  SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
+
   /// File path: assets/icons/ic_login_char_front.svg
   SvgGenImage get icLoginCharFront =>
       const SvgGenImage('assets/icons/ic_login_char_front.svg');
@@ -167,6 +194,13 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
+
+  /// File path: assets/icons/ic_message.svg
+  SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
+
+  /// File path: assets/icons/ic_person_count.svg
+  SvgGenImage get icPersonCount =>
+      const SvgGenImage('assets/icons/ic_person_count.svg');
 
   /// File path: assets/icons/ic_photo_library.svg
   SvgGenImage get icPhotoLibrary =>
@@ -212,6 +246,12 @@ class $AssetsIconsGen {
   SvgGenImage get icReadingComplete =>
       const SvgGenImage('assets/icons/ic_reading_complete.svg');
 
+  /// File path: assets/icons/ic_scrap.svg
+  SvgGenImage get icScrap => const SvgGenImage('assets/icons/ic_scrap.svg');
+
+  /// File path: assets/icons/ic_star.svg
+  SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
+
   /// File path: assets/icons/ic_withdrawal.svg
   SvgGenImage get icWithdrawal =>
       const SvgGenImage('assets/icons/ic_withdrawal.svg');
@@ -223,7 +263,13 @@ class $AssetsIconsGen {
   List<SvgGenImage> get values => [
     apple,
     google,
+    icAddPick,
+    icArrowUpDown,
     icBookpickChatCharacter,
+    icBookpickChatOption,
+    icBookpickChatOptionPicture,
+    icBookpickChatSendColored,
+    icBookpickChatSendDisabled,
     icBookpickSearchCharacter,
     icBooktalkSearchCharacter,
     icCamera,
@@ -244,9 +290,12 @@ class $AssetsIconsGen {
     icDeeptypeStickerBook,
     icDeeptypeStickerClock,
     icDeeptypeStickerCloud,
+    icHeart,
     icLoginCharFront,
     icLoginCharTop,
     icMail,
+    icMessage,
+    icPersonCount,
     icPhotoLibrary,
     icPointShopChar1,
     icPointShopChar2,
@@ -258,6 +307,8 @@ class $AssetsIconsGen {
     icReadingChallengeCompleted,
     icReadingChallengeNotCompleted,
     icReadingComplete,
+    icScrap,
+    icStar,
     icWithdrawal,
     kakao,
   ];

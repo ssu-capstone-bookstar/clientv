@@ -36,7 +36,7 @@ abstract class ReadingDiaryRepository {
   @DELETE('/reading-diaries/{diaryId}')
   Future<ResponseForm<dynamic>> deleteDiary(@Path('diaryId') int diaryId);
 
-  @GET('/reading-diaries/members/{memberId}')
+  @GET('/reading-diaries/members/{memberId}/thumbnail')
   Future<ResponseForm<List<DiaryThumbnail>>> getMemberDiaries(
     @Path('memberId') int memberId, {
     @Query('cursorId') int? cursorId,

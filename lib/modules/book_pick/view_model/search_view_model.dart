@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/search_state.dart';
 import '../repository/search_repository.dart';
+import '../model/search_state.dart';
 
 part 'search_view_model.g.dart';
 
@@ -16,6 +16,18 @@ class SearchViewModel extends _$SearchViewModel {
   @override
   FutureOr<SearchState> build() async {
     _repository = ref.watch(searchRepositoryProvider);
+
+    final response = await _repository.searchBooks('베르');
+
+    state = AsyncValue.data(
+      SearchState(
+        books: response.data.data,
+        start: 2,
+        hasNext: response.data.hasNext,
+      ),
+    );
+
+
     return const SearchState();
   }
 
@@ -36,9 +48,9 @@ class SearchViewModel extends _$SearchViewModel {
       state = AsyncValue.data(
         SearchState(
           books: response.data.data,
-          start: 2,
           hasNext: response.data.hasNext,
           query: query,
+          start: 2,
         ),
       );
     } catch (e, stackTrace) {

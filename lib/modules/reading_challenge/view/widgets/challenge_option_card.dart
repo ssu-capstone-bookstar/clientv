@@ -44,7 +44,7 @@ class ChallengeOptionCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: AppTexts.b8.copyWith(color: ColorName.g3),
+              style: AppTexts.b8.copyWith(color: selected ? ColorName.g2 : ColorName.g3),
             ),
           ],
         ),

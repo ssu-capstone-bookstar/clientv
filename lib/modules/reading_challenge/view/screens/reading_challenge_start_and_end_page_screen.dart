@@ -1,5 +1,5 @@
-import 'package:book/common/components/cta_button_l1.dart';
-import 'package:book/common/components/custom_dialog.dart';
+import 'package:book/common/components/button/cta_button_l1.dart';
+import 'package:book/common/components/dialog/custom_dialog.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
@@ -30,6 +30,17 @@ class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
 
 class _ReadingChallengeStartAndEndPageScreenState
     extends ConsumerState<ReadingChallengeStartAndEndPageScreen> {
+
+  final FocusNode startFocusNode = FocusNode();
+  final FocusNode endFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    startFocusNode.dispose();
+    endFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -108,7 +119,7 @@ class _ReadingChallengeStartAndEndPageScreenState
                         currentStep: 2,
                       ),
                       const SizedBox(height: 40),
-                      _buildPageInputSection(viewModel),
+                      _buildPageInputSection(context, viewModel, startFocusNode, endFocusNode),
                       const SizedBox(height: 24),
                       _buildBottomButtonSection(
                           context, book, widget.totalPages),
@@ -123,7 +134,7 @@ class _ReadingChallengeStartAndEndPageScreenState
     );
   }
 
-  Widget _buildPageInputSection(CurrentChallengeViewModel viewModel) {
+  Widget _buildPageInputSection(BuildContext ctx, CurrentChallengeViewModel viewModel, FocusNode startFocusNode, FocusNode endFocusNode) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -135,12 +146,22 @@ class _ReadingChallengeStartAndEndPageScreenState
         const SizedBox(height: 24),
         _buildPageInputField(
           label: '에서',
+          focusNode: startFocusNode,
+          textInputAction: TextInputAction.next,
           onChanged: (value) => viewModel.setStartPage(value),
+          onSubmitted: () {
+            FocusScope.of(ctx).requestFocus(endFocusNode);
+          },
         ),
         const SizedBox(height: 16),
         _buildPageInputField(
           label: '까지 읽었어요',
+          focusNode: endFocusNode,
+          textInputAction: TextInputAction.done,
           onChanged: (value) => viewModel.setEndPage(value),
+          onSubmitted: () {
+            FocusScope.of(context).unfocus();
+          },
         ),
       ],
     );
@@ -149,19 +170,24 @@ class _ReadingChallengeStartAndEndPageScreenState
   Widget _buildPageInputField({
     required String label,
     required ValueChanged<String> onChanged,
+    FocusNode? focusNode,
+    TextInputAction? textInputAction,
+    Function()? onSubmitted,
   }) {
     return Row(
       children: [
         Expanded(
           child: TextField(
+            focusNode: focusNode,
+            textInputAction: textInputAction,
             onChanged: onChanged,
+            onSubmitted: (_) => onSubmitted,
             textAlign: TextAlign.left,
             style: AppTexts.h3.copyWith(color: ColorName.w1),
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(signed: true),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(
               filled: false,
-              hintText: '페이지',
               hintStyle: AppTexts.h3.copyWith(color: ColorName.g6),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: ColorName.g6),
@@ -169,6 +195,7 @@ class _ReadingChallengeStartAndEndPageScreenState
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: ColorName.p1),
               ),
+              suffixText: '페이지',
             ),
           ),
         ),

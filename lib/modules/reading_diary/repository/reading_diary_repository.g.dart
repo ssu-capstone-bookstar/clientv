@@ -97,7 +97,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/reading-diaries/members/${memberId}',
+            '/reading-diaries/members/${memberId}/thumbnail',
             queryParameters: queryParameters,
             data: _data,
           )

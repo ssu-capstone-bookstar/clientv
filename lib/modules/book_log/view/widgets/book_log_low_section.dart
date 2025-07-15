@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:book/common/components/image_grid.dart';
+
+import '../../../../common/components/grid/image_grid.dart';
 import '../../view_model/book_log_view_model.dart';
-import 'package:book/gen/colors.gen.dart';
+import '../../../../gen/colors.gen.dart';
 
 class BookLogLowSection extends ConsumerWidget {
   final int memberId;

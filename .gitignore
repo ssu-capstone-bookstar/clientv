@@ -67,3 +67,6 @@ ios/Keys.xcconfig
 
 # fvm
 .fvm/flutter_sdk
+.fvmrc
+
+.vscode
