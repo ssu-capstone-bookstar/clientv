@@ -19,6 +19,8 @@ class SearchTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final VoidCallback? onTapSuffixIcon;
   final VoidCallback? onTap;
+  final TextInputType? keyboardType; 
+  final int? maxLines; 
 
   const SearchTextField({
     super.key,
@@ -36,6 +38,8 @@ class SearchTextField extends StatelessWidget {
     this.onSubmitted,
     this.onTapSuffixIcon,
     this.onTap,
+    this.keyboardType,
+    this.maxLines = 1,
   });
 
   @override
@@ -71,6 +75,8 @@ class SearchTextField extends StatelessWidget {
         ),
         onSubmitted: onSubmitted,
         readOnly: readOnly,
+        keyboardType: keyboardType,
+        maxLines: maxLines,
       ),
     );
   }

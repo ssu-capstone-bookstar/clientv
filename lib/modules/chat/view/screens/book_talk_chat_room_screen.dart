@@ -216,6 +216,8 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
             onTapSuffixIcon: () {
               handleSend();
             },
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
           ),
         ),
       ],
