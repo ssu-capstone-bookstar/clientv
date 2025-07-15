@@ -3,6 +3,9 @@ import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/chat/model/chat_message_request.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
 import 'package:flutter/material.dart';
@@ -23,27 +26,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   late final ScrollController _scrollController;
   final TextEditingController _textController = TextEditingController();
   bool _visibleOption = false;
-  ChatInputOptionType? _chatInputOptionType = null;
-
-  _updateVisibleOption(bool value) {
-    setState(() {
-      if (!value && _chatInputOptionType != null) {
-        _chatInputOptionType = null;
-      } else {
-        _visibleOption = value;
-      }
-    });
-  }
-
-  _handleSend() {
-    print("handleSend");
-  }
-
-  _updateInputOption(ChatInputOptionType value) {
-    setState(() {
-      _chatInputOptionType = value;
-    });
-  }
+  ChatInputOptionType? _chatInputOptionType;
 
   @override
   void initState() {
@@ -59,6 +42,31 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     });
   }
 
+  _updateVisibleOption(bool value) {
+    setState(() {
+      if (!value && _chatInputOptionType != null) {
+        _chatInputOptionType = null;
+      } else {
+        _visibleOption = value;
+      }
+    });
+  }
+
+  _handleSend() async {
+    await ref.read(chatViewModelProvider.notifier).sendMessage(
+        widget.roomId, _textController.text, MessageType.text, null);
+    setState(() {
+      _textController.clear();
+    });
+    ref.read(chatViewModelProvider.notifier).fetchChatRoomState(widget.roomId);
+  }
+
+  _updateInputOption(ChatInputOptionType value) {
+    setState(() {
+      _chatInputOptionType = value;
+    });
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -69,6 +77,8 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(chatViewModelProvider);
+    final user = ref.watch(authViewModelProvider).value;
+    final memberId = (user is AuthSuccess) ? user.memberId : 0;
 
     String roomName = ChatViewModel.categories
         .firstWhere((item) => item.roomId == widget.roomId,
@@ -89,7 +99,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
         child: state.when(
           data: (data) => Column(
             children: [
-              Expanded(child: _buildChatHistory(_scrollController, data)),
+              Expanded(child: _buildChatHistory(_scrollController, data, memberId)),
               _buildChatInputWrap(
                   _textController,
                   _visibleOption,
@@ -106,17 +116,22 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     );
   }
 
-  Widget _buildChatHistory(ScrollController scrollController, ChatState data) {
+  Widget _buildChatHistory(ScrollController scrollController, ChatState data, int currentMemberId) {
     final messages = data.chatHistory.data;
     return messages.isEmpty
         ? _buildEmptyChatRoom()
         : CustomScrollView(
             controller: _scrollController,
             slivers: [
-              SliverToBoxAdapter(
-                  child: Text(
-                "",
-                style: AppTexts.b1.copyWith(color: ColorName.e0),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final message = messages[index];
+                  final isMyMessage = message.senderId == currentMemberId;
+                  // TODO: 말풍선 디자인 적용
+                  return Text(message.content, style: AppTexts.b1.copyWith(color: !isMyMessage ? ColorName.b1: ColorName.o),);
+                },
+                childCount: messages.length,
               ))
             ],
           );

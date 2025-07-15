@@ -14,9 +14,12 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ChatMessageResponse {
-  String get messageId;
-  MinimumMemberProfile get sender;
+  int get id;
+  int get senderId;
+  String get senderName;
   String get content;
+  MessageType get messageType;
+  String? get fileUrl;
   String get createdAt;
 
   /// Create a copy of ChatMessageResponse
@@ -35,22 +38,27 @@ mixin _$ChatMessageResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ChatMessageResponse &&
-            (identical(other.messageId, messageId) ||
-                other.messageId == messageId) &&
-            (identical(other.sender, sender) || other.sender == sender) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.senderId, senderId) ||
+                other.senderId == senderId) &&
+            (identical(other.senderName, senderName) ||
+                other.senderName == senderName) &&
             (identical(other.content, content) || other.content == content) &&
+            (identical(other.messageType, messageType) ||
+                other.messageType == messageType) &&
+            (identical(other.fileUrl, fileUrl) || other.fileUrl == fileUrl) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, messageId, sender, content, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, senderId, senderName,
+      content, messageType, fileUrl, createdAt);
 
   @override
   String toString() {
-    return 'ChatMessageResponse(messageId: $messageId, sender: $sender, content: $content, createdAt: $createdAt)';
+    return 'ChatMessageResponse(id: $id, senderId: $senderId, senderName: $senderName, content: $content, messageType: $messageType, fileUrl: $fileUrl, createdAt: $createdAt)';
   }
 }
 
@@ -61,12 +69,13 @@ abstract mixin class $ChatMessageResponseCopyWith<$Res> {
       _$ChatMessageResponseCopyWithImpl;
   @useResult
   $Res call(
-      {String messageId,
-      MinimumMemberProfile sender,
+      {int id,
+      int senderId,
+      String senderName,
       String content,
+      MessageType messageType,
+      String? fileUrl,
       String createdAt});
-
-  $MinimumMemberProfileCopyWith<$Res> get sender;
 }
 
 /// @nodoc
@@ -82,39 +91,44 @@ class _$ChatMessageResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? messageId = null,
-    Object? sender = null,
+    Object? id = null,
+    Object? senderId = null,
+    Object? senderName = null,
     Object? content = null,
+    Object? messageType = null,
+    Object? fileUrl = freezed,
     Object? createdAt = null,
   }) {
     return _then(_self.copyWith(
-      messageId: null == messageId
-          ? _self.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderId: null == senderId
+          ? _self.senderId
+          : senderId // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderName: null == senderName
+          ? _self.senderName
+          : senderName // ignore: cast_nullable_to_non_nullable
               as String,
-      sender: null == sender
-          ? _self.sender
-          : sender // ignore: cast_nullable_to_non_nullable
-              as MinimumMemberProfile,
       content: null == content
           ? _self.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
+      messageType: null == messageType
+          ? _self.messageType
+          : messageType // ignore: cast_nullable_to_non_nullable
+              as MessageType,
+      fileUrl: freezed == fileUrl
+          ? _self.fileUrl
+          : fileUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String,
     ));
-  }
-
-  /// Create a copy of ChatMessageResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MinimumMemberProfileCopyWith<$Res> get sender {
-    return $MinimumMemberProfileCopyWith<$Res>(_self.sender, (value) {
-      return _then(_self.copyWith(sender: value));
-    });
   }
 }
 
@@ -211,16 +225,16 @@ extension ChatMessageResponsePatterns on ChatMessageResponse {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String messageId, MinimumMemberProfile sender,
-            String content, String createdAt)?
+    TResult Function(int id, int senderId, String senderName, String content,
+            MessageType messageType, String? fileUrl, String createdAt)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ChatMessageResponse() when $default != null:
-        return $default(
-            _that.messageId, _that.sender, _that.content, _that.createdAt);
+        return $default(_that.id, _that.senderId, _that.senderName,
+            _that.content, _that.messageType, _that.fileUrl, _that.createdAt);
       case _:
         return orElse();
     }
@@ -241,15 +255,15 @@ extension ChatMessageResponsePatterns on ChatMessageResponse {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String messageId, MinimumMemberProfile sender,
-            String content, String createdAt)
+    TResult Function(int id, int senderId, String senderName, String content,
+            MessageType messageType, String? fileUrl, String createdAt)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatMessageResponse():
-        return $default(
-            _that.messageId, _that.sender, _that.content, _that.createdAt);
+        return $default(_that.id, _that.senderId, _that.senderName,
+            _that.content, _that.messageType, _that.fileUrl, _that.createdAt);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -269,15 +283,15 @@ extension ChatMessageResponsePatterns on ChatMessageResponse {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String messageId, MinimumMemberProfile sender,
-            String content, String createdAt)?
+    TResult? Function(int id, int senderId, String senderName, String content,
+            MessageType messageType, String? fileUrl, String createdAt)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatMessageResponse() when $default != null:
-        return $default(
-            _that.messageId, _that.sender, _that.content, _that.createdAt);
+        return $default(_that.id, _that.senderId, _that.senderName,
+            _that.content, _that.messageType, _that.fileUrl, _that.createdAt);
       case _:
         return null;
     }
@@ -288,21 +302,33 @@ extension ChatMessageResponsePatterns on ChatMessageResponse {
 @JsonSerializable()
 class _ChatMessageResponse implements ChatMessageResponse {
   const _ChatMessageResponse(
-      {this.messageId = '',
-      required this.sender,
+      {this.id = 0,
+      this.senderId = 0,
+      this.senderName = '',
       this.content = '',
+      this.messageType = MessageType.text,
+      this.fileUrl,
       this.createdAt = ''});
   factory _ChatMessageResponse.fromJson(Map<String, dynamic> json) =>
       _$ChatMessageResponseFromJson(json);
 
   @override
   @JsonKey()
-  final String messageId;
+  final int id;
   @override
-  final MinimumMemberProfile sender;
+  @JsonKey()
+  final int senderId;
+  @override
+  @JsonKey()
+  final String senderName;
   @override
   @JsonKey()
   final String content;
+  @override
+  @JsonKey()
+  final MessageType messageType;
+  @override
+  final String? fileUrl;
   @override
   @JsonKey()
   final String createdAt;
@@ -328,22 +354,27 @@ class _ChatMessageResponse implements ChatMessageResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ChatMessageResponse &&
-            (identical(other.messageId, messageId) ||
-                other.messageId == messageId) &&
-            (identical(other.sender, sender) || other.sender == sender) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.senderId, senderId) ||
+                other.senderId == senderId) &&
+            (identical(other.senderName, senderName) ||
+                other.senderName == senderName) &&
             (identical(other.content, content) || other.content == content) &&
+            (identical(other.messageType, messageType) ||
+                other.messageType == messageType) &&
+            (identical(other.fileUrl, fileUrl) || other.fileUrl == fileUrl) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, messageId, sender, content, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, senderId, senderName,
+      content, messageType, fileUrl, createdAt);
 
   @override
   String toString() {
-    return 'ChatMessageResponse(messageId: $messageId, sender: $sender, content: $content, createdAt: $createdAt)';
+    return 'ChatMessageResponse(id: $id, senderId: $senderId, senderName: $senderName, content: $content, messageType: $messageType, fileUrl: $fileUrl, createdAt: $createdAt)';
   }
 }
 
@@ -356,13 +387,13 @@ abstract mixin class _$ChatMessageResponseCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String messageId,
-      MinimumMemberProfile sender,
+      {int id,
+      int senderId,
+      String senderName,
       String content,
+      MessageType messageType,
+      String? fileUrl,
       String createdAt});
-
-  @override
-  $MinimumMemberProfileCopyWith<$Res> get sender;
 }
 
 /// @nodoc
@@ -378,39 +409,44 @@ class __$ChatMessageResponseCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? messageId = null,
-    Object? sender = null,
+    Object? id = null,
+    Object? senderId = null,
+    Object? senderName = null,
     Object? content = null,
+    Object? messageType = null,
+    Object? fileUrl = freezed,
     Object? createdAt = null,
   }) {
     return _then(_ChatMessageResponse(
-      messageId: null == messageId
-          ? _self.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderId: null == senderId
+          ? _self.senderId
+          : senderId // ignore: cast_nullable_to_non_nullable
+              as int,
+      senderName: null == senderName
+          ? _self.senderName
+          : senderName // ignore: cast_nullable_to_non_nullable
               as String,
-      sender: null == sender
-          ? _self.sender
-          : sender // ignore: cast_nullable_to_non_nullable
-              as MinimumMemberProfile,
       content: null == content
           ? _self.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
+      messageType: null == messageType
+          ? _self.messageType
+          : messageType // ignore: cast_nullable_to_non_nullable
+              as MessageType,
+      fileUrl: freezed == fileUrl
+          ? _self.fileUrl
+          : fileUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _self.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String,
     ));
-  }
-
-  /// Create a copy of ChatMessageResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MinimumMemberProfileCopyWith<$Res> get sender {
-    return $MinimumMemberProfileCopyWith<$Res>(_self.sender, (value) {
-      return _then(_self.copyWith(sender: value));
-    });
   }
 }
 
