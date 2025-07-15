@@ -22,6 +22,28 @@ class BookTalkChatRoomScreen extends ConsumerStatefulWidget {
 class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   late final ScrollController _scrollController;
   final TextEditingController _textController = TextEditingController();
+  bool _visibleOption = false;
+  ChatInputOptionType? _chatInputOptionType = null;
+
+  _updateVisibleOption(bool value) {
+    setState(() {
+      if (!value && _chatInputOptionType != null) {
+        _chatInputOptionType = null;
+      } else {
+        _visibleOption = value;
+      }
+    });
+  }
+
+  _handleSend() {
+    print("handleSend");
+  }
+
+  _updateInputOption(ChatInputOptionType value) {
+    setState(() {
+      _chatInputOptionType = value;
+    });
+  }
 
   @override
   void initState() {
@@ -65,12 +87,22 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       ),
       body: SafeArea(
         child: state.when(
-          data: (data) => _buildChatHistory(_scrollController, data),
+          data: (data) => Column(
+            children: [
+              Expanded(child: _buildChatHistory(_scrollController, data)),
+              _buildChatInputWrap(
+                  _textController,
+                  _visibleOption,
+                  _updateVisibleOption,
+                  _handleSend,
+                  _chatInputOptionType,
+                  _updateInputOption)
+            ],
+          ),
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text('Error: $err')),
         ),
       ),
-      bottomSheet: _buildChatInput(_textController),
     );
   }
 
@@ -107,9 +139,15 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     );
   }
 
-  Widget _buildChatInput(TextEditingController textController) {
+  Widget _buildChatInputWrap(
+      TextEditingController textController,
+      bool visibleOption,
+      Function(bool) updateVisibleOption,
+      Function() handleSend,
+      ChatInputOptionType? chatInputOptionType,
+      Function(ChatInputOptionType) updateInputOption) {
     return Container(
-      height: 129,
+      height: !visibleOption ? 129 : 129 + 249,
       decoration: BoxDecoration(
         color: ColorName.g7,
         borderRadius: BorderRadius.only(
@@ -119,35 +157,136 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       ),
       child: Padding(
         padding: AppPaddings.CHAT_INPUT_PADDING,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Assets.icons.icBookpickChatOption.svg(),
-            SizedBox(
-              width: 24,
+            _buildChatInput(
+              textController,
+              visibleOption,
+              updateVisibleOption,
+              handleSend,
             ),
-            Expanded(
-              child: SearchTextField(
-                controller: textController,
-                backgroundColor: ColorName.w1,
-                textColor: ColorName.b1,
-                hintText: '메세지를 작성해 보세요',
-                hintStyle: AppTexts.b8.copyWith(color: ColorName.g3),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                  child: textController.text.isNotEmpty 
+            if (visibleOption)
+              _buildChatInputOption(chatInputOptionType, updateInputOption)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChatInput(
+      TextEditingController textController,
+      bool visibleOption,
+      Function(bool) updateVisibleOption,
+      Function() handleSend) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        GestureDetector(
+          child: !visibleOption
+              ? Assets.icons.icBookpickChatOption.svg()
+              : Icon(Icons.close),
+          onTap: () {
+            updateVisibleOption(!visibleOption);
+          },
+        ),
+        SizedBox(
+          width: 24,
+        ),
+        Expanded(
+          child: SearchTextField(
+            controller: textController,
+            backgroundColor: ColorName.w1,
+            textColor: ColorName.b1,
+            hintText: '메세지를 작성해 보세요',
+            hintStyle: AppTexts.b8.copyWith(color: ColorName.g3),
+            suffixIcon: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 13),
+              child: textController.text.isNotEmpty
                   ? Assets.icons.icBookpickChatSendColored
                       .svg(width: 22, height: 22)
                   : Assets.icons.icBookpickChatSendDisabled
                       .svg(width: 22, height: 22),
-                ),
-                onTapSuffixIcon:() {
-                },
-              ),
+            ),
+            onTap: () {
+              updateVisibleOption(false);
+            },
+            onTapSuffixIcon: () {
+              handleSend();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChatInputOption(ChatInputOptionType? chatInputOptionType,
+      Function(ChatInputOptionType) updateInputOption) {
+    Widget currentView = Container();
+
+    switch (chatInputOptionType) {
+      case null:
+        currentView = Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildOptionButton(
+                    "카메라", Assets.icons.icCamera.svg(width: 27, height: 27),
+                    () {
+                  updateInputOption(ChatInputOptionType.camera);
+                }),
+                _buildOptionButton(
+                    "갤러리",
+                    Assets.icons.icBookpickChatOptionPicture
+                        .svg(width: 24, height: 24), () {
+                  updateInputOption(ChatInputOptionType.gallery);
+                })
+              ],
             ),
           ],
-        ),
+        );
+        break;
+      case ChatInputOptionType.camera:
+        currentView = Center(child: Text("camera"));
+        break;
+      case ChatInputOptionType.gallery:
+        currentView = Center(child: Text("gellery"));
+        break;
+    }
+
+    return Expanded(
+      child: currentView,
+    );
+  }
+
+  Widget _buildOptionButton(
+    String text,
+    Widget icon,
+    Function() onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+              width: 55,
+              height: 55,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(38.5),
+                  color: ColorName.dim2),
+              child: Center(child: icon)),
+          SizedBox(
+            height: 6,
+          ),
+          Text(
+            text,
+            style: AppTexts.b8.copyWith(color: ColorName.g2),
+          )
+        ],
       ),
     );
   }

@@ -24,6 +24,11 @@ class ChatCategory {
   });
 }
 
+enum ChatInputOptionType {
+  camera,
+  gallery,
+}
+
 @riverpod
 class ChatViewModel extends _$ChatViewModel {
   late final ChatRepository _repository;

@@ -91,6 +91,10 @@ class $AssetsIconsGen {
   SvgGenImage get icBookpickChatOption =>
       const SvgGenImage('assets/icons/ic_bookpick_chat_option.svg');
 
+  /// File path: assets/icons/ic_bookpick_chat_option_picture.svg
+  SvgGenImage get icBookpickChatOptionPicture =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_option_picture.svg');
+
   /// File path: assets/icons/ic_bookpick_chat_send_colored.svg
   SvgGenImage get icBookpickChatSendColored =>
       const SvgGenImage('assets/icons/ic_bookpick_chat_send_colored.svg');
@@ -251,6 +255,7 @@ class $AssetsIconsGen {
     icArrowUpDown,
     icBookpickChatCharacter,
     icBookpickChatOption,
+    icBookpickChatOptionPicture,
     icBookpickChatSendColored,
     icBookpickChatSendDisabled,
     icBookpickSearchCharacter,
