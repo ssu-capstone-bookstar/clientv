@@ -1,4 +1,4 @@
-import 'package:book/common/components/checkbox_1.dart';
+import 'package:book/common/components/form/checkbox_1.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
