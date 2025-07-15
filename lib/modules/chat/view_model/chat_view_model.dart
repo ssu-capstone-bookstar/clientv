@@ -1,5 +1,6 @@
 import 'package:book/common/models/cursor_page_response.dart';
 import 'package:book/gen/assets.gen.dart';
+import 'package:book/modules/chat/model/chat_message_request.dart';
 import 'package:book/modules/chat/model/chat_message_response.dart';
 import 'package:book/modules/chat/model/chat_participant_response.dart';
 import 'package:book/modules/chat/model/chat_room_response.dart';
@@ -22,6 +23,11 @@ class ChatCategory {
     required this.icon,
     required this.category,
   });
+}
+
+enum ChatInputOptionType {
+  camera,
+  gallery,
 }
 
 @riverpod
@@ -113,6 +119,16 @@ class ChatViewModel extends _$ChatViewModel {
       cursorId: cursorId,
       size: size,
     );
+    return response.data;
+  }
+
+  Future<ChatMessageResponse> sendMessage(
+      int roomId, String? content, MessageType messageType, String? fileUrl) async {
+    final response = await _repository.sendMessage(roomId, ChatMessageRequest(
+      content: content,
+      messageType: messageType,
+      fileUrl: fileUrl,
+    ));
     return response.data;
   }
 

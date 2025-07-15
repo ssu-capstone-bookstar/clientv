@@ -20,7 +20,7 @@ class AppPaddings {
   // HEADER
   static const EdgeInsets SORTABLE_HEADER_PADDING = EdgeInsets.symmetric(horizontal: 16.0);
   
-  static const EdgeInsets CHAT_INPUT_PADDING = EdgeInsets.symmetric(horizontal: 20.5, vertical: 24);
+  static const EdgeInsets CHAT_INPUT_PADDING = EdgeInsets.only(left: 20.5, right: 20.5, top: 24, bottom: 24);
 
   static const EdgeInsets JOINED_CHAT_ROOM_ITEM_PADDING = EdgeInsets.symmetric(vertical: 18.5);
 }

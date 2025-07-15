@@ -87,6 +87,22 @@ class $AssetsIconsGen {
   SvgGenImage get icBookpickChatCharacter =>
       const SvgGenImage('assets/icons/ic_bookpick_chat_character.svg');
 
+  /// File path: assets/icons/ic_bookpick_chat_option.svg
+  SvgGenImage get icBookpickChatOption =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_option.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_option_picture.svg
+  SvgGenImage get icBookpickChatOptionPicture =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_option_picture.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_send_colored.svg
+  SvgGenImage get icBookpickChatSendColored =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_send_colored.svg');
+
+  /// File path: assets/icons/ic_bookpick_chat_send_disabled.svg
+  SvgGenImage get icBookpickChatSendDisabled =>
+      const SvgGenImage('assets/icons/ic_bookpick_chat_send_disabled.svg');
+
   /// File path: assets/icons/ic_bookpick_search_character.svg
   SvgGenImage get icBookpickSearchCharacter =>
       const SvgGenImage('assets/icons/ic_bookpick_search_character.svg');
@@ -250,6 +266,10 @@ class $AssetsIconsGen {
     icAddPick,
     icArrowUpDown,
     icBookpickChatCharacter,
+    icBookpickChatOption,
+    icBookpickChatOptionPicture,
+    icBookpickChatSendColored,
+    icBookpickChatSendDisabled,
     icBookpickSearchCharacter,
     icBooktalkSearchCharacter,
     icCamera,
