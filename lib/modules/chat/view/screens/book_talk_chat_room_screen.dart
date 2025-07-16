@@ -6,6 +6,7 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
+import 'package:book/modules/chat/model/chat_message_response.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -163,6 +164,21 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
           : null;
     }
 
+    Widget getChatWidget(ChatMessageResponse message, TextStyle textStyle) {
+      switch (message.messageType) {
+        case MessageType.text:
+          return Padding(
+            padding: AppPaddings.CHAT_MESSAGE_PADDING,
+            child: Text(
+              message.content,
+              style: textStyle,
+            ),
+          );
+        default:
+          return Container();
+      }
+    }
+
     return messages.isEmpty
         ? _buildEmptyChatRoom()
         : Padding(
@@ -200,13 +216,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                                       color: backgroundColor,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Padding(
-                                      padding: AppPaddings.CHAT_MESSAGE_PADDING,
-                                      child: Text(
-                                        message.content,
-                                        style: textStyle,
-                                      ),
-                                    ),
+                                    child: getChatWidget(message, textStyle),
                                   ),
                                 ),
                               ]
@@ -218,13 +228,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                                       color: backgroundColor,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Padding(
-                                      padding: AppPaddings.CHAT_MESSAGE_PADDING,
-                                      child: Text(
-                                        message.content,
-                                        style: textStyle,
-                                      ),
-                                    ),
+                                    child: getChatWidget(message, textStyle),
                                   ),
                                 ),
                                 SizedBox(
