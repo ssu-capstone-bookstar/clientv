@@ -13,14 +13,15 @@ import '../widgets/book_log_mid_section.dart';
 import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
 
 class BookLogScreen extends ConsumerWidget {
-  const BookLogScreen({super.key, this.showAppBar = true});
+  const BookLogScreen({super.key, this.showAppBar = true, this.otherMemberId = 0});
   final bool showAppBar;
+  final int otherMemberId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authViewModelProvider).value;
-    final memberId = (user is AuthSuccess) ? user.memberId : 0;
-    final isMyProfile = user is AuthSuccess && user.memberId == memberId;
+    final memberId = otherMemberId == 0 ? ((user is AuthSuccess) ? user.memberId : 0) : otherMemberId;
+    final isMyProfile = otherMemberId == 0 ? (user is AuthSuccess && user.memberId == memberId) : false;
 
     final profileAsync = ref.watch(bookLogProfileProvider(memberId));
     final challengesAsync = ref

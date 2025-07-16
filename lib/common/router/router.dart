@@ -1,5 +1,6 @@
 import 'package:book/modules/book_log/view/screens/feed_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
+import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,6 @@ import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
 import '../../modules/book_log/view/screens/book_log_diary_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
-import '../../modules/book_log/view/screens/feed_screen.dart';
 import '../../modules/book_pick/model/search_book_response.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
 import '../../modules/book_pick/view/screens/book_pick_search_screen.dart';
@@ -194,13 +194,25 @@ GoRouter router(Ref ref) {
                 builder: (context, state) => const BookTalkScreen(),
                 routes: [
                   GoRoute(
-                    path: 'chat-room/:roomId',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final roomId = int.parse(state.pathParameters['roomId']!);
-                      return BookTalkChatRoomScreen(roomId: roomId);
-                    },
-                  ),
+                      path: 'chat-room/:roomId',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (context, state) {
+                        final roomId =
+                            int.parse(state.pathParameters['roomId']!);
+                        return BookTalkChatRoomScreen(roomId: roomId);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: 'book-log/:memberId',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final memberId =
+                                int.parse(state.pathParameters['memberId']!);
+                            return BookTalkChatRoomBookLogScreen(
+                                memberId: memberId);
+                          },
+                        ),
+                      ]),
                 ],
               ),
             ],
