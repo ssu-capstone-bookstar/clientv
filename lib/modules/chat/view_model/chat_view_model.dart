@@ -99,7 +99,6 @@ class ChatViewModel extends _$ChatViewModel {
 
   /// 참여한 채팅방 목록 조회
   Future<void> getMyChatRooms() async {
-    _repository = ref.watch(chatRepositoryProvider);
     final prev = state.value ?? ChatState();
     state = AsyncValue.loading();
     final response = await _repository.getMyChatRooms();
@@ -131,7 +130,16 @@ class ChatViewModel extends _$ChatViewModel {
       cursorId: cursorId,
       size: size,
     );
-    return response.data;
+
+    return _sortChatHistory(response.data);
+  }
+
+  CursorPageResponse<ChatMessageResponse> _sortChatHistory(
+      CursorPageResponse<ChatMessageResponse> value) {
+    final sortedData = [...value.data]
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    return value.copyWith(data: sortedData);
   }
 
   Future<ChatMessageResponse> sendMessage(

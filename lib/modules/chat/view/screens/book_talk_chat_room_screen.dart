@@ -8,6 +8,8 @@ import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -144,26 +146,99 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   Widget _buildChatHistory(
       ScrollController scrollController, ChatState data, int currentMemberId) {
     final messages = data.chatHistory.data;
+
+    ClipRRect? getProfileImage(int senderId) {
+      final profileImageUrl = data.chatParticipants.participants
+          .firstWhereOrNull((participant) => participant.memberId == senderId)
+          ?.profileImageUrl;
+      return profileImageUrl != null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                imageUrl: profileImageUrl,
+                width: 40,
+                height: 40,
+              ),
+            )
+          : null;
+    }
+
     return messages.isEmpty
         ? _buildEmptyChatRoom()
-        : CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final message = messages[index];
-                  final isMyMessage = message.senderId == currentMemberId;
-                  // TODO: 말풍선 디자인 적용
-                  return Text(
-                    message.content,
-                    style: AppTexts.b1.copyWith(
-                        color: !isMyMessage ? ColorName.b1 : ColorName.o),
-                  );
-                },
-                childCount: messages.length,
-              ))
-            ],
+        : Padding(
+            padding: AppPaddings.CHAT_CONTAINER_PADDING,
+            child: CustomScrollView(
+              controller: _scrollController,
+              reverse: true,
+              slivers: [
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final message = messages[index];
+                    final isMe = message.senderId == currentMemberId;
+                    final profileImage = getProfileImage(message.senderId);
+                    final backgroundColor = !isMe ? ColorName.g7 : ColorName.p1;
+                    final textStyle = AppTexts.b8
+                        .copyWith(color: !isMe ? ColorName.w1 : Colors.white);
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: !isMe
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: !isMe
+                            ? [
+                                if (profileImage != null) profileImage,
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 140),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: backgroundColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: AppPaddings.CHAT_MESSAGE_PADDING,
+                                      child: Text(
+                                        message.content,
+                                        style: textStyle,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            : [
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 140),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: backgroundColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: AppPaddings.CHAT_MESSAGE_PADDING,
+                                      child: Text(
+                                        message.content,
+                                        style: textStyle,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                if (profileImage != null) profileImage
+                              ],
+                      ),
+                    );
+                  },
+                  childCount: messages.length,
+                ))
+              ],
+            ),
           );
   }
 
