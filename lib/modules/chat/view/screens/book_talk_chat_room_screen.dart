@@ -122,9 +122,9 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
         title: Text(roomName),
         actions: [
           IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => context.pop(),
-          ),
+              icon: const Icon(Icons.menu),
+              onPressed: () =>
+                  context.push('/book-talk/chat-room/${widget.roomId}/menu'))
         ],
       ),
       body: SafeArea(
