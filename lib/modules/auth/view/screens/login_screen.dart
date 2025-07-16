@@ -61,9 +61,14 @@ class LoginScreen extends ConsumerWidget {
   Widget _buildHeroSection() {
     return Center(
       child: AnimatedHeroSwitcher(
-        imagePaths: [
-          Assets.images.heroLookUp3x.path,
-          Assets.images.heroLookForward3x.path,
+        loopReversing: true,
+        frames: [
+          ImageFrame(Assets.images.heroLogin01.svg(), const Duration(milliseconds: 3000)),
+          ImageFrame(Assets.images.heroLogin02.svg(), const Duration(milliseconds: 60)),
+          ImageFrame(Assets.images.heroLogin03.svg(), const Duration(milliseconds: 50)),
+          ImageFrame(Assets.images.heroLogin04.svg(), const Duration(milliseconds: 40)),
+          ImageFrame(Assets.images.heroLogin05.svg(), const Duration(milliseconds: 30)),
+          ImageFrame(Assets.images.heroLogin06.svg(), const Duration(milliseconds: 3000)),
         ],
       ),
     );

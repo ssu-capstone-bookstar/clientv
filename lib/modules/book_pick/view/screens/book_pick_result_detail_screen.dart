@@ -102,7 +102,7 @@ class _BookPickResultDetailScreenState extends ConsumerState<BookPickResultDetai
                 children: [
                   _buildBookPickResultDetailAppBar(),
                   Padding(
-                    padding: AppPaddings.SCREEN_BODY_HORIZONTAL_PADDING,
+                    padding: AppPaddings.SCREEN_BODY_HORIZONTAL_PADDING.copyWith(top: 5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: 12.0,

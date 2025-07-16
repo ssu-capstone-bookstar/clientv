@@ -300,6 +300,30 @@ class $AssetsImagesGen {
   AssetGenImage get heroBookPick3x =>
       const AssetGenImage('assets/images/hero_book_pick@3x.png');
 
+  /// File path: assets/images/hero_login_01.svg
+  SvgGenImage get heroLogin01 =>
+      const SvgGenImage('assets/images/hero_login_01.svg');
+
+  /// File path: assets/images/hero_login_02.svg
+  SvgGenImage get heroLogin02 =>
+      const SvgGenImage('assets/images/hero_login_02.svg');
+
+  /// File path: assets/images/hero_login_03.svg
+  SvgGenImage get heroLogin03 =>
+      const SvgGenImage('assets/images/hero_login_03.svg');
+
+  /// File path: assets/images/hero_login_04.svg
+  SvgGenImage get heroLogin04 =>
+      const SvgGenImage('assets/images/hero_login_04.svg');
+
+  /// File path: assets/images/hero_login_05.svg
+  SvgGenImage get heroLogin05 =>
+      const SvgGenImage('assets/images/hero_login_05.svg');
+
+  /// File path: assets/images/hero_login_06.svg
+  SvgGenImage get heroLogin06 =>
+      const SvgGenImage('assets/images/hero_login_06.svg');
+
   /// File path: assets/images/hero_look_forward@3x.png
   AssetGenImage get heroLookForward3x =>
       const AssetGenImage('assets/images/hero_look_forward@3x.png');
@@ -367,8 +391,14 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/speech_bubble.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
     heroBookPick3x,
+    heroLogin01,
+    heroLogin02,
+    heroLogin03,
+    heroLogin04,
+    heroLogin05,
+    heroLogin06,
     heroLookForward3x,
     heroLookUp3x,
     icSearchColored3x,
