@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:book/common/models/cursor_page_response.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
@@ -6,7 +8,12 @@ import 'package:book/modules/chat/model/chat_participant_response.dart';
 import 'package:book/modules/chat/model/chat_room_response.dart';
 import 'package:book/modules/chat/repository/chat_repository.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
+import 'package:book/modules/image/model/presigned_url_request.dart';
+import 'package:book/modules/image/repository/image_repository.dart';
+import 'package:book/modules/image/repository/s3_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_view_model.g.dart';
@@ -33,6 +40,8 @@ enum ChatInputOptionType {
 @riverpod
 class ChatViewModel extends _$ChatViewModel {
   late final ChatRepository _repository;
+  late final ImageRepository _imageRepo;
+  late final S3Repository _s3Repo;
 
   static final ChatCategory defaultCategory = ChatCategory(
       roomId: 2,
@@ -76,6 +85,9 @@ class ChatViewModel extends _$ChatViewModel {
   @override
   FutureOr<ChatState> build() async {
     _repository = ref.watch(chatRepositoryProvider);
+    _imageRepo = ref.read(imageRepositoryProvider);
+    _s3Repo = ref.read(s3RepositoryProvider);
+
     final response = await _repository.getMyChatRooms();
     state = AsyncValue.data(
       ChatState(
@@ -123,13 +135,35 @@ class ChatViewModel extends _$ChatViewModel {
   }
 
   Future<ChatMessageResponse> sendMessage(
-      int roomId, String? content, MessageType messageType, String? fileUrl) async {
-    final response = await _repository.sendMessage(roomId, ChatMessageRequest(
-      content: content,
-      messageType: messageType,
-      fileUrl: fileUrl,
-    ));
+      int roomId, String? content, MessageType messageType, XFile? file) async {
+    String? fileUrl = file != null ? await _getFileUrl(file) : null;
+    final response = await _repository.sendMessage(
+        roomId,
+        ChatMessageRequest(
+          content: content,
+          messageType: messageType,
+          fileUrl: fileUrl,
+        ));
     return response.data;
+  }
+
+  Future<String> _getFileUrl(XFile xFile) async {
+    final file = File(xFile.path);
+    final fileName = file.uri.pathSegments.last;
+    final presignedUrlResponse = await _imageRepo.getPresignedUrl(
+      'CHAT_IMAGE',
+      PresignedUrlRequest(fileName: fileName),
+    );
+
+    debugPrint('##### Presigned URL Response: ${presignedUrlResponse.data}');
+    final presignedData = presignedUrlResponse.data;
+
+    await _s3Repo.uploadFileToS3(
+      presignedUrl: presignedData.presignedUrl,
+      file: file,
+    );
+
+    return presignedData.presignedUrl;
   }
 
   /// 채팅방 참여자 목록 조회

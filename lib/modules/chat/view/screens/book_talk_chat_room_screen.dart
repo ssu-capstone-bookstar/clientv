@@ -11,6 +11,7 @@ import 'package:book/modules/chat/view_model/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class BookTalkChatRoomScreen extends ConsumerStatefulWidget {
   const BookTalkChatRoomScreen({super.key, required this.roomId});
@@ -26,7 +27,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   late final ScrollController _scrollController;
   final TextEditingController _textController = TextEditingController();
   bool _visibleOption = false;
-  ChatInputOptionType? _chatInputOptionType;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -44,27 +45,55 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
 
   _updateVisibleOption(bool value) {
     setState(() {
-      if (!value && _chatInputOptionType != null) {
-        _chatInputOptionType = null;
-      } else {
-        _visibleOption = value;
-      }
+      _visibleOption = value;
     });
   }
 
-  _handleSend() async {
+  _handleTextSend() async {
     await ref.read(chatViewModelProvider.notifier).sendMessage(
         widget.roomId, _textController.text, MessageType.text, null);
+    _clearText();
+    _refreshChat();
+  }
+
+  _clearText() {
     setState(() {
       _textController.clear();
     });
+  }
+
+  _refreshChat() {
     ref.read(chatViewModelProvider.notifier).fetchChatRoomState(widget.roomId);
   }
 
-  _updateInputOption(ChatInputOptionType value) {
-    setState(() {
-      _chatInputOptionType = value;
-    });
+  _handleImageSend(List<XFile> pickedFiles) async {
+    for (XFile file in pickedFiles) {
+      await ref
+          .read(chatViewModelProvider.notifier)
+          .sendMessage(widget.roomId, null, MessageType.image, file);
+    }
+    if (pickedFiles.isNotEmpty) {
+      _refreshChat();
+    }
+  }
+
+  _clickInputOption(ImageSource source) async {
+    List<XFile> pickedFiles = [];
+    switch (source) {
+      case ImageSource.camera:
+        final XFile? image = await _picker.pickImage(source: source);
+        if (image != null) {
+          pickedFiles.add(image);
+        }
+        break;
+      case ImageSource.gallery:
+        pickedFiles = await _picker.pickMultiImage();
+    }
+
+    if (pickedFiles.isNotEmpty && mounted) {
+      _updateVisibleOption(false);
+      _handleImageSend(pickedFiles);
+    }
   }
 
   @override
@@ -99,14 +128,10 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
         child: state.when(
           data: (data) => Column(
             children: [
-              Expanded(child: _buildChatHistory(_scrollController, data, memberId)),
-              _buildChatInputWrap(
-                  _textController,
-                  _visibleOption,
-                  _updateVisibleOption,
-                  _handleSend,
-                  _chatInputOptionType,
-                  _updateInputOption)
+              Expanded(
+                  child: _buildChatHistory(_scrollController, data, memberId)),
+              _buildChatInputWrap(_textController, _visibleOption,
+                  _updateVisibleOption, _handleTextSend, _clickInputOption)
             ],
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -116,7 +141,8 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     );
   }
 
-  Widget _buildChatHistory(ScrollController scrollController, ChatState data, int currentMemberId) {
+  Widget _buildChatHistory(
+      ScrollController scrollController, ChatState data, int currentMemberId) {
     final messages = data.chatHistory.data;
     return messages.isEmpty
         ? _buildEmptyChatRoom()
@@ -129,7 +155,11 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                   final message = messages[index];
                   final isMyMessage = message.senderId == currentMemberId;
                   // TODO: 말풍선 디자인 적용
-                  return Text(message.content, style: AppTexts.b1.copyWith(color: !isMyMessage ? ColorName.b1: ColorName.o),);
+                  return Text(
+                    message.content,
+                    style: AppTexts.b1.copyWith(
+                        color: !isMyMessage ? ColorName.b1 : ColorName.o),
+                  );
                 },
                 childCount: messages.length,
               ))
@@ -158,9 +188,8 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       TextEditingController textController,
       bool visibleOption,
       Function(bool) updateVisibleOption,
-      Function() handleSend,
-      ChatInputOptionType? chatInputOptionType,
-      Function(ChatInputOptionType) updateInputOption) {
+      Function() handleTextSend,
+      Function(ImageSource) clickInputOption) {
     return Container(
       height: !visibleOption ? 129 : 129 + 249,
       decoration: BoxDecoration(
@@ -180,10 +209,9 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
               textController,
               visibleOption,
               updateVisibleOption,
-              handleSend,
+              handleTextSend,
             ),
-            if (visibleOption)
-              _buildChatInputOption(chatInputOptionType, updateInputOption)
+            if (visibleOption) _buildChatInputOption(clickInputOption)
           ],
         ),
       ),
@@ -194,7 +222,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       TextEditingController textController,
       bool visibleOption,
       Function(bool) updateVisibleOption,
-      Function() handleSend) {
+      Function() handleTextSend) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -229,7 +257,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
               updateVisibleOption(false);
             },
             onTapSuffixIcon: () {
-              handleSend();
+              handleTextSend();
             },
             keyboardType: TextInputType.multiline,
             maxLines: null,
@@ -239,44 +267,28 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     );
   }
 
-  Widget _buildChatInputOption(ChatInputOptionType? chatInputOptionType,
-      Function(ChatInputOptionType) updateInputOption) {
-    Widget currentView = Container();
-
-    switch (chatInputOptionType) {
-      case null:
-        currentView = Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildOptionButton(
-                    "카메라", Assets.icons.icCamera.svg(width: 27, height: 27),
-                    () {
-                  updateInputOption(ChatInputOptionType.camera);
-                }),
-                _buildOptionButton(
-                    "갤러리",
-                    Assets.icons.icBookpickChatOptionPicture
-                        .svg(width: 24, height: 24), () {
-                  updateInputOption(ChatInputOptionType.gallery);
-                })
-              ],
-            ),
-          ],
-        );
-        break;
-      case ChatInputOptionType.camera:
-        currentView = Center(child: Text("camera"));
-        break;
-      case ChatInputOptionType.gallery:
-        currentView = Center(child: Text("gellery"));
-        break;
-    }
-
+  Widget _buildChatInputOption(Function(ImageSource) clickInputOption) {
     return Expanded(
-      child: currentView,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildOptionButton(
+                  "카메라", Assets.icons.icCamera.svg(width: 27, height: 27), () {
+                clickInputOption(ImageSource.camera);
+              }),
+              _buildOptionButton(
+                  "갤러리",
+                  Assets.icons.icBookpickChatOptionPicture
+                      .svg(width: 24, height: 24), () {
+                clickInputOption(ImageSource.gallery);
+              })
+            ],
+          ),
+        ],
+      ),
     );
   }
 
