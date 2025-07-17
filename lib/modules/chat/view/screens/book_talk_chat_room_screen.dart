@@ -148,17 +148,23 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       ScrollController scrollController, ChatState data, int currentMemberId) {
     final messages = data.chatHistory.data;
 
-    ClipRRect? getProfileImage(int senderId) {
+    Widget? getProfileImage(int senderId) {
       final profileImageUrl = data.chatParticipants.participants
           .firstWhereOrNull((participant) => participant.memberId == senderId)
           ?.profileImageUrl;
       return profileImageUrl != null
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                imageUrl: profileImageUrl,
-                width: 40,
-                height: 40,
+          ? GestureDetector(
+              onTap: () {
+                context.push(
+                    '/book-talk/chat-room/${widget.roomId}/book-log/$senderId');
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  imageUrl: profileImageUrl,
+                  width: 40,
+                  height: 40,
+                ),
               ),
             )
           : null;
