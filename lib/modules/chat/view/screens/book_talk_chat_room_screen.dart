@@ -174,6 +174,21 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
               style: textStyle,
             ),
           );
+        case MessageType.image:
+          return Padding(
+            padding: AppPaddings.CHAT_MESSAGE_PADDING,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: message.fileUrl ?? "",
+                width: 140,
+                height: 140,
+                errorWidget: (context, url, error) => Container(),
+              ),
+            )
+          );
+
         default:
           return Container();
       }

@@ -171,7 +171,7 @@ class ChatViewModel extends _$ChatViewModel {
       file: file,
     );
 
-    return presignedData.presignedUrl;
+    return presignedData.imageUrl;
   }
 
   /// 채팅방 참여자 목록 조회
