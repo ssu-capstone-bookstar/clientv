@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatParticipantItemResponse {
   int get memberId;
-  String get nickName;
+  String get nickname;
   String get profileImageUrl;
 
   /// Create a copy of ChatParticipantItemResponse
@@ -37,8 +37,8 @@ mixin _$ChatParticipantItemResponse {
             other is ChatParticipantItemResponse &&
             (identical(other.memberId, memberId) ||
                 other.memberId == memberId) &&
-            (identical(other.nickName, nickName) ||
-                other.nickName == nickName) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl));
   }
@@ -46,11 +46,11 @@ mixin _$ChatParticipantItemResponse {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, memberId, nickName, profileImageUrl);
+      Object.hash(runtimeType, memberId, nickname, profileImageUrl);
 
   @override
   String toString() {
-    return 'ChatParticipantItemResponse(memberId: $memberId, nickName: $nickName, profileImageUrl: $profileImageUrl)';
+    return 'ChatParticipantItemResponse(memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl)';
   }
 }
 
@@ -61,7 +61,7 @@ abstract mixin class $ChatParticipantItemResponseCopyWith<$Res> {
           $Res Function(ChatParticipantItemResponse) _then) =
       _$ChatParticipantItemResponseCopyWithImpl;
   @useResult
-  $Res call({int memberId, String nickName, String profileImageUrl});
+  $Res call({int memberId, String nickname, String profileImageUrl});
 }
 
 /// @nodoc
@@ -78,7 +78,7 @@ class _$ChatParticipantItemResponseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? memberId = null,
-    Object? nickName = null,
+    Object? nickname = null,
     Object? profileImageUrl = null,
   }) {
     return _then(_self.copyWith(
@@ -86,9 +86,9 @@ class _$ChatParticipantItemResponseCopyWithImpl<$Res>
           ? _self.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      nickName: null == nickName
-          ? _self.nickName
-          : nickName // ignore: cast_nullable_to_non_nullable
+      nickname: null == nickname
+          ? _self.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
               as String,
       profileImageUrl: null == profileImageUrl
           ? _self.profileImageUrl
@@ -191,14 +191,14 @@ extension ChatParticipantItemResponsePatterns on ChatParticipantItemResponse {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int memberId, String nickName, String profileImageUrl)?
+    TResult Function(int memberId, String nickname, String profileImageUrl)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ChatParticipantItemResponse() when $default != null:
-        return $default(_that.memberId, _that.nickName, _that.profileImageUrl);
+        return $default(_that.memberId, _that.nickname, _that.profileImageUrl);
       case _:
         return orElse();
     }
@@ -219,13 +219,13 @@ extension ChatParticipantItemResponsePatterns on ChatParticipantItemResponse {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int memberId, String nickName, String profileImageUrl)
+    TResult Function(int memberId, String nickname, String profileImageUrl)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatParticipantItemResponse():
-        return $default(_that.memberId, _that.nickName, _that.profileImageUrl);
+        return $default(_that.memberId, _that.nickname, _that.profileImageUrl);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -245,13 +245,13 @@ extension ChatParticipantItemResponsePatterns on ChatParticipantItemResponse {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int memberId, String nickName, String profileImageUrl)?
+    TResult? Function(int memberId, String nickname, String profileImageUrl)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatParticipantItemResponse() when $default != null:
-        return $default(_that.memberId, _that.nickName, _that.profileImageUrl);
+        return $default(_that.memberId, _that.nickname, _that.profileImageUrl);
       case _:
         return null;
     }
@@ -262,7 +262,7 @@ extension ChatParticipantItemResponsePatterns on ChatParticipantItemResponse {
 @JsonSerializable()
 class _ChatParticipantItemResponse implements ChatParticipantItemResponse {
   const _ChatParticipantItemResponse(
-      {this.memberId = 0, this.nickName = "", this.profileImageUrl = ""});
+      {this.memberId = 0, this.nickname = "", this.profileImageUrl = ""});
   factory _ChatParticipantItemResponse.fromJson(Map<String, dynamic> json) =>
       _$ChatParticipantItemResponseFromJson(json);
 
@@ -271,7 +271,7 @@ class _ChatParticipantItemResponse implements ChatParticipantItemResponse {
   final int memberId;
   @override
   @JsonKey()
-  final String nickName;
+  final String nickname;
   @override
   @JsonKey()
   final String profileImageUrl;
@@ -299,8 +299,8 @@ class _ChatParticipantItemResponse implements ChatParticipantItemResponse {
             other is _ChatParticipantItemResponse &&
             (identical(other.memberId, memberId) ||
                 other.memberId == memberId) &&
-            (identical(other.nickName, nickName) ||
-                other.nickName == nickName) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
                 other.profileImageUrl == profileImageUrl));
   }
@@ -308,11 +308,11 @@ class _ChatParticipantItemResponse implements ChatParticipantItemResponse {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, memberId, nickName, profileImageUrl);
+      Object.hash(runtimeType, memberId, nickname, profileImageUrl);
 
   @override
   String toString() {
-    return 'ChatParticipantItemResponse(memberId: $memberId, nickName: $nickName, profileImageUrl: $profileImageUrl)';
+    return 'ChatParticipantItemResponse(memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl)';
   }
 }
 
@@ -325,7 +325,7 @@ abstract mixin class _$ChatParticipantItemResponseCopyWith<$Res>
       __$ChatParticipantItemResponseCopyWithImpl;
   @override
   @useResult
-  $Res call({int memberId, String nickName, String profileImageUrl});
+  $Res call({int memberId, String nickname, String profileImageUrl});
 }
 
 /// @nodoc
@@ -342,7 +342,7 @@ class __$ChatParticipantItemResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? memberId = null,
-    Object? nickName = null,
+    Object? nickname = null,
     Object? profileImageUrl = null,
   }) {
     return _then(_ChatParticipantItemResponse(
@@ -350,9 +350,9 @@ class __$ChatParticipantItemResponseCopyWithImpl<$Res>
           ? _self.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      nickName: null == nickName
-          ? _self.nickName
-          : nickName // ignore: cast_nullable_to_non_nullable
+      nickname: null == nickname
+          ? _self.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
               as String,
       profileImageUrl: null == profileImageUrl
           ? _self.profileImageUrl

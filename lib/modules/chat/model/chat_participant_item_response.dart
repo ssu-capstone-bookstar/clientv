@@ -7,7 +7,7 @@ part 'chat_participant_item_response.g.dart';
 abstract class ChatParticipantItemResponse with _$ChatParticipantItemResponse {
   const factory ChatParticipantItemResponse({
     @Default(0) int memberId,
-    @Default("") String nickName,
+    @Default("") String nickname,
     @Default("") String profileImageUrl,
   }) = _ChatParticipantItemResponse;
 

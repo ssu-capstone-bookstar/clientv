@@ -1,6 +1,7 @@
 import 'package:book/modules/book_log/view/screens/feed_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
+import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -206,10 +207,20 @@ GoRouter router(Ref ref) {
                           path: 'book-log/:memberId',
                           parentNavigatorKey: rootNavigatorKey,
                           builder: (context, state) {
-                            final memberId =
+                             final memberId =
                                 int.parse(state.pathParameters['memberId']!);
                             return BookTalkChatRoomBookLogScreen(
                                 memberId: memberId);
+                          },
+                        ),
+                        GoRoute(
+                          path: 'menu',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final roomId =
+                                int.parse(state.pathParameters['roomId']!);
+                            return BookTalkChatRoomMenuScreen(
+                                roomId: roomId);
                           },
                         ),
                       ]),
