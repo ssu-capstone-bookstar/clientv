@@ -141,7 +141,7 @@ class _BookTalkChatRoomMenuScreenState
                       width: 12,
                     ),
                     Text(
-                      item.nickName,
+                      item.nickname,
                       style: AppTexts.b8.copyWith(color: ColorName.w1),
                     )
                   ],
