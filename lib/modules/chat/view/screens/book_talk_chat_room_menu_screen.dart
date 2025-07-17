@@ -5,16 +5,38 @@ import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/chat/model/chat_participant_item_response.dart';
 import 'package:book/modules/chat/view_model/chat_view_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class BookTalkChatRoomMenuScreen extends ConsumerWidget {
+class BookTalkChatRoomMenuScreen extends ConsumerStatefulWidget {
   const BookTalkChatRoomMenuScreen({super.key, required this.roomId});
   final int roomId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BookTalkChatRoomMenuScreen> createState() =>
+      _BookTalkChatRoomMenuScreenState();
+}
+
+class _BookTalkChatRoomMenuScreenState
+    extends ConsumerState<BookTalkChatRoomMenuScreen> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(chatViewModelProvider);
     return Scaffold(
       appBar: AppBar(),
@@ -22,13 +44,18 @@ class BookTalkChatRoomMenuScreen extends ConsumerWidget {
         child: state.when(
           data: (data) {
             final chatParticipants = data.chatParticipants;
-
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(context, ref, roomId,
+                _buildHeader(context, widget.roomId,
                     chatParticipants.totalParticipantCount),
-                _buildChatParticipantList(chatParticipants.participants)
+                Expanded(
+                  child: CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        _buildChatParticipantList(chatParticipants.participants)
+                      ]),
+                )
               ],
             );
           },
@@ -39,8 +66,8 @@ class BookTalkChatRoomMenuScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, WidgetRef ref, int roomId,
-      int totalParticipantCount) {
+  Widget _buildHeader(
+      BuildContext context, int roomId, int totalParticipantCount) {
     return Padding(
       padding: EdgeInsetsGeometry.all(16),
       child: Row(
@@ -72,7 +99,7 @@ class BookTalkChatRoomMenuScreen extends ConsumerWidget {
           ),
           CtaButtonL2(
             text: '채팅방 나가기',
-            onPressed: () => _showExitChatRoomDialog(context, ref, roomId),
+            onPressed: () => _showExitChatRoomDialog(context, roomId),
             width: 71,
             height: 27,
             textStyle: AppTexts.b12,
@@ -87,11 +114,58 @@ class BookTalkChatRoomMenuScreen extends ConsumerWidget {
 
   Widget _buildChatParticipantList(
       List<ChatParticipantItemResponse> participants) {
-    return Container();
+    return SliverList.separated(
+      itemBuilder: (context, index) {
+        final item = participants[index];
+        return GestureDetector(
+          onTap: () {
+            context.push(
+                    '/book-talk/chat-room/${widget.roomId}/book-log/${item.memberId}');
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: CachedNetworkImage(
+                        imageUrl: item.profileImageUrl,
+                        width: 58,
+                        height: 58,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    Text(
+                      "참여자 이름",
+                      style: AppTexts.b8.copyWith(color: ColorName.w1),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("책로그 보기", style: AppTexts.b10.copyWith(color: ColorName.g3),),
+                    Icon(Icons.chevron_right, size: 19, color: ColorName.g3,)
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+      itemCount: participants.length,
+      separatorBuilder: (context, index) => Divider(
+        height: 1,
+        color: ColorName.g7,
+      ),
+    );
   }
 
-  void _showExitChatRoomDialog(
-      BuildContext context, WidgetRef ref, int roomId) {
+  void _showExitChatRoomDialog(BuildContext context, int roomId) {
     showDialog(
         context: context,
         builder: (ctx) {
