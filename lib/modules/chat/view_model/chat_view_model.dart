@@ -122,6 +122,11 @@ class ChatViewModel extends _$ChatViewModel {
         chatHistory: chatHistory, chatParticipants: chatParticipants));
   }
 
+  Future<void> initAbly() async {
+      final response = await _repository.getAblyToken();
+      print("response.data.accessToken: ${response.data.token}");
+  }
+
   /// 채팅 내역 조회
   Future<CursorPageResponse<ChatMessageResponse>> getChatHistory(int roomId,
       {int? cursorId, int? size}) async {

@@ -8,10 +8,10 @@ part of 'ably_token_response.dart';
 
 _AblyTokenResponse _$AblyTokenResponseFromJson(Map<String, dynamic> json) =>
     _AblyTokenResponse(
-      accessToken: json['accessToken'] as String? ?? '',
+      token: json['token'] as String? ?? '',
     );
 
 Map<String, dynamic> _$AblyTokenResponseToJson(_AblyTokenResponse instance) =>
     <String, dynamic>{
-      'accessToken': instance.accessToken,
+      'token': instance.token,
     };

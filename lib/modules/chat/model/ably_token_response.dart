@@ -6,7 +6,7 @@ part 'ably_token_response.g.dart';
 @freezed
 abstract class AblyTokenResponse with _$AblyTokenResponse {
   const factory AblyTokenResponse({
-    @Default('') String accessToken,
+    @Default('') String token,
   }) = _AblyTokenResponse;
 
   factory AblyTokenResponse.fromJson(Map<String, dynamic> json) =>

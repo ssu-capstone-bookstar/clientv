@@ -42,7 +42,8 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     Future.microtask(() {
       ref
           .read(chatViewModelProvider.notifier)
-          .fetchChatRoomState(widget.roomId);
+          ..initAbly()
+          ..fetchChatRoomState(widget.roomId);
     });
   }
 

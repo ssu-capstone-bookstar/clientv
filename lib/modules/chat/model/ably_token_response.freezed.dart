@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$AblyTokenResponse {
-  String get accessToken;
+  String get token;
 
   /// Create a copy of AblyTokenResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -32,17 +32,16 @@ mixin _$AblyTokenResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is AblyTokenResponse &&
-            (identical(other.accessToken, accessToken) ||
-                other.accessToken == accessToken));
+            (identical(other.token, token) || other.token == token));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, accessToken);
+  int get hashCode => Object.hash(runtimeType, token);
 
   @override
   String toString() {
-    return 'AblyTokenResponse(accessToken: $accessToken)';
+    return 'AblyTokenResponse(token: $token)';
   }
 }
 
@@ -52,7 +51,7 @@ abstract mixin class $AblyTokenResponseCopyWith<$Res> {
           AblyTokenResponse value, $Res Function(AblyTokenResponse) _then) =
       _$AblyTokenResponseCopyWithImpl;
   @useResult
-  $Res call({String accessToken});
+  $Res call({String token});
 }
 
 /// @nodoc
@@ -68,12 +67,12 @@ class _$AblyTokenResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? accessToken = null,
+    Object? token = null,
   }) {
     return _then(_self.copyWith(
-      accessToken: null == accessToken
-          ? _self.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
+      token: null == token
+          ? _self.token
+          : token // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -172,13 +171,13 @@ extension AblyTokenResponsePatterns on AblyTokenResponse {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String accessToken)? $default, {
+    TResult Function(String token)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _AblyTokenResponse() when $default != null:
-        return $default(_that.accessToken);
+        return $default(_that.token);
       case _:
         return orElse();
     }
@@ -199,12 +198,12 @@ extension AblyTokenResponsePatterns on AblyTokenResponse {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String accessToken) $default,
+    TResult Function(String token) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _AblyTokenResponse():
-        return $default(_that.accessToken);
+        return $default(_that.token);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -224,12 +223,12 @@ extension AblyTokenResponsePatterns on AblyTokenResponse {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String accessToken)? $default,
+    TResult? Function(String token)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _AblyTokenResponse() when $default != null:
-        return $default(_that.accessToken);
+        return $default(_that.token);
       case _:
         return null;
     }
@@ -239,13 +238,13 @@ extension AblyTokenResponsePatterns on AblyTokenResponse {
 /// @nodoc
 @JsonSerializable()
 class _AblyTokenResponse implements AblyTokenResponse {
-  const _AblyTokenResponse({this.accessToken = ''});
+  const _AblyTokenResponse({this.token = ''});
   factory _AblyTokenResponse.fromJson(Map<String, dynamic> json) =>
       _$AblyTokenResponseFromJson(json);
 
   @override
   @JsonKey()
-  final String accessToken;
+  final String token;
 
   /// Create a copy of AblyTokenResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -267,17 +266,16 @@ class _AblyTokenResponse implements AblyTokenResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _AblyTokenResponse &&
-            (identical(other.accessToken, accessToken) ||
-                other.accessToken == accessToken));
+            (identical(other.token, token) || other.token == token));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, accessToken);
+  int get hashCode => Object.hash(runtimeType, token);
 
   @override
   String toString() {
-    return 'AblyTokenResponse(accessToken: $accessToken)';
+    return 'AblyTokenResponse(token: $token)';
   }
 }
 
@@ -289,7 +287,7 @@ abstract mixin class _$AblyTokenResponseCopyWith<$Res>
       __$AblyTokenResponseCopyWithImpl;
   @override
   @useResult
-  $Res call({String accessToken});
+  $Res call({String token});
 }
 
 /// @nodoc
@@ -305,12 +303,12 @@ class __$AblyTokenResponseCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? accessToken = null,
+    Object? token = null,
   }) {
     return _then(_AblyTokenResponse(
-      accessToken: null == accessToken
-          ? _self.accessToken
-          : accessToken // ignore: cast_nullable_to_non_nullable
+      token: null == token
+          ? _self.token
+          : token // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
