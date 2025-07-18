@@ -9,11 +9,14 @@ abstract class AuthResponse with _$AuthResponse {
     required int memberId,
     @Default('') String nickName,
     @Default('') String profileImage,
+    required String providerType,
+    required String email,
     required String accessToken,
     required String refreshToken,
     required DateTime accessTokenExpiration,
     required DateTime refreshTokenExpiration,
   }) = _AuthResponse;
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) => _$AuthResponseFromJson(json);
+  factory AuthResponse.fromJson(Map<String, dynamic> json) =>
+      _$AuthResponseFromJson(json);
 }

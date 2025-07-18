@@ -47,6 +47,17 @@ class AuthViewModel extends _$AuthViewModel {
 
       final authData = response.data;
 
+      // Debug: Print the received auth data
+      print('=== DEBUG: Auth Response Data ===');
+      print('memberId: ${authData.memberId}');
+      print('nickName: ${authData.nickName}');
+      print('profileImage: ${authData.profileImage}');
+      print('providerType: ${authData.providerType}');
+      print('email: ${authData.email}');
+      print('accessToken: ${authData.accessToken.substring(0, 20)}...');
+      print('refreshToken: ${authData.refreshToken.substring(0, 20)}...');
+      print('================================');
+
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
@@ -55,7 +66,9 @@ class AuthViewModel extends _$AuthViewModel {
       return AuthSuccess(
           memberId: authData.memberId,
           nickName: authData.nickName,
-          profileImage: authData.profileImage);
+          profileImage: authData.profileImage,
+          providerType: authData.providerType,
+          email: authData.email);
     });
   }
 
@@ -71,6 +84,12 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> signOut() async {
+    await _secureStorageRepository.deleteTokens();
+    state = AsyncData(AuthIdle());
+  }
+
+  Future<void> forceSignOut() async {
+    print('=== FORCE SIGNOUT: Clearing all tokens ===');
     await _secureStorageRepository.deleteTokens();
     state = AsyncData(AuthIdle());
   }
@@ -102,16 +121,34 @@ class AuthViewModel extends _$AuthViewModel {
         return null;
       }
 
+      // Debug: Print the received auth data from refresh token
+      print('=== DEBUG: Refresh Token Response Data ===');
+      print('memberId: ${authData.memberId}');
+      print('nickName: ${authData.nickName}');
+      print('profileImage: ${authData.profileImage}');
+      print('providerType: ${authData.providerType}');
+      print('email: ${authData.email}');
+      print('accessToken: ${authData.accessToken}');
+      print('refreshToken: ${authData.refreshToken}');
+      print('==========================================');
+
       await _secureStorageRepository.saveTokens(
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
       );
+
+      // Handle cases where server might not return email and providerType yet
+      final email = authData.email.isNotEmpty ? authData.email : '이메일 정보 없음';
+      final providerType =
+          authData.providerType.isNotEmpty ? authData.providerType : '연동 상태';
 
       state = AsyncData(
         AuthSuccess(
           memberId: authData.memberId,
           nickName: authData.nickName,
           profileImage: authData.profileImage,
+          providerType: providerType,
+          email: email,
         ),
       );
 

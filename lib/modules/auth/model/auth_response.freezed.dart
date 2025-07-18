@@ -17,6 +17,8 @@ mixin _$AuthResponse {
   int get memberId;
   String get nickName;
   String get profileImage;
+  String get providerType;
+  String get email;
   String get accessToken;
   String get refreshToken;
   DateTime get accessTokenExpiration;
@@ -44,6 +46,9 @@ mixin _$AuthResponse {
                 other.nickName == nickName) &&
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage) &&
+            (identical(other.providerType, providerType) ||
+                other.providerType == providerType) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.accessToken, accessToken) ||
                 other.accessToken == accessToken) &&
             (identical(other.refreshToken, refreshToken) ||
@@ -56,12 +61,21 @@ mixin _$AuthResponse {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, memberId, nickName, profileImage,
-      accessToken, refreshToken, accessTokenExpiration, refreshTokenExpiration);
+  int get hashCode => Object.hash(
+      runtimeType,
+      memberId,
+      nickName,
+      profileImage,
+      providerType,
+      email,
+      accessToken,
+      refreshToken,
+      accessTokenExpiration,
+      refreshTokenExpiration);
 
   @override
   String toString() {
-    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration)';
+    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, providerType: $providerType, email: $email, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration)';
   }
 }
 
@@ -75,6 +89,8 @@ abstract mixin class $AuthResponseCopyWith<$Res> {
       {int memberId,
       String nickName,
       String profileImage,
+      String providerType,
+      String email,
       String accessToken,
       String refreshToken,
       DateTime accessTokenExpiration,
@@ -96,6 +112,8 @@ class _$AuthResponseCopyWithImpl<$Res> implements $AuthResponseCopyWith<$Res> {
     Object? memberId = null,
     Object? nickName = null,
     Object? profileImage = null,
+    Object? providerType = null,
+    Object? email = null,
     Object? accessToken = null,
     Object? refreshToken = null,
     Object? accessTokenExpiration = null,
@@ -113,6 +131,14 @@ class _$AuthResponseCopyWithImpl<$Res> implements $AuthResponseCopyWith<$Res> {
       profileImage: null == profileImage
           ? _self.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
+              as String,
+      providerType: null == providerType
+          ? _self.providerType
+          : providerType // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _self.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       accessToken: null == accessToken
           ? _self.accessToken
@@ -231,6 +257,8 @@ extension AuthResponsePatterns on AuthResponse {
             int memberId,
             String nickName,
             String profileImage,
+            String providerType,
+            String email,
             String accessToken,
             String refreshToken,
             DateTime accessTokenExpiration,
@@ -245,6 +273,8 @@ extension AuthResponsePatterns on AuthResponse {
             _that.memberId,
             _that.nickName,
             _that.profileImage,
+            _that.providerType,
+            _that.email,
             _that.accessToken,
             _that.refreshToken,
             _that.accessTokenExpiration,
@@ -273,6 +303,8 @@ extension AuthResponsePatterns on AuthResponse {
             int memberId,
             String nickName,
             String profileImage,
+            String providerType,
+            String email,
             String accessToken,
             String refreshToken,
             DateTime accessTokenExpiration,
@@ -286,6 +318,8 @@ extension AuthResponsePatterns on AuthResponse {
             _that.memberId,
             _that.nickName,
             _that.profileImage,
+            _that.providerType,
+            _that.email,
             _that.accessToken,
             _that.refreshToken,
             _that.accessTokenExpiration,
@@ -313,6 +347,8 @@ extension AuthResponsePatterns on AuthResponse {
             int memberId,
             String nickName,
             String profileImage,
+            String providerType,
+            String email,
             String accessToken,
             String refreshToken,
             DateTime accessTokenExpiration,
@@ -326,6 +362,8 @@ extension AuthResponsePatterns on AuthResponse {
             _that.memberId,
             _that.nickName,
             _that.profileImage,
+            _that.providerType,
+            _that.email,
             _that.accessToken,
             _that.refreshToken,
             _that.accessTokenExpiration,
@@ -343,6 +381,8 @@ class _AuthResponse implements AuthResponse {
       {required this.memberId,
       this.nickName = '',
       this.profileImage = '',
+      required this.providerType,
+      required this.email,
       required this.accessToken,
       required this.refreshToken,
       required this.accessTokenExpiration,
@@ -358,6 +398,10 @@ class _AuthResponse implements AuthResponse {
   @override
   @JsonKey()
   final String profileImage;
+  @override
+  final String providerType;
+  @override
+  final String email;
   @override
   final String accessToken;
   @override
@@ -393,6 +437,9 @@ class _AuthResponse implements AuthResponse {
                 other.nickName == nickName) &&
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage) &&
+            (identical(other.providerType, providerType) ||
+                other.providerType == providerType) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.accessToken, accessToken) ||
                 other.accessToken == accessToken) &&
             (identical(other.refreshToken, refreshToken) ||
@@ -405,12 +452,21 @@ class _AuthResponse implements AuthResponse {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, memberId, nickName, profileImage,
-      accessToken, refreshToken, accessTokenExpiration, refreshTokenExpiration);
+  int get hashCode => Object.hash(
+      runtimeType,
+      memberId,
+      nickName,
+      profileImage,
+      providerType,
+      email,
+      accessToken,
+      refreshToken,
+      accessTokenExpiration,
+      refreshTokenExpiration);
 
   @override
   String toString() {
-    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration)';
+    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, providerType: $providerType, email: $email, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration)';
   }
 }
 
@@ -426,6 +482,8 @@ abstract mixin class _$AuthResponseCopyWith<$Res>
       {int memberId,
       String nickName,
       String profileImage,
+      String providerType,
+      String email,
       String accessToken,
       String refreshToken,
       DateTime accessTokenExpiration,
@@ -448,6 +506,8 @@ class __$AuthResponseCopyWithImpl<$Res>
     Object? memberId = null,
     Object? nickName = null,
     Object? profileImage = null,
+    Object? providerType = null,
+    Object? email = null,
     Object? accessToken = null,
     Object? refreshToken = null,
     Object? accessTokenExpiration = null,
@@ -465,6 +525,14 @@ class __$AuthResponseCopyWithImpl<$Res>
       profileImage: null == profileImage
           ? _self.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
+              as String,
+      providerType: null == providerType
+          ? _self.providerType
+          : providerType // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _self.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       accessToken: null == accessToken
           ? _self.accessToken

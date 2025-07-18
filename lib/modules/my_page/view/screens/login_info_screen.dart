@@ -3,14 +3,19 @@ import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/modules/my_page/view/widgets/label_section.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
 
-class LoginInfoScreen extends StatelessWidget {
+class LoginInfoScreen extends ConsumerWidget {
   const LoginInfoScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const double titleWidth = 80;
+    final authState = ref.watch(authViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('로그인 정보'),
@@ -52,7 +57,12 @@ class LoginInfoScreen extends StatelessWidget {
                       border: InputBorder.none,
                       filled: true,
                       fillColor: Colors.transparent,
-                      hintText: 'xxx.gmail.com', // TODO: 이메일 주소 정보 모델 추가
+                      hintText: authState.when(
+                        data: (data) =>
+                            data is AuthSuccess ? data.email : '이메일 정보 없음',
+                        loading: () => '이메일 정보 없음',
+                        error: (e, t) => '이메일 정보 없음',
+                      ),
                       hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
                       isCollapsed: true,
                       contentPadding: EdgeInsets.zero,
@@ -82,7 +92,12 @@ class LoginInfoScreen extends StatelessWidget {
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.transparent,
-                        hintText: '연동 상태', // TODO: 연동 상태 정보 모델 추가
+                        hintText: authState.when(
+                          data: (data) =>
+                              data is AuthSuccess ? data.providerType : '연동 상태',
+                          loading: () => '연동 상태',
+                          error: (e, t) => '연동 상태',
+                        ),
                         hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
                         isCollapsed: true,
                         contentPadding: EdgeInsets.zero,

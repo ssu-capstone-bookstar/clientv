@@ -9,11 +9,15 @@ class AuthSuccess extends AuthState {
   final int memberId;
   final String nickName;
   final String profileImage;
+  final String providerType;
+  final String email;
 
   AuthSuccess({
     required this.memberId,
     required this.nickName,
     required this.profileImage,
+    required this.providerType,
+    required this.email,
   });
 }
 
@@ -28,7 +32,6 @@ class AuthFailed extends AuthState {
 }
 
 class AuthLoading extends AuthState {}
-
 
 mixin class UserState {
   AuthState watchAuthState(WidgetRef ref) {
@@ -49,7 +52,7 @@ mixin class UserState {
         if (data is AuthSuccess) return data;
         return null;
       },
-      loading: () =>null,
+      loading: () => null,
       error: (e, t) => null,
     );
   }
