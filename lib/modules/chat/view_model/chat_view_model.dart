@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:book/common/models/cursor_page_response.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
@@ -113,7 +114,7 @@ class ChatViewModel extends _$ChatViewModel {
   }
 
   /// 채팅방 참여 직후, 필요 데이터 취득
-  Future<void> fetchChatRoomState(int roomId) async {
+  Future<void> initChatRoomState(int roomId) async {
     final prev = state.value ?? ChatState();
     state = AsyncValue.loading();
     final chatHistory = await getChatHistory(roomId);
@@ -122,9 +123,13 @@ class ChatViewModel extends _$ChatViewModel {
         chatHistory: chatHistory, chatParticipants: chatParticipants));
   }
 
-  Future<void> initAbly() async {
-      final response = await _repository.getAblyToken();
-      print("response.data.accessToken: ${response.data.token}");
+  Future<ably.RealtimeChannel> initAbly(int roomId) async {
+    final response = await _repository.getAblyToken();
+    final token = response.data.token;
+    final options = ably.ClientOptions(key: token);
+
+    final realtime = ably.Realtime(options: options);
+    return realtime.channels.get('chat:$roomId');
   }
 
   /// 채팅 내역 조회
@@ -136,15 +141,30 @@ class ChatViewModel extends _$ChatViewModel {
       size: size,
     );
 
-    return _sortChatHistory(response.data);
+    return response.data.copyWith(data: _sortChatHistory(response.data.data));
   }
 
-  CursorPageResponse<ChatMessageResponse> _sortChatHistory(
-      CursorPageResponse<ChatMessageResponse> value) {
-    final sortedData = [...value.data]
+  void addChatHistory(Object? data) {
+    if (data != null) {
+      final map = Map<String, dynamic>.from(data as Map<dynamic, dynamic>);
+      final response = ChatMessageResponse.fromJson(map);
+      // 기존 상태에서 chatHistory.data에 아이템 하나 추가
+      final prev = state.value ?? ChatState();
+      state = AsyncValue.data(
+        prev.copyWith(
+          chatHistory: prev.chatHistory.copyWith(
+            data: _sortChatHistory([...prev.chatHistory.data, response]),
+          ),
+        ),
+      );
+    }
+  }
+
+  List<ChatMessageResponse> _sortChatHistory(List<ChatMessageResponse> value) {
+    final sortedData = [...value]
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-    return value.copyWith(data: sortedData);
+    return sortedData;
   }
 
   Future<ChatMessageResponse> sendMessage(
