@@ -170,7 +170,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
 
   Widget _buildChatHistory(
       ScrollController scrollController, ChatState data, int currentMemberId) {
-    final messages = data.chatHistory.data;
+    final messages = data.chatHistory;
 
     Widget? getProfileImage(int senderId) {
       final profileImageUrl = data.chatParticipants.participants

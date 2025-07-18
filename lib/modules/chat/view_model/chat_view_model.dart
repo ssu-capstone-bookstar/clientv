@@ -120,22 +120,24 @@ class ChatViewModel extends _$ChatViewModel {
     final chatHistory = await getChatHistory(roomId);
     final chatParticipants = await getChatParticipants(roomId);
     state = AsyncValue.data(prev.copyWith(
-        chatHistory: chatHistory, chatParticipants: chatParticipants));
+        chatHistory: chatHistory.data, 
+        hasNext: chatHistory.hasNext,
+        nextCursor: chatHistory.nextCursor,
+        chatParticipants: chatParticipants));
   }
 
     /// 채팅방 참여 직후, 필요 데이터 취득
   Future<void> fetchPreviousChatHistory(int roomId) async {
     final prev = state.value ?? ChatState();
-    if(!prev.chatHistory.hasNext || prev.chatHistory.nextCursor == null) return;
-    state = AsyncValue.loading();
-    final newChatHistory = await getChatHistory(roomId, cursorId: prev.chatHistory.nextCursor);
+    if(!prev.hasNext || prev.nextCursor == null) return;
+    // state = AsyncValue.loading();
+    final newChatHistory = await getChatHistory(roomId, cursorId: prev.nextCursor);
+    final sortedNewChatHistory = _sortChatHistory([...newChatHistory.data, ...prev.chatHistory]);
     state = AsyncValue.data(
       prev.copyWith(
-        chatHistory: prev.chatHistory.copyWith(
-          hasNext: newChatHistory.hasNext,
-          nextCursor: newChatHistory.nextCursor,
-          data: _sortChatHistory([...newChatHistory.data, ...prev.chatHistory.data]),
-        ),
+        hasNext: newChatHistory.hasNext,
+        nextCursor: newChatHistory.nextCursor,
+        chatHistory: sortedNewChatHistory,
       ),
     );
   }
@@ -165,13 +167,12 @@ class ChatViewModel extends _$ChatViewModel {
     if (data != null) {
       final map = Map<String, dynamic>.from(data as Map<dynamic, dynamic>);
       final response = ChatMessageResponse.fromJson(map);
-      // 기존 상태에서 chatHistory.data에 아이템 하나 추가
       final prev = state.value ?? ChatState();
+      // 기존 상태에서 chatHistory.data에 아이템 하나 추가
+      final sortedNewChatHistory = _sortChatHistory([...prev.chatHistory, response]);
       state = AsyncValue.data(
         prev.copyWith(
-          chatHistory: prev.chatHistory.copyWith(
-            data: _sortChatHistory([...prev.chatHistory.data, response]),
-          ),
+          chatHistory: sortedNewChatHistory,
         ),
       );
     }
