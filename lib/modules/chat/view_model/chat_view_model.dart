@@ -120,23 +120,27 @@ class ChatViewModel extends _$ChatViewModel {
     final chatHistory = await getChatHistory(roomId);
     final chatParticipants = await getChatParticipants(roomId);
     state = AsyncValue.data(prev.copyWith(
-        chatHistory: chatHistory.data, 
+        chatHistory: chatHistory.data,
         hasNext: chatHistory.hasNext,
         nextCursor: chatHistory.nextCursor ?? -1,
         chatParticipants: chatParticipants));
   }
 
-    /// 채팅방 참여 직후, 필요 데이터 취득
+  /// scroll top, 이전 채팅 내역 취득
   Future<void> fetchPreviousChatHistory(int roomId) async {
     final prev = state.value ?? ChatState();
-    if(!prev.hasNext || prev.nextCursor == -1) return;
+    if (!prev.hasNext || prev.nextCursor == -1) return;
     // state = AsyncValue.loading();
-    final previousChatHistory = await getChatHistory(roomId, cursorId: prev.nextCursor);
+    final previousChatHistory =
+        await getChatHistory(roomId, cursorId: prev.nextCursor);
     state = AsyncValue.data(
       prev.copyWith(
         hasNext: previousChatHistory.hasNext,
         nextCursor: previousChatHistory.nextCursor ?? -1,
-        chatHistory: [...previousChatHistory.data, ...prev.chatHistory,  ],
+        chatHistory: [
+          ...prev.chatHistory,
+          ...previousChatHistory.data,
+        ],
       ),
     );
   }
@@ -168,10 +172,9 @@ class ChatViewModel extends _$ChatViewModel {
       final response = ChatMessageResponse.fromJson(map);
       final prev = state.value ?? ChatState();
       // 기존 상태에서 chatHistory.data에 아이템 하나 추가
-      final sortedNewChatHistory = _sortChatHistory([...prev.chatHistory, response]);
       state = AsyncValue.data(
         prev.copyWith(
-          chatHistory: sortedNewChatHistory,
+          chatHistory: [response, ...prev.chatHistory, ],
         ),
       );
     }
