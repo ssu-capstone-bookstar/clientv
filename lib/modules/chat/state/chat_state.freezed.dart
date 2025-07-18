@@ -17,7 +17,7 @@ mixin _$ChatState {
   List<ChatRoomResponse> get myChatRooms;
   List<ChatMessageResponse> get chatHistory;
   bool get hasNext;
-  int? get nextCursor;
+  int get nextCursor;
   ChatParticipantResponse get chatParticipants;
 
   /// Create a copy of ChatState
@@ -67,7 +67,7 @@ abstract mixin class $ChatStateCopyWith<$Res> {
       {List<ChatRoomResponse> myChatRooms,
       List<ChatMessageResponse> chatHistory,
       bool hasNext,
-      int? nextCursor,
+      int nextCursor,
       ChatParticipantResponse chatParticipants});
 
   $ChatParticipantResponseCopyWith<$Res> get chatParticipants;
@@ -88,7 +88,7 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
     Object? myChatRooms = null,
     Object? chatHistory = null,
     Object? hasNext = null,
-    Object? nextCursor = freezed,
+    Object? nextCursor = null,
     Object? chatParticipants = null,
   }) {
     return _then(_self.copyWith(
@@ -104,10 +104,10 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      nextCursor: freezed == nextCursor
+      nextCursor: null == nextCursor
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       chatParticipants: null == chatParticipants
           ? _self.chatParticipants
           : chatParticipants // ignore: cast_nullable_to_non_nullable
@@ -224,7 +224,7 @@ extension ChatStatePatterns on ChatState {
             List<ChatRoomResponse> myChatRooms,
             List<ChatMessageResponse> chatHistory,
             bool hasNext,
-            int? nextCursor,
+            int nextCursor,
             ChatParticipantResponse chatParticipants)?
         $default, {
     required TResult orElse(),
@@ -258,7 +258,7 @@ extension ChatStatePatterns on ChatState {
             List<ChatRoomResponse> myChatRooms,
             List<ChatMessageResponse> chatHistory,
             bool hasNext,
-            int? nextCursor,
+            int nextCursor,
             ChatParticipantResponse chatParticipants)
         $default,
   ) {
@@ -290,7 +290,7 @@ extension ChatStatePatterns on ChatState {
             List<ChatRoomResponse> myChatRooms,
             List<ChatMessageResponse> chatHistory,
             bool hasNext,
-            int? nextCursor,
+            int nextCursor,
             ChatParticipantResponse chatParticipants)?
         $default,
   ) {
@@ -312,7 +312,7 @@ class _ChatState implements ChatState {
       {final List<ChatRoomResponse> myChatRooms = const [],
       final List<ChatMessageResponse> chatHistory = const [],
       this.hasNext = false,
-      this.nextCursor,
+      this.nextCursor = -1,
       this.chatParticipants = const ChatParticipantResponse()})
       : _myChatRooms = myChatRooms,
         _chatHistory = chatHistory;
@@ -339,7 +339,8 @@ class _ChatState implements ChatState {
   @JsonKey()
   final bool hasNext;
   @override
-  final int? nextCursor;
+  @JsonKey()
+  final int nextCursor;
   @override
   @JsonKey()
   final ChatParticipantResponse chatParticipants;
@@ -395,7 +396,7 @@ abstract mixin class _$ChatStateCopyWith<$Res>
       {List<ChatRoomResponse> myChatRooms,
       List<ChatMessageResponse> chatHistory,
       bool hasNext,
-      int? nextCursor,
+      int nextCursor,
       ChatParticipantResponse chatParticipants});
 
   @override
@@ -417,7 +418,7 @@ class __$ChatStateCopyWithImpl<$Res> implements _$ChatStateCopyWith<$Res> {
     Object? myChatRooms = null,
     Object? chatHistory = null,
     Object? hasNext = null,
-    Object? nextCursor = freezed,
+    Object? nextCursor = null,
     Object? chatParticipants = null,
   }) {
     return _then(_ChatState(
@@ -433,10 +434,10 @@ class __$ChatStateCopyWithImpl<$Res> implements _$ChatStateCopyWith<$Res> {
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      nextCursor: freezed == nextCursor
+      nextCursor: null == nextCursor
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       chatParticipants: null == chatParticipants
           ? _self.chatParticipants
           : chatParticipants // ignore: cast_nullable_to_non_nullable

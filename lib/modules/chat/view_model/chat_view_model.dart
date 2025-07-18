@@ -122,22 +122,21 @@ class ChatViewModel extends _$ChatViewModel {
     state = AsyncValue.data(prev.copyWith(
         chatHistory: chatHistory.data, 
         hasNext: chatHistory.hasNext,
-        nextCursor: chatHistory.nextCursor,
+        nextCursor: chatHistory.nextCursor ?? -1,
         chatParticipants: chatParticipants));
   }
 
     /// 채팅방 참여 직후, 필요 데이터 취득
   Future<void> fetchPreviousChatHistory(int roomId) async {
     final prev = state.value ?? ChatState();
-    if(!prev.hasNext || prev.nextCursor == null) return;
+    if(!prev.hasNext || prev.nextCursor == -1) return;
     // state = AsyncValue.loading();
-    final newChatHistory = await getChatHistory(roomId, cursorId: prev.nextCursor);
-    final sortedNewChatHistory = _sortChatHistory([...newChatHistory.data, ...prev.chatHistory]);
+    final previousChatHistory = await getChatHistory(roomId, cursorId: prev.nextCursor);
     state = AsyncValue.data(
       prev.copyWith(
-        hasNext: newChatHistory.hasNext,
-        nextCursor: newChatHistory.nextCursor,
-        chatHistory: sortedNewChatHistory,
+        hasNext: previousChatHistory.hasNext,
+        nextCursor: previousChatHistory.nextCursor ?? -1,
+        chatHistory: [...previousChatHistory.data, ...prev.chatHistory,  ],
       ),
     );
   }

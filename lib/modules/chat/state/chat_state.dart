@@ -11,7 +11,7 @@ abstract class ChatState with _$ChatState {
     @Default([]) List<ChatRoomResponse> myChatRooms,
     @Default([]) List<ChatMessageResponse> chatHistory,
     @Default(false) bool hasNext,
-    int? nextCursor,
+    @Default(-1) int nextCursor,
     @Default(
       ChatParticipantResponse()
     ) ChatParticipantResponse chatParticipants,
