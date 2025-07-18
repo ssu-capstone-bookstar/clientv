@@ -123,6 +123,23 @@ class ChatViewModel extends _$ChatViewModel {
         chatHistory: chatHistory, chatParticipants: chatParticipants));
   }
 
+    /// 채팅방 참여 직후, 필요 데이터 취득
+  Future<void> fetchPreviousChatHistory(int roomId) async {
+    final prev = state.value ?? ChatState();
+    if(!prev.chatHistory.hasNext || prev.chatHistory.nextCursor == null) return;
+    state = AsyncValue.loading();
+    final newChatHistory = await getChatHistory(roomId, cursorId: prev.chatHistory.nextCursor);
+    state = AsyncValue.data(
+      prev.copyWith(
+        chatHistory: prev.chatHistory.copyWith(
+          hasNext: newChatHistory.hasNext,
+          nextCursor: newChatHistory.nextCursor,
+          data: _sortChatHistory([...newChatHistory.data, ...prev.chatHistory.data]),
+        ),
+      ),
+    );
+  }
+
   Future<ably.RealtimeChannel> initAbly(int roomId) async {
     final response = await _repository.getAblyToken();
     final token = response.data.token;

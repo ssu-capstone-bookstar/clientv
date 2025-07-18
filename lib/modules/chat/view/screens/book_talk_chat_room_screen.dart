@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class BookTalkChatRoomScreen extends ConsumerStatefulWidget {
   const BookTalkChatRoomScreen({super.key, required this.roomId});
@@ -38,6 +39,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
     _textController.addListener(() {
       setState(() {});
     });
@@ -50,6 +52,17 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
           .initAbly(widget.roomId);
       _subscribe();
     });
+  }
+
+  void _onScroll() async {
+    const margin = 10;
+    // 맨 위에 도달했는지 확인
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent + margin) {
+      await ref
+          .read(chatViewModelProvider.notifier)
+          .fetchPreviousChatHistory(widget.roomId);
+    }
   }
 
   _subscribe() {
@@ -210,6 +223,13 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       }
     }
 
+    Widget getDateWidget(String createdAt) {
+      DateTime dt = DateTime.parse(createdAt);
+
+      String formatted = DateFormat('MM/dd\nHH:mm').format(dt);
+      return Text(formatted, style: AppTexts.b12.copyWith(color: ColorName.w1));
+    }
+
     return messages.isEmpty
         ? _buildEmptyChatRoom()
         : Padding(
@@ -250,8 +270,12 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                                     child: getChatWidget(message, textStyle),
                                   ),
                                 ),
+                                SizedBox(width: 6,),
+                                getDateWidget(message.createdAt),
                               ]
                             : [
+                                getDateWidget(message.createdAt),
+                                SizedBox(width: 6,),
                                 ConstrainedBox(
                                   constraints: BoxConstraints(maxWidth: 140),
                                   child: Container(
