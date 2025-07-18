@@ -207,7 +207,7 @@ GoRouter router(Ref ref) {
                           path: 'book-log/:memberId',
                           parentNavigatorKey: rootNavigatorKey,
                           builder: (context, state) {
-                             final memberId =
+                            final memberId =
                                 int.parse(state.pathParameters['memberId']!);
                             return BookTalkChatRoomBookLogScreen(
                                 memberId: memberId);
@@ -219,8 +219,7 @@ GoRouter router(Ref ref) {
                           builder: (context, state) {
                             final roomId =
                                 int.parse(state.pathParameters['roomId']!);
-                            return BookTalkChatRoomMenuScreen(
-                                roomId: roomId);
+                            return BookTalkChatRoomMenuScreen(roomId: roomId);
                           },
                         ),
                       ]),

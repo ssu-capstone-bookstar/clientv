@@ -58,7 +58,7 @@ abstract class BookRepository {
   );
 
   /// 특정 책과 관련된 독서일기 썸네일 목록을 최신순으로 조회합니다.
-  @GET('/books/{bookId}/related/reading-diaries/thumbnail')
+  @GET('/api/v2/books/{bookId}/reading-diaries/thumbnail')
   Future<ResponseForm<CursorPageResponse<DiaryThumbnail>>>
       getRelatedLatestDiaryThumbnailsByBook(
     @Path('bookId') int bookId, {
@@ -67,7 +67,7 @@ abstract class BookRepository {
   });
 
   /// 특정 책과 관련된 독서일기 썸네일 목록을 인기순(DB 기반)으로 조회합니다.
-  @GET('/books/{bookId}/related/reading-diaries/thumbnail/popular')
+  @GET('/api/v2/books/{bookId}/reading-diaries/thumbnail/popular')
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getRelatedPopularDiaryThumbnailsByBook(
     @Path('bookId') int bookId, {
@@ -77,7 +77,7 @@ abstract class BookRepository {
   });
 
   /// 특정 책의 독서일기 피드 목록을 최신순으로 조회합니다.
-  @GET('/books/{bookId}/related/reading-diaries/feed')
+  @GET('/api/v2/books/{bookId}/reading-diaries/feed')
   Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
       getLatestDiaryFeedsByBook(
     @Path('bookId') int bookId, {
@@ -86,7 +86,7 @@ abstract class BookRepository {
   });
 
   /// 특정 책의 독서일기 피드 목록을 인기순(DB 기반)으로 조회합니다.
-  @GET('/books/{bookId}/related/reading-diaries/feed/popular')
+  @GET('/api/v2/books/{bookId}/reading-diaries/feed/popular')
   Future<ResponseForm<DualCursorPageResponse<DiaryResponse>>>
       getPopularDiaryFeedsByBook(
     @Path('bookId') int bookId, {

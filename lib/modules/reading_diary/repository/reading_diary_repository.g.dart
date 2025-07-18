@@ -29,7 +29,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/reading-diaries/challenges',
+            '/reading-diaries',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -343,7 +343,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/books/${bookId}/related/reading-diaries',
+            '/books/${bookId}/reading-diaries/thumbnail',
             queryParameters: queryParameters,
             data: _data,
           )

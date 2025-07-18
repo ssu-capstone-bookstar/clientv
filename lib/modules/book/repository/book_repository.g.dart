@@ -208,7 +208,7 @@ class _BookRepository implements BookRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/books/${bookId}/related/reading-diaries/thumbnail',
+            '/api/v2/books/${bookId}/reading-diaries/thumbnail',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -255,7 +255,7 @@ class _BookRepository implements BookRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/books/${bookId}/related/reading-diaries/thumbnail/popular',
+            '/api/v2/books/${bookId}/reading-diaries/thumbnail/popular',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -298,7 +298,7 @@ class _BookRepository implements BookRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/books/${bookId}/related/reading-diaries/feed',
+            '/api/v2/books/${bookId}/reading-diaries/feed',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -345,7 +345,7 @@ class _BookRepository implements BookRepository {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/books/${bookId}/related/reading-diaries/feed/popular',
+            '/api/v2/books/${bookId}/reading-diaries/feed/popular',
             queryParameters: queryParameters,
             data: _data,
           )

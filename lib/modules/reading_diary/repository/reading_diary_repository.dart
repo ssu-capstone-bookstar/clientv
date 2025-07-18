@@ -28,7 +28,7 @@ abstract class ReadingDiaryRepository {
   factory ReadingDiaryRepository(Dio dio, {String baseUrl}) =
       _ReadingDiaryRepository;
 
-  @POST('/reading-diaries/challenges')
+  @POST('/reading-diaries')
   Future<ResponseForm<DiaryResponse>> createDiary(
     @Body() DiaryRequest request,
   );
@@ -73,7 +73,7 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
-  @GET('/books/{bookId}/related/reading-diaries')
+  @GET('/books/{bookId}/reading-diaries/thumbnail')
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getRelatedDiaries(
     @Path('bookId') int bookId, {
