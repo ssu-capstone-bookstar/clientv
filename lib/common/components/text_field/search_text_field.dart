@@ -21,6 +21,7 @@ class SearchTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final TextInputType? keyboardType; 
   final int? maxLines; 
+  final FocusNode? focusNode;
 
   const SearchTextField({
     super.key,
@@ -40,6 +41,7 @@ class SearchTextField extends StatelessWidget {
     this.onTap,
     this.keyboardType,
     this.maxLines = 1,
+    this.focusNode,
   });
 
   @override
@@ -54,6 +56,7 @@ class SearchTextField extends StatelessWidget {
     return SizedBox(
       height: height,
       child: TextField(
+        focusNode: focusNode,
         controller: controller,
         onTap: onTap,
         style: TextStyle(
