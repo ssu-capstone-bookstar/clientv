@@ -1,8 +1,8 @@
-import 'package:book/common/components/text_field/search_text_field.dart';
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/chat/view/widgets/chat_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -78,7 +78,7 @@ class ChatInputWrap extends ConsumerWidget {
           width: 24,
         ),
         Expanded(
-          child: SearchTextField(
+          child: ChatTextField(
             focusNode: focusNode,
             controller: textController,
             backgroundColor: ColorName.w1,
@@ -100,7 +100,7 @@ class ChatInputWrap extends ConsumerWidget {
               handleTextSend();
             },
             keyboardType: TextInputType.multiline,
-            maxLines: null,
+            maxLines: 2,
           ),
         ),
       ],
