@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:book/common/models/cursor_page_response.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
@@ -113,18 +114,44 @@ class ChatViewModel extends _$ChatViewModel {
   }
 
   /// 채팅방 참여 직후, 필요 데이터 취득
-  Future<void> fetchChatRoomState(int roomId) async {
+  Future<void> initChatRoomState(int roomId) async {
     final prev = state.value ?? ChatState();
     state = AsyncValue.loading();
     final chatHistory = await getChatHistory(roomId);
     final chatParticipants = await getChatParticipants(roomId);
     state = AsyncValue.data(prev.copyWith(
-        chatHistory: chatHistory, chatParticipants: chatParticipants));
+        chatHistory: chatHistory.data,
+        hasNext: chatHistory.hasNext,
+        nextCursor: chatHistory.nextCursor ?? -1,
+        chatParticipants: chatParticipants));
   }
 
-  Future<void> initAbly() async {
-      final response = await _repository.getAblyToken();
-      print("response.data.accessToken: ${response.data.token}");
+  /// scroll top, 이전 채팅 내역 취득
+  Future<void> fetchPreviousChatHistory(int roomId) async {
+    final prev = state.value ?? ChatState();
+    if (!prev.hasNext || prev.nextCursor == -1) return;
+    // state = AsyncValue.loading();
+    final previousChatHistory =
+        await getChatHistory(roomId, cursorId: prev.nextCursor);
+    state = AsyncValue.data(
+      prev.copyWith(
+        hasNext: previousChatHistory.hasNext,
+        nextCursor: previousChatHistory.nextCursor ?? -1,
+        chatHistory: [
+          ...prev.chatHistory,
+          ...previousChatHistory.data,
+        ],
+      ),
+    );
+  }
+
+  Future<ably.RealtimeChannel> initAbly(int roomId) async {
+    final response = await _repository.getAblyToken();
+    final token = response.data.token;
+    final options = ably.ClientOptions(key: token);
+
+    final realtime = ably.Realtime(options: options);
+    return realtime.channels.get('chat:$roomId');
   }
 
   /// 채팅 내역 조회
@@ -136,15 +163,28 @@ class ChatViewModel extends _$ChatViewModel {
       size: size,
     );
 
-    return _sortChatHistory(response.data);
+    return response.data.copyWith(data: _sortChatHistory(response.data.data));
   }
 
-  CursorPageResponse<ChatMessageResponse> _sortChatHistory(
-      CursorPageResponse<ChatMessageResponse> value) {
-    final sortedData = [...value.data]
+  void addChatHistory(Object? data) {
+    if (data != null) {
+      final map = Map<String, dynamic>.from(data as Map<dynamic, dynamic>);
+      final response = ChatMessageResponse.fromJson(map);
+      final prev = state.value ?? ChatState();
+      // 기존 상태에서 chatHistory.data에 아이템 하나 추가
+      state = AsyncValue.data(
+        prev.copyWith(
+          chatHistory: [response, ...prev.chatHistory, ],
+        ),
+      );
+    }
+  }
+
+  List<ChatMessageResponse> _sortChatHistory(List<ChatMessageResponse> value) {
+    final sortedData = [...value]
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-    return value.copyWith(data: sortedData);
+    return sortedData;
   }
 
   Future<ChatMessageResponse> sendMessage(

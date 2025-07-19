@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatState {
   List<ChatRoomResponse> get myChatRooms;
-  CursorPageResponse<ChatMessageResponse> get chatHistory;
+  List<ChatMessageResponse> get chatHistory;
+  bool get hasNext;
+  int get nextCursor;
   ChatParticipantResponse get chatParticipants;
 
   /// Create a copy of ChatState
@@ -32,8 +34,11 @@ mixin _$ChatState {
             other is ChatState &&
             const DeepCollectionEquality()
                 .equals(other.myChatRooms, myChatRooms) &&
-            (identical(other.chatHistory, chatHistory) ||
-                other.chatHistory == chatHistory) &&
+            const DeepCollectionEquality()
+                .equals(other.chatHistory, chatHistory) &&
+            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
+            (identical(other.nextCursor, nextCursor) ||
+                other.nextCursor == nextCursor) &&
             (identical(other.chatParticipants, chatParticipants) ||
                 other.chatParticipants == chatParticipants));
   }
@@ -42,12 +47,14 @@ mixin _$ChatState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(myChatRooms),
-      chatHistory,
+      const DeepCollectionEquality().hash(chatHistory),
+      hasNext,
+      nextCursor,
       chatParticipants);
 
   @override
   String toString() {
-    return 'ChatState(myChatRooms: $myChatRooms, chatHistory: $chatHistory, chatParticipants: $chatParticipants)';
+    return 'ChatState(myChatRooms: $myChatRooms, chatHistory: $chatHistory, hasNext: $hasNext, nextCursor: $nextCursor, chatParticipants: $chatParticipants)';
   }
 }
 
@@ -58,10 +65,11 @@ abstract mixin class $ChatStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<ChatRoomResponse> myChatRooms,
-      CursorPageResponse<ChatMessageResponse> chatHistory,
+      List<ChatMessageResponse> chatHistory,
+      bool hasNext,
+      int nextCursor,
       ChatParticipantResponse chatParticipants});
 
-  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory;
   $ChatParticipantResponseCopyWith<$Res> get chatParticipants;
 }
 
@@ -79,6 +87,8 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
   $Res call({
     Object? myChatRooms = null,
     Object? chatHistory = null,
+    Object? hasNext = null,
+    Object? nextCursor = null,
     Object? chatParticipants = null,
   }) {
     return _then(_self.copyWith(
@@ -89,23 +99,20 @@ class _$ChatStateCopyWithImpl<$Res> implements $ChatStateCopyWith<$Res> {
       chatHistory: null == chatHistory
           ? _self.chatHistory
           : chatHistory // ignore: cast_nullable_to_non_nullable
-              as CursorPageResponse<ChatMessageResponse>,
+              as List<ChatMessageResponse>,
+      hasNext: null == hasNext
+          ? _self.hasNext
+          : hasNext // ignore: cast_nullable_to_non_nullable
+              as bool,
+      nextCursor: null == nextCursor
+          ? _self.nextCursor
+          : nextCursor // ignore: cast_nullable_to_non_nullable
+              as int,
       chatParticipants: null == chatParticipants
           ? _self.chatParticipants
           : chatParticipants // ignore: cast_nullable_to_non_nullable
               as ChatParticipantResponse,
     ));
-  }
-
-  /// Create a copy of ChatState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory {
-    return $CursorPageResponseCopyWith<ChatMessageResponse, $Res>(
-        _self.chatHistory, (value) {
-      return _then(_self.copyWith(chatHistory: value));
-    });
   }
 
   /// Create a copy of ChatState
@@ -215,7 +222,9 @@ extension ChatStatePatterns on ChatState {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
             List<ChatRoomResponse> myChatRooms,
-            CursorPageResponse<ChatMessageResponse> chatHistory,
+            List<ChatMessageResponse> chatHistory,
+            bool hasNext,
+            int nextCursor,
             ChatParticipantResponse chatParticipants)?
         $default, {
     required TResult orElse(),
@@ -223,8 +232,8 @@ extension ChatStatePatterns on ChatState {
     final _that = this;
     switch (_that) {
       case _ChatState() when $default != null:
-        return $default(
-            _that.myChatRooms, _that.chatHistory, _that.chatParticipants);
+        return $default(_that.myChatRooms, _that.chatHistory, _that.hasNext,
+            _that.nextCursor, _that.chatParticipants);
       case _:
         return orElse();
     }
@@ -247,15 +256,17 @@ extension ChatStatePatterns on ChatState {
   TResult when<TResult extends Object?>(
     TResult Function(
             List<ChatRoomResponse> myChatRooms,
-            CursorPageResponse<ChatMessageResponse> chatHistory,
+            List<ChatMessageResponse> chatHistory,
+            bool hasNext,
+            int nextCursor,
             ChatParticipantResponse chatParticipants)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatState():
-        return $default(
-            _that.myChatRooms, _that.chatHistory, _that.chatParticipants);
+        return $default(_that.myChatRooms, _that.chatHistory, _that.hasNext,
+            _that.nextCursor, _that.chatParticipants);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -277,15 +288,17 @@ extension ChatStatePatterns on ChatState {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
             List<ChatRoomResponse> myChatRooms,
-            CursorPageResponse<ChatMessageResponse> chatHistory,
+            List<ChatMessageResponse> chatHistory,
+            bool hasNext,
+            int nextCursor,
             ChatParticipantResponse chatParticipants)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ChatState() when $default != null:
-        return $default(
-            _that.myChatRooms, _that.chatHistory, _that.chatParticipants);
+        return $default(_that.myChatRooms, _that.chatHistory, _that.hasNext,
+            _that.nextCursor, _that.chatParticipants);
       case _:
         return null;
     }
@@ -297,9 +310,12 @@ extension ChatStatePatterns on ChatState {
 class _ChatState implements ChatState {
   const _ChatState(
       {final List<ChatRoomResponse> myChatRooms = const [],
-      this.chatHistory = const CursorPageResponse(data: [], hasNext: false),
+      final List<ChatMessageResponse> chatHistory = const [],
+      this.hasNext = false,
+      this.nextCursor = -1,
       this.chatParticipants = const ChatParticipantResponse()})
-      : _myChatRooms = myChatRooms;
+      : _myChatRooms = myChatRooms,
+        _chatHistory = chatHistory;
 
   final List<ChatRoomResponse> _myChatRooms;
   @override
@@ -310,9 +326,21 @@ class _ChatState implements ChatState {
     return EqualUnmodifiableListView(_myChatRooms);
   }
 
+  final List<ChatMessageResponse> _chatHistory;
   @override
   @JsonKey()
-  final CursorPageResponse<ChatMessageResponse> chatHistory;
+  List<ChatMessageResponse> get chatHistory {
+    if (_chatHistory is EqualUnmodifiableListView) return _chatHistory;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_chatHistory);
+  }
+
+  @override
+  @JsonKey()
+  final bool hasNext;
+  @override
+  @JsonKey()
+  final int nextCursor;
   @override
   @JsonKey()
   final ChatParticipantResponse chatParticipants;
@@ -332,8 +360,11 @@ class _ChatState implements ChatState {
             other is _ChatState &&
             const DeepCollectionEquality()
                 .equals(other._myChatRooms, _myChatRooms) &&
-            (identical(other.chatHistory, chatHistory) ||
-                other.chatHistory == chatHistory) &&
+            const DeepCollectionEquality()
+                .equals(other._chatHistory, _chatHistory) &&
+            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
+            (identical(other.nextCursor, nextCursor) ||
+                other.nextCursor == nextCursor) &&
             (identical(other.chatParticipants, chatParticipants) ||
                 other.chatParticipants == chatParticipants));
   }
@@ -342,12 +373,14 @@ class _ChatState implements ChatState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_myChatRooms),
-      chatHistory,
+      const DeepCollectionEquality().hash(_chatHistory),
+      hasNext,
+      nextCursor,
       chatParticipants);
 
   @override
   String toString() {
-    return 'ChatState(myChatRooms: $myChatRooms, chatHistory: $chatHistory, chatParticipants: $chatParticipants)';
+    return 'ChatState(myChatRooms: $myChatRooms, chatHistory: $chatHistory, hasNext: $hasNext, nextCursor: $nextCursor, chatParticipants: $chatParticipants)';
   }
 }
 
@@ -361,11 +394,11 @@ abstract mixin class _$ChatStateCopyWith<$Res>
   @useResult
   $Res call(
       {List<ChatRoomResponse> myChatRooms,
-      CursorPageResponse<ChatMessageResponse> chatHistory,
+      List<ChatMessageResponse> chatHistory,
+      bool hasNext,
+      int nextCursor,
       ChatParticipantResponse chatParticipants});
 
-  @override
-  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory;
   @override
   $ChatParticipantResponseCopyWith<$Res> get chatParticipants;
 }
@@ -384,6 +417,8 @@ class __$ChatStateCopyWithImpl<$Res> implements _$ChatStateCopyWith<$Res> {
   $Res call({
     Object? myChatRooms = null,
     Object? chatHistory = null,
+    Object? hasNext = null,
+    Object? nextCursor = null,
     Object? chatParticipants = null,
   }) {
     return _then(_ChatState(
@@ -392,25 +427,22 @@ class __$ChatStateCopyWithImpl<$Res> implements _$ChatStateCopyWith<$Res> {
           : myChatRooms // ignore: cast_nullable_to_non_nullable
               as List<ChatRoomResponse>,
       chatHistory: null == chatHistory
-          ? _self.chatHistory
+          ? _self._chatHistory
           : chatHistory // ignore: cast_nullable_to_non_nullable
-              as CursorPageResponse<ChatMessageResponse>,
+              as List<ChatMessageResponse>,
+      hasNext: null == hasNext
+          ? _self.hasNext
+          : hasNext // ignore: cast_nullable_to_non_nullable
+              as bool,
+      nextCursor: null == nextCursor
+          ? _self.nextCursor
+          : nextCursor // ignore: cast_nullable_to_non_nullable
+              as int,
       chatParticipants: null == chatParticipants
           ? _self.chatParticipants
           : chatParticipants // ignore: cast_nullable_to_non_nullable
               as ChatParticipantResponse,
     ));
-  }
-
-  /// Create a copy of ChatState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CursorPageResponseCopyWith<ChatMessageResponse, $Res> get chatHistory {
-    return $CursorPageResponseCopyWith<ChatMessageResponse, $Res>(
-        _self.chatHistory, (value) {
-      return _then(_self.copyWith(chatHistory: value));
-    });
   }
 
   /// Create a copy of ChatState

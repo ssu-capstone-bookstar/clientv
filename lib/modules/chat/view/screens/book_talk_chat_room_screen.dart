@@ -1,3 +1,4 @@
+import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:book/common/components/text_field/search_text_field.dart';
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class BookTalkChatRoomScreen extends ConsumerStatefulWidget {
   const BookTalkChatRoomScreen({super.key, required this.roomId});
@@ -31,20 +33,48 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   final TextEditingController _textController = TextEditingController();
   bool _visibleOption = false;
   final ImagePicker _picker = ImagePicker();
+  ably.RealtimeChannel? _channel;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
     _textController.addListener(() {
       setState(() {});
     });
-    Future.microtask(() {
-      ref
+    Future.microtask(() async {
+      await ref
           .read(chatViewModelProvider.notifier)
-          ..initAbly()
-          ..fetchChatRoomState(widget.roomId);
+          .initChatRoomState(widget.roomId);
+      _channel = await ref
+          .read(chatViewModelProvider.notifier)
+          .initAbly(widget.roomId);
+      _subscribe();
     });
+  }
+
+  void _onScroll() async {
+    const margin = 10;
+    // 맨 위에 도달했는지 확인
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent + margin) {
+      await ref
+          .read(chatViewModelProvider.notifier)
+          .fetchPreviousChatHistory(widget.roomId);
+    }
+  }
+
+  _subscribe() {
+    /// ably subscribe
+    _channel?.subscribe(name: "message").listen((message) {
+      ref.read(chatViewModelProvider.notifier).addChatHistory(message.data);
+    });
+  }
+
+  _publish(ChatMessageResponse data) {
+    /// ably publish
+    _channel?.publish(name: "message", data: data.toJson());
   }
 
   _updateVisibleOption(bool value) {
@@ -54,10 +84,10 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   }
 
   _handleTextSend() async {
-    await ref.read(chatViewModelProvider.notifier).sendMessage(
+    final data = await ref.read(chatViewModelProvider.notifier).sendMessage(
         widget.roomId, _textController.text, MessageType.text, null);
+    _publish(data);
     _clearText();
-    _refreshChat();
   }
 
   _clearText() {
@@ -66,19 +96,14 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     });
   }
 
-  _refreshChat() {
-    ref.read(chatViewModelProvider.notifier).fetchChatRoomState(widget.roomId);
-  }
-
   _handleImageSend(List<XFile> pickedFiles) async {
     for (XFile file in pickedFiles) {
-      await ref
+      final data = await ref
           .read(chatViewModelProvider.notifier)
           .sendMessage(widget.roomId, null, MessageType.image, file);
+      _publish(data);
     }
-    if (pickedFiles.isNotEmpty) {
-      _refreshChat();
-    }
+    _updateVisibleOption(false);
   }
 
   _clickInputOption(ImageSource source) async {
@@ -95,15 +120,13 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     }
 
     if (pickedFiles.isNotEmpty && mounted) {
-      _updateVisibleOption(false);
       _handleImageSend(pickedFiles);
     }
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
-    _textController.dispose();
+    _channel?.detach();
     super.dispose();
   }
 
@@ -147,7 +170,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
 
   Widget _buildChatHistory(
       ScrollController scrollController, ChatState data, int currentMemberId) {
-    final messages = data.chatHistory.data;
+    final messages = data.chatHistory;
 
     Widget? getProfileImage(int senderId) {
       final profileImageUrl = data.chatParticipants.participants
@@ -183,22 +206,28 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
           );
         case MessageType.image:
           return Padding(
-            padding: AppPaddings.CHAT_MESSAGE_PADDING,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: message.fileUrl ?? "",
-                width: 140,
-                height: 140,
-                errorWidget: (context, url, error) => Container(),
-              ),
-            )
-          );
+              padding: AppPaddings.CHAT_MESSAGE_PADDING,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: message.fileUrl ?? "",
+                  width: 140,
+                  height: 140,
+                  errorWidget: (context, url, error) => Container(),
+                ),
+              ));
 
         default:
           return Container();
       }
+    }
+
+    Widget getDateWidget(String createdAt) {
+      DateTime dt = DateTime.parse(createdAt);
+
+      String formatted = DateFormat('MM/dd\nHH:mm').format(dt);
+      return Text(formatted, style: AppTexts.b12.copyWith(color: ColorName.w1));
     }
 
     return messages.isEmpty
@@ -241,8 +270,12 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                                     child: getChatWidget(message, textStyle),
                                   ),
                                 ),
+                                SizedBox(width: 6,),
+                                getDateWidget(message.createdAt),
                               ]
                             : [
+                                getDateWidget(message.createdAt),
+                                SizedBox(width: 6,),
                                 ConstrainedBox(
                                   constraints: BoxConstraints(maxWidth: 140),
                                   child: Container(

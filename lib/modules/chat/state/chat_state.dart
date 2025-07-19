@@ -1,4 +1,3 @@
-import 'package:book/common/models/cursor_page_response.dart';
 import 'package:book/modules/chat/model/chat_message_response.dart';
 import 'package:book/modules/chat/model/chat_participant_response.dart';
 import 'package:book/modules/chat/model/chat_room_response.dart';
@@ -10,12 +9,9 @@ part 'chat_state.freezed.dart';
 abstract class ChatState with _$ChatState {
   const factory ChatState({
     @Default([]) List<ChatRoomResponse> myChatRooms,
-    @Default(
-      CursorPageResponse(
-        data: [],
-        hasNext: false,
-      )
-    ) CursorPageResponse<ChatMessageResponse> chatHistory,
+    @Default([]) List<ChatMessageResponse> chatHistory,
+    @Default(false) bool hasNext,
+    @Default(-1) int nextCursor,
     @Default(
       ChatParticipantResponse()
     ) ChatParticipantResponse chatParticipants,
