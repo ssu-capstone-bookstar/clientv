@@ -34,7 +34,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   bool _visibleOption = false;
   final ImagePicker _picker = ImagePicker();
   ably.RealtimeChannel? _channel;
-  final FocusNode chatInputFocusNode = FocusNode();
+  final FocusNode _chatInputFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     setState(() {
       _visibleOption = value;
     });
-    if (value) chatInputFocusNode.unfocus();
+    if (value) _chatInputFocusNode.unfocus();
   }
 
   _handleTextSend() async {
@@ -127,7 +127,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   }
 
   _clearChatInput() {
-    chatInputFocusNode.unfocus();
+    _chatInputFocusNode.unfocus();
     _updateVisibleOption(false);
   }
 
@@ -171,7 +171,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                 ChatInputWrap(
                   textController: _textController,
                   visibleOption: _visibleOption,
-                  focusNode: chatInputFocusNode,
+                  focusNode: _chatInputFocusNode,
                   updateVisibleOption: _updateVisibleOption,
                   handleTextSend: _handleTextSend,
                   clickInputOption: _clickInputOption,
