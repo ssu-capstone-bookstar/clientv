@@ -1,12 +1,11 @@
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-import '../../../gen/colors.gen.dart';
-import '../../theme/style/app_texts.dart';
-
-class SearchTextField extends StatelessWidget {
+class ChatTextField extends StatelessWidget {
   final TextEditingController? controller;
   final Widget? suffixIcon;
-  
+
   final String? hintText;
   final TextStyle? hintStyle;
   final Color? textColor;
@@ -19,11 +18,12 @@ class SearchTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final VoidCallback? onTapSuffixIcon;
   final VoidCallback? onTap;
-  final TextInputType? keyboardType; 
-  final int? maxLines; 
+  final TextInputType? keyboardType;
+  final int? minLines;
+  final int? maxLines;
   final FocusNode? focusNode;
 
-  const SearchTextField({
+  const ChatTextField({
     super.key,
     this.controller,
     this.suffixIcon,
@@ -40,6 +40,7 @@ class SearchTextField extends StatelessWidget {
     this.onTapSuffixIcon,
     this.onTap,
     this.keyboardType,
+    this.minLines = 1,
     this.maxLines = 1,
     this.focusNode,
   });
@@ -53,8 +54,11 @@ class SearchTextField extends StatelessWidget {
       ),
     );
 
-    return SizedBox(
-      height: height,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: 0,
+        maxHeight: 100
+      ),
       child: TextField(
         focusNode: focusNode,
         controller: controller,
@@ -79,6 +83,7 @@ class SearchTextField extends StatelessWidget {
         onSubmitted: onSubmitted,
         readOnly: readOnly,
         keyboardType: keyboardType,
+        minLines: minLines,
         maxLines: maxLines,
       ),
     );
