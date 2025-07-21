@@ -49,14 +49,14 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: AppPaddings.SCREEN_BODY_PADDING,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 32),
+              const SizedBox(height: 10),
               Text(
                 '오늘 읽은 내용을\n다이어리에 기록해 보세요',
-                style: AppTexts.h2.copyWith(color: ColorName.w1),
+                style: AppTexts.b1.copyWith(color: ColorName.w1),
               ),
               if (subtitle != null)
                 Padding(
@@ -64,10 +64,10 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                   // TODO: 보라색 그라데이션 효과
                   child: Text(
                     subtitle,
-                    style: AppTexts.h4.copyWith(color: ColorName.p1),
+                    style: AppTexts.b8.copyWith(color: ColorName.p1),
                   ),
                 ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               const StepProgressIndicator(
                 totalSteps: 3,
                 currentStep: 3,
@@ -88,6 +88,16 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        CtaButtonL1(
+          text: '작성하기',
+          onPressed: () {
+            final challengeId =
+                ref.read(currentChallengeViewModelProvider).challengeId;
+            if (challengeId == null) return;
+            context.push('/reading-diary/$progressId');
+          },
+        ),
+        const SizedBox(height: 8),
         CtaButtonL2(
           text: '나중에 하기',
           onPressed: () {
@@ -114,16 +124,6 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 ),
               ),
             );
-          },
-        ),
-        const SizedBox(height: 8),
-        CtaButtonL1(
-          text: '작성하기',
-          onPressed: () {
-            final challengeId =
-                ref.read(currentChallengeViewModelProvider).challengeId;
-            if (challengeId == null) return;
-            context.push('/reading-diary/$progressId');
           },
         ),
         const SizedBox(height: 34),

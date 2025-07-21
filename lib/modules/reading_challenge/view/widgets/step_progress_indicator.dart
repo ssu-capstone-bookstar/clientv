@@ -27,8 +27,8 @@ class StepProgressIndicator extends StatelessWidget {
           // 첫 단계는 보라색
           colorForCurrentStep = ColorName.p1;
         } else if (currentStep - 1 == totalSteps - 1) {
-          // 마지막 단계는 초록색
-          colorForCurrentStep = ColorName.sg;
+          // 마지막 단계는 노란색
+          colorForCurrentStep = ColorName.l;
         } else {
           // 중간 단계는 빨간색
           colorForCurrentStep = ColorName.r;

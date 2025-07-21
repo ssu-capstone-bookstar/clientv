@@ -1,11 +1,10 @@
 import 'package:book/common/components/button/cta_button_l1.dart';
+import 'package:book/common/components/text_field/input_1.dart';
 import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
 import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -65,39 +64,30 @@ class _ReadingChallengeTotalPageScreenState
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: AppPaddings.SCREEN_BODY_PADDING,
           child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height -
-                    (AppBar().preferredSize.height +
-                        MediaQuery.of(context).padding.top +
-                        MediaQuery.of(context).padding.bottom),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 20),
-                      ChallengeBookInfoWidget(book: book),
-                      const SizedBox(height: 16),
-                      const StepProgressIndicator(
-                        totalSteps: 3,
-                        currentStep: 1,
-                      ),
-                      const SizedBox(height: 60),
-                      _buildPageInputSection(),
-                    ],
-                  ),
-                  _buildBottomButtonSection(),
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ChallengeBookInfoWidget(book: book),
+                    const SizedBox(height: 25),
+                    const StepProgressIndicator(
+                      totalSteps: 3,
+                      currentStep: 1,
+                    ),
+                    const SizedBox(height: 40),
+                    _buildPageInputSection(),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
+        bottomNavigationBar: _buildBottomButtonSection(),
       ),
     );
   }
@@ -106,57 +96,40 @@ class _ReadingChallengeTotalPageScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          '선택하신 책의 전체 페이지 수를 알려주세요',
-          style: AppTexts.b8.copyWith(color: ColorName.p1),
-          textAlign: TextAlign.left,
-        ),
-        const SizedBox(height: 24),
-        TextField(
+        Input1(
           controller: _textController,
-          textAlign: TextAlign.left,
-          style: AppTexts.h3.copyWith(color: ColorName.w1),
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: InputDecoration(
-            filled: false,
-            hintStyle: AppTexts.h3.copyWith(color: ColorName.g6),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: ColorName.g6),
-            ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: ColorName.p1),
-            ),
-            suffixText: '페이지',
-          ),
+          label: '선택하신 책의 전체 페이지 수를 알려주세요',
+          hintText: '페이지',
         ),
       ],
     );
   }
 
   Widget _buildBottomButtonSection() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        CtaButtonL1(
-          text: '다음',
-          enabled: _isButtonEnabled,
-          onPressed: () {
-            final totalPages = int.tryParse(_textController.text);
-            if (totalPages != null && mounted) {
-              context.push(
-                '/reading-challenge/start-and-end',
-                extra: {
-                  'book': widget.book,
-                  'totalPages': totalPages,
-                },
-              );
-            }
-          },
-        ),
-        const SizedBox(height: 34),
-      ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          CtaButtonL1(
+            text: '다음으로',
+            enabled: _isButtonEnabled,
+            onPressed: () {
+              final totalPages = int.tryParse(_textController.text);
+              if (totalPages != null && mounted) {
+                context.push(
+                  '/reading-challenge/start-and-end',
+                  extra: {
+                    'book': widget.book,
+                    'totalPages': totalPages,
+                  },
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

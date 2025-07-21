@@ -12,7 +12,6 @@ import '../../../book/view/widgets/book_info_widget.dart';
 import '../../../book/view_model/book_overview_view_model.dart';
 import '../../../book/repository/book_repository.dart';
 import '../../../book_pick/model/search_book_response.dart';
-import '../../../reading_diary/view_model/challenge_diaries_view_model.dart';
 import '../../../../common/models/cursor_page_response.dart';
 import '../../../reading_diary/model/diary_thumbnail_response.dart';
 

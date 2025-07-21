@@ -1,5 +1,6 @@
 import 'package:book/common/components/button/cta_button_l1.dart';
 import 'package:book/common/components/dialog/custom_dialog.dart';
+import 'package:book/common/components/text_field/input_1.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/search_book_response.dart';
@@ -30,7 +31,6 @@ class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
 
 class _ReadingChallengeStartAndEndPageScreenState
     extends ConsumerState<ReadingChallengeStartAndEndPageScreen> {
-
   final FocusNode startFocusNode = FocusNode();
   final FocusNode endFocusNode = FocusNode();
 
@@ -79,6 +79,7 @@ class _ReadingChallengeStartAndEndPageScreenState
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
+    final state = ref.watch(currentChallengeViewModelProvider);
     final book = widget.book;
 
     return Scaffold(
@@ -110,6 +111,7 @@ class _ReadingChallengeStartAndEndPageScreenState
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
                       ChallengeBookInfoWidget(book: book),
@@ -119,10 +121,8 @@ class _ReadingChallengeStartAndEndPageScreenState
                         currentStep: 2,
                       ),
                       const SizedBox(height: 40),
-                      _buildPageInputSection(context, viewModel, startFocusNode, endFocusNode),
-                      const SizedBox(height: 24),
-                      _buildBottomButtonSection(
-                          context, book, widget.totalPages),
+                      _buildPageInputSection(
+                          context, viewModel, startFocusNode, endFocusNode),
                     ],
                   ),
                 ),
@@ -131,19 +131,27 @@ class _ReadingChallengeStartAndEndPageScreenState
           ),
         ),
       ),
+      bottomNavigationBar: (state.startPage?.isNotEmpty == true ||
+              state.endPage?.isNotEmpty == true)
+          ? _buildBottomButtonSection(context, book, widget.totalPages)
+          : null,
     );
   }
 
-  Widget _buildPageInputSection(BuildContext ctx, CurrentChallengeViewModel viewModel, FocusNode startFocusNode, FocusNode endFocusNode) {
+  Widget _buildPageInputSection(
+      BuildContext ctx,
+      CurrentChallengeViewModel viewModel,
+      FocusNode startFocusNode,
+      FocusNode endFocusNode) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '오늘 읽은 페이지 수를 알려주세요',
-          style: AppTexts.b8.copyWith(color: ColorName.p1),
+          style: AppTexts.b10.copyWith(color: ColorName.p1),
           textAlign: TextAlign.left,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
         _buildPageInputField(
           label: '에서',
           focusNode: startFocusNode,
@@ -175,32 +183,27 @@ class _ReadingChallengeStartAndEndPageScreenState
     Function()? onSubmitted,
   }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(
-          child: TextField(
+          child: Input1(
+            hintText: '페이지',
             focusNode: focusNode,
-            textInputAction: textInputAction,
-            onChanged: onChanged,
-            onSubmitted: (_) => onSubmitted,
-            textAlign: TextAlign.left,
-            style: AppTexts.h3.copyWith(color: ColorName.w1),
             keyboardType: TextInputType.numberWithOptions(signed: true),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: InputDecoration(
-              filled: false,
-              hintStyle: AppTexts.h3.copyWith(color: ColorName.g6),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorName.g6),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorName.p1),
-              ),
-              suffixText: '페이지',
-            ),
+            onChanged: onChanged,
+            onTap: () {
+              if (onSubmitted != null) {
+                onSubmitted();
+              }
+            },
           ),
         ),
         const SizedBox(width: 8),
-        Text(label, style: AppTexts.h3.copyWith(color: ColorName.w1)),
+        Text(
+          label,
+          style: AppTexts.b4.copyWith(color: ColorName.g3),
+        ),
       ],
     );
   }
@@ -213,49 +216,51 @@ class _ReadingChallengeStartAndEndPageScreenState
     final state = ref.watch(currentChallengeViewModelProvider);
     final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        CtaButtonL1(
-          text: '기록하기',
-          enabled: viewModel.isButtonEnabled,
-          onPressed: () async {
-            try {
-              final int progressId;
-              if (widget.challengeId == null) {
-                progressId = await viewModel.createChallenge(ref);
-              } else {
-                progressId = await viewModel.updateChallengeProgress();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          CtaButtonL1(
+            text: '다음으로',
+            enabled: viewModel.isButtonEnabled,
+            onPressed: () async {
+              try {
+                final int progressId;
+                if (widget.challengeId == null) {
+                  progressId = await viewModel.createChallenge(ref);
+                } else {
+                  progressId = await viewModel.updateChallengeProgress();
+                }
+
+                if (!context.mounted) return;
+
+                final isChallengeCompleted = state.endPage != null &&
+                    int.tryParse(state.endPage!) != null &&
+                    int.parse(state.endPage!) >= totalPages;
+
+                if (isChallengeCompleted) {
+                  context.push(
+                    '/reading-challenge/rating',
+                    extra: book,
+                  );
+                } else {
+                  context.push(
+                    '/reading-challenge/diary-encourage',
+                    extra: {
+                      'isChallengeCompleted': isChallengeCompleted,
+                      'progressId': progressId,
+                    },
+                  );
+                }
+              } catch (e) {
+                debugPrint('Failed to process reading record: $e');
               }
-
-              if (!context.mounted) return;
-
-              final isChallengeCompleted = state.endPage != null &&
-                  int.tryParse(state.endPage!) != null &&
-                  int.parse(state.endPage!) >= totalPages;
-
-              if (isChallengeCompleted) {
-                context.push(
-                  '/reading-challenge/rating',
-                  extra: book,
-                );
-              } else {
-                context.push(
-                  '/reading-challenge/diary-encourage',
-                  extra: {
-                    'isChallengeCompleted': isChallengeCompleted,
-                    'progressId': progressId,
-                  },
-                );
-              }
-            } catch (e) {
-              debugPrint('Failed to process reading record: $e');
-            }
-          },
-        ),
-        const SizedBox(height: 34),
-      ],
+            },
+          ),
+        ],
+      ),
     );
   }
 }
