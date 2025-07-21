@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/colors.gen.dart';
 import '../../theme/app_style.dart';
 import '../button/cta_button_l1.dart';
+import '../button/cta_button_l2.dart';
 
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
@@ -58,12 +59,10 @@ class CustomDialog extends StatelessWidget {
               children: [
                 if (cancelButtonText.isNotEmpty)
                   Expanded(
-                    child: CtaButtonL1(
+                    child: CtaButtonL2(
                       text: cancelButtonText,
                       onPressed: onCancel,
                       height: 41,
-                      backgroundColor: ColorName.g5,
-                      borderColor: ColorName.g4,
                       borderRadius: 7,
                     ),
                   ),

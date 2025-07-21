@@ -101,11 +101,6 @@ class _BookTalkChatRoomMenuScreenState
             text: '채팅방 나가기',
             onPressed: () => _showExitChatRoomDialog(context, roomId),
             width: 71,
-            height: 27,
-            textStyle: AppTexts.b12,
-            defaultTextColor: ColorName.p1,
-            borderRadius: 5,
-            defaultBackgroundColor: ColorName.g7,
           )
         ],
       ),

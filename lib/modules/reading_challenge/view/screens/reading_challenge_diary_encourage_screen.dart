@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/components/button/cta_button_l1.dart';
-import '../../../../common/components/button/cta_button_s.dart';
+import '../../../../common/components/button/cta_button_l2.dart';
 import '../../../../common/components/dialog/custom_dialog.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
@@ -88,7 +88,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        CtaButtonS(
+        CtaButtonL2(
           text: '나중에 하기',
           onPressed: () {
             showDialog(
