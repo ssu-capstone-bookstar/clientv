@@ -17,12 +17,12 @@ class CtaButtonS extends StatefulWidget {
     required this.text,
     this.onPressed,
     this.enabled = true,
-    this.width = 341,
-    this.height = 56,
-    this.textStyle = AppTexts.b7,
-    this.defaultTextColor = ColorName.g2,
-    this.borderRadius = 10,
-    this.defaultBackgroundColor = ColorName.g6,
+    this.width = 200,
+    this.height = 27,
+    this.textStyle = AppTexts.b12,
+    this.defaultTextColor = ColorName.p1,
+    this.borderRadius = 5,
+    this.defaultBackgroundColor = ColorName.g7,
   }) : super(key: key);
 
   @override
@@ -44,19 +44,18 @@ class _CtaButtonSState extends State<CtaButtonS> {
     if (isDisabled) {
       backgroundColor = ColorName.g7;
       borderColor = ColorName.g6;
-      textColor = ColorName.g5;
-    } else if (_isPressed) {
-      backgroundColor = const Color(0xFF33353B);
-      borderColor = const Color(0xFF43454B);
-      textColor = ColorName.g4;
-    } else if (_isHovered) {
-      backgroundColor = ColorName.g7;
-      borderColor = ColorName.g6;
       textColor = ColorName.g3;
+    } else if (_isPressed) {
+      backgroundColor = const Color(0xFF242429);
+      borderColor = const Color(0xFF2F2F35);
+      textColor = const Color(0xFF775DFF);
+    } else if (_isHovered) {
+      backgroundColor = const Color(0xFF38383E);
+      borderColor = const Color(0xFF46464F);
+      textColor = const Color(0xFF8A75FF);
     } else {
       backgroundColor = widget.defaultBackgroundColor;
-      borderColor = const Color(0xFF4D4F55);
-      // textColor = ColorName.g2;
+      borderColor = ColorName.g6;
       textColor = widget.defaultTextColor;
     }
 
