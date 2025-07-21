@@ -43,11 +43,12 @@ class CustomDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(title,
-                style: titleStyle ?? AppTexts.b7.copyWith(color: ColorName.w1)),
+                style:
+                    titleStyle ?? AppTexts.b11.copyWith(color: ColorName.g2)),
             const SizedBox(height: 3),
             Text(
               content,
-              style: contentStyle ?? AppTexts.b11.copyWith(color: ColorName.g2),
+              style: contentStyle ?? AppTexts.b7.copyWith(color: ColorName.w1),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),

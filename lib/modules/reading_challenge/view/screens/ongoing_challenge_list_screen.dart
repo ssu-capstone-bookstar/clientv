@@ -208,7 +208,9 @@ class _OngoingChallengeListScreenState
       builder: (_) {
         return CustomDialog(
           title: '리딩 챌린지를 중단할까요?',
-          content: '중단한 리딩 챌린지는 마이페이지 > 중단한 리딩 챌린지에서 언제든지 다시 진행할 수 있어요',
+          content: '중단한 리딩 챌린지는 마이페이지 > 중단한 리딩 챌린지에서\n언제든지 다시 진행할 수 있어요',
+          titleStyle: AppTexts.b7.copyWith(color: ColorName.w1),
+          contentStyle: AppTexts.b11.copyWith(color: ColorName.g2),
           icon: Assets.icons.icReadingChallengeChar1
               .svg(width: 100, height: 106.8803482055664),
           onCancel: () => Navigator.of(context).pop(),
@@ -243,8 +245,6 @@ class _OngoingChallengeListScreenState
           onCancel: () => Navigator.of(context).pop(),
           confirmButtonText: '확인',
           cancelButtonText: '',
-          titleStyle: AppTexts.b11.copyWith(color: ColorName.g2),
-          contentStyle: AppTexts.b7.copyWith(color: ColorName.w1),
         );
       },
     );
