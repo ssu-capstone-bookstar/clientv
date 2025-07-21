@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../common/components/button/cta_button_l2.dart';
+import '../../../../common/components/button/cta_button_s.dart';
 import '../../../../common/components/button/cta_button_l1.dart';
 import '../../../../common/theme/style/app_texts.dart';
 import '../../../../gen/assets.gen.dart';
@@ -40,7 +40,7 @@ class DeepTimePauseDialog extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: CtaButtonL2(
+                  child: CtaButtonS(
                     text: '멈추기',
                     onPressed: () async {
                       await ref

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common/components/button/cta_button_l1.dart';
-import '../../../../common/components/button/cta_button_l2.dart';
+import '../../../../common/components/button/cta_button_s.dart';
 
 class DeepTimeCompletionDialog extends ConsumerWidget {
   const DeepTimeCompletionDialog({super.key});
@@ -41,7 +41,7 @@ class DeepTimeCompletionDialog extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: CtaButtonL2(
+                  child: CtaButtonS(
                     text: '다시 하기',
                     onPressed: () async {
                       await ref

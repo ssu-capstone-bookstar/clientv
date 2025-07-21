@@ -2,7 +2,7 @@ import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-class CtaButtonL2 extends StatefulWidget {
+class CtaButtonS extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool enabled;
@@ -12,7 +12,7 @@ class CtaButtonL2 extends StatefulWidget {
   final Color defaultTextColor;
   final double borderRadius;
   final Color defaultBackgroundColor;
-  const CtaButtonL2({
+  const CtaButtonS({
     Key? key,
     required this.text,
     this.onPressed,
@@ -26,10 +26,10 @@ class CtaButtonL2 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CtaButtonL2> createState() => _CtaButtonL2State();
+  State<CtaButtonS> createState() => _CtaButtonSState();
 }
 
-class _CtaButtonL2State extends State<CtaButtonL2> {
+class _CtaButtonSState extends State<CtaButtonS> {
   bool _isHovered = false;
   bool _isPressed = false;
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/colors.gen.dart';
 import '../../theme/app_style.dart';
 import '../button/cta_button_l1.dart';
-import '../button/cta_button_l2.dart';
+import '../button/cta_button_s.dart';
 
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
@@ -53,7 +53,7 @@ class CustomDialog extends StatelessWidget {
               children: [
                 if (cancelButtonText.isNotEmpty)
                   Expanded(
-                    child: CtaButtonL2(
+                    child: CtaButtonS(
                       text: cancelButtonText,
                       onPressed: onCancel,
                     ),

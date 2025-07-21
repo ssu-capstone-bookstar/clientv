@@ -1,4 +1,4 @@
-import 'package:book/common/components/button/cta_button_l2.dart';
+import 'package:book/common/components/button/cta_button_s.dart';
 import 'package:book/common/components/dialog/custom_dialog.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
@@ -97,7 +97,7 @@ class _BookTalkChatRoomMenuScreenState
               )
             ],
           ),
-          CtaButtonL2(
+          CtaButtonS(
             text: '채팅방 나가기',
             onPressed: () => _showExitChatRoomDialog(context, roomId),
             width: 71,
@@ -120,7 +120,7 @@ class _BookTalkChatRoomMenuScreenState
         return GestureDetector(
           onTap: () {
             context.push(
-                    '/book-talk/chat-room/${widget.roomId}/book-log/${item.memberId}');
+                '/book-talk/chat-room/${widget.roomId}/book-log/${item.memberId}');
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -148,8 +148,15 @@ class _BookTalkChatRoomMenuScreenState
                 ),
                 Row(
                   children: [
-                    Text("책로그 보기", style: AppTexts.b10.copyWith(color: ColorName.g3),),
-                    Icon(Icons.chevron_right, size: 19, color: ColorName.g3,)
+                    Text(
+                      "책로그 보기",
+                      style: AppTexts.b10.copyWith(color: ColorName.g3),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 19,
+                      color: ColorName.g3,
+                    )
                   ],
                 )
               ],

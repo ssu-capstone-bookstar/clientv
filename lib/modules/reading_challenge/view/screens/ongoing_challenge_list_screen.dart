@@ -1,5 +1,5 @@
 import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/common/components/button/cta_button_l2.dart';
+import 'package:book/common/components/button/cta_button_s.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
@@ -61,7 +61,7 @@ class _OngoingChallengeListScreenState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTopSection(viewModel, isSelectionMode, _textController),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             Expanded(
               child: state.challenges.when(
                 data: (challenges) => _buildChallengeGrid(
@@ -91,8 +91,9 @@ class _OngoingChallengeListScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('완독에 도전 중인 도서를 찾아보세요', style: AppTexts.h4),
-        const SizedBox(height: 8),
+        Text('완독에 도전 중인 도서를 찾아보세요',
+            style: AppTexts.b1.copyWith(color: ColorName.w1)),
+        const SizedBox(height: 12),
         SearchTextField(
           controller: textController,
           hintText: '읽던 책을 검색해 보세요',
@@ -101,10 +102,10 @@ class _OngoingChallengeListScreenState
               ? Assets.images.icSearchColored3x.image(scale: 3)
               : Assets.images.icSearchUncolored3x.image(scale: 3),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 25),
         Align(
           alignment: Alignment.centerRight,
-          child: CtaButtonL2(
+          child: CtaButtonS(
             text: isSelectionMode ? '선택 취소' : '챌린지 중단하기',
             onPressed: viewModel.toggleSelectionMode,
             width: 76,
