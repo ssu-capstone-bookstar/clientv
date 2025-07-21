@@ -128,45 +128,62 @@ class _OngoingChallengeListScreenState
       return const Center(child: Text('진행중인 챌린지가 없습니다.'));
     }
     final rowCount = (challenges.length / 3).ceil();
-    return ListView.separated(
-      itemCount: rowCount,
-      itemBuilder: (context, rowIndex) {
-        final startIndex = rowIndex * 3;
-        final List<Widget> rowItems = [];
-        for (int i = 0; i < 3; i++) {
-          final challengeIndex = startIndex + i;
-          if (challengeIndex < challenges.length) {
-            final challenge = challenges[challengeIndex];
-            rowItems.add(
-              Expanded(
-                child: OngoingChallengeCard(
-                  challenge: challenge,
-                  isSelectionMode: screenState.isSelectionMode,
-                  isSelected: screenState.selectedChallengeIds
-                      .contains(challenge.challengeId),
-                  onToggle: () {
-                    viewModel.toggleChallengeSelection(challenge.challengeId);
-                  },
-                ),
+    return ListView.builder(
+      itemCount: rowCount * 2, // Include separator after the last row
+      itemBuilder: (context, index) {
+        if (index.isOdd) {
+          // Separator item
+          return Padding(
+            padding: const EdgeInsets.only(top: 6, bottom: 30),
+            child: Container(
+              height: 7,
+              decoration: const BoxDecoration(
+                color: Color(0xFF26262B),
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.7),
+                    offset: Offset(0, 6),
+                    blurRadius: 50,
+                  ),
+                ],
               ),
-            );
-          } else {
-            rowItems.add(Expanded(child: Container())); // Placeholder
+            ),
+          );
+        } else {
+          // Content item
+          final rowIndex = index ~/ 2;
+          final startIndex = rowIndex * 3;
+          final List<Widget> rowItems = [];
+          for (int i = 0; i < 3; i++) {
+            final challengeIndex = startIndex + i;
+            if (challengeIndex < challenges.length) {
+              final challenge = challenges[challengeIndex];
+              rowItems.add(
+                Expanded(
+                  child: OngoingChallengeCard(
+                    challenge: challenge,
+                    isSelectionMode: screenState.isSelectionMode,
+                    isSelected: screenState.selectedChallengeIds
+                        .contains(challenge.challengeId),
+                    onToggle: () {
+                      viewModel.toggleChallengeSelection(challenge.challengeId);
+                    },
+                  ),
+                ),
+              );
+            } else {
+              rowItems.add(Expanded(child: Container())); // Placeholder
+            }
+            if (i < 2) {
+              rowItems.add(const SizedBox(width: 16));
+            }
           }
-          if (i < 2) {
-            rowItems.add(const SizedBox(width: 16));
-          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: rowItems,
+          );
         }
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: rowItems,
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          child: Divider(color: ColorName.g6, height: 1),
-        );
       },
     );
   }
