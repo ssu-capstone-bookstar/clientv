@@ -1,5 +1,6 @@
 import 'package:book/common/components/form/checkbox_1.dart';
 import 'package:book/common/theme/app_style.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +85,10 @@ class OngoingChallengeCard extends StatelessWidget {
                     child: CheckBox1(
                       value: isSelected,
                       onChanged: (bool value) => onToggle(),
-                    )
-                )
+                      selectedBackgroundColor: ColorName.p1,
+                      selectedborderColor: const Color(0xFF8972FF),
+                      iconColor: ColorName.w1,
+                    ))
             ],
           ),
         ),

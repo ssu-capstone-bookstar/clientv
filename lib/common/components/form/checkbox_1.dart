@@ -20,12 +20,18 @@ class CheckBox1 extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final bool enabled;
+  final Color? selectedBackgroundColor;
+  final Color? selectedborderColor;
+  final Color? iconColor;
 
   const CheckBox1({
     Key? key,
     required this.value,
     required this.onChanged,
     this.enabled = true,
+    this.selectedBackgroundColor = ColorName.p5,
+    this.selectedborderColor = ColorName.p1,
+    this.iconColor = ColorName.p1,
   }) : super(key: key);
 
   @override
@@ -36,16 +42,20 @@ class CheckBox1 extends StatelessWidget {
         width: 22,
         height: 22,
         decoration: BoxDecoration(
-          color: value ? ColorName.p5 : ColorName.g7,
+          color: value ? (selectedBackgroundColor) : ColorName.g7,
           borderRadius: BorderRadius.circular(3),
           border: Border.all(
-            color: value ? ColorName.p1 : ColorName.g7,
+            color: value ? (selectedborderColor ?? ColorName.p1) : ColorName.g7,
             width: 0.8,
           ),
         ),
         child: value
             ? Center(
-                child: Assets.icons.icCheck.svg(width: 11.6, height: 10.2),
+                child: Assets.icons.icCheck.svg(
+                    width: 11.6,
+                    height: 10.2,
+                    colorFilter: ColorFilter.mode(
+                        iconColor ?? ColorName.p1, BlendMode.srcIn)),
               )
             : null,
       ),

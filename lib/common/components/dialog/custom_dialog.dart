@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../gen/colors.gen.dart';
 import '../../theme/app_style.dart';
 import '../button/cta_button_l1.dart';
-import '../button/cta_button_s.dart';
 
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
@@ -15,6 +14,8 @@ class CustomDialog extends StatelessWidget {
     required this.onConfirm,
     required this.onCancel,
     this.icon,
+    this.titleStyle,
+    this.contentStyle,
   });
 
   final String title;
@@ -24,45 +25,55 @@ class CustomDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
   final Widget? icon;
+  final TextStyle? titleStyle;
+  final TextStyle? contentStyle;
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: ColorName.g6,
+      backgroundColor: ColorName.g7,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: ColorName.g6, width: 1),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(title, style: AppTexts.b5.copyWith(color: ColorName.w1)),
-            const SizedBox(height: 16),
-            if (icon != null) ...[
-              icon!,
-              const SizedBox(height: 16),
-            ],
+            Text(title,
+                style: titleStyle ?? AppTexts.b7.copyWith(color: ColorName.w1)),
+            const SizedBox(height: 3),
             Text(
               content,
-              style: AppTexts.b3.copyWith(color: ColorName.w1),
+              style: contentStyle ?? AppTexts.b11.copyWith(color: ColorName.g2),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
+            if (icon != null) ...[
+              icon!,
+            ],
+            const SizedBox(height: 30),
             Row(
               children: [
                 if (cancelButtonText.isNotEmpty)
                   Expanded(
-                    child: CtaButtonS(
+                    child: CtaButtonL1(
                       text: cancelButtonText,
                       onPressed: onCancel,
+                      height: 41,
+                      backgroundColor: ColorName.g5,
+                      borderColor: ColorName.g4,
+                      borderRadius: 7,
                     ),
                   ),
-                if (cancelButtonText.isNotEmpty) const SizedBox(width: 8),
+                if (cancelButtonText.isNotEmpty) const SizedBox(width: 6),
                 Expanded(
                   child: CtaButtonL1(
                     text: confirmButtonText,
                     onPressed: onConfirm,
+                    height: 41,
+                    borderRadius: 7,
                   ),
                 ),
               ],

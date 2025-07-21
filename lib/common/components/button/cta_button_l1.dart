@@ -8,6 +8,8 @@ class CtaButtonL1 extends StatefulWidget {
   final bool enabled;
   final Color? backgroundColor;
   final Color? borderColor;
+  final double height;
+  final double borderRadius;
 
   const CtaButtonL1({
     Key? key,
@@ -16,6 +18,8 @@ class CtaButtonL1 extends StatefulWidget {
     this.enabled = true,
     this.backgroundColor,
     this.borderColor,
+    this.height = 56,
+    this.borderRadius = 10,
   }) : super(key: key);
 
   @override
@@ -77,10 +81,10 @@ class _CtaButtonL1State extends State<CtaButtonL1> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
           width: 341,
-          height: 56,
+          height: widget.height,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
             border: Border.all(color: borderColor, width: 1),
           ),
           alignment: Alignment.center,
