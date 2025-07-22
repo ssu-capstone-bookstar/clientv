@@ -1,26 +1,44 @@
+import 'package:book/common/theme/style/app_texts.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../gen/colors.gen.dart';
 
 class FollowButton extends StatelessWidget {
-  const FollowButton({super.key});
-  @override
+  const FollowButton({super.key, this.onPressed, this.isFollowing = false});
+  final VoidCallback? onPressed;
+  final bool isFollowing;
+    @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: ColorName.p1,
-        foregroundColor: ColorName.w1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-        minimumSize: const Size(0, 36),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-        elevation: 0,
+    return SizedBox(
+      width: 68,
+      height: 26,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: ColorName.p1,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+            side: BorderSide(color: ColorName.p3, width: 1),
+          ),
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        ),
+        onPressed:
+            onPressed,
+        child: SizedBox(
+          width: 55,
+          height: 19,
+          child: Center(
+            child: Text(
+              isFollowing ? '팔로잉 취소' : '팔로우',
+              textAlign: TextAlign.center,
+              style: AppTexts.b9.copyWith(color: ColorName.w1),
+            ),
+          ),
+        ),
       ),
-      onPressed: () {
-        // TODO: 팔로우/언팔로우 로직 구현
-      },
-      child: const Text('팔로우'),
     );
   }
+
 }
 // TODO: 팔로우/언팔로우 로직 구현 필요시 이 파일에서 작업

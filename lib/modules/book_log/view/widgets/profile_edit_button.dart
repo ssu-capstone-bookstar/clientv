@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileEditButton extends StatelessWidget {
-  final VoidCallback? onPressed;
   const ProfileEditButton({super.key, this.onPressed});
+  final VoidCallback? onPressed;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
