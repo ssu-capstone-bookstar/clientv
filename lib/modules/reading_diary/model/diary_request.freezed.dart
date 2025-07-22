@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$DiaryRequest {
-  int get progressId;
+  int get bookId;
   String get content;
   List<ImageRequest> get images;
 
@@ -34,20 +34,19 @@ mixin _$DiaryRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is DiaryRequest &&
-            (identical(other.progressId, progressId) ||
-                other.progressId == progressId) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality().equals(other.images, images));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, progressId, content,
+  int get hashCode => Object.hash(runtimeType, bookId, content,
       const DeepCollectionEquality().hash(images));
 
   @override
   String toString() {
-    return 'DiaryRequest(progressId: $progressId, content: $content, images: $images)';
+    return 'DiaryRequest(bookId: $bookId, content: $content, images: $images)';
   }
 }
 
@@ -57,7 +56,7 @@ abstract mixin class $DiaryRequestCopyWith<$Res> {
           DiaryRequest value, $Res Function(DiaryRequest) _then) =
       _$DiaryRequestCopyWithImpl;
   @useResult
-  $Res call({int progressId, String content, List<ImageRequest> images});
+  $Res call({int bookId, String content, List<ImageRequest> images});
 }
 
 /// @nodoc
@@ -72,14 +71,14 @@ class _$DiaryRequestCopyWithImpl<$Res> implements $DiaryRequestCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? progressId = null,
+    Object? bookId = null,
     Object? content = null,
     Object? images = null,
   }) {
     return _then(_self.copyWith(
-      progressId: null == progressId
-          ? _self.progressId
-          : progressId // ignore: cast_nullable_to_non_nullable
+      bookId: null == bookId
+          ? _self.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
               as int,
       content: null == content
           ? _self.content
@@ -186,14 +185,14 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int progressId, String content, List<ImageRequest> images)?
+    TResult Function(int bookId, String content, List<ImageRequest> images)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _DiaryRequest() when $default != null:
-        return $default(_that.progressId, _that.content, _that.images);
+        return $default(_that.bookId, _that.content, _that.images);
       case _:
         return orElse();
     }
@@ -214,13 +213,13 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int progressId, String content, List<ImageRequest> images)
+    TResult Function(int bookId, String content, List<ImageRequest> images)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryRequest():
-        return $default(_that.progressId, _that.content, _that.images);
+        return $default(_that.bookId, _that.content, _that.images);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -240,14 +239,13 @@ extension DiaryRequestPatterns on DiaryRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            int progressId, String content, List<ImageRequest> images)?
+    TResult? Function(int bookId, String content, List<ImageRequest> images)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryRequest() when $default != null:
-        return $default(_that.progressId, _that.content, _that.images);
+        return $default(_that.bookId, _that.content, _that.images);
       case _:
         return null;
     }
@@ -258,7 +256,7 @@ extension DiaryRequestPatterns on DiaryRequest {
 @JsonSerializable()
 class _DiaryRequest implements DiaryRequest {
   const _DiaryRequest(
-      {required this.progressId,
+      {required this.bookId,
       this.content = '',
       final List<ImageRequest> images = const []})
       : _images = images;
@@ -266,7 +264,7 @@ class _DiaryRequest implements DiaryRequest {
       _$DiaryRequestFromJson(json);
 
   @override
-  final int progressId;
+  final int bookId;
   @override
   @JsonKey()
   final String content;
@@ -299,20 +297,19 @@ class _DiaryRequest implements DiaryRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _DiaryRequest &&
-            (identical(other.progressId, progressId) ||
-                other.progressId == progressId) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality().equals(other._images, _images));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, progressId, content,
+  int get hashCode => Object.hash(runtimeType, bookId, content,
       const DeepCollectionEquality().hash(_images));
 
   @override
   String toString() {
-    return 'DiaryRequest(progressId: $progressId, content: $content, images: $images)';
+    return 'DiaryRequest(bookId: $bookId, content: $content, images: $images)';
   }
 }
 
@@ -324,7 +321,7 @@ abstract mixin class _$DiaryRequestCopyWith<$Res>
       __$DiaryRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({int progressId, String content, List<ImageRequest> images});
+  $Res call({int bookId, String content, List<ImageRequest> images});
 }
 
 /// @nodoc
@@ -340,14 +337,14 @@ class __$DiaryRequestCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? progressId = null,
+    Object? bookId = null,
     Object? content = null,
     Object? images = null,
   }) {
     return _then(_DiaryRequest(
-      progressId: null == progressId
-          ? _self.progressId
-          : progressId // ignore: cast_nullable_to_non_nullable
+      bookId: null == bookId
+          ? _self.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
               as int,
       content: null == content
           ? _self.content

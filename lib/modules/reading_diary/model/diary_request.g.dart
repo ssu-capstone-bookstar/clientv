@@ -8,7 +8,7 @@ part of 'diary_request.dart';
 
 _DiaryRequest _$DiaryRequestFromJson(Map<String, dynamic> json) =>
     _DiaryRequest(
-      progressId: (json['progressId'] as num).toInt(),
+      bookId: (json['bookId'] as num).toInt(),
       content: json['content'] as String? ?? '',
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => ImageRequest.fromJson(e as Map<String, dynamic>))
@@ -18,7 +18,7 @@ _DiaryRequest _$DiaryRequestFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$DiaryRequestToJson(_DiaryRequest instance) =>
     <String, dynamic>{
-      'progressId': instance.progressId,
+      'bookId': instance.bookId,
       'content': instance.content,
       'images': instance.images,
     };

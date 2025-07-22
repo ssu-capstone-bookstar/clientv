@@ -95,11 +95,11 @@ GoRouter router(Ref ref) {
         builder: (context, state) => const BookLogDiaryScreen(),
       ),
       GoRoute(
-        path: '/reading-diary/:progressId',
+        path: '/reading-diary/:bookId',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
-          final progressId = int.parse(state.pathParameters['progressId']!);
-          return ReadingDiaryPhotoScreen(progressId: progressId);
+          final bookId = int.parse(state.pathParameters['bookId']!);
+          return ReadingDiaryPhotoScreen(bookId: bookId);
         },
         routes: [
           GoRoute(
@@ -108,10 +108,10 @@ GoRouter router(Ref ref) {
             builder: (context, state) {
               final extra = state.extra as Map<String, dynamic>;
               final imagePaths = extra['images'] as List<String>;
-              final progressId = extra['progressId'] as int;
+              final bookId = extra['bookId'] as int;
               return ReadingDiaryEntryScreen(
                 imagePaths: imagePaths,
-                progressId: progressId,
+                bookId: bookId,
               );
             },
           ),
@@ -349,11 +349,11 @@ GoRouter router(Ref ref) {
                       final extra = state.extra as Map<String, dynamic>;
                       final isChallengeCompleted =
                           extra['isChallengeCompleted'] as bool;
-                      final progressId = extra['progressId'] as int;
+                      final bookId = extra['bookId'] as int;
 
                       return ReadingChallengeDiaryEncourageScreen(
                         isChallengeCompleted: isChallengeCompleted,
-                        progressId: progressId,
+                        bookId: bookId,
                       );
                     },
                   ),

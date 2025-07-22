@@ -16,10 +16,10 @@ enum PhotoSelection {
 class ReadingDiaryPhotoScreen extends ConsumerStatefulWidget {
   const ReadingDiaryPhotoScreen({
     super.key,
-    required this.progressId,
+    required this.bookId,
   });
 
-  final int progressId;
+  final int bookId;
 
   @override
   ConsumerState<ReadingDiaryPhotoScreen> createState() =>
@@ -58,10 +58,10 @@ class _ReadingDiaryPhotoScreenState
     if (pickedFiles.isNotEmpty && mounted) {
       final imagePaths = pickedFiles.map((f) => f.path).toList();
       context.push(
-        '/reading-diary/${widget.progressId}/entry',
+        '/reading-diary/${widget.bookId}/entry',
         extra: {
           'images': imagePaths,
-          'progressId': widget.progressId,
+          'bookId': widget.bookId,
         },
       );
     }
@@ -114,10 +114,10 @@ class _ReadingDiaryPhotoScreenState
                         PhotoSourceModal.show(context, onPick: _pickImages);
                       } else if (mounted) {
                         context.push(
-                          '/reading-diary/${widget.progressId}/entry',
+                          '/reading-diary/${widget.bookId}/entry',
                           extra: {
                             'images': <String>[],
-                            'progressId': widget.progressId,
+                            'bookId': widget.bookId,
                           },
                         );
                       }

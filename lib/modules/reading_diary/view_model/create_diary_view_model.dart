@@ -24,7 +24,7 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
   }
 
   Future<bool> submitDiary({
-    required int progressId,
+    required int bookId,
     required List<XFile> images,
     required String content,
   }) async {
@@ -62,7 +62,7 @@ class CreateDiaryViewModel extends _$CreateDiaryViewModel {
       }));
 
       final diaryRequest = DiaryRequest(
-        progressId: progressId,
+        bookId: bookId,
         content: content,
         images: imageRequests,
       );

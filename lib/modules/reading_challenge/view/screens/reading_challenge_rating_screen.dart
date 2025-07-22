@@ -101,6 +101,8 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
   Widget _buildBottomButtonSection(BuildContext context, WidgetRef ref) {
     final viewModel =
         ref.read(readingChallengeRatingViewModelProvider.notifier);
+    final bookId = ref.read(currentChallengeViewModelProvider).book?.bookId;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -110,18 +112,12 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
           enabled: viewModel.isButtonEnabled,
           onPressed: () {
             // TODO: 별점 저장 API 호출
-            final progressId =
-                ref.read(currentChallengeViewModelProvider).progressId;
-            if (progressId == null) {
-              // Handle error: progressId not found
-              return;
-            }
-
+            if(bookId == null) return;
             context.push(
               '/reading-challenge/diary-encourage',
               extra: {
                 'isChallengeCompleted': true,
-                'progressId': progressId,
+                'bookId': bookId,
               },
             );
           },
