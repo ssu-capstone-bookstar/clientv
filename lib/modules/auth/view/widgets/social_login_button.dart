@@ -36,21 +36,16 @@ class SocialLoginButton extends StatelessWidget {
         elevation: 0,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Container()),
-          SvgPicture.asset(assetName, width: 24, height: 24),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              label,
+          SvgPicture.asset(assetName, width: 20, height: 20),
+          const SizedBox(width: 10),
+          Text(label,
               style: TextStyle(
                 color: textColor,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Expanded(child: Container()),
+              ))
         ],
       ),
     );
