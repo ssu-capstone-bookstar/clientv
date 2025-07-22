@@ -7,7 +7,7 @@ part of 'create_diary_view_model.dart';
 // **************************************************************************
 
 String _$createDiaryViewModelHash() =>
-    r'2a644084a9ef6f8922ff40a23e349468145f73f4';
+    r'6e8cba31ea85cb51807636629fdd682fd450eb92';
 
 /// See also [CreateDiaryViewModel].
 @ProviderFor(CreateDiaryViewModel)

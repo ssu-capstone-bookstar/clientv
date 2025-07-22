@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$BookOverviewResponse {
-  int get bookId;
+  int get id;
   String get title;
   String get author;
   String get cover;
@@ -40,7 +40,7 @@ mixin _$BookOverviewResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is BookOverviewResponse &&
-            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.cover, cover) || other.cover == cover) &&
@@ -56,12 +56,12 @@ mixin _$BookOverviewResponse {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, title, author, cover,
+  int get hashCode => Object.hash(runtimeType, id, title, author, cover,
       readingDiaryCount, isbn, publisher, star, publishedDate);
 
   @override
   String toString() {
-    return 'BookOverviewResponse(bookId: $bookId, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate)';
+    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate)';
   }
 }
 
@@ -72,7 +72,7 @@ abstract mixin class $BookOverviewResponseCopyWith<$Res> {
       _$BookOverviewResponseCopyWithImpl;
   @useResult
   $Res call(
-      {int bookId,
+      {int id,
       String title,
       String author,
       String cover,
@@ -96,7 +96,7 @@ class _$BookOverviewResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bookId = null,
+    Object? id = null,
     Object? title = null,
     Object? author = null,
     Object? cover = null,
@@ -107,9 +107,9 @@ class _$BookOverviewResponseCopyWithImpl<$Res>
     Object? publishedDate = null,
   }) {
     return _then(_self.copyWith(
-      bookId: null == bookId
-          ? _self.bookId
-          : bookId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
               as int,
       title: null == title
           ? _self.title
@@ -241,7 +241,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            int bookId,
+            int id,
             String title,
             String author,
             String cover,
@@ -257,7 +257,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
     switch (_that) {
       case _BookOverviewResponse() when $default != null:
         return $default(
-            _that.bookId,
+            _that.id,
             _that.title,
             _that.author,
             _that.cover,
@@ -287,7 +287,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            int bookId,
+            int id,
             String title,
             String author,
             String cover,
@@ -302,7 +302,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
     switch (_that) {
       case _BookOverviewResponse():
         return $default(
-            _that.bookId,
+            _that.id,
             _that.title,
             _that.author,
             _that.cover,
@@ -331,7 +331,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            int bookId,
+            int id,
             String title,
             String author,
             String cover,
@@ -346,7 +346,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
     switch (_that) {
       case _BookOverviewResponse() when $default != null:
         return $default(
-            _that.bookId,
+            _that.id,
             _that.title,
             _that.author,
             _that.cover,
@@ -365,7 +365,7 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
 @JsonSerializable()
 class _BookOverviewResponse implements BookOverviewResponse {
   const _BookOverviewResponse(
-      {this.bookId = 0,
+      {this.id = -1,
       required this.title,
       required this.author,
       required this.cover,
@@ -379,7 +379,7 @@ class _BookOverviewResponse implements BookOverviewResponse {
 
   @override
   @JsonKey()
-  final int bookId;
+  final int id;
   @override
   final String title;
   @override
@@ -418,7 +418,7 @@ class _BookOverviewResponse implements BookOverviewResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _BookOverviewResponse &&
-            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.cover, cover) || other.cover == cover) &&
@@ -434,12 +434,12 @@ class _BookOverviewResponse implements BookOverviewResponse {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bookId, title, author, cover,
+  int get hashCode => Object.hash(runtimeType, id, title, author, cover,
       readingDiaryCount, isbn, publisher, star, publishedDate);
 
   @override
   String toString() {
-    return 'BookOverviewResponse(bookId: $bookId, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate)';
+    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate)';
   }
 }
 
@@ -452,7 +452,7 @@ abstract mixin class _$BookOverviewResponseCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int bookId,
+      {int id,
       String title,
       String author,
       String cover,
@@ -476,7 +476,7 @@ class __$BookOverviewResponseCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? bookId = null,
+    Object? id = null,
     Object? title = null,
     Object? author = null,
     Object? cover = null,
@@ -487,9 +487,9 @@ class __$BookOverviewResponseCopyWithImpl<$Res>
     Object? publishedDate = null,
   }) {
     return _then(_BookOverviewResponse(
-      bookId: null == bookId
-          ? _self.bookId
-          : bookId // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _self.id
+          : id // ignore: cast_nullable_to_non_nullable
               as int,
       title: null == title
           ? _self.title

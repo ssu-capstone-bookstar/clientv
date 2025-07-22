@@ -6,7 +6,7 @@ part 'book_overview_response.g.dart';
 @freezed
 abstract class BookOverviewResponse with _$BookOverviewResponse {
   const factory BookOverviewResponse({
-    @Default(0) int bookId,
+    @Default(-1) int id,
     required String title,
     required String author,
     required String cover,
