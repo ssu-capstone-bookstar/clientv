@@ -23,7 +23,8 @@ class BookPickSearchScreen extends ConsumerStatefulWidget {
   final String? from;
 
   @override
-  ConsumerState<BookPickSearchScreen> createState() => _BookPickSearchScreenState();
+  ConsumerState<BookPickSearchScreen> createState() =>
+      _BookPickSearchScreenState();
 }
 
 class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
@@ -90,7 +91,7 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
           children: [
             Text(
               isFromChallenge ? '새롭게 읽을 책을 찾아보세요' : '책 찾기',
-              style: AppTexts.h4,
+              style: AppTexts.b1.copyWith(color: ColorName.w1),
             ),
             SearchTextField(
               controller: _textController,
@@ -139,7 +140,9 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
         title: Text(history.queries),
         trailing: GestureDetector(
           child: Icon(Icons.clear),
-          onTap: () => ref.read(searchHistoryViewModelProvider.notifier).removeHistory(history.queries),
+          onTap: () => ref
+              .read(searchHistoryViewModelProvider.notifier)
+              .removeHistory(history.queries),
         ),
       ),
       onTap: (history) {
@@ -155,7 +158,8 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
 
     return BookCoverGridView<SearchState, SearchBookResponse>(
       asyncValue: searchState,
-      itemBuilder: (book) => BookSearchResultCard(book: book, from: widget.from),
+      itemBuilder: (book) =>
+          BookSearchResultCard(book: book, from: widget.from),
       listBuilder: (SearchState data) => data.books,
       hasNext: searchState.asData?.value.hasNext ?? false,
       scrollController: _scrollController,

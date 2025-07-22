@@ -1,4 +1,3 @@
-import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/modules/book_log/view/widgets/daiary_card.dart';
 import 'package:flutter/material.dart';
 

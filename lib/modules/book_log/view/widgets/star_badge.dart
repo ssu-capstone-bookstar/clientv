@@ -1,4 +1,3 @@
-import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:flutter/material.dart';

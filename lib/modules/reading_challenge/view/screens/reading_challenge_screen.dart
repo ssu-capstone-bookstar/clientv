@@ -5,29 +5,29 @@ import 'package:book/modules/reading_challenge/view_model/reading_challenge_view
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:book/gen/colors.gen.dart';
 
 class ReadingChallengeScreen extends ConsumerWidget {
   const ReadingChallengeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Column(
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.zero,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               '오늘은 어떤 책을 읽으셨나요?',
-              style: AppTexts.h4,
+              style: AppTexts.b1.copyWith(color: ColorName.w1),
             ),
-            SizedBox(height: 32),
+            SizedBox(height: 22),
             _buildOptionsSection(ref),
           ],
         ),
-        const Spacer(),
-        _buildBottomSection(ref, context),
-      ],
+      ),
+      bottomNavigationBar: _buildBottomSection(ref, context),
     );
   }
 
@@ -43,14 +43,14 @@ class ReadingChallengeScreen extends ConsumerWidget {
           selected: selectedOption == ReadingChallengeType.reading,
           onTap: () => viewModel.selectOption(ReadingChallengeType.reading),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         ChallengeOptionCard(
           title: '새로운 책 읽기',
           subtitle: '새롭게 읽은 도서로 리딩 챌린지를 시작해요',
           selected: selectedOption == ReadingChallengeType.newBook,
           onTap: () => viewModel.selectOption(ReadingChallengeType.newBook),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         // ChallengeOptionCard(
         //   title: '모든 포인트 확인',
         //   subtitle: '챌린지에 참여하고 받은 포인트를 확인해 보세요',
@@ -75,11 +75,11 @@ class ReadingChallengeScreen extends ConsumerWidget {
             if (selectedOption == ReadingChallengeType.reading) {
               context.go('/reading-challenge/continue-list');
             } else if (selectedOption == ReadingChallengeType.newBook) {
-            /** 새로운책 읽기*/
+              /** 새로운책 읽기*/
               context.go(
                 '/reading-challenge/search-new?from=challenge',
               );
-            } else  {
+            } else {
               // TODO: Handle other options
             }
           },

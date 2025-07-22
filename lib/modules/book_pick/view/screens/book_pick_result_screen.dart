@@ -1,7 +1,6 @@
 import 'package:book/modules/reading_diary/model/related_diary_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../common/components/header/section_header.dart';
 import '../../../../common/components/text_field/search_text_field.dart';
@@ -25,7 +24,8 @@ class BookPickResultScreen extends ConsumerStatefulWidget {
   final SearchBookResponse book;
 
   @override
-  ConsumerState<BookPickResultScreen> createState() => _BookPickResultScreenState();
+  ConsumerState<BookPickResultScreen> createState() =>
+      _BookPickResultScreenState();
 }
 
 class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
@@ -42,7 +42,8 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
       ref.read(searchViewModelProvider.notifier).fetchNextPage();
     }
   }
@@ -86,13 +87,18 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
                   SectionHeader(
                     heading: '관련 게시물',
                     description: '북스타 유저들이 공유한 관련 게시물을 확인해 보세요',
-                    descriptionStyle: AppTexts.b10.copyWith(color: ColorName.g2),
+                    descriptionStyle:
+                        AppTexts.b10.copyWith(color: ColorName.g2),
                     trailing: GestureDetector(
-                      onTap: () => ref.read(relatedDiarySortStateProvider.notifier).toggle(),
+                      onTap: () => ref
+                          .read(relatedDiarySortStateProvider.notifier)
+                          .toggle(),
                       child: Row(
                         children: [
                           Text(
-                            ref.watch(relatedDiarySortStateProvider.select((value) => value == RelatedDiarySort.LATEST))
+                            ref.watch(relatedDiarySortStateProvider.select(
+                                    (value) =>
+                                        value == RelatedDiarySort.LATEST))
                                 ? '최신순'
                                 : '인기순',
                             style: AppTexts.b10.copyWith(color: ColorName.g3),
@@ -103,10 +109,17 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
                     ),
                   ),
                   AsyncImageGridView<RelatedDiaryState, RelatedDiaryThumbnail>(
-                    asyncValue: ref.watch(relatedDiariesViewModelProvider(widget.book.bookId)),
+                    asyncValue: ref.watch(
+                        relatedDiariesViewModelProvider(widget.book.bookId)),
                     getItems: (state) => state.diaries,
                     getImageUrl: (diary) => diary.firstImage.imageUrl,
-                    hasNext: ref.watch(relatedDiariesViewModelProvider(widget.book.bookId)).asData?.value.hasNext ?? false,
+                    hasNext: ref
+                            .watch(relatedDiariesViewModelProvider(
+                                widget.book.bookId))
+                            .asData
+                            ?.value
+                            .hasNext ??
+                        false,
                     emptyText: '관련 독서일기가 없습니다.',
                     errorText: '게시물을 불러올 수 없습니다.',
                   ),

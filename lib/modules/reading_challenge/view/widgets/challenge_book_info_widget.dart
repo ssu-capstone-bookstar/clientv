@@ -30,7 +30,7 @@ class ChallengeBookInfoWidget extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF51515C).withOpacity(0.7),
+                    color: const Color(0xFF51515C).withValues(alpha: 0.7),
                     blurRadius: 46.0,
                     spreadRadius: 0.0,
                     offset: const Offset(0, 0),
