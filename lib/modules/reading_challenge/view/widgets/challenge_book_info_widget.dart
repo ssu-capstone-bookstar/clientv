@@ -19,39 +19,44 @@ class ChallengeBookInfoWidget extends StatelessWidget {
       children: [
         Center(
           child: SizedBox(
-            width: 180,
-            child: AspectRatio(
-              aspectRatio: 2 / 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(book.bookCover),
-                    fit: BoxFit.cover,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.white.withOpacity(0.2),
-                      blurRadius: 15.0,
-                      spreadRadius: 5.0,
-                    ),
-                  ],
+            width: 161.02,
+            child: Container(
+              height: 265,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(7.36),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(book.bookCover),
+                  fit: BoxFit.cover,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF51515C).withOpacity(0.7),
+                    blurRadius: 46.0,
+                    spreadRadius: 0.0,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        Text(
-          book.title,
-          style: AppTexts.b5,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          book.author,
-          style: AppTexts.b8.copyWith(color: ColorName.g3),
-          textAlign: TextAlign.center,
+        const SizedBox(height: 12),
+        SizedBox(
+          width: 161.02,
+          child: Column(
+            children: [
+              Text(
+                book.title,
+                style: AppTexts.b9.copyWith(color: ColorName.w1),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                book.author,
+                style: AppTexts.b11.copyWith(color: ColorName.g3),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ],
     );
