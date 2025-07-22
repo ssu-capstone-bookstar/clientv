@@ -26,25 +26,31 @@ class SocialLoginButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: isGoogle ? BorderSide(color: Colors.grey.shade300) : BorderSide.none,
+          borderRadius:
+              BorderRadius.circular(12), // https://butsteadily.tistory.com/16
+          side: isGoogle
+              ? BorderSide(color: Colors.grey.shade300)
+              : BorderSide.none,
         ),
         padding: const EdgeInsets.symmetric(vertical: 16),
         elevation: 0,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Expanded(child: Container()),
           SvgPicture.asset(assetName, width: 24, height: 24),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
+          Expanded(child: Container()),
         ],
       ),
     );

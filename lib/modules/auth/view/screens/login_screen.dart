@@ -82,23 +82,6 @@ class LoginScreen extends ConsumerWidget {
           backgroundColor: const Color(0xFFFEE500),
           textColor: Colors.black87,
         ),
-        // SignInWithAppleButton(
-        //   onPressed: () => ref.read(authViewModelProvider.notifier).login(ProviderType.apple),
-        //   style: SignInWithAppleButtonStyle.black,
-        //   height: 44,
-        //   borderRadius: BorderRadius.circular(8),
-        //   iconAlignment: IconAlignment.center,
-        //   text: 'Sign in with Apple',
-        // ),
-        SocialLoginButton(
-          onPressed: () {
-            ref.read(authViewModelProvider.notifier).login(ProviderType.apple);
-          },
-          assetName: 'assets/icons/apple.svg',
-          label: 'Apple로 로그인',
-          backgroundColor: Colors.white,
-          textColor: Colors.black,
-        ),
         SocialLoginButton(
           onPressed: () {
             ref.read(authViewModelProvider.notifier).login(ProviderType.google);
@@ -108,6 +91,15 @@ class LoginScreen extends ConsumerWidget {
           backgroundColor: Colors.white,
           textColor: Colors.black,
           isGoogle: true,
+        ),
+        SocialLoginButton(
+          onPressed: () {
+            ref.read(authViewModelProvider.notifier).login(ProviderType.apple);
+          },
+          assetName: 'assets/icons/apple.svg',
+          label: 'Apple로 로그인',
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
         ),
       ],
     );
