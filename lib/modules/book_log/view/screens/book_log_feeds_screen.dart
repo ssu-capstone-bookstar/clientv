@@ -1,3 +1,4 @@
+import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_log/state/book_log_state.dart';
 import 'package:book/modules/book_log/view/widgets/feed_card.dart';
 import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
@@ -156,7 +157,7 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
-        child: ScrollablePositionedList.builder(
+        child: ScrollablePositionedList.separated(
           itemScrollController: itemScrollController,
           scrollOffsetController: scrollOffsetController,
           itemPositionsListener: itemPositionsListener,
@@ -166,6 +167,13 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
             feed: feeds[index],
             loadingLike: index == _loadingLikeIndex,
             onLike: () => onLike(index),
+          ),
+          separatorBuilder: (context, index) => const Divider(
+            color: ColorName.g7,
+            height: 0,
+            thickness: 1,
+            indent: 16,
+            endIndent: 16,
           ),
         ),
       ),

@@ -32,11 +32,11 @@ class _FeedCardState extends ConsumerState<FeedCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -54,12 +54,12 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                           : null,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(width: 6),
                   // 닉네임
                   Center(
                     child: Text(
                       "@${widget.feed.nickname}",
-                      style: AppTexts.b7.copyWith(color: ColorName.b1),
+                      style: AppTexts.b7.copyWith(color: ColorName.g3),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -124,13 +124,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
             ],
           ),
         ),
-        Divider(
-          color: ColorName.g7,
-          height: 0,
-          thickness: 1,
-          indent: 16,
-          endIndent: 16,
-        ),
+        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
