@@ -11,10 +11,7 @@ import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book/view/widgets/book_info_widget.dart';
 import '../../../book/view_model/book_overview_view_model.dart';
-import '../../../book/repository/book_repository.dart';
 import '../../../book_pick/model/search_book_response.dart';
-import '../../../../common/models/cursor_page_response.dart';
-import '../../../reading_diary/model/diary_thumbnail_response.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../reading_diary/view_model/related_diaries_view_model.dart';
 import '../../../reading_diary/model/related_diary_sort.dart';
@@ -100,6 +97,7 @@ class _ReadingChallengeDetailScreenState
                     error: (error, stack) =>
                         Center(child: Text('오류가 발생했습니다: $error')),
                   ),
+                  const SizedBox(height: 10),
                   _buildPointsSection(),
                   _buildCalendarSection(),
                   const SizedBox(height: 28),
