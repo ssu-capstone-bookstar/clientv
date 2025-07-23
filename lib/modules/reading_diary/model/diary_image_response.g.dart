@@ -8,14 +8,16 @@ part of 'diary_image_response.dart';
 
 _DiaryImageResponse _$DiaryImageResponseFromJson(Map<String, dynamic> json) =>
     _DiaryImageResponse(
-      id: (json['id'] as num?)?.toInt() ?? 0,
+      diaryId: (json['diaryId'] as num?)?.toInt() ?? -1,
+      imageId: (json['imageId'] as num?)?.toInt() ?? -1,
       imageUrl: json['imageUrl'] as String? ?? '',
       sequence: (json['sequence'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$DiaryImageResponseToJson(_DiaryImageResponse instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'diaryId': instance.diaryId,
+      'imageId': instance.imageId,
       'imageUrl': instance.imageUrl,
       'sequence': instance.sequence,
     };

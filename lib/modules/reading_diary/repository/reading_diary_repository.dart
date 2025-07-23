@@ -37,9 +37,19 @@ abstract class ReadingDiaryRepository {
   Future<ResponseForm<dynamic>> deleteDiary(@Path('diaryId') int diaryId);
 
   @GET('/reading-diaries/members/{memberId}/thumbnail')
-  Future<ResponseForm<List<DiaryThumbnail>>> getMemberDiaries(
+  Future<ResponseForm<CursorPageResponse<DiaryThumbnail>>>
+      getReadingDiariesMembersThumbnails(
     @Path('memberId') int memberId, {
     @Query('cursorId') int? cursorId,
+    @Query('size') int? size,
+  });
+
+  /// 특정 사용자가 작성한 독서일기 피드 목록을 최신순으로 조회합니다.
+  @GET('/reading-diaries/members/{memberId}/feed')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getReadingDiariesMembersFeed(
+    @Path('memberId') int memberId, {
+    @Query('cursor') int? cursor, // 서버 명세에 따라 파라미터 이름이 다를 수 있음
     @Query('size') int? size,
   });
 

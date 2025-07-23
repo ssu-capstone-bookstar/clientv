@@ -6,6 +6,8 @@ class ImageGrid extends StatelessWidget {
   final double spacing;
   final int crossAxisCount;
   final Widget? emptyWidget;
+  final Function(int)? onTap;
+  final ScrollController? scrollController;
 
   const ImageGrid({
     Key? key,
@@ -13,6 +15,8 @@ class ImageGrid extends StatelessWidget {
     this.spacing = 0,
     this.crossAxisCount = 3,
     this.emptyWidget,
+    this.onTap,
+    this.scrollController,
   }) : super(key: key);
 
   @override
@@ -26,6 +30,7 @@ class ImageGrid extends StatelessWidget {
         final double cellSize = gridWidth / crossAxisCount;
         final int totalRows = (imageUrls.length / crossAxisCount).ceil();
         return GridView.builder(
+          controller: scrollController,
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
@@ -47,24 +52,29 @@ class ImageGrid extends StatelessWidget {
               top: row == 0 ? borderSide : BorderSide.none,
             );
             final imageUrl = imageUrls[idx];
-            return Container(
-              width: cellSize,
-              height: cellSize,
-              decoration: BoxDecoration(
-                color: ColorName.g7,
-                border: border,
+            return GestureDetector(
+              onTap: () {
+                onTap?.call(idx);
+              },
+              child: Container(
+                width: cellSize,
+                height: cellSize,
+                decoration: BoxDecoration(
+                  color: ColorName.g7,
+                  border: border,
+                ),
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      )
+                    : const Center(
+                        child: Icon(Icons.image_not_supported,
+                            color: ColorName.g7, size: 36),
+                      ),
               ),
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
-                  : const Center(
-                      child: Icon(Icons.image_not_supported,
-                          color: ColorName.g7, size: 36),
-                    ),
             );
           },
         );

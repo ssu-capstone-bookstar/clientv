@@ -8,26 +8,40 @@ part of 'diary_response.dart';
 
 _DiaryResponse _$DiaryResponseFromJson(Map<String, dynamic> json) =>
     _DiaryResponse(
-      diaryId: (json['diaryId'] as num).toInt(),
-      startPage: (json['startPage'] as num?)?.toInt() ?? 0,
-      endPage: (json['endPage'] as num?)?.toInt() ?? 0,
+      diaryId: (json['diaryId'] as num?)?.toInt() ?? -1,
       content: json['content'] as String? ?? '',
+      createdDate: json['createdDate'] as String? ?? '',
+      memberId: (json['memberId'] as num?)?.toInt() ?? -1,
+      nickname: json['nickname'] as String? ?? '',
+      profileImageUrl: json['profileImageUrl'] as String? ?? '',
+      bookId: (json['bookId'] as num?)?.toInt() ?? -1,
+      bookTitle: json['bookTitle'] as String? ?? '',
+      bookAuthor: json['bookAuthor'] as String? ?? '',
       images: (json['images'] as List<dynamic>?)
               ?.map(
                   (e) => DiaryImageResponse.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      decoration: json['decoration'] as String? ?? '',
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      likeCount: (json['likeCount'] as num?)?.toInt() ?? 0,
+      commentCount: (json['commentCount'] as num?)?.toInt() ?? 0,
+      viewCount: (json['viewCount'] as num?)?.toInt() ?? 0,
+      liked: json['liked'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$DiaryResponseToJson(_DiaryResponse instance) =>
     <String, dynamic>{
       'diaryId': instance.diaryId,
-      'startPage': instance.startPage,
-      'endPage': instance.endPage,
       'content': instance.content,
+      'createdDate': instance.createdDate,
+      'memberId': instance.memberId,
+      'nickname': instance.nickname,
+      'profileImageUrl': instance.profileImageUrl,
+      'bookId': instance.bookId,
+      'bookTitle': instance.bookTitle,
+      'bookAuthor': instance.bookAuthor,
       'images': instance.images,
-      'decoration': instance.decoration,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'likeCount': instance.likeCount,
+      'commentCount': instance.commentCount,
+      'viewCount': instance.viewCount,
+      'liked': instance.liked,
     };

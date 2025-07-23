@@ -10,7 +10,6 @@ import '../../../auth/view_model/auth_view_model.dart';
 import '../../view_model/book_log_view_model.dart';
 import '../widgets/book_log_header_section.dart';
 import '../widgets/book_log_low_section.dart';
-import '../widgets/book_log_mid_section.dart';
 import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
 
 class BookLogScreen extends ConsumerWidget {
@@ -29,17 +28,16 @@ class BookLogScreen extends ConsumerWidget {
         ? (user is AuthSuccess && user.memberId == memberId)
         : false;
 
-    final profileAsync = ref.watch(bookLogProfileProvider(memberId));
+    final bookLogAsync = ref.watch(bookLogViewModelProvider(memberId));
     final challengesAsync = ref
         .watch(getChallengesByMemberViewModelProvider(memberId: memberId))
         .challenges;
-
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
 
-    return profileAsync.when(
+    return bookLogAsync.when(
         loading: _loading,
         error: _error('프로필 정보를 불러올 수 없습니다.'),
-        data: (profile) => challengesAsync.when(
+        data: (bookLog) => challengesAsync.when(
               loading: _loading,
               error: _error('책장 정보를 불러올 수 없습니다.'),
               data: (challenges) => followInfoAsync.when(
@@ -58,6 +56,8 @@ class BookLogScreen extends ConsumerWidget {
                       ref.read(followInfoViewModelProvider.notifier).follow(targetMemberId);
                     }
                   }
+                  final profile = bookLog.profile;
+                  final thumbnails = bookLog.thumbnails;
                   return Stack(
                     children: [
                       Column(
@@ -77,10 +77,13 @@ class BookLogScreen extends ConsumerWidget {
                             onFollow: onFollow,
                             profileImageKey: GlobalKey(),
                           ),
-                          const SizedBox(height: 25),
-                          BookLogMidSection(books: challenges),
+                          // const SizedBox(height: 25),
+                          // BookLogMidSection(books: challenges), TODO: 책장 추가
                           const SizedBox(height: 20),
-                          BookLogLowSection(memberId: memberId),
+                          BookLogLowSection(
+                            thumbnails: thumbnails,
+                            memberId: memberId,
+                          ),
                         ],
                       ),
                       Align(

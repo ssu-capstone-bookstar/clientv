@@ -184,6 +184,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_heart.svg
   SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
 
+  /// File path: assets/icons/ic_heart_filled.svg
+  SvgGenImage get icHeartFilled =>
+      const SvgGenImage('assets/icons/ic_heart_filled.svg');
+
   /// File path: assets/icons/ic_login_char_front.svg
   SvgGenImage get icLoginCharFront =>
       const SvgGenImage('assets/icons/ic_login_char_front.svg');
@@ -194,6 +198,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
+
+  /// File path: assets/icons/ic_menu_more.svg
+  SvgGenImage get icMenuMore =>
+      const SvgGenImage('assets/icons/ic_menu_more.svg');
 
   /// File path: assets/icons/ic_message.svg
   SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
@@ -291,9 +299,11 @@ class $AssetsIconsGen {
     icDeeptypeStickerClock,
     icDeeptypeStickerCloud,
     icHeart,
+    icHeartFilled,
     icLoginCharFront,
     icLoginCharTop,
     icMail,
+    icMenuMore,
     icMessage,
     icPersonCount,
     icPhotoLibrary,

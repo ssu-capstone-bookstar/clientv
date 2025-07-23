@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:book/modules/book_log/model/book_log_models.dart';
+// import 'package:book/modules/book_log/model/book_log_models.dart';
 
 import '../../../../common/components/grid/image_grid.dart';
 
@@ -11,9 +11,11 @@ class ScrappedDiariesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: 더미 다이어리 삭제 필요
-    final List<String> imageUrls = dummyDiaries
-        .expand((diary) => diary.images.map((image) => image.imageUrl))
-        .toList();
+    // final List<String> imageUrls = dummyDiaries
+    //     .expand((diary) => diary.images.map((image) => image.imageUrl))
+    //     .toList();
+    final List<String> imageUrls = [];
+
 
     return Scaffold(
       appBar: AppBar(
