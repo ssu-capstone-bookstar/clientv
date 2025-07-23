@@ -13,6 +13,7 @@ import '../../../../common/components/text_field/search_text_field.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../auth/view_model/auth_state.dart';
+import '../../../book_pick/view/widgets/book_cover_grid_view.dart';
 import '../../view_model/get_challenges_by_member_view_model.dart';
 
 class OngoingChallengeListScreen extends ConsumerStatefulWidget {
@@ -63,19 +64,7 @@ class _OngoingChallengeListScreenState
             _buildTopSection(viewModel, isSelectionMode, _textController),
             const SizedBox(height: 18),
             Expanded(
-              child: state.challenges.when(
-                data: (challenges) => _buildChallengeGrid(
-                  challenges
-                      .where((challenge) =>
-                          challenge.book.title.contains(searchQuery))
-                      .toList(),
-                  state,
-                  viewModel,
-                ),
-                error: (error, stack) =>
-                    const Center(child: Text('챌린지를 불러오는데 실패했습니다.')),
-                loading: () => const Center(child: CircularProgressIndicator()),
-              ),
+              child: _buildChallengeGrid(state, viewModel),
             ),
             if (isSelectionMode)
               _buildBottomDeleteButton(context, state, viewModel, ref),
@@ -96,7 +85,7 @@ class _OngoingChallengeListScreenState
         const SizedBox(height: 12),
         SearchTextField(
           controller: textController,
-          hintText: '읽던 책을 검색해 보세요',
+          hintText: '내가 읽은 책을 검색해 보세요',
           hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
           suffixIcon: textController.text.isNotEmpty
               ? Assets.images.icSearchColored3x.image(scale: 3)
@@ -116,71 +105,35 @@ class _OngoingChallengeListScreenState
   }
 
   Widget _buildChallengeGrid(
-    List<ChallengeResponse> challenges,
-    OngoingChallengeScreenState screenState,
-    OngoingChallengeViewModel viewModel,
-  ) {
-    if (challenges.isEmpty) {
-      return const Center(child: Text('진행중인 챌린지가 없습니다.'));
-    }
-    final rowCount = (challenges.length / 3).ceil();
-    return ListView.builder(
-      itemCount: rowCount * 2, // Include separator after the last row
-      itemBuilder: (context, index) {
-        if (index.isOdd) {
-          // Separator item
-          return Padding(
-            padding: const EdgeInsets.only(top: 6, bottom: 30),
-            child: Container(
-              height: 7,
-              decoration: const BoxDecoration(
-                color: Color(0xFF26262B),
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.7),
-                    offset: Offset(0, 6),
-                    blurRadius: 50,
-                  ),
-                ],
-              ),
-            ),
-          );
-        } else {
-          // Content item
-          final rowIndex = index ~/ 2;
-          final startIndex = rowIndex * 3;
-          final List<Widget> rowItems = [];
-          for (int i = 0; i < 3; i++) {
-            final challengeIndex = startIndex + i;
-            if (challengeIndex < challenges.length) {
-              final challenge = challenges[challengeIndex];
-              rowItems.add(
-                Expanded(
-                  child: OngoingChallengeCard(
-                    challenge: challenge,
-                    isSelectionMode: screenState.isSelectionMode,
-                    isSelected: screenState.selectedChallengeIds
-                        .contains(challenge.challengeId),
-                    onToggle: () {
-                      viewModel.toggleChallengeSelection(challenge.challengeId);
-                    },
-                  ),
-                ),
-              );
-            } else {
-              rowItems.add(Expanded(child: Container())); // Placeholder
-            }
-            if (i < 2) {
-              rowItems.add(const SizedBox(width: 16));
-            }
-          }
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: rowItems,
-          );
+      OngoingChallengeScreenState state, OngoingChallengeViewModel viewModel) {
+    return state.challenges.when(
+      data: (challenges) {
+        final filteredChallenges = challenges
+            .where((challenge) => challenge.book.title.contains(searchQuery))
+            .toList();
+
+        if (filteredChallenges.isEmpty) {
+          return const Center(child: Text('진행중인 챌린지가 없습니다.'));
         }
+
+        return BookCoverGridView<List<ChallengeResponse>, ChallengeResponse>(
+          asyncValue: AsyncValue.data(filteredChallenges),
+          itemBuilder: (challenge) => OngoingChallengeCard(
+            challenge: challenge,
+            isSelectionMode: state.isSelectionMode,
+            isSelected:
+                state.selectedChallengeIds.contains(challenge.challengeId),
+            onToggle: () {
+              viewModel.toggleChallengeSelection(challenge.challengeId);
+            },
+          ),
+          listBuilder: (data) => data,
+          crossAxisCount: 3,
+          gridPadding: EdgeInsets.zero,
+        );
       },
+      error: (error, stack) => const Center(child: Text('챌린지를 불러오는데 실패했습니다.')),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 

@@ -1,0 +1,4 @@
+enum MyDiarySort {
+  POPULAR,
+  LATEST,
+}

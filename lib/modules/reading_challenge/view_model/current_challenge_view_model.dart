@@ -136,13 +136,21 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
   }
 
   bool get isButtonEnabled {
-    bool isValidStartPage = state.startPage != null && state.startPage!.isNotEmpty;
+    bool isValidStartPage =
+        state.startPage != null && state.startPage!.isNotEmpty;
     bool isValidEndPage = state.endPage != null && state.endPage!.isNotEmpty;
-    int startLength = state.startPage?.length ?? 0;
-    int endLength = state.endPage?.length ?? 0;
-    int start = int.parse(startLength != 0 ? state.startPage! : '0');
-    int end = int.parse(endLength != 0 ? state.endPage! : '0');
-    bool isValidRange = start <= end;
-    return isValidStartPage && isValidEndPage && isValidRange;
+
+    if (!isValidStartPage || !isValidEndPage) {
+      return false;
+    }
+
+    try {
+      int start = int.parse(state.startPage!);
+      int end = int.parse(state.endPage!);
+      bool isValidRange = start <= end;
+      return isValidRange;
+    } catch (e) {
+      return false;
+    }
   }
 }
