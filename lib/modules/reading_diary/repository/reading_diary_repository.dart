@@ -77,7 +77,15 @@ abstract class ReadingDiaryRepository {
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getRelatedDiaries(
     @Path('bookId') int bookId, {
-    @Query('relatedDiarySort') RelatedDiarySort? relatedDiarySort,
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
+
+  @GET('/books/{bookId}/reading-diaries/thumbnail/popular')
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getRelatedDiariesPopular(
+    @Path('bookId') int bookId, {
     @Query('cursorId') int? cursorId,
     @Query('cursorScore') double? cursorScore,
     @Query('size') int? size,

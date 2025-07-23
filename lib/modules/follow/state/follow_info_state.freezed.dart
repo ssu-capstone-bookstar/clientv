@@ -14,7 +14,10 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$FollowInfoState {
+  /// currentMemberId가 팔로우한 사람들
   List<FollowResponse> get following;
+
+  /// currentMemberId를 팔로우한 사람들
   List<FollowResponse> get followers;
   int get currentMemberId;
 
@@ -272,7 +275,10 @@ class _FollowInfoState implements FollowInfoState {
       : _following = following,
         _followers = followers;
 
+  /// currentMemberId가 팔로우한 사람들
   final List<FollowResponse> _following;
+
+  /// currentMemberId가 팔로우한 사람들
   @override
   @JsonKey()
   List<FollowResponse> get following {
@@ -281,7 +287,10 @@ class _FollowInfoState implements FollowInfoState {
     return EqualUnmodifiableListView(_following);
   }
 
+  /// currentMemberId를 팔로우한 사람들
   final List<FollowResponse> _followers;
+
+  /// currentMemberId를 팔로우한 사람들
   @override
   @JsonKey()
   List<FollowResponse> get followers {

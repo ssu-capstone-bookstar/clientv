@@ -16,14 +16,16 @@ class RelatedDiarySortState extends _$RelatedDiarySortState {
   }
 
   void toggle() {
-    state = state == RelatedDiarySort.LATEST ? RelatedDiarySort.POPULAR : RelatedDiarySort.LATEST;
+    state = state == RelatedDiarySort.LATEST
+        ? RelatedDiarySort.POPULAR
+        : RelatedDiarySort.LATEST;
   }
 }
 
 @riverpod
 class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
-  late final ReadingDiaryRepository _repository;
-  late final int _bookId;
+  ReadingDiaryRepository? _repository;
+  int? _bookId;
   Object? _key;
 
   @override
@@ -34,9 +36,9 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
       _key = null;
     });
 
-    _repository = ref.watch(readingDiaryRepositoryProvider);
+    _repository ??= ref.read(readingDiaryRepositoryProvider);
     final sort = ref.watch(relatedDiarySortStateProvider);
-    final response = await _fetchDiaries(bookId: _bookId, sort: sort);
+    final response = await _fetchDiaries(bookId: bookId, sort: sort);
     return RelatedDiaryState(
       diaries: response.data,
       nextCursor: response.nextCursor,
@@ -51,13 +53,20 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
     int? cursorId,
     double? cursorScore,
   }) async {
-    final response = await _repository.getRelatedDiaries(
-      bookId,
-      relatedDiarySort: sort,
-      cursorId: cursorId,
-      cursorScore: cursorScore,
-      size: 18,
-    );
+    final repository = _repository!;
+    final response = sort == RelatedDiarySort.LATEST
+        ? await repository.getRelatedDiaries(
+            bookId,
+            cursorId: cursorId,
+            cursorScore: cursorScore,
+            size: 18,
+          )
+        : await repository.getRelatedDiariesPopular(
+            bookId,
+            cursorId: cursorId,
+            cursorScore: cursorScore,
+            size: 18,
+          );
     return response.data;
   }
 
@@ -72,7 +81,7 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
       final sort = ref.read(relatedDiarySortStateProvider);
 
       final response = await _fetchDiaries(
-        bookId: _bookId,
+        bookId: _bookId!,
         sort: sort,
         cursorId: currentState.nextCursor,
         cursorScore: currentState.nextSubCursor as double?,
