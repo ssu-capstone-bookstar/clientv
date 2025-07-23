@@ -39,7 +39,7 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _scrollToIndex(widget.initialIndex);
+        _jumpToIndex(widget.initialIndex);
       }
     });
   }
@@ -55,12 +55,11 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
     }
   }
 
-  void _scrollToIndex(int index) {
+  void _jumpToIndex(int index) {
     if (mounted) {
-      itemScrollController.scrollTo(
-          index: index,
-          duration: Duration(seconds: 1),
-          curve: Curves.easeInOutCubic);
+      itemScrollController.jumpTo(
+        index: index,
+      );
     }
   }
 
