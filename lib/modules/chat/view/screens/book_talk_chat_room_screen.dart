@@ -206,6 +206,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                   imageUrl: profileImageUrl,
                   width: 40,
                   height: 40,
+                  errorWidget: (context, url, error) => Container(),
                 ),
               ),
             )

@@ -1,4 +1,5 @@
 import 'package:book/gen/colors.gen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageGrid extends StatelessWidget {
@@ -64,11 +65,12 @@ class ImageGrid extends StatelessWidget {
                   border: border,
                 ),
                 child: imageUrl.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
+                        errorWidget: (context, url, error) => Container(),
                       )
                     : const Center(
                         child: Icon(Icons.image_not_supported,

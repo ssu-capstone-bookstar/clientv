@@ -46,7 +46,9 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                     child: CircleAvatar(
                       backgroundColor: ColorName.g7,
                       backgroundImage: widget.feed.profileImageUrl.isNotEmpty
-                          ? NetworkImage(widget.feed.profileImageUrl)
+                          ? CachedNetworkImageProvider(
+                              widget.feed.profileImageUrl,
+                            )
                           : null,
                       child: widget.feed.profileImageUrl.isEmpty
                           ? const Icon(Icons.person,
@@ -79,6 +81,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                 child: CachedNetworkImage(
                   imageUrl: widget.feed.images[index].imageUrl,
                   fit: BoxFit.contain,
+                  errorWidget: (context, url, error) => Container(),
                 ),
               );
             },
@@ -124,7 +127,6 @@ class _FeedCardState extends ConsumerState<FeedCard> {
             ],
           ),
         ),
-        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
