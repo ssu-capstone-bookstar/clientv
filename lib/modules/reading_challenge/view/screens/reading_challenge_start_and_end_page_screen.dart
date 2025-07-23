@@ -214,7 +214,7 @@ class _ReadingChallengeStartAndEndPageScreenState
   ) {
     final state = ref.watch(currentChallengeViewModelProvider);
     final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
-
+    final bookId = state.book?.bookId;
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
       child: Column(
@@ -226,15 +226,7 @@ class _ReadingChallengeStartAndEndPageScreenState
             enabled: viewModel.isButtonEnabled,
             onPressed: () async {
               try {
-                final int progressId;
-                if (widget.challengeId == null) {
-                  progressId = await viewModel.createChallenge(ref);
-                } else {
-                  progressId = await viewModel.updateChallengeProgress();
-                }
-
                 if (!context.mounted) return;
-
                 final isChallengeCompleted = state.endPage != null &&
                     int.tryParse(state.endPage!) != null &&
                     int.parse(state.endPage!) >= totalPages;
@@ -249,7 +241,7 @@ class _ReadingChallengeStartAndEndPageScreenState
                     '/reading-challenge/diary-encourage',
                     extra: {
                       'isChallengeCompleted': isChallengeCompleted,
-                      'progressId': progressId,
+                      'bookId': bookId,
                     },
                   );
                 }

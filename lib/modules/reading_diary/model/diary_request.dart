@@ -7,7 +7,7 @@ part 'diary_request.g.dart';
 @freezed
 abstract class DiaryRequest with _$DiaryRequest {
   const factory DiaryRequest({
-    required int progressId,
+    required int bookId,
     @Default('') String content,
     @Default([]) List<ImageRequest> images,
   }) = _DiaryRequest;

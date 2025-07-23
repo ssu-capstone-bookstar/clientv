@@ -15,11 +15,11 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
   const ReadingChallengeDiaryEncourageScreen({
     super.key,
     required this.isChallengeCompleted,
-    required this.progressId,
+    required this.bookId,
   });
 
   final bool isChallengeCompleted;
-  final int progressId;
+  final int bookId;
 
   static const path = '/reading-challenge/diary-encourage';
   static const name = 'ReadingChallengeDiaryEncourageScreen';
@@ -91,10 +91,10 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
         CtaButtonL1(
           text: '작성하기',
           onPressed: () {
-            final challengeId =
-                ref.read(currentChallengeViewModelProvider).challengeId;
-            if (challengeId == null) return;
-            context.push('/reading-diary/$progressId');
+            final bookId =
+                ref.read(currentChallengeViewModelProvider).book?.bookId;
+            if (bookId == null) return;
+            context.push('/reading-diary/$bookId');
           },
         ),
         const SizedBox(height: 8),
@@ -109,11 +109,11 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 confirmButtonText: '바로 작성하기',
                 cancelButtonText: '나중에 하기',
                 onConfirm: () {
-                  final challengeId =
-                      ref.read(currentChallengeViewModelProvider).challengeId;
-                  if (challengeId == null) return;
+                  final bookId =
+                      ref.read(currentChallengeViewModelProvider).book?.bookId;
+                  if (bookId == null) return;
                   context.pop();
-                  context.push('/reading-diary/$progressId');
+                  context.push('/reading-diary/$bookId');
                 },
                 onCancel: () {
                   context.go('/reading-challenge');

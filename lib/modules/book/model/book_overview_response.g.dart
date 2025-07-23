@@ -9,7 +9,7 @@ part of 'book_overview_response.dart';
 _BookOverviewResponse _$BookOverviewResponseFromJson(
         Map<String, dynamic> json) =>
     _BookOverviewResponse(
-      bookId: (json['bookId'] as num?)?.toInt() ?? 0,
+      id: (json['id'] as num?)?.toInt() ?? -1,
       title: json['title'] as String,
       author: json['author'] as String,
       cover: json['cover'] as String,
@@ -23,7 +23,7 @@ _BookOverviewResponse _$BookOverviewResponseFromJson(
 Map<String, dynamic> _$BookOverviewResponseToJson(
         _BookOverviewResponse instance) =>
     <String, dynamic>{
-      'bookId': instance.bookId,
+      'id': instance.id,
       'title': instance.title,
       'author': instance.author,
       'cover': instance.cover,

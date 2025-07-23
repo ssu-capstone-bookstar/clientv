@@ -54,7 +54,7 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (book != null) BookInfoWidget(book: book),
+                BookInfoWidget(book: book),
                 _buildPointsSection(),
                 if (memberId != null) _buildDiarySection(ref, bookId),
               ],
@@ -71,7 +71,7 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
             text: '리딩 챌린지 진행하기',
             onPressed: () {
               final bookForRoute = SearchBookResponse(
-                bookId: book.bookId,
+                bookId: book.id,
                 title: book.title,
                 author: book.author,
                 bookCover: book.cover,
@@ -153,7 +153,7 @@ class ReadingChallengeDetailScreen extends ConsumerWidget {
               error: (error, stack) =>
                   Center(child: Text('독서 다이어리를 불러오는 중 오류가 발생했습니다: $error')),
               data: (page) {
-                final imageUrls = (page.data ?? [])
+                final imageUrls = (page.data)
                     .map((e) => e.firstImage.imageUrl)
                     .where((url) => url.isNotEmpty)
                     .toList();

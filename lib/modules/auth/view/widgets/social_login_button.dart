@@ -26,8 +26,11 @@ class SocialLoginButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: isGoogle ? BorderSide(color: Colors.grey.shade300) : BorderSide.none,
+          borderRadius:
+              BorderRadius.circular(12), // https://butsteadily.tistory.com/16
+          side: isGoogle
+              ? BorderSide(color: Colors.grey.shade300)
+              : BorderSide.none,
         ),
         padding: const EdgeInsets.symmetric(vertical: 16),
         elevation: 0,
@@ -35,16 +38,14 @@ class SocialLoginButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(assetName, width: 24, height: 24),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          SvgPicture.asset(assetName, width: 20, height: 20),
+          const SizedBox(width: 10),
+          Text(label,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ))
         ],
       ),
     );

@@ -18,11 +18,11 @@ class ReadingDiaryEntryScreen extends ConsumerStatefulWidget {
   const ReadingDiaryEntryScreen({
     super.key,
     required this.imagePaths,
-    required this.progressId,
+    required this.bookId,
   });
 
   final List<String> imagePaths;
-  final int progressId;
+  final int bookId;
 
   static String get routeName => 'reading-diary-entry';
 
@@ -208,7 +208,7 @@ class _ReadingDiaryEntryScreenState
           final images = widget.imagePaths.map((path) => XFile(path)).toList();
           final success =
               await ref.read(createDiaryViewModelProvider.notifier).submitDiary(
-                    progressId: widget.progressId,
+                    bookId: widget.bookId,
                     images: images,
                     content: _textController.text,
                   );

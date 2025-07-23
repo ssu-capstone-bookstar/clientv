@@ -1,3 +1,4 @@
+import 'package:book/modules/book_log/view/widgets/follow_button.dart';
 import 'package:flutter/material.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/common/theme/style/app_texts.dart';
@@ -12,7 +13,9 @@ class BookLogHeaderSection extends StatelessWidget {
   final int followingCount;
   final int followerCount;
   final bool isMyProfile;
+  final bool isFollowing;
   final VoidCallback? onEdit;
+  final VoidCallback? onFollow;
   final Key? profileImageKey;
 
   const BookLogHeaderSection({
@@ -22,7 +25,9 @@ class BookLogHeaderSection extends StatelessWidget {
     required this.followingCount,
     required this.followerCount,
     this.isMyProfile = false,
+    this.isFollowing = false,
     this.onEdit,
+    this.onFollow,
     this.profileImageKey,
     super.key,
   });
@@ -84,6 +89,9 @@ class BookLogHeaderSection extends StatelessWidget {
           if (isMyProfile) ...[
             const SizedBox(height: 16),
             ProfileEditButton(onPressed: onEdit),
+          ] else ...[
+            const SizedBox(height: 16),
+            FollowButton(isFollowing: isFollowing, onPressed: onFollow),
           ],
         ],
       ),

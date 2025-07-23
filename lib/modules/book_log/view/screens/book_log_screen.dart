@@ -1,4 +1,5 @@
 import 'package:book/modules/book_log/view/widgets/profile_speech_bubble.dart';
+import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,59 +14,84 @@ import '../widgets/book_log_mid_section.dart';
 import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
 
 class BookLogScreen extends ConsumerWidget {
-  const BookLogScreen({super.key, this.showAppBar = true, this.otherMemberId = 0});
+  const BookLogScreen(
+      {super.key, this.showAppBar = true, this.otherMemberId = 0});
   final bool showAppBar;
   final int otherMemberId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authViewModelProvider).value;
-    final memberId = otherMemberId == 0 ? ((user is AuthSuccess) ? user.memberId : 0) : otherMemberId;
-    final isMyProfile = otherMemberId == 0 ? (user is AuthSuccess && user.memberId == memberId) : false;
+    final memberId = otherMemberId == 0
+        ? ((user is AuthSuccess) ? user.memberId : 0)
+        : otherMemberId;
+    final isMyProfile = otherMemberId == 0
+        ? (user is AuthSuccess && user.memberId == memberId)
+        : false;
 
     final profileAsync = ref.watch(bookLogProfileProvider(memberId));
     final challengesAsync = ref
         .watch(getChallengesByMemberViewModelProvider(memberId: memberId))
         .challenges;
 
+    final followInfoAsync = ref.watch(followInfoViewModelProvider);
+
     return profileAsync.when(
-      loading: _loading,
-      error: _error('프로필 정보를 불러올 수 없습니다.'),
-      data: (profile) => challengesAsync.when(
         loading: _loading,
-        error: _error('책장 정보를 불러올 수 없습니다.'),
-        data: (challenges) {
-          return Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 20),
-                  BookLogHeaderSection(
-                    profileImageUrl: profile.profileImageUrl,
-                    nickName: profile.nickName,
-                    diaryCount: profile.diaryCount,
-                    followingCount: profile.followingCount,
-                    followerCount: profile.followerCount,
-                    isMyProfile: isMyProfile,
-                    onEdit: () => GoRouter.of(context).go('/book-log/profile'),
-                    profileImageKey: GlobalKey(),
-                  ),
-                  const SizedBox(height: 25),
-                  BookLogMidSection(books: challenges),
-                  const SizedBox(height: 20),
-                  BookLogLowSection(memberId: memberId),
-                ],
+        error: _error('프로필 정보를 불러올 수 없습니다.'),
+        data: (profile) => challengesAsync.when(
+              loading: _loading,
+              error: _error('책장 정보를 불러올 수 없습니다.'),
+              data: (challenges) => followInfoAsync.when(
+                loading: _loading,
+                error: _error('팔로워 정보를 불러올 수 없습니다.'),
+                data: (followInfo) {
+                  final targetMemberId = !isMyProfile ? memberId : -1;
+                  final isFollowing =
+                      followInfo.following.map((e) => e.memberId).contains(
+                            targetMemberId,
+                          );
+                  void onFollow() {
+                    if (isFollowing) {
+                      ref.read(followInfoViewModelProvider.notifier).unfollow(targetMemberId);
+                    } else {
+                      ref.read(followInfoViewModelProvider.notifier).follow(targetMemberId);
+                    }
+                  }
+                  return Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 20),
+                          BookLogHeaderSection(
+                            profileImageUrl: profile.profileImageUrl,
+                            nickName: profile.nickName,
+                            diaryCount: profile.diaryCount,
+                            followingCount: profile.followingCount,
+                            followerCount: profile.followerCount,
+                            isMyProfile: isMyProfile,
+                            isFollowing: isFollowing,
+                            onEdit: () =>
+                                GoRouter.of(context).go('/book-log/profile'),
+                            onFollow: onFollow,
+                            profileImageKey: GlobalKey(),
+                          ),
+                          const SizedBox(height: 25),
+                          BookLogMidSection(books: challenges),
+                          const SizedBox(height: 20),
+                          BookLogLowSection(memberId: memberId),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: ProfileSpeechBubble(text: profile.introduction),
+                      ),
+                    ],
+                  );
+                },
               ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: ProfileSpeechBubble(text: profile.introduction),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+            ));
   }
 
   Widget _loading() => const Center(child: CircularProgressIndicator());
