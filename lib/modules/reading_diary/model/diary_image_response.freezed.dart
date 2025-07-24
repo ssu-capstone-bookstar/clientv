@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$DiaryImageResponse {
-  int get id;
+  int get diaryId;
+  int get imageId;
   String get imageUrl;
   int get sequence;
 
@@ -34,7 +35,8 @@ mixin _$DiaryImageResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is DiaryImageResponse &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
+            (identical(other.imageId, imageId) || other.imageId == imageId) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.sequence, sequence) ||
@@ -43,11 +45,12 @@ mixin _$DiaryImageResponse {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, imageUrl, sequence);
+  int get hashCode =>
+      Object.hash(runtimeType, diaryId, imageId, imageUrl, sequence);
 
   @override
   String toString() {
-    return 'DiaryImageResponse(id: $id, imageUrl: $imageUrl, sequence: $sequence)';
+    return 'DiaryImageResponse(diaryId: $diaryId, imageId: $imageId, imageUrl: $imageUrl, sequence: $sequence)';
   }
 }
 
@@ -57,7 +60,7 @@ abstract mixin class $DiaryImageResponseCopyWith<$Res> {
           DiaryImageResponse value, $Res Function(DiaryImageResponse) _then) =
       _$DiaryImageResponseCopyWithImpl;
   @useResult
-  $Res call({int id, String imageUrl, int sequence});
+  $Res call({int diaryId, int imageId, String imageUrl, int sequence});
 }
 
 /// @nodoc
@@ -73,14 +76,19 @@ class _$DiaryImageResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? diaryId = null,
+    Object? imageId = null,
     Object? imageUrl = null,
     Object? sequence = null,
   }) {
     return _then(_self.copyWith(
-      id: null == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
+      diaryId: null == diaryId
+          ? _self.diaryId
+          : diaryId // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageId: null == imageId
+          ? _self.imageId
+          : imageId // ignore: cast_nullable_to_non_nullable
               as int,
       imageUrl: null == imageUrl
           ? _self.imageUrl
@@ -187,13 +195,15 @@ extension DiaryImageResponsePatterns on DiaryImageResponse {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int id, String imageUrl, int sequence)? $default, {
+    TResult Function(int diaryId, int imageId, String imageUrl, int sequence)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _DiaryImageResponse() when $default != null:
-        return $default(_that.id, _that.imageUrl, _that.sequence);
+        return $default(
+            _that.diaryId, _that.imageId, _that.imageUrl, _that.sequence);
       case _:
         return orElse();
     }
@@ -214,12 +224,14 @@ extension DiaryImageResponsePatterns on DiaryImageResponse {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int id, String imageUrl, int sequence) $default,
+    TResult Function(int diaryId, int imageId, String imageUrl, int sequence)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryImageResponse():
-        return $default(_that.id, _that.imageUrl, _that.sequence);
+        return $default(
+            _that.diaryId, _that.imageId, _that.imageUrl, _that.sequence);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -239,12 +251,14 @@ extension DiaryImageResponsePatterns on DiaryImageResponse {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int id, String imageUrl, int sequence)? $default,
+    TResult? Function(int diaryId, int imageId, String imageUrl, int sequence)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryImageResponse() when $default != null:
-        return $default(_that.id, _that.imageUrl, _that.sequence);
+        return $default(
+            _that.diaryId, _that.imageId, _that.imageUrl, _that.sequence);
       case _:
         return null;
     }
@@ -255,13 +269,19 @@ extension DiaryImageResponsePatterns on DiaryImageResponse {
 @JsonSerializable()
 class _DiaryImageResponse implements DiaryImageResponse {
   const _DiaryImageResponse(
-      {this.id = 0, this.imageUrl = '', this.sequence = 0});
+      {this.diaryId = -1,
+      this.imageId = -1,
+      this.imageUrl = '',
+      this.sequence = 0});
   factory _DiaryImageResponse.fromJson(Map<String, dynamic> json) =>
       _$DiaryImageResponseFromJson(json);
 
   @override
   @JsonKey()
-  final int id;
+  final int diaryId;
+  @override
+  @JsonKey()
+  final int imageId;
   @override
   @JsonKey()
   final String imageUrl;
@@ -289,7 +309,8 @@ class _DiaryImageResponse implements DiaryImageResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _DiaryImageResponse &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
+            (identical(other.imageId, imageId) || other.imageId == imageId) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.sequence, sequence) ||
@@ -298,11 +319,12 @@ class _DiaryImageResponse implements DiaryImageResponse {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, imageUrl, sequence);
+  int get hashCode =>
+      Object.hash(runtimeType, diaryId, imageId, imageUrl, sequence);
 
   @override
   String toString() {
-    return 'DiaryImageResponse(id: $id, imageUrl: $imageUrl, sequence: $sequence)';
+    return 'DiaryImageResponse(diaryId: $diaryId, imageId: $imageId, imageUrl: $imageUrl, sequence: $sequence)';
   }
 }
 
@@ -314,7 +336,7 @@ abstract mixin class _$DiaryImageResponseCopyWith<$Res>
       __$DiaryImageResponseCopyWithImpl;
   @override
   @useResult
-  $Res call({int id, String imageUrl, int sequence});
+  $Res call({int diaryId, int imageId, String imageUrl, int sequence});
 }
 
 /// @nodoc
@@ -330,14 +352,19 @@ class __$DiaryImageResponseCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? id = null,
+    Object? diaryId = null,
+    Object? imageId = null,
     Object? imageUrl = null,
     Object? sequence = null,
   }) {
     return _then(_DiaryImageResponse(
-      id: null == id
-          ? _self.id
-          : id // ignore: cast_nullable_to_non_nullable
+      diaryId: null == diaryId
+          ? _self.diaryId
+          : diaryId // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageId: null == imageId
+          ? _self.imageId
+          : imageId // ignore: cast_nullable_to_non_nullable
               as int,
       imageUrl: null == imageUrl
           ? _self.imageUrl
