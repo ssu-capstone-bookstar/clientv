@@ -1,6 +1,9 @@
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_log/state/book_log_state.dart';
 import 'package:book/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_delete_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_report_success_dialog.dart';
 import 'package:book/modules/book_log/view/widgets/feed_card.dart';
 import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:flutter/material.dart';
@@ -165,6 +168,54 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
       }
     }
 
+    onDelete(BuildContext ctx, int targetIndex) async {
+      final targetFeed = feeds[targetIndex];
+      final result = await showModalBottomSheet(
+          context: ctx,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => DiaryFeedDeleteDialog());
+      if (result == true) {
+        final currentState = await ref
+            .read(bookLogViewModelProvider(widget.memberId).notifier)
+            .deleteFeed(targetFeed.diaryId);
+        setState(() {
+          _localState = currentState;
+        });
+      }
+    }
+
+    onReport(BuildContext ctx, int targetIndex) async {
+      final targetFeed = feeds[targetIndex];
+      final result = await showModalBottomSheet(
+          context: ctx,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => DiaryFeedReportDialog());
+
+      if (result == null) return;
+
+      ReportType? reportType = result?['reportType'];
+      String? content = result?['content'];
+
+      if (reportType == null || content == null) return;
+      await ref
+          .read(bookLogViewModelProvider(widget.memberId).notifier)
+          .reportFeed(targetFeed.diaryId, reportType, content);
+
+      await showModalBottomSheet(
+          context: ctx,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => DiaryFeedReportSuccessDialog());
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('책로그'),
@@ -185,6 +236,8 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
             feed: feeds[index],
             onLike: () => onLike(index),
             onMessage: () => onMessage(context, index),
+            onDelete: () => onDelete(context, index),
+            onReport: () => onReport(context, index),
           ),
           separatorBuilder: (context, index) => const Divider(
             color: ColorName.g7,
