@@ -6,7 +6,7 @@ part of 'book_log_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookLogViewModelHash() => r'aaa580b993d0670dad5fd46d370faf0aa84bd71e';
+String _$bookLogViewModelHash() => r'1d002d6fe7bb917b30ed1618b67ac62aa5c1b128';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -1,5 +1,7 @@
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/diary_comment/model/diary_comment_response.dart';
 import 'package:book/modules/diary_comment/model/diary_reply_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -22,8 +24,8 @@ class CommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    /// TODO: memberId를 통해 본인의 코멘트인지 판정
-    final bool isMyComment = true;
+    final user = ref.watch(authViewModelProvider).value;
+    final bool isMyComment = (comment?.writer.memberId ?? reply?.writer.memberId ?? 0) == ((user is AuthSuccess) ? user.memberId : 0);
 
     return Slidable(
       key: ValueKey(comment?.commentId ?? reply?.commentId ?? 0),

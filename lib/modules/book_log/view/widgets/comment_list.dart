@@ -39,6 +39,7 @@ class CommentList extends StatelessWidget {
             ? ListView.builder(
                 reverse: true,
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: replies!.length,
                 itemBuilder: (context, index) {
                   final reply = replies![index];
