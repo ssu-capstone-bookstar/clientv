@@ -13,10 +13,10 @@ import '../../../book/view/widgets/book_info_widget.dart';
 import '../../../book/view_model/book_overview_view_model.dart';
 import '../../../book_pick/model/search_book_response.dart';
 import '../../../../gen/assets.gen.dart';
-import '../../../reading_diary/view_model/related_diaries_view_model.dart';
-import '../../../reading_diary/model/related_diary_sort.dart';
-import '../../../reading_diary/model/related_diary_thumbnail.dart';
-import '../../../reading_diary/view_model/related_diary_state.dart';
+import '../../view_model/reading_challenge_view_model.dart';
+import '../../model/my_diary_sort.dart';
+import '../../model/my_diary_thumbnail.dart';
+import '../../model/my_diary_state.dart';
 
 class ReadingChallengeDetailScreen extends ConsumerStatefulWidget {
   const ReadingChallengeDetailScreen({
@@ -226,13 +226,12 @@ class _ReadingChallengeDetailScreenState
             description: '해당 도서를 읽고 쓴 독서 다이어리를 확인해 보세요',
             descriptionStyle: AppTexts.b10.copyWith(color: ColorName.g2),
             trailing: GestureDetector(
-              onTap: () =>
-                  ref.read(relatedDiarySortStateProvider.notifier).toggle(),
+              onTap: () => ref.read(myDiarySortStateProvider.notifier).toggle(),
               child: Row(
                 children: [
                   Text(
-                    ref.watch(relatedDiarySortStateProvider.select(
-                            (value) => value == RelatedDiarySort.LATEST))
+                    ref.watch(myDiarySortStateProvider
+                            .select((value) => value == MyDiarySort.LATEST))
                         ? '최신순'
                         : '인기순',
                     style: AppTexts.b10.copyWith(color: ColorName.g3),
@@ -242,13 +241,12 @@ class _ReadingChallengeDetailScreenState
               ),
             ),
           ),
-          AsyncImageGridView<RelatedDiaryState, RelatedDiaryThumbnail>(
-            asyncValue:
-                ref.watch(relatedDiariesViewModelProvider(widget.bookId)),
+          AsyncImageGridView<MyDiaryState, MyDiaryThumbnail>(
+            asyncValue: ref.watch(myDiariesViewModelProvider(widget.bookId)),
             getItems: (state) => state.diaries,
             getImageUrl: (diary) => diary.firstImage.imageUrl,
             hasNext: ref
-                    .watch(relatedDiariesViewModelProvider(widget.bookId))
+                    .watch(myDiariesViewModelProvider(widget.bookId))
                     .asData
                     ?.value
                     .hasNext ??
