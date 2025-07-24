@@ -114,11 +114,13 @@ class _DiaryFeedCommentDialogState
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
     handleCommentSend() async {
+      /// 댓글 작성
       if (targetParentComment == null) {
         await ref
             .read(feedCommentViewModelProvider(widget.diaryId).notifier)
             .addComment(widget.diaryId, _textController.text);
       } else {
+        /// 대댓글(답글) 작성
         await ref
             .read(feedCommentViewModelProvider(widget.diaryId).notifier)
             .addReply(widget.diaryId, _textController.text,

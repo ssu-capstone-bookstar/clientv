@@ -29,7 +29,7 @@ abstract class DiaryCommentRepository {
   });
 
   @POST('/api/v2/reading-diaries/{diaryId}/comments')
-  Future<ResponseForm<void>> createComment(
+  Future<ResponseForm<DiaryCommentResponse>> createComment(
     @Path('diaryId') int diaryId,
     @Body() CommentRequest request,
   );
