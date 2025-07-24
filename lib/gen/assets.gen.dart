@@ -222,6 +222,10 @@ class $AssetsIconsGen {
   SvgGenImage get icRatingStar =>
       const SvgGenImage('assets/icons/ic_rating_star.svg');
 
+  /// File path: assets/icons/ic_rating_star_filled.svg
+  SvgGenImage get icRatingStarFilled =>
+      const SvgGenImage('assets/icons/ic_rating_star_filled.svg');
+
   /// File path: assets/icons/ic_reading_challenge_char1.svg
   SvgGenImage get icReadingChallengeChar1 =>
       const SvgGenImage('assets/icons/ic_reading_challenge_char1.svg');
@@ -301,6 +305,7 @@ class $AssetsIconsGen {
     icPointShopChar2,
     icPointShopChar3,
     icRatingStar,
+    icRatingStarFilled,
     icReadingChallengeChar1,
     icReadingChallengeChar2,
     icReadingChallengeChar3,

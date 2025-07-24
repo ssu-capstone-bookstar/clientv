@@ -1,6 +1,7 @@
 import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
 import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
+import 'package:book/modules/reading_challenge/model/rating_request.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -128,6 +129,24 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     } catch (e) {
       // TODO: Handle error
       print('Failed to fetch challenge detail: $e');
+    }
+  }
+
+  Future<void> completeChallenge(double rating) async {
+    if (state.challengeId == null || state.book == null) {
+      throw Exception('Challenge ID and book must be set for completion.');
+    }
+
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    try {
+      final request = RatingRequest(
+        bookId: state.book!.bookId,
+        rating: rating.toInt(),
+      );
+      await repo.completeChallenge(state.challengeId!, request);
+    } catch (e) {
+      debugPrint('Failed to complete challenge: $e');
+      rethrow;
     }
   }
 
