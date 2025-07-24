@@ -90,7 +90,8 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
       children: [
         CtaButtonL1(
           text: '작성하기',
-          onPressed: () {
+          onPressed: () async {
+            await _updateChallengeProgress(ref);
             final bookId =
                 ref.read(currentChallengeViewModelProvider).book?.bookId;
             if (bookId == null) return;
@@ -108,14 +109,16 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 content: '독서 다이어리를 작성하지 않으면\n리딩 챌린지 참여가 인정되지 않아요',
                 confirmButtonText: '바로 작성하기',
                 cancelButtonText: '나중에 하기',
-                onConfirm: () {
+                onConfirm: () async {
+                  await _updateChallengeProgress(ref);
                   final bookId =
                       ref.read(currentChallengeViewModelProvider).book?.bookId;
                   if (bookId == null) return;
                   context.pop();
                   context.push('/reading-diary/$bookId');
                 },
-                onCancel: () {
+                onCancel: () async {
+                  await _updateChallengeProgress(ref);
                   context.go('/reading-challenge');
                 },
                 icon: Assets.icons.icReadingChallengeChar3.svg(
@@ -129,5 +132,23 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
         const SizedBox(height: 34),
       ],
     );
+  }
+
+  Future<void> _updateChallengeProgress(WidgetRef ref) async {
+    try {
+      final currentChallenge = ref.read(currentChallengeViewModelProvider);
+      final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
+
+      if (currentChallenge.challengeId == null) {
+        // Create new challenge if challengeId doesn't exist
+        await viewModel.createChallenge(ref);
+      } else {
+        // Update existing challenge progress
+        await viewModel.updateChallengeProgress();
+      }
+    } catch (e) {
+      // Handle error silently or show a snackbar if needed
+      debugPrint('Failed to create/update challenge: $e');
+    }
   }
 }
