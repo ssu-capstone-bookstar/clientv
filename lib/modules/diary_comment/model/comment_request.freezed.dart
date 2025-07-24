@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$CommentRequest {
-  int get diaryId;
+  int? get parentCommentId;
   String get content;
 
   /// Create a copy of CommentRequest
@@ -33,17 +33,18 @@ mixin _$CommentRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is CommentRequest &&
-            (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
+            (identical(other.parentCommentId, parentCommentId) ||
+                other.parentCommentId == parentCommentId) &&
             (identical(other.content, content) || other.content == content));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, diaryId, content);
+  int get hashCode => Object.hash(runtimeType, parentCommentId, content);
 
   @override
   String toString() {
-    return 'CommentRequest(diaryId: $diaryId, content: $content)';
+    return 'CommentRequest(parentCommentId: $parentCommentId, content: $content)';
   }
 }
 
@@ -53,7 +54,7 @@ abstract mixin class $CommentRequestCopyWith<$Res> {
           CommentRequest value, $Res Function(CommentRequest) _then) =
       _$CommentRequestCopyWithImpl;
   @useResult
-  $Res call({int diaryId, String content});
+  $Res call({int? parentCommentId, String content});
 }
 
 /// @nodoc
@@ -69,14 +70,14 @@ class _$CommentRequestCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? diaryId = null,
+    Object? parentCommentId = freezed,
     Object? content = null,
   }) {
     return _then(_self.copyWith(
-      diaryId: null == diaryId
-          ? _self.diaryId
-          : diaryId // ignore: cast_nullable_to_non_nullable
-              as int,
+      parentCommentId: freezed == parentCommentId
+          ? _self.parentCommentId
+          : parentCommentId // ignore: cast_nullable_to_non_nullable
+              as int?,
       content: null == content
           ? _self.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -178,13 +179,13 @@ extension CommentRequestPatterns on CommentRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(int diaryId, String content)? $default, {
+    TResult Function(int? parentCommentId, String content)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _CommentRequest() when $default != null:
-        return $default(_that.diaryId, _that.content);
+        return $default(_that.parentCommentId, _that.content);
       case _:
         return orElse();
     }
@@ -205,12 +206,12 @@ extension CommentRequestPatterns on CommentRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(int diaryId, String content) $default,
+    TResult Function(int? parentCommentId, String content) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _CommentRequest():
-        return $default(_that.diaryId, _that.content);
+        return $default(_that.parentCommentId, _that.content);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -230,12 +231,12 @@ extension CommentRequestPatterns on CommentRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(int diaryId, String content)? $default,
+    TResult? Function(int? parentCommentId, String content)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _CommentRequest() when $default != null:
-        return $default(_that.diaryId, _that.content);
+        return $default(_that.parentCommentId, _that.content);
       case _:
         return null;
     }
@@ -245,13 +246,12 @@ extension CommentRequestPatterns on CommentRequest {
 /// @nodoc
 @JsonSerializable()
 class _CommentRequest implements CommentRequest {
-  const _CommentRequest({this.diaryId = 0, required this.content});
+  const _CommentRequest({this.parentCommentId, required this.content});
   factory _CommentRequest.fromJson(Map<String, dynamic> json) =>
       _$CommentRequestFromJson(json);
 
   @override
-  @JsonKey()
-  final int diaryId;
+  final int? parentCommentId;
   @override
   final String content;
 
@@ -275,17 +275,18 @@ class _CommentRequest implements CommentRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _CommentRequest &&
-            (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
+            (identical(other.parentCommentId, parentCommentId) ||
+                other.parentCommentId == parentCommentId) &&
             (identical(other.content, content) || other.content == content));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, diaryId, content);
+  int get hashCode => Object.hash(runtimeType, parentCommentId, content);
 
   @override
   String toString() {
-    return 'CommentRequest(diaryId: $diaryId, content: $content)';
+    return 'CommentRequest(parentCommentId: $parentCommentId, content: $content)';
   }
 }
 
@@ -297,7 +298,7 @@ abstract mixin class _$CommentRequestCopyWith<$Res>
       __$CommentRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({int diaryId, String content});
+  $Res call({int? parentCommentId, String content});
 }
 
 /// @nodoc
@@ -313,14 +314,14 @@ class __$CommentRequestCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? diaryId = null,
+    Object? parentCommentId = freezed,
     Object? content = null,
   }) {
     return _then(_CommentRequest(
-      diaryId: null == diaryId
-          ? _self.diaryId
-          : diaryId // ignore: cast_nullable_to_non_nullable
-              as int,
+      parentCommentId: freezed == parentCommentId
+          ? _self.parentCommentId
+          : parentCommentId // ignore: cast_nullable_to_non_nullable
+              as int?,
       content: null == content
           ? _self.content
           : content // ignore: cast_nullable_to_non_nullable

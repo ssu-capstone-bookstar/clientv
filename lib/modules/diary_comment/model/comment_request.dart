@@ -6,7 +6,7 @@ part 'comment_request.g.dart';
 @freezed
 abstract class CommentRequest with _$CommentRequest {
   const factory CommentRequest({
-    @Default(0) int diaryId,
+    int? parentCommentId,
     required String content,
   }) = _CommentRequest;
 

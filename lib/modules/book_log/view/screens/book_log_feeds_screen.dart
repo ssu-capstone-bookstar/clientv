@@ -1,5 +1,6 @@
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_log/state/book_log_state.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
 import 'package:book/modules/book_log/view/widgets/feed_card.dart';
 import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,6 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
   // 중복 호출 방지를 위한 플래그
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
-  int? _loadingLikeIndex;
 
   @override
   void initState() {
@@ -133,17 +133,37 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
     final feeds = _localState.feeds;
 
     onLike(int targetIndex) async {
-      setState(() {
-        _loadingLikeIndex = targetIndex;
-      });
       final targetFeed = feeds[targetIndex];
       final result = await ref
           .read(bookLogViewModelProvider(widget.memberId).notifier)
           .handleFeedLike(targetFeed.diaryId, targetFeed.liked, targetIndex);
       setState(() {
         _localState = result;
-        _loadingLikeIndex = null;
       });
+    }
+
+    onMessage(BuildContext ctx, int targetIndex) async {
+      final targetFeed = feeds[targetIndex];
+      final result = await showModalBottomSheet(
+          context: ctx,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) =>
+              DiaryFeedCommentDialog(diaryId: targetFeed.diaryId));
+
+      bool hasChanges = result['hasChanges'];
+      int commentCount = result['commentCount'];
+      if (hasChanges) {
+        final currentState = ref
+            .read(bookLogViewModelProvider(widget.memberId).notifier)
+            .changeCommentCount(targetFeed.diaryId, commentCount);
+        setState(() {
+          _localState = currentState;
+        });
+      }
     }
 
     return Scaffold(
@@ -164,8 +184,8 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
           itemCount: feeds.length,
           itemBuilder: (context, index) => FeedCard(
             feed: feeds[index],
-            loadingLike: index == _loadingLikeIndex,
             onLike: () => onLike(index),
+            onMessage: () => onMessage(context, index),
           ),
           separatorBuilder: (context, index) => const Divider(
             color: ColorName.g7,

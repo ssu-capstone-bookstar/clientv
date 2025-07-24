@@ -8,14 +8,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class FeedCard extends ConsumerStatefulWidget {
+  final DiaryResponse feed;
+  final Function onLike;
+  final Function onMessage;
+
   const FeedCard(
       {super.key,
       required this.feed,
-      required this.loadingLike,
-      required this.onLike});
-  final DiaryResponse feed;
-  final bool loadingLike;
-  final Function onLike;
+      required this.onLike,
+      required this.onMessage});
 
   @override
   ConsumerState<FeedCard> createState() => _FeedCardState();
@@ -95,32 +96,37 @@ class _FeedCardState extends ConsumerState<FeedCard> {
               SizedBox(
                 child: Row(
                   children: [
-                    GestureDetector(
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
                       onTap: () => widget.onLike(),
-                      child: widget.loadingLike
-                          ? SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: ColorName.p1,
-                              ),
-                            )
-                          : !widget.feed.liked
+                      child: Row(
+                        children: [
+                          !widget.feed.liked
                               ? Assets.icons.icHeart.svg()
                               : Assets.icons.icHeartFilled.svg(),
-                    ),
-                    const SizedBox(width: 3),
-                    Text(
-                      widget.feed.likeCount.toString(),
-                      style: AppTexts.b10.copyWith(color: ColorName.w1),
+                          const SizedBox(width: 3),
+                          Text(
+                            widget.feed.likeCount.toString(),
+                            style: AppTexts.b10.copyWith(color: ColorName.w1),
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 6),
-                    Assets.icons.icMessage.svg(),
-                    const SizedBox(width: 3),
-                    Text(
-                      widget.feed.commentCount.toString(),
-                      style: AppTexts.b10.copyWith(color: ColorName.w1),
-                    ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () => widget.onMessage(),
+                      child: Row(
+                        children: [
+                          Assets.icons.icMessage.svg(),
+                          const SizedBox(width: 3),
+                          Text(
+                            widget.feed.commentCount.toString(),
+                            style: AppTexts.b10.copyWith(color: ColorName.w1),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
