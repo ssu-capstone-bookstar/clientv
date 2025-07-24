@@ -83,7 +83,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     }
   }
 
-  Future<int> updateChallengeProgress() async {
+  Future<int> updateChallengeProgress(WidgetRef ref) async {
     if (state.challengeId == null ||
         state.startPage == null ||
         state.endPage == null) {
@@ -103,6 +103,12 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       state = state.copyWith(
         progressId: res.data.progressId,
       );
+
+      final user = ref.read(authViewModelProvider).value;
+      final memberId = (user is AuthSuccess) ? user.memberId : 0;
+      ref.invalidate(
+          getChallengesByMemberViewModelProvider(memberId: memberId));
+
       return res.data.progressId;
     } catch (e) {
       debugPrint('Failed to update challenge progress: $e');
@@ -132,7 +138,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     }
   }
 
-  Future<void> completeChallenge(double rating) async {
+  Future<void> completeChallenge(double rating, WidgetRef ref) async {
     if (state.challengeId == null || state.book == null) {
       throw Exception('Challenge ID and book must be set for completion.');
     }
@@ -144,6 +150,11 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
         rating: rating.toInt(),
       );
       await repo.completeChallenge(state.challengeId!, request);
+
+      final user = ref.read(authViewModelProvider).value;
+      final memberId = (user is AuthSuccess) ? user.memberId : 0;
+      ref.invalidate(
+          getChallengesByMemberViewModelProvider(memberId: memberId));
     } catch (e) {
       debugPrint('Failed to complete challenge: $e');
       rethrow;

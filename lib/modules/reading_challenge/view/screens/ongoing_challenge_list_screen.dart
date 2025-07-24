@@ -113,7 +113,9 @@ class _OngoingChallengeListScreenState
             .toList();
 
         if (filteredChallenges.isEmpty) {
-          return const Center(child: Text('진행중인 챌린지가 없습니다.'));
+          return Center(
+              child: Text('진행중인 챌린지가 없습니다.',
+                  style: AppTexts.b8.copyWith(color: ColorName.g3)));
         }
 
         return BookCoverGridView<List<ChallengeResponse>, ChallengeResponse>(

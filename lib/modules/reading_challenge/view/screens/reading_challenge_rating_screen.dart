@@ -29,39 +29,47 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
     final state = ref.watch(readingChallengeRatingViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("리딩 챌린지"),
-        leading: BackButton(
-          onPressed: context.pop,
+      appBar: _buildAppBar(context),
+      body: _buildBody(context, ref, viewModel, state),
+      bottomNavigationBar:
+          state.rating != null ? _buildBottomNavigationBar(context, ref) : null,
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text("리딩 챌린지"),
+      leading: BackButton(onPressed: context.pop),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => context.go('/reading-challenge'),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              context.go('/reading-challenge');
-            },
+      ],
+    );
+  }
+
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    ReadingChallengeRatingViewModel viewModel,
+    ReadingChallengeRatingState state,
+  ) {
+    return Padding(
+      padding: AppPaddings.SCREEN_BODY_PADDING,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ChallengeBookInfoWidget(book: book),
+          const SizedBox(height: 16),
+          const StepProgressIndicator(
+            totalSteps: 3,
+            currentStep: 2,
           ),
+          const SizedBox(height: 40),
+          _buildRatingSection(viewModel, state),
         ],
       ),
-      body: Padding(
-        padding: AppPaddings.SCREEN_BODY_PADDING,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ChallengeBookInfoWidget(book: book),
-            const SizedBox(height: 16),
-            const StepProgressIndicator(
-              totalSteps: 3,
-              currentStep: 2,
-            ),
-            const SizedBox(height: 40),
-            _buildRatingSection(viewModel, state),
-          ],
-        ),
-      ),
-      bottomNavigationBar: (state.rating != null)
-          ? _buildBottomButtonSection(context, ref)
-          : null,
     );
   }
 
@@ -77,85 +85,108 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
           style: AppTexts.b10.copyWith(color: ColorName.p1),
         ),
         const SizedBox(height: 20),
-        RatingBar(
-          initialRating: state.rating,
-          minRating: 0.0,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          itemPadding: const EdgeInsets.symmetric(horizontal: 3.41),
-          ratingWidget: _buildRatingWidget(),
-          onRatingUpdate: (rating) {
-            viewModel.setRating(rating);
-          },
-        ),
+        _buildRatingBar(viewModel, state),
       ],
     );
   }
 
-  Widget _buildBottomButtonSection(BuildContext context, WidgetRef ref) {
-    final viewModel =
-        ref.read(readingChallengeRatingViewModelProvider.notifier);
-    final state = ref.watch(readingChallengeRatingViewModelProvider);
-    final currentChallenge = ref.read(currentChallengeViewModelProvider);
+  Widget _buildRatingBar(
+    ReadingChallengeRatingViewModel viewModel,
+    ReadingChallengeRatingState state,
+  ) {
+    return RatingBar(
+      initialRating: state.rating,
+      minRating: 0.0,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 5,
+      itemPadding: const EdgeInsets.symmetric(horizontal: 3.41),
+      ratingWidget: _buildRatingWidget(),
+      onRatingUpdate: viewModel.setRating,
+    );
+  }
 
+  Widget _buildBottomNavigationBar(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CtaButtonL1(
-            text: '저장하기',
-            enabled: viewModel.isButtonEnabled,
-            onPressed: () async {
-              try {
-                if (currentChallenge.challengeId != null) {
-                  await ref
-                      .read(currentChallengeViewModelProvider.notifier)
-                      .completeChallenge(state.rating!);
-                }
-
-                if (context.mounted) {
-                  context.push(
-                    '/reading-challenge/diary-encourage',
-                    extra: {
-                      'isChallengeCompleted': true,
-                      'bookId': book.bookId,
-                    },
-                  );
-                }
-              } catch (e) {
-                // Handle error - could show a snackbar here
-                debugPrint('Failed to complete challenge: $e');
-              }
-            },
-          ),
+          _buildSaveButton(context, ref),
           const SizedBox(height: 8),
-          CtaButtonL2(
-            text: '나중에 남기기',
-            onPressed: () async {
-              try {
-                if (currentChallenge.challengeId != null) {
-                  await ref
-                      .read(currentChallengeViewModelProvider.notifier)
-                      .updateChallengeProgress();
-                }
-
-                if (context.mounted) {
-                  context.go('/reading-challenge');
-                }
-              } catch (e) {
-                debugPrint('Failed to update challenge progress: $e');
-                if (context.mounted) {
-                  context.go('/reading-challenge');
-                }
-              }
-            },
-          ),
+          _buildSkipButton(context, ref),
         ],
       ),
     );
+  }
+
+  Widget _buildSaveButton(BuildContext context, WidgetRef ref) {
+    final viewModel =
+        ref.read(readingChallengeRatingViewModelProvider.notifier);
+    final state = ref.watch(readingChallengeRatingViewModelProvider);
+
+    return CtaButtonL1(
+      text: '저장하기',
+      enabled: viewModel.isButtonEnabled,
+      onPressed: () => _handleSaveButton(context, ref, state),
+    );
+  }
+
+  Widget _buildSkipButton(BuildContext context, WidgetRef ref) {
+    return CtaButtonL2(
+      text: '나중에 남기기',
+      onPressed: () => _handleSkipButton(context, ref),
+    );
+  }
+
+  Future<void> _handleSaveButton(
+    BuildContext context,
+    WidgetRef ref,
+    ReadingChallengeRatingState state,
+  ) async {
+    try {
+      final currentChallenge = ref.read(currentChallengeViewModelProvider);
+
+      if (currentChallenge.challengeId != null) {
+        await ref
+            .read(currentChallengeViewModelProvider.notifier)
+            .completeChallenge(state.rating!, ref);
+      }
+
+      if (context.mounted) {
+        context.push(
+          '/reading-challenge/diary-encourage',
+          extra: {
+            'isChallengeCompleted': true,
+            'bookId': book.bookId,
+          },
+        );
+      }
+    } catch (e) {
+      debugPrint('Failed to complete challenge: $e');
+    }
+  }
+
+  Future<void> _handleSkipButton(BuildContext context, WidgetRef ref) async {
+    try {
+      final currentChallenge = ref.read(currentChallengeViewModelProvider);
+
+      if (currentChallenge.challengeId != null) {
+        await ref
+            .read(currentChallengeViewModelProvider.notifier)
+            .updateChallengeProgress(ref);
+      }
+
+      if (context.mounted) {
+        context.go('/reading-challenge');
+      }
+    } catch (e) {
+      debugPrint('Failed to update challenge progress: $e');
+      if (context.mounted) {
+        context.go('/reading-challenge');
+      }
+    }
   }
 
   RatingWidget _buildRatingWidget() {

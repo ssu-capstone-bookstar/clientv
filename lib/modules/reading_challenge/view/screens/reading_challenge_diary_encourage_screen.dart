@@ -144,7 +144,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
         await viewModel.createChallenge(ref);
       } else {
         // Update existing challenge progress
-        await viewModel.updateChallengeProgress();
+        await viewModel.updateChallengeProgress(ref);
       }
     } catch (e) {
       // Handle error silently or show a snackbar if needed

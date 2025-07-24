@@ -1,3 +1,4 @@
+import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,10 @@ class ImageGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (imageUrls.isEmpty) {
-      return emptyWidget ?? const Center(child: Text('이미지가 없습니다.'));
+      return emptyWidget ??
+          Center(
+              child: Text('이미지가 없습니다.',
+                  style: AppTexts.b8.copyWith(color: ColorName.g3)));
     }
     return LayoutBuilder(
       builder: (context, constraints) {
