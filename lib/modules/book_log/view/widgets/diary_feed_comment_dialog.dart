@@ -24,7 +24,6 @@ class _DiaryFeedCommentDialogState
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _textController = TextEditingController();
   DiaryCommentResponse? targetParentComment;
-  bool hasChanged = false;
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
 
@@ -77,12 +76,6 @@ class _DiaryFeedCommentDialogState
         .initState(widget.diaryId);
   }
 
-  _onChanged() {
-    setState(() {
-      hasChanged = true;
-    });
-  }
-
   _resetText() {
     setState(() {
       _textController.clear();
@@ -130,17 +123,16 @@ class _DiaryFeedCommentDialogState
       }
       _resetText();
       _hideKeyboard();
-      _onChanged();
     }
 
     handleCommentDelete(int commentId) async {
       await ref
           .read(feedCommentViewModelProvider(widget.diaryId).notifier)
           .deleteComment(commentId);
-      _onChanged();
     }
 
     return PopScope(
+      canPop: true,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           final currentState =
@@ -151,7 +143,6 @@ class _DiaryFeedCommentDialogState
               0;
           Navigator.pop(context, {
             'commentCount': totalCommentCount,
-            'hasChanged': hasChanged,
           });
         }
       },
