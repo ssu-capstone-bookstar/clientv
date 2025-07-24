@@ -9,17 +9,19 @@ class CommentList extends StatelessWidget {
       this.comments,
       this.replies,
       required this.onDelete,
-      this.onReply});
+      this.onReply,
+      this.scrollController});
   final List<DiaryCommentResponse>? comments;
   final List<DiaryReplyResponse>? replies;
   final Function(int) onDelete;
   final Function(int, int)? onReply;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return comments != null
         ? ListView.builder(
-            reverse: true,
+            controller: scrollController,
             itemCount: comments!.length,
             itemBuilder: (context, index) {
               final comment = comments![index];
@@ -30,14 +32,15 @@ class CommentList extends StatelessWidget {
                       onDelete: onDelete,
                       onReply: (commentId) => onReply?.call(commentId, index)),
                   if (comment.replies.isNotEmpty)
-                    CommentList(replies: comment.replies, onDelete: onDelete)
+                    CommentList(
+                        replies: comment.replies,
+                        onDelete: onDelete)
                 ],
               );
             },
           )
         : replies != null
             ? ListView.builder(
-                reverse: true,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: replies!.length,

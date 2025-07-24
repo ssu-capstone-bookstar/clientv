@@ -25,12 +25,8 @@ class _DiaryFeedCommentDialogState
   final TextEditingController _textController = TextEditingController();
   DiaryCommentResponse? targetParentComment;
   bool hasChanged = false;
-
-  void _onChanged() {
-    setState(() {
-      hasChanged = true;
-    });
-  }
+  bool _isLoadingMore = false;
+  DateTime? _lastBottomReachedTime;
 
   @override
   void initState() {
@@ -38,48 +34,54 @@ class _DiaryFeedCommentDialogState
     _textController.addListener(() {
       setState(() {});
     });
-    // _setupScrollListener();
+    _setupScrollListener();
   }
 
-  // void _setupScrollListener() {
-  //   _scrollController.addListener(() {
-  //     if (_scrollController.position.pixels >=
-  //             _scrollController.position.maxScrollExtent * 0.8 &&
-  //         !_isLoadingMore) {
-  //       _onBottomReached();
-  //     }
-  //   });
-  // }
+  void _setupScrollListener() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent * 0.8 &&
+          !_isLoadingMore) {
+        _onBottomReached();
+      }
+    });
+  }
 
-  // void _onBottomReached() {
-  //   final now = DateTime.now();
-  //   // 디바운싱: 마지막 호출로부터 2초가 지나지 않았으면 무시
-  //   if (_lastBottomReachedTime != null &&
-  //       now.difference(_lastBottomReachedTime!).inSeconds < 2) {
-  //     return;
-  //   }
-  //   // 이미 로딩 중이면 무시
-  //   if (_isLoadingMore) {
-  //     return;
-  //   }
-  //   _lastBottomReachedTime = now;
-  //   _isLoadingMore = true;
-  //   // 실제 로딩 로직 실행
-  //   _loadMoreThumbnails();
-  // }
+  void _onBottomReached() {
+    final now = DateTime.now();
+    // 디바운싱: 마지막 호출로부터 2초가 지나지 않았으면 무시
+    if (_lastBottomReachedTime != null &&
+        now.difference(_lastBottomReachedTime!).inSeconds < 2) {
+      return;
+    }
+    // 이미 로딩 중이면 무시
+    if (_isLoadingMore) {
+      return;
+    }
+    _lastBottomReachedTime = now;
+    _isLoadingMore = true;
+    // 실제 로딩 로직 실행
+    _loadMoreComments();
+  }
 
-  // void _loadMoreThumbnails() async {
-  //   await ref
-  //       .read(bookLogViewModelProvider(widget.memberId).notifier)
-  //       .refreshState();
-  //   _isLoadingMore = false;
-  // }
+  void _loadMoreComments() async {
+    await ref
+        .read(feedCommentViewModelProvider(widget.diaryId).notifier)
+        .refreshState();
+    _isLoadingMore = false;
+  }
 
-  // Future<void> _onRefresh() async {
-  //   await ref
-  //       .read(bookLogViewModelProvider(widget.memberId).notifier)
-  //       .initState(widget.memberId);
-  // }
+  Future<void> _onRefresh() async {
+    await ref
+        .read(feedCommentViewModelProvider(widget.diaryId).notifier)
+        .initState(widget.diaryId);
+  }
+
+  _onChanged() {
+    setState(() {
+      hasChanged = true;
+    });
+  }
 
   _resetText() {
     setState(() {
@@ -96,16 +98,16 @@ class _DiaryFeedCommentDialogState
     _focusNode.unfocus();
   }
 
+  _updateTargetParentComment(DiaryCommentResponse? comment) {
+    setState(() {
+      targetParentComment = comment;
+    });
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  updateTargetParentComment(DiaryCommentResponse? comment) {
-    setState(() {
-      targetParentComment = comment;
-    });
   }
 
   @override
@@ -139,20 +141,17 @@ class _DiaryFeedCommentDialogState
     }
 
     return PopScope(
-      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           final currentState =
               ref.read(feedCommentViewModelProvider(widget.diaryId)).value;
-
           // 댓글과 답글을 포함한 총 개수 계산
-          final totalCommentCount = currentState?.comments
-                  .fold<int>(0, (sum, comment) => sum + 1 + comment.replies.length) ??
+          final totalCommentCount = currentState?.comments.fold<int>(
+                  0, (sum, comment) => sum + 1 + comment.replies.length) ??
               0;
-
           Navigator.pop(context, {
             'commentCount': totalCommentCount,
-            'hasChanges': hasChanged,
+            'hasChanged': hasChanged,
           });
         }
       },
@@ -170,21 +169,22 @@ class _DiaryFeedCommentDialogState
               padding: EdgeInsets.only(bottom: keyboardHeight),
               duration: const Duration(milliseconds: 100),
               curve: Curves.easeOut,
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildDragHandle(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("댓글 (${comments.length})",
-                            style: AppTexts.b7.copyWith(color: ColorName.w1)),
-                        SizedBox(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildDragHandle(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("댓글 (${comments.length})",
+                          style: AppTexts.b7.copyWith(color: ColorName.w1)),
+                      RefreshIndicator(
+                        onRefresh: _onRefresh,
+                        child: SizedBox(
                           height: _focusNode.hasFocus ? 200 : 300,
                           child: !isEmpty
                               ? CommentList(
+                                  scrollController: _scrollController,
                                   comments: comments,
                                   onDelete: (int commentId) {
                                     handleCommentDelete(commentId);
@@ -193,7 +193,7 @@ class _DiaryFeedCommentDialogState
                                     final targetComment = comments[index];
                                     if (targetComment.commentId ==
                                         parentCommentId) {
-                                      updateTargetParentComment(targetComment);
+                                      _updateTargetParentComment(targetComment);
                                       _showKeyboard();
                                     }
                                   })
@@ -203,60 +203,59 @@ class _DiaryFeedCommentDialogState
                                       style: AppTexts.b8
                                           .copyWith(color: ColorName.g3))),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 24, horizontal: 16),
-                          child: CommentTextField(
-                            focusNode: _focusNode,
-                            controller: _textController,
-                            backgroundColor: ColorName.g7,
-                            textColor: ColorName.g3,
-                            hintText: targetParentComment == null
-                                ? '이 책에 대한 생각을 들려주세요'
-                                : null,
-                            hintStyle:
-                                AppTexts.b8.copyWith(color: ColorName.g3),
-                            borderRadius: 16,
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 13),
-                              child: _textController.text.isNotEmpty
-                                  ? Assets.icons.icBookpickChatSendColored
-                                      .svg(width: 22, height: 22)
-                                  : Assets.icons.icBookpickChatSendDisabled
-                                      .svg(width: 22, height: 22),
-                            ),
-                            onTapSuffixIcon: () {
-                              handleCommentSend();
-                            },
-                            prefix: targetParentComment != null
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "@${targetParentComment!.writer.nickName}",
-                                        style: AppTexts.b8
-                                            .copyWith(color: ColorName.p1),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      )
-                                    ],
-                                  )
-                                : null,
-                            onTapPrefix: () {
-                              updateTargetParentComment(null);
-                            },
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 2,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 24, horizontal: 16),
+                        child: CommentTextField(
+                          focusNode: _focusNode,
+                          controller: _textController,
+                          backgroundColor: ColorName.g7,
+                          textColor: ColorName.g3,
+                          hintText: targetParentComment == null
+                              ? '이 책에 대한 생각을 들려주세요'
+                              : null,
+                          hintStyle: AppTexts.b8.copyWith(color: ColorName.g3),
+                          borderRadius: 16,
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            child: _textController.text.isNotEmpty
+                                ? Assets.icons.icBookpickChatSendColored
+                                    .svg(width: 22, height: 22)
+                                : Assets.icons.icBookpickChatSendDisabled
+                                    .svg(width: 22, height: 22),
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 24,
-                    )
-                  ],
-                ),
+                          onTapSuffixIcon: () {
+                            handleCommentSend();
+                          },
+                          prefix: targetParentComment != null
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "@${targetParentComment!.writer.nickName}",
+                                      style: AppTexts.b8
+                                          .copyWith(color: ColorName.p1),
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    )
+                                  ],
+                                )
+                              : null,
+                          onTapPrefix: () {
+                            _updateTargetParentComment(null);
+                          },
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 2,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 24,
+                  )
+                ],
               ),
             ),
           );

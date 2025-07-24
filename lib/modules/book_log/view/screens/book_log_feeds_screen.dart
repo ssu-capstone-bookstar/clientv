@@ -154,9 +154,9 @@ class _BookLogFeedsScreenState extends ConsumerState<BookLogFeedsScreen> {
           builder: (context) =>
               DiaryFeedCommentDialog(diaryId: targetFeed.diaryId));
 
-      bool hasChanges = result['hasChanges'];
-      int commentCount = result['commentCount'];
-      if (hasChanges) {
+      bool hasChanged = result?['hasChanged'] ?? false;
+      int? commentCount = result?['commentCount'];
+      if (hasChanged && commentCount != null) {
         final currentState = ref
             .read(bookLogViewModelProvider(widget.memberId).notifier)
             .changeCommentCount(targetFeed.diaryId, commentCount);
