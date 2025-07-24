@@ -130,6 +130,7 @@ class _BookTalkChatRoomMenuScreenState
                         imageUrl: item.profileImageUrl,
                         width: 58,
                         height: 58,
+                        errorWidget: (context, url, error) => Container(),
                       ),
                     ),
                     SizedBox(

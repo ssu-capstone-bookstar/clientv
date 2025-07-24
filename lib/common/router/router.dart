@@ -1,4 +1,3 @@
-import 'package:book/modules/book_log/view/screens/feed_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
@@ -12,7 +11,7 @@ import '../../modules/auth/view/screens/login_screen.dart';
 import '../../modules/auth/view_model/auth_state.dart';
 import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
-import '../../modules/book_log/view/screens/book_log_diary_screen.dart';
+import '../../modules/book_log/view/screens/book_log_feeds_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
 import '../../modules/book_pick/model/search_book_response.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
@@ -87,14 +86,6 @@ GoRouter router(Ref ref) {
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
-        path: '/feeds',
-        builder: (context, state) => const FeedScreen(),
-      ),
-      GoRoute(
-        path: '/book-log-diary',
-        builder: (context, state) => const BookLogDiaryScreen(),
-      ),
-      GoRoute(
         path: '/reading-diary/:bookId',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
@@ -132,6 +123,16 @@ GoRouter router(Ref ref) {
                   },
                 ),
                 routes: [
+                  GoRoute(
+                    path: 'feeds',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final extra = state.extra as Map<String, dynamic>;
+                      final memberId = extra['memberId'] as int;
+                      final index = extra['index'] as int;
+                      return BookLogFeedsScreen(memberId: memberId, initialIndex: index);
+                    },
+                  ),
                   GoRoute(
                     path: 'profile',
                     parentNavigatorKey: rootNavigatorKey,
