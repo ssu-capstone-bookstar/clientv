@@ -105,4 +105,19 @@ class BookLogViewModel extends _$BookLogViewModel {
     ));
     return state.value ?? BookLogState();
   }
+
+  BookLogState changeCommentCount(int diaryId, int commentCount) {
+    final prev = state.value ?? BookLogState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            commentCount: commentCount,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? BookLogState();
+  }
 }

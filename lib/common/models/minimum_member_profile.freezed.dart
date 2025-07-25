@@ -14,6 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$MinimumMemberProfile {
+  int get memberId;
   String get nickName;
   String get profileImage;
 
@@ -33,6 +34,8 @@ mixin _$MinimumMemberProfile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is MinimumMemberProfile &&
+            (identical(other.memberId, memberId) ||
+                other.memberId == memberId) &&
             (identical(other.nickName, nickName) ||
                 other.nickName == nickName) &&
             (identical(other.profileImage, profileImage) ||
@@ -41,11 +44,12 @@ mixin _$MinimumMemberProfile {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, nickName, profileImage);
+  int get hashCode =>
+      Object.hash(runtimeType, memberId, nickName, profileImage);
 
   @override
   String toString() {
-    return 'MinimumMemberProfile(nickName: $nickName, profileImage: $profileImage)';
+    return 'MinimumMemberProfile(memberId: $memberId, nickName: $nickName, profileImage: $profileImage)';
   }
 }
 
@@ -55,7 +59,7 @@ abstract mixin class $MinimumMemberProfileCopyWith<$Res> {
           $Res Function(MinimumMemberProfile) _then) =
       _$MinimumMemberProfileCopyWithImpl;
   @useResult
-  $Res call({String nickName, String profileImage});
+  $Res call({int memberId, String nickName, String profileImage});
 }
 
 /// @nodoc
@@ -71,10 +75,15 @@ class _$MinimumMemberProfileCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? memberId = null,
     Object? nickName = null,
     Object? profileImage = null,
   }) {
     return _then(_self.copyWith(
+      memberId: null == memberId
+          ? _self.memberId
+          : memberId // ignore: cast_nullable_to_non_nullable
+              as int,
       nickName: null == nickName
           ? _self.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -180,13 +189,14 @@ extension MinimumMemberProfilePatterns on MinimumMemberProfile {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String nickName, String profileImage)? $default, {
+    TResult Function(int memberId, String nickName, String profileImage)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _MinimumMemberProfile() when $default != null:
-        return $default(_that.nickName, _that.profileImage);
+        return $default(_that.memberId, _that.nickName, _that.profileImage);
       case _:
         return orElse();
     }
@@ -207,12 +217,13 @@ extension MinimumMemberProfilePatterns on MinimumMemberProfile {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String nickName, String profileImage) $default,
+    TResult Function(int memberId, String nickName, String profileImage)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _MinimumMemberProfile():
-        return $default(_that.nickName, _that.profileImage);
+        return $default(_that.memberId, _that.nickName, _that.profileImage);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -232,12 +243,13 @@ extension MinimumMemberProfilePatterns on MinimumMemberProfile {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String nickName, String profileImage)? $default,
+    TResult? Function(int memberId, String nickName, String profileImage)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _MinimumMemberProfile() when $default != null:
-        return $default(_that.nickName, _that.profileImage);
+        return $default(_that.memberId, _that.nickName, _that.profileImage);
       case _:
         return null;
     }
@@ -247,10 +259,14 @@ extension MinimumMemberProfilePatterns on MinimumMemberProfile {
 /// @nodoc
 @JsonSerializable()
 class _MinimumMemberProfile implements MinimumMemberProfile {
-  const _MinimumMemberProfile({this.nickName = '', this.profileImage = ''});
+  const _MinimumMemberProfile(
+      {this.memberId = 0, this.nickName = '', this.profileImage = ''});
   factory _MinimumMemberProfile.fromJson(Map<String, dynamic> json) =>
       _$MinimumMemberProfileFromJson(json);
 
+  @override
+  @JsonKey()
+  final int memberId;
   @override
   @JsonKey()
   final String nickName;
@@ -279,6 +295,8 @@ class _MinimumMemberProfile implements MinimumMemberProfile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _MinimumMemberProfile &&
+            (identical(other.memberId, memberId) ||
+                other.memberId == memberId) &&
             (identical(other.nickName, nickName) ||
                 other.nickName == nickName) &&
             (identical(other.profileImage, profileImage) ||
@@ -287,11 +305,12 @@ class _MinimumMemberProfile implements MinimumMemberProfile {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, nickName, profileImage);
+  int get hashCode =>
+      Object.hash(runtimeType, memberId, nickName, profileImage);
 
   @override
   String toString() {
-    return 'MinimumMemberProfile(nickName: $nickName, profileImage: $profileImage)';
+    return 'MinimumMemberProfile(memberId: $memberId, nickName: $nickName, profileImage: $profileImage)';
   }
 }
 
@@ -303,7 +322,7 @@ abstract mixin class _$MinimumMemberProfileCopyWith<$Res>
       __$MinimumMemberProfileCopyWithImpl;
   @override
   @useResult
-  $Res call({String nickName, String profileImage});
+  $Res call({int memberId, String nickName, String profileImage});
 }
 
 /// @nodoc
@@ -319,10 +338,15 @@ class __$MinimumMemberProfileCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? memberId = null,
     Object? nickName = null,
     Object? profileImage = null,
   }) {
     return _then(_MinimumMemberProfile(
+      memberId: null == memberId
+          ? _self.memberId
+          : memberId // ignore: cast_nullable_to_non_nullable
+              as int,
       nickName: null == nickName
           ? _self.nickName
           : nickName // ignore: cast_nullable_to_non_nullable

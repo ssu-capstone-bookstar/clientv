@@ -41,7 +41,7 @@ final myDiarySortStateProvider =
 
 typedef _$MyDiarySortState = AutoDisposeNotifier<MyDiarySort>;
 String _$myDiariesViewModelHash() =>
-    r'ffb4d6509286736f26b096724e1a75fa8c891eaa';
+    r'163eebe1223368ae5b5bdbaa6e17c132f0abeb78';
 
 /// Copied from Dart SDK
 class _SystemHash {

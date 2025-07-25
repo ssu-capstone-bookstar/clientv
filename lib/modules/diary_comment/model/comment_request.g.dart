@@ -8,12 +8,12 @@ part of 'comment_request.dart';
 
 _CommentRequest _$CommentRequestFromJson(Map<String, dynamic> json) =>
     _CommentRequest(
-      diaryId: (json['diaryId'] as num?)?.toInt() ?? 0,
+      parentCommentId: (json['parentCommentId'] as num?)?.toInt(),
       content: json['content'] as String,
     );
 
 Map<String, dynamic> _$CommentRequestToJson(_CommentRequest instance) =>
     <String, dynamic>{
-      'diaryId': instance.diaryId,
+      'parentCommentId': instance.parentCommentId,
       'content': instance.content,
     };

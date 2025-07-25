@@ -62,7 +62,7 @@ class _DiaryCommentRepository implements DiaryCommentRepository {
   }
 
   @override
-  Future<ResponseForm<void>> createComment(
+  Future<ResponseForm<DiaryCommentResponse>> createComment(
     int diaryId,
     CommentRequest request,
   ) async {
@@ -70,7 +70,7 @@ class _DiaryCommentRepository implements DiaryCommentRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
-    final _options = _setStreamType<ResponseForm<void>>(
+    final _options = _setStreamType<ResponseForm<DiaryCommentResponse>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -81,9 +81,12 @@ class _DiaryCommentRepository implements DiaryCommentRepository {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<void> _value;
+    late ResponseForm<DiaryCommentResponse> _value;
     try {
-      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
+      _value = ResponseForm<DiaryCommentResponse>.fromJson(
+        _result.data!,
+        (json) => DiaryCommentResponse.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
