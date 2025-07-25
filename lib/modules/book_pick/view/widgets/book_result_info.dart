@@ -34,7 +34,8 @@ class BookResultInfo extends StatelessWidget {
                   Expanded(
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: BookCoverImage(imageUrl: book.bookCover, tag: '${book.bookId}')),
+                        child: BookCoverImage(
+                            imageUrl: book.bookCover, tag: '${book.bookId}')),
                   ),
                   Expanded(
                     child: Column(
@@ -79,7 +80,7 @@ class BookResultInfo extends StatelessWidget {
       spacing: 8,
       children: [
         BookIconValueLabel(
-          icon: Assets.icons.icRatingStar.svg(width: 12.0, height: 12.0),
+          icon: Assets.icons.icStar.svg(width: 12.0, height: 12.0),
           value: (4.5).toString(),
           valueStyle: AppTexts.b8.copyWith(color: ColorName.p1),
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),

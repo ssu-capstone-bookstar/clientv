@@ -100,4 +100,22 @@ abstract class ReadingDiaryRepository {
     @Query('cursorScore') double? cursorScore,
     @Query('size') int? size,
   });
+
+  @GET('/books/{bookId}/my-reading-diaries/thumbnail')
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getMyRelatedDiaries(
+    @Path('bookId') int bookId, {
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
+
+  @GET('/books/{bookId}/my-reading-diaries/thumbnail/popular')
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getMyRelatedDiariesPopular(
+    @Path('bookId') int bookId, {
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
 }

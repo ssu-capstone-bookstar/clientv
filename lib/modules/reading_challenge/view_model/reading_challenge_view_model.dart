@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/dual_cursor_page_response.dart';
 import '../../reading_diary/repository/reading_diary_repository.dart';
+import '../../reading_diary/model/related_diary_thumbnail.dart';
 import '../model/my_diary_sort.dart';
 import '../model/my_diary_thumbnail.dart';
 import '../model/my_diary_state.dart';
@@ -55,47 +56,52 @@ class MyDiariesViewModel extends _$MyDiariesViewModel {
 
     _repository ??= ref.read(readingDiaryRepositoryProvider);
     final sort = ref.watch(myDiarySortStateProvider);
-    final response = await _fetchDiaries(bookId: bookId, sort: sort);
-    return MyDiaryState(
-      diaries: response.data,
-      nextCursor: response.nextCursor,
-      nextSubCursor: response.nextSubCursor,
-      hasNext: response.hasNext,
-    );
+
+    try {
+      final response = await _fetchDiaries(bookId: bookId, sort: sort);
+      return MyDiaryState(
+        diaries: response.data
+            .map((diary) => MyDiaryThumbnail(
+                  diaryId: diary.diaryId,
+                  firstImage: diary.firstImage,
+                  score: diary.score,
+                ))
+            .toList(),
+        nextCursor: response.nextCursor,
+        nextSubCursor: response.nextSubCursor,
+        hasNext: response.hasNext,
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<DualCursorPageResponse<MyDiaryThumbnail>> _fetchDiaries({
+  Future<DualCursorPageResponse<RelatedDiaryThumbnail>> _fetchDiaries({
     required int bookId,
     required MyDiarySort sort,
     int? cursorId,
     double? cursorScore,
   }) async {
-    final repository = _repository!;
-    final response = sort == MyDiarySort.LATEST
-        ? await repository.getRelatedDiaries(
-            bookId,
-            cursorId: cursorId,
-            cursorScore: cursorScore,
-            size: 18,
-          )
-        : await repository.getRelatedDiariesPopular(
-            bookId,
-            cursorId: cursorId,
-            cursorScore: cursorScore,
-            size: 18,
-          );
-    return DualCursorPageResponse<MyDiaryThumbnail>(
-      data: response.data.data
-          .map((diary) => MyDiaryThumbnail(
-                diaryId: diary.diaryId,
-                firstImage: diary.firstImage,
-                score: diary.score,
-              ))
-          .toList(),
-      nextCursor: response.data.nextCursor,
-      nextSubCursor: response.data.nextSubCursor,
-      hasNext: response.data.hasNext,
-    );
+    try {
+      final repository = _repository!;
+      final response = sort == MyDiarySort.LATEST
+          ? await repository.getMyRelatedDiaries(
+              bookId,
+              cursorId: cursorId,
+              cursorScore: cursorScore,
+              size: 18,
+            )
+          : await repository.getMyRelatedDiariesPopular(
+              bookId,
+              cursorId: cursorId,
+              cursorScore: cursorScore,
+              size: 18,
+            );
+
+      return response.data;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> fetchNextPage() async {
@@ -119,7 +125,14 @@ class MyDiariesViewModel extends _$MyDiariesViewModel {
 
       state = AsyncValue.data(
         currentState.copyWith(
-          diaries: [...currentState.diaries, ...response.data],
+          diaries: [
+            ...currentState.diaries,
+            ...response.data.map((diary) => MyDiaryThumbnail(
+                  diaryId: diary.diaryId,
+                  firstImage: diary.firstImage,
+                  score: diary.score,
+                ))
+          ],
           nextCursor: response.nextCursor,
           nextSubCursor: response.nextSubCursor,
           hasNext: response.hasNext,
