@@ -38,10 +38,11 @@ class FeedCommentViewModel extends _$FeedCommentViewModel {
     ));
   }
 
-  Future<void> addReply(int diaryId, String content, int parentCommentId) async {
+  Future<void> addReply(
+      int diaryId, String content, int parentCommentId) async {
     final prev = state.value ?? FeedCommentState();
-    final response = await _diaryCommentRepository.createComment(
-    diaryId, CommentRequest(content: content, parentCommentId: parentCommentId));
+    final response = await _diaryCommentRepository.createComment(diaryId,
+        CommentRequest(content: content, parentCommentId: parentCommentId));
     state = AsyncValue.data(prev.copyWith(
       comments: prev.comments.map((comment) {
         if (comment.commentId == parentCommentId) {
@@ -51,12 +52,18 @@ class FeedCommentViewModel extends _$FeedCommentViewModel {
       }).toList(),
     ));
   }
+
   Future<void> deleteComment(int commentId) async {
     final prev = state.value ?? FeedCommentState();
     await _diaryCommentRepository.deleteComment(commentId);
     state = AsyncValue.data(prev.copyWith(
-      comments: prev.comments.where((comment) {
-        return comment.commentId != commentId;
+      comments: prev.comments
+          .where((comment) => comment.commentId != commentId)
+          .map((comment) {
+        return comment.copyWith(
+            replies: comment.replies
+                .where((reply) => reply.commentId != commentId)
+                .toList());
       }).toList(),
     ));
   }
@@ -64,9 +71,8 @@ class FeedCommentViewModel extends _$FeedCommentViewModel {
   Future<FeedCommentState> refreshState() async {
     final prev = state.value ?? FeedCommentState();
     if (prev.nextCursor != -1) {
-      final response = await _diaryCommentRepository
-          .findComments(diaryId: prev.diaryId,
-              cursorId: prev.nextCursor);
+      final response = await _diaryCommentRepository.findComments(
+          diaryId: prev.diaryId, cursorId: prev.nextCursor);
       state = AsyncValue.data(prev.copyWith(
         comments: response.data.data,
         hasNext: response.data.hasNext,
