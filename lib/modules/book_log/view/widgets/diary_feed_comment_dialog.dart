@@ -107,6 +107,10 @@ class _DiaryFeedCommentDialogState
   Widget build(BuildContext context) {
     final stateAsync = ref.watch(feedCommentViewModelProvider(widget.diaryId));
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    // 댓글과 답글을 포함한 총 개수 계산
+    final totalCommentCount = stateAsync.value?.comments
+            .fold<int>(0, (sum, comment) => sum + 1 + comment.replies.length) ??
+        0;
 
     handleCommentSend() async {
       /// 댓글 작성
@@ -135,12 +139,6 @@ class _DiaryFeedCommentDialogState
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
-          final currentState =
-              ref.read(feedCommentViewModelProvider(widget.diaryId)).value;
-          // 댓글과 답글을 포함한 총 개수 계산
-          final totalCommentCount = currentState?.comments.fold<int>(
-                  0, (sum, comment) => sum + 1 + comment.replies.length) ??
-              0;
           Navigator.pop(context, {
             'commentCount': totalCommentCount,
           });
@@ -167,7 +165,7 @@ class _DiaryFeedCommentDialogState
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("댓글 (${comments.length})",
+                      Text("댓글 ($totalCommentCount)",
                           style: AppTexts.b7.copyWith(color: ColorName.w1)),
                       RefreshIndicator(
                         onRefresh: _onRefresh,
