@@ -1,11 +1,20 @@
+import 'dart:io';
+
 import 'package:book/common/models/cursor_page_response.dart';
+import 'package:book/common/models/image_request.dart';
 import 'package:book/modules/book_log/state/book_log_state.dart';
+import 'package:book/modules/image/model/presigned_url_request.dart';
+import 'package:book/modules/image/repository/image_repository.dart';
+import 'package:book/modules/image/repository/s3_repository.dart';
 import 'package:book/modules/profile/model/profile_with_counts.dart';
 import 'package:book/modules/profile/repository/profile_repository.dart';
 import 'package:book/modules/profile/view_model/profile_view_model.dart';
+import 'package:book/modules/reading_diary/model/diary_response.dart';
 import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:book/modules/reading_diary/model/report_diary_request.dart';
 import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:flutter/material.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -24,6 +33,56 @@ final bookLogDiariesProvider =
         (ref, memberId) async {
   final repo = ref.watch(readingDiaryRepositoryProvider);
   final response = await repo.getReadingDiariesMembersThumbnails(memberId);
+  return response.data;
+});
+
+final imageUploadProvider =
+    FutureProvider.family<List<ImageRequest>, List<String>>(
+        (ref, images) async {
+  final imageRepo = ref.read(imageRepositoryProvider);
+  final s3Repo = ref.read(s3RepositoryProvider);
+
+  final imageRequests =
+      await Future.wait(images.asMap().entries.map((entry) async {
+    final index = entry.key;
+    final path = entry.value;
+    final file = File(path);
+    final fileName = file.uri.pathSegments.last;
+
+    final presignedUrlResponse = await imageRepo.getPresignedUrl(
+      'DIARY_IMAGE',
+      PresignedUrlRequest(fileName: fileName),
+    );
+    debugPrint('##### Presigned URL Response: ${presignedUrlResponse.data}');
+    final presignedData = presignedUrlResponse.data;
+
+    await s3Repo.uploadFileToS3(
+      presignedUrl: presignedData.presignedUrl,
+      file: file,
+    );
+
+    return ImageRequest(
+      image: presignedData.imageUrl,
+      sequence: index + 1,
+    );
+  }));
+  return imageRequests;
+});
+
+class DiaryRequestWithId {
+  final DiaryUpdateRequest request;
+  final int diaryId;
+
+  DiaryRequestWithId({
+    required this.request,
+    required this.diaryId,
+  });
+}
+
+final bookLogDiaryUpdateProvider =
+    FutureProvider.family<DiaryResponse, DiaryRequestWithId>((ref, request) async {
+  final diaryRepo = ref.read(readingDiaryRepositoryProvider);
+  final response = await diaryRepo.updateDiary(request.diaryId, request.request);
   return response.data;
 });
 

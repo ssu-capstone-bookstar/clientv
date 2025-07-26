@@ -1,3 +1,4 @@
+import 'package:book/common/models/image_request.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_feed_list.dart';
@@ -6,6 +7,7 @@ import 'package:book/modules/book_log/view/widgets/diary_feed_delete_dialog.dart
 import 'package:book/modules/book_log/view/widgets/diary_feed_report_dialog.dart';
 import 'package:book/modules/book_log/view/widgets/diary_feed_report_success_dialog.dart';
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -147,6 +149,16 @@ class BookLogScreen extends ConsumerWidget {
                       .read(bookLogViewModelProvider(null).notifier)
                       .handleFeedScrap(
                           targetFeed.diaryId, targetFeed.scraped, targetIndex);
+                },
+                onUpdate: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  context.push('/reading-diary/${targetFeed.diaryId}/update',
+                      extra: DiaryUpdateRequest(
+                          content: targetFeed.content,
+                          images: targetFeed.images
+                              .map((e) => ImageRequest(
+                                  image: e.imageUrl, sequence: e.sequence))
+                              .toList()));
                 },
               ),
             ),

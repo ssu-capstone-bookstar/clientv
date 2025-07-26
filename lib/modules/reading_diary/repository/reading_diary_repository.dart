@@ -1,3 +1,4 @@
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:book/modules/reading_diary/model/report_diary_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +33,12 @@ abstract class ReadingDiaryRepository {
   @POST('/reading-diaries')
   Future<ResponseForm<DiaryResponse>> createDiary(
     @Body() DiaryRequest request,
+  );
+
+  @PUT('/reading-diaries/{diaryId}')
+  Future<ResponseForm<DiaryResponse>> updateDiary(
+    @Path('diaryId') int diaryId,
+    @Body() DiaryUpdateRequest request,
   );
 
   @DELETE('/reading-diaries/{diaryId}')

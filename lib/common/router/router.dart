@@ -3,6 +3,8 @@ import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
+import 'package:book/modules/reading_diary/screens/reading_diary_update_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -108,6 +110,17 @@ GoRouter router(Ref ref) {
             },
           ),
         ],
+      ),
+      GoRoute(
+        path: '/reading-diary/:diaryId/update',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final diaryId = int.parse(state.pathParameters['diaryId']!);
+          final extra = state.extra as Map<String, dynamic>;
+          final memberId = extra["memberId"] as int;
+          final request = extra["request"] as DiaryUpdateRequest;
+          return ReadingDiaryUpdateScreen(diaryId: diaryId, request: request, memberId: memberId);
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

@@ -50,6 +50,39 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
+  Future<ResponseForm<DiaryResponse>> updateDiary(
+    int diaryId,
+    DiaryUpdateRequest request,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<ResponseForm<DiaryResponse>>(
+      Options(method: 'PUT', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reading-diaries/${diaryId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<DiaryResponse> _value;
+    try {
+      _value = ResponseForm<DiaryResponse>.fromJson(
+        _result.data!,
+        (json) => DiaryResponse.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ResponseForm<dynamic>> deleteDiary(int diaryId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
