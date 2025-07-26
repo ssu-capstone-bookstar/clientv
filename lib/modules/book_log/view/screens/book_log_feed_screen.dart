@@ -124,6 +124,13 @@ class BookLogFeedScreen extends ConsumerWidget {
                   // final targetFeed = bookLog.feeds[targetIndex];
                   // context.push('/book-log/thumbnail/${targetFeed.memberId}');
                 },
+                onScrap: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  ref
+                      .read(bookLogViewModelProvider(memberId).notifier)
+                      .handleFeedScrap(
+                          targetFeed.diaryId, targetFeed.scraped, targetIndex);
+                },
               ),
             ),
             error: _error("팔로우 정보를 불러올 수 없습니다."),

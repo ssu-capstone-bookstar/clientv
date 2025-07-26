@@ -11,21 +11,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class FeedCard extends ConsumerStatefulWidget {
+  const FeedCard({
+    super.key,
+    required this.feed,
+    required this.onLike,
+    required this.onMessage,
+    required this.onDelete,
+    required this.onReport,
+    required this.onClickProfile,
+    required this.onScrap,
+  });
+
   final DiaryResponse feed;
   final Function onLike;
   final Function onMessage;
   final Function onDelete;
   final Function onReport;
   final Function onClickProfile;
-
-  const FeedCard(
-      {super.key,
-      required this.feed,
-      required this.onLike,
-      required this.onMessage,
-      required this.onDelete,
-      required this.onReport,
-      required this.onClickProfile});
+  final Function onScrap;
 
   @override
   ConsumerState<FeedCard> createState() => _FeedCardState();
@@ -130,45 +133,50 @@ class _FeedCardState extends ConsumerState<FeedCard> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                child: Row(
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(10),
-                      onTap: () => widget.onLike(),
-                      child: Row(
-                        children: [
-                          !widget.feed.liked
-                              ? Assets.icons.icHeart.svg()
-                              : Assets.icons.icHeartFilled.svg(),
-                          const SizedBox(width: 3),
-                          Text(
-                            widget.feed.likeCount.toString(),
-                            style: AppTexts.b10.copyWith(color: ColorName.w1),
-                          )
-                        ],
-                      ),
+              Row(
+                children: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () => widget.onLike(),
+                    child: Row(
+                      children: [
+                        !widget.feed.liked
+                            ? Assets.icons.icHeart.svg()
+                            : Assets.icons.icHeartFilled.svg(),
+                        const SizedBox(width: 3),
+                        Text(
+                          widget.feed.likeCount.toString(),
+                          style: AppTexts.b10.copyWith(color: ColorName.w1),
+                        )
+                      ],
                     ),
-                    const SizedBox(width: 6),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(10),
-                      onTap: () => widget.onMessage(),
-                      child: Row(
-                        children: [
-                          Assets.icons.icMessage.svg(),
-                          const SizedBox(width: 3),
-                          Text(
-                            widget.feed.commentCount.toString(),
-                            style: AppTexts.b10.copyWith(color: ColorName.w1),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () => widget.onMessage(),
+                    child: Row(
+                      children: [
+                        Assets.icons.icMessage.svg(),
+                        const SizedBox(width: 3),
+                        Text(
+                          widget.feed.commentCount.toString(),
+                          style: AppTexts.b10.copyWith(color: ColorName.w1),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
+              InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () => widget.onScrap(),
+                  child: widget.feed.scraped
+                      ? Assets.icons.icScrapFilled.svg()
+                      : Assets.icons.icScrap.svg()),
             ],
           ),
         ),

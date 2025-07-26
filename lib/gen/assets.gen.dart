@@ -261,6 +261,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_scrap.svg
   SvgGenImage get icScrap => const SvgGenImage('assets/icons/ic_scrap.svg');
 
+  /// File path: assets/icons/ic_scrap_filled.svg
+  SvgGenImage get icScrapFilled =>
+      const SvgGenImage('assets/icons/ic_scrap_filled.svg');
+
   /// File path: assets/icons/ic_star.svg
   SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
 
@@ -323,6 +327,7 @@ class $AssetsIconsGen {
     icReadingChallengeNotCompleted,
     icReadingComplete,
     icScrap,
+    icScrapFilled,
     icStar,
     icWithdrawal,
     kakao,

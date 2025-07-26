@@ -129,6 +129,27 @@ class BookLogViewModel extends _$BookLogViewModel {
     return state.value ?? BookLogState();
   }
 
+  Future<BookLogState> handleFeedScrap(
+      int diaryId, bool scraped, int index) async {
+    if (scraped) {
+      await _readingDiaryRepository.unscrapDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.scrapDiary(diaryId);
+    }
+    final prev = state.value ?? BookLogState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            scraped: !feed.scraped,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? BookLogState();
+  }
+
   BookLogState changeCommentCount(int diaryId, int commentCount) {
     final prev = state.value ?? BookLogState();
     state = AsyncValue.data(prev.copyWith(
