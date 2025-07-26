@@ -142,7 +142,9 @@ GoRouter router(Ref ref) {
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       final memberId = int.parse(state.pathParameters['memberId']!);
-                      return BookLogThumbnailScreen(memberId: memberId);
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final requiredRefresh = extra?['requiredRefresh'] as bool? ?? false;
+                      return BookLogThumbnailScreen(memberId: memberId, requiredRefresh: requiredRefresh);
                     },
                   ),
 

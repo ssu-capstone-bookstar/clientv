@@ -11,19 +11,42 @@ import 'package:go_router/go_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
-class BookLogThumbnailScreen extends ConsumerWidget {
-  const BookLogThumbnailScreen({super.key, required this.memberId});
+class BookLogThumbnailScreen extends ConsumerStatefulWidget {
+  const BookLogThumbnailScreen(
+      {super.key, required this.memberId, this.requiredRefresh = false});
   final int memberId;
+  final bool requiredRefresh;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bookLogAsync = ref.watch(bookLogViewModelProvider(memberId));
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _BookLogThumbnailScreenState();
+  }
+}
+
+class _BookLogThumbnailScreenState
+    extends ConsumerState<BookLogThumbnailScreen> {
+
+  @override
+  initState() {
+    super.initState();
+    if (widget.requiredRefresh) {
+      ref
+          .read(bookLogViewModelProvider(widget.memberId).notifier)
+          .initState(widget.memberId);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bookLogAsync = ref.watch(bookLogViewModelProvider(widget.memberId));
     final user = ref.watch(authViewModelProvider).value;
     final followInfo = ref.watch(followInfoViewModelProvider).value;
-    final isMyProfile = (user is AuthSuccess && user.memberId == memberId);
-    final isFollowing =
-        followInfo?.following.map((e) => e.memberId).contains(memberId) ??
-            false;
+    final isMyProfile =
+        (user is AuthSuccess && user.memberId == widget.memberId);
+    final isFollowing = followInfo?.following
+            .map((e) => e.memberId)
+            .contains(widget.memberId) ??
+        false;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,11 +78,11 @@ class BookLogThumbnailScreen extends ConsumerWidget {
                           if (isFollowing) {
                             ref
                                 .read(followInfoViewModelProvider.notifier)
-                                .unfollow(memberId);
+                                .unfollow(widget.memberId);
                           } else {
                             ref
                                 .read(followInfoViewModelProvider.notifier)
-                                .follow(memberId);
+                                .follow(widget.memberId);
                           }
                         },
                         profileImageKey: GlobalKey(),
@@ -69,20 +92,21 @@ class BookLogThumbnailScreen extends ConsumerWidget {
                           thumbnails: bookLog.thumbnails,
                           onScrollBottom: () async {
                             await ref
-                                .read(
-                                    bookLogViewModelProvider(memberId).notifier)
+                                .read(bookLogViewModelProvider(widget.memberId)
+                                    .notifier)
                                 .refreshState();
                           },
                           onRefresh: () async {
                             await ref
-                                .read(
-                                    bookLogViewModelProvider(memberId).notifier)
-                                .initState(memberId);
+                                .read(bookLogViewModelProvider(widget.memberId)
+                                    .notifier)
+                                .initState(widget.memberId);
                           },
                           onClickThumbnail: (int targetIndex) {
-                            context.push('/book-log/feed/$memberId', extra: {
-                              'index': targetIndex,
-                            });
+                            context.push('/book-log/feed/${widget.memberId}',
+                                extra: {
+                                  'index': targetIndex,
+                                });
                           }),
                     ],
                   ),
