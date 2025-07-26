@@ -19,7 +19,8 @@ class BookLogFeedList extends ConsumerStatefulWidget {
       required this.onMessage,
       required this.onDelete,
       required this.onReport,
-      required this.onClickProfile});
+      required this.onClickProfile,
+      required this.onScrap});
   final BookLogState bookLog;
   // final FollowInfoState followInfo;
   final int? initialIndex;
@@ -30,6 +31,7 @@ class BookLogFeedList extends ConsumerStatefulWidget {
   final Function(BuildContext, int) onDelete;
   final Function(BuildContext, int) onReport;
   final Function(int) onClickProfile;
+  final Function(int) onScrap;
 
   @override
   ConsumerState<BookLogFeedList> createState() => _BookLogFeedListState();
@@ -138,6 +140,7 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
                   onDelete: () => widget.onDelete(context, index),
                   onReport: () => widget.onReport(context, index),
                   onClickProfile: () => widget.onClickProfile(index),
+                  onScrap: () => widget.onScrap(index),
                 ),
                 separatorBuilder: (context, index) => const Divider(
                   color: ColorName.g7,

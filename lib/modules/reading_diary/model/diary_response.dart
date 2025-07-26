@@ -17,11 +17,13 @@ abstract class DiaryResponse with _$DiaryResponse {
     @Default(-1) int bookId,
     @Default('') String bookTitle,
     @Default('') String bookAuthor,
+    @Default(-1) double bookRating,
     @Default([]) List<DiaryImageResponse> images,
     @Default(0) int likeCount,
     @Default(0) int commentCount,
     @Default(0) int viewCount,
     @Default(false) bool liked,
+    @Default(false) bool scraped,
   }) = _DiaryResponse;
 
   factory DiaryResponse.fromJson(Map<String, dynamic> json) => _$DiaryResponseFromJson(json);

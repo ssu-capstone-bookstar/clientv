@@ -86,6 +86,12 @@ abstract class ReadingDiaryRepository {
   @DELETE('/reading-diaries/{diaryId}/like')
   Future<ResponseForm<void>> unlikeDiary(@Path('diaryId') int diaryId);
 
+  @POST('/scraps/reading-diaries/{diaryId}')
+  Future<ResponseForm<void>> scrapDiary(@Path('diaryId') int diaryId);
+
+  @DELETE('/scraps/reading-diaries/{diaryId}')
+  Future<ResponseForm<void>> unscrapDiary(@Path('diaryId') int diaryId);
+
   @GET('/reading-diaries/me')
   Future<ResponseForm<CursorPageResponse<LikedDiaryResponse>>> getLikedDiaries({
     @Query('cursorId') int? cursorId,
