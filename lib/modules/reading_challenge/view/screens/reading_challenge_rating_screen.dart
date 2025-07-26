@@ -31,8 +31,7 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context, ref, viewModel, state),
-      bottomNavigationBar:
-          state.rating != null ? _buildBottomNavigationBar(context, ref) : null,
+      bottomNavigationBar: _buildBottomNavigationBar(context, ref),
     );
   }
 
@@ -151,7 +150,7 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
       if (currentChallenge.challengeId != null) {
         await ref
             .read(currentChallengeViewModelProvider.notifier)
-            .completeChallenge(state.rating!, ref);
+            .completeChallenge(state.rating, ref);
       }
 
       if (context.mounted) {

@@ -1,7 +1,7 @@
 import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
 import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
-import 'package:book/modules/reading_challenge/model/rating_request.dart';
+import 'package:book/modules/reading_challenge/model/book_rating_request.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -145,11 +145,18 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
 
     final repo = ref.read(readingChallengeRepositoryProvider);
     try {
-      final request = RatingRequest(
-        bookId: state.book!.bookId,
+      // Update challenge progress
+      final progressRequest = ChallengeProgressRequest(
+        startPage: int.parse(state.startPage!),
+        endPage: int.parse(state.endPage!),
+      );
+      await repo.updateChallengeProgress(state.challengeId!, progressRequest);
+
+      // Create book rating
+      final ratingRequest = BookRatingRequest(
         rating: rating.toInt(),
       );
-      await repo.completeChallenge(state.challengeId!, request);
+      await repo.createBookRating(state.book!.bookId.toString(), ratingRequest);
 
       final user = ref.read(authViewModelProvider).value;
       final memberId = (user is AuthSuccess) ? user.memberId : 0;
@@ -157,6 +164,20 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
           getChallengesByMemberViewModelProvider(memberId: memberId));
     } catch (e) {
       debugPrint('Failed to complete challenge: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteBookRating(WidgetRef ref) async {
+    if (state.book == null) {
+      throw Exception('Book must be set for rating deletion.');
+    }
+
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    try {
+      await repo.deleteBookRating(state.book!.bookId.toString());
+    } catch (e) {
+      debugPrint('Failed to delete book rating: $e');
       rethrow;
     }
   }

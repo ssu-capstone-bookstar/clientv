@@ -231,9 +231,9 @@ class _ReadingChallengeRepository implements ReadingChallengeRepository {
   }
 
   @override
-  Future<ResponseForm<dynamic>> completeChallenge(
-    int challengeId,
-    RatingRequest request,
+  Future<ResponseForm<dynamic>> createBookRating(
+    String bookId,
+    BookRatingRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -243,7 +243,37 @@ class _ReadingChallengeRepository implements ReadingChallengeRepository {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v2/reading-challenges/${challengeId}/complete',
+            '/api/v2/books/${bookId}/ratings',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<dynamic> _value;
+    try {
+      _value = ResponseForm<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<dynamic>> deleteBookRating(String bookId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<dynamic>>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/v2/books/${bookId}/ratings',
             queryParameters: queryParameters,
             data: _data,
           )
