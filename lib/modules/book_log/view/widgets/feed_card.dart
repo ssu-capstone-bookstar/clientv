@@ -16,6 +16,7 @@ class FeedCard extends ConsumerStatefulWidget {
   final Function onMessage;
   final Function onDelete;
   final Function onReport;
+  final Function onClickProfile;
 
   const FeedCard(
       {super.key,
@@ -23,7 +24,8 @@ class FeedCard extends ConsumerStatefulWidget {
       required this.onLike,
       required this.onMessage,
       required this.onDelete,
-      required this.onReport});
+      required this.onReport,
+      required this.onClickProfile});
 
   @override
   ConsumerState<FeedCard> createState() => _FeedCardState();
@@ -47,36 +49,39 @@ class _FeedCardState extends ConsumerState<FeedCard> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: CircleAvatar(
-                      backgroundColor: ColorName.g7,
-                      backgroundImage: widget.feed.profileImageUrl.isNotEmpty
-                          ? CachedNetworkImageProvider(
-                              widget.feed.profileImageUrl,
-                            )
-                          : null,
-                      child: widget.feed.profileImageUrl.isEmpty
-                          ? const Icon(Icons.person,
-                              size: 40, color: ColorName.g5)
-                          : null,
+              GestureDetector(
+                onTap: () => widget.onClickProfile(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: CircleAvatar(
+                        backgroundColor: ColorName.g7,
+                        backgroundImage: widget.feed.profileImageUrl.isNotEmpty
+                            ? CachedNetworkImageProvider(
+                                widget.feed.profileImageUrl,
+                              )
+                            : null,
+                        child: widget.feed.profileImageUrl.isEmpty
+                            ? const Icon(Icons.person,
+                                size: 40, color: ColorName.g5)
+                            : null,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  // 닉네임
-                  Center(
-                    child: Text(
-                      "@${widget.feed.nickname}",
-                      style: AppTexts.b7.copyWith(color: ColorName.g3),
-                      textAlign: TextAlign.center,
+                    const SizedBox(width: 6),
+                    // 닉네임
+                    Center(
+                      child: Text(
+                        "@${widget.feed.nickname}",
+                        style: AppTexts.b7.copyWith(color: ColorName.g3),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               MenuButton(
                 menus: [

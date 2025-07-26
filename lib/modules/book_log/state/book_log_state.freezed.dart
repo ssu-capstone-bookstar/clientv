@@ -19,7 +19,7 @@ mixin _$BookLogState {
   List<DiaryResponse> get feeds;
   bool get hasNext;
   int get nextCursor;
-  int get memberId;
+  int? get memberId;
 
   /// Create a copy of BookLogState
   /// with the given fields replaced by the non-null parameter values.
@@ -73,7 +73,7 @@ abstract mixin class $BookLogStateCopyWith<$Res> {
       List<DiaryResponse> feeds,
       bool hasNext,
       int nextCursor,
-      int memberId});
+      int? memberId});
 
   $ProfileWithCountsCopyWith<$Res> get profile;
 }
@@ -95,7 +95,7 @@ class _$BookLogStateCopyWithImpl<$Res> implements $BookLogStateCopyWith<$Res> {
     Object? feeds = null,
     Object? hasNext = null,
     Object? nextCursor = null,
-    Object? memberId = null,
+    Object? memberId = freezed,
   }) {
     return _then(_self.copyWith(
       profile: null == profile
@@ -118,10 +118,10 @@ class _$BookLogStateCopyWithImpl<$Res> implements $BookLogStateCopyWith<$Res> {
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: null == memberId
+      memberId: freezed == memberId
           ? _self.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 
@@ -235,7 +235,7 @@ extension BookLogStatePatterns on BookLogState {
             List<DiaryResponse> feeds,
             bool hasNext,
             int nextCursor,
-            int memberId)?
+            int? memberId)?
         $default, {
     required TResult orElse(),
   }) {
@@ -270,7 +270,7 @@ extension BookLogStatePatterns on BookLogState {
             List<DiaryResponse> feeds,
             bool hasNext,
             int nextCursor,
-            int memberId)
+            int? memberId)
         $default,
   ) {
     final _that = this;
@@ -303,7 +303,7 @@ extension BookLogStatePatterns on BookLogState {
             List<DiaryResponse> feeds,
             bool hasNext,
             int nextCursor,
-            int memberId)?
+            int? memberId)?
         $default,
   ) {
     final _that = this;
@@ -326,7 +326,7 @@ class _BookLogState implements BookLogState {
       final List<DiaryResponse> feeds = const [],
       this.hasNext = false,
       this.nextCursor = -1,
-      this.memberId = -1})
+      this.memberId})
       : _thumbnails = thumbnails,
         _feeds = feeds;
 
@@ -358,8 +358,7 @@ class _BookLogState implements BookLogState {
   @JsonKey()
   final int nextCursor;
   @override
-  @JsonKey()
-  final int memberId;
+  final int? memberId;
 
   /// Create a copy of BookLogState
   /// with the given fields replaced by the non-null parameter values.
@@ -415,7 +414,7 @@ abstract mixin class _$BookLogStateCopyWith<$Res>
       List<DiaryResponse> feeds,
       bool hasNext,
       int nextCursor,
-      int memberId});
+      int? memberId});
 
   @override
   $ProfileWithCountsCopyWith<$Res> get profile;
@@ -439,7 +438,7 @@ class __$BookLogStateCopyWithImpl<$Res>
     Object? feeds = null,
     Object? hasNext = null,
     Object? nextCursor = null,
-    Object? memberId = null,
+    Object? memberId = freezed,
   }) {
     return _then(_BookLogState(
       profile: null == profile
@@ -462,10 +461,10 @@ class __$BookLogStateCopyWithImpl<$Res>
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
               as int,
-      memberId: null == memberId
+      memberId: freezed == memberId
           ? _self.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 
