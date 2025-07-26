@@ -1,4 +1,3 @@
-import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_feed_list.dart';
 import 'package:book/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
@@ -8,67 +7,51 @@ import 'package:book/modules/book_log/view/widgets/diary_feed_report_success_dia
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
-class BookLogScreen extends ConsumerWidget {
-  const BookLogScreen({super.key});
+class BookLogFeedScreen extends ConsumerWidget {
+  const BookLogFeedScreen(
+      {super.key, required this.memberId, required this.initialIndex});
+  final int memberId;
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookLogAsync = ref.watch(bookLogViewModelProvider(null));
+    final bookLogAsync = ref.watch(bookLogViewModelProvider(memberId));
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
     final userAsync = ref.watch(authViewModelProvider);
 
     return userAsync.when(
       data: (user) {
-        final currentMemberProfileImage =
-            (user is AuthSuccess) ? user.profileImage : "";
-        final currentMemberId = (user is AuthSuccess) ? user.memberId : -1;
-
         return bookLogAsync.when(
           data: (bookLog) => followInfoAsync.when(
             data: (followInfo) => Scaffold(
-              floatingActionButton: InkWell(
-                onTap: () {
-                  context.push('/book-log/thumbnail/$currentMemberId');
-                },
-                child: SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: CircleAvatar(
-                    key: UniqueKey(),
-                    backgroundColor: ColorName.g7,
-                    backgroundImage: currentMemberProfileImage.isNotEmpty
-                        ? NetworkImage(currentMemberProfileImage)
-                        : null,
-                    child: currentMemberProfileImage.isEmpty
-                        ? const Icon(Icons.person,
-                            size: 40, color: ColorName.g5)
-                        : null,
-                  ),
+              appBar: AppBar(
+                title: const Text('책로그'),
+                leading: IconButton(
+                  icon: const BackButton(),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
               body: BookLogFeedList(
                 bookLog: bookLog,
-                // followInfo: followInfo,
-                initialIndex: null,
+                initialIndex: initialIndex,
                 onScrollBottom: () async {
                   await ref
-                      .read(bookLogViewModelProvider(null).notifier)
+                      .read(bookLogViewModelProvider(memberId).notifier)
                       .refreshState();
                 },
                 onRefresh: () async {
                   await ref
-                      .read(bookLogViewModelProvider(null).notifier)
+                      .read(bookLogViewModelProvider(memberId).notifier)
                       .initState(null);
                 },
                 onLike: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
                   ref
-                      .read(bookLogViewModelProvider(null).notifier)
+                      .read(bookLogViewModelProvider(memberId).notifier)
                       .handleFeedLike(
                           targetFeed.diaryId, targetFeed.liked, targetIndex);
                 },
@@ -88,7 +71,7 @@ class BookLogScreen extends ConsumerWidget {
                   int? commentCount = result?['commentCount'];
                   if (commentCount != null) {
                     ref
-                        .read(bookLogViewModelProvider(null).notifier)
+                        .read(bookLogViewModelProvider(memberId).notifier)
                         .changeCommentCount(targetFeed.diaryId, commentCount);
                   }
                 },
@@ -101,7 +84,7 @@ class BookLogScreen extends ConsumerWidget {
                       builder: (context) => DiaryFeedDeleteDialog());
                   if (result == true) {
                     await ref
-                        .read(bookLogViewModelProvider(null).notifier)
+                        .read(bookLogViewModelProvider(memberId).notifier)
                         .deleteFeed(targetFeed.diaryId);
                   }
                 },
@@ -124,7 +107,7 @@ class BookLogScreen extends ConsumerWidget {
 
                   if (reportType == null || content == null) return;
                   await ref
-                      .read(bookLogViewModelProvider(null).notifier)
+                      .read(bookLogViewModelProvider(memberId).notifier)
                       .reportFeed(targetFeed.diaryId, reportType, content);
                   if (!ctx.mounted) return;
                   await showModalBottomSheet(
@@ -138,8 +121,8 @@ class BookLogScreen extends ConsumerWidget {
                       builder: (context) => DiaryFeedReportSuccessDialog());
                 },
                 onClickProfile: (int targetIndex) {
-                  final targetFeed = bookLog.feeds[targetIndex];
-                  context.push('/book-log/thumbnail/${targetFeed.memberId}');
+                  // final targetFeed = bookLog.feeds[targetIndex];
+                  // context.push('/book-log/thumbnail/${targetFeed.memberId}');
                 },
               ),
             ),

@@ -1,23 +1,29 @@
 import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../common/components/grid/image_grid.dart';
 import '../../../../gen/colors.gen.dart';
-import '../../view_model/book_log_view_model.dart';
 
-class BookLogLowSection extends ConsumerStatefulWidget {
+class BookLogThumbnailGrid extends ConsumerStatefulWidget {
+  const BookLogThumbnailGrid({
+    super.key,
+    required this.thumbnails,
+    required this.onScrollBottom,
+    required this.onRefresh,
+    required this.onClickThumbnail,
+  });
   final List<DiaryThumbnail> thumbnails;
-  final int memberId;
-  const BookLogLowSection(
-      {super.key, required this.thumbnails, required this.memberId});
+  final Future<void> Function() onScrollBottom;
+  final Future<void> Function() onRefresh;
+  final Function(int) onClickThumbnail;
 
   @override
-  ConsumerState<BookLogLowSection> createState() => _BookLogLowSectionState();
+  ConsumerState<BookLogThumbnailGrid> createState() =>
+      _BookLogThumbnailGridState();
 }
 
-class _BookLogLowSectionState extends ConsumerState<BookLogLowSection> {
+class _BookLogThumbnailGridState extends ConsumerState<BookLogThumbnailGrid> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
@@ -38,7 +44,7 @@ class _BookLogLowSectionState extends ConsumerState<BookLogLowSection> {
     });
   }
 
-  void _onBottomReached() {
+  Future<void> _onBottomReached() async {
     final now = DateTime.now();
     // 디바운싱: 마지막 호출로부터 2초가 지나지 않았으면 무시
     if (_lastBottomReachedTime != null &&
@@ -52,20 +58,8 @@ class _BookLogLowSectionState extends ConsumerState<BookLogLowSection> {
     _lastBottomReachedTime = now;
     _isLoadingMore = true;
     // 실제 로딩 로직 실행
-    _loadMoreThumbnails();
-  }
-
-  void _loadMoreThumbnails() async {
-    await ref
-        .read(bookLogViewModelProvider(widget.memberId).notifier)
-        .refreshState();
+    await widget.onScrollBottom();
     _isLoadingMore = false;
-  }
-
-  Future<void> _onRefresh() async {
-    await ref
-        .read(bookLogViewModelProvider(widget.memberId).notifier)
-        .initState(widget.memberId);
   }
 
   @override
@@ -83,17 +77,14 @@ class _BookLogLowSectionState extends ConsumerState<BookLogLowSection> {
 
     return Expanded(
       child: RefreshIndicator(
-        onRefresh: _onRefresh,
+        onRefresh: widget.onRefresh,
         child: ImageGrid(
           scrollController: _scrollController,
           imageUrls: imageUrls,
           crossAxisCount: 3,
           spacing: 0,
           onTap: (index) {
-            context.push('/book-log/feeds', extra: {
-              'memberId': widget.memberId,
-              'index': index,
-            });
+            widget.onClickThumbnail(index);
           },
           emptyWidget: const Center(
             child: Text(

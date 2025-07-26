@@ -18,16 +18,19 @@ class BookLogFeedList extends ConsumerStatefulWidget {
       required this.onLike,
       required this.onMessage,
       required this.onDelete,
-      required this.onReport});
+      required this.onReport,
+      required this.onClickProfile});
   final BookLogState bookLog;
   // final FollowInfoState followInfo;
   final int? initialIndex;
-  final Function onScrollBottom;
+  final Future<void> Function() onScrollBottom;
   final Future<void> Function() onRefresh;
   final Function(int) onLike;
-  final Function(int) onMessage;
-  final Function(int) onDelete;
-  final Function(int) onReport;
+  final Function(BuildContext, int) onMessage;
+  final Function(BuildContext, int) onDelete;
+  final Function(BuildContext, int) onReport;
+  final Function(int) onClickProfile;
+
   @override
   ConsumerState<BookLogFeedList> createState() => _BookLogFeedListState();
 }
@@ -67,17 +70,6 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
     }
   }
 
-  // void _initState() {
-  //   final currentState = ref
-  //       .read(bookLogViewModelProvider(widget.memberId).notifier)
-  //       .getCurrentState();
-  //   if (currentState != null) {
-  //     setState(() {
-  //       _localState = currentState;
-  //     });
-  //   }
-  // }
-
   void _setupScrollListener() {
     itemPositionsListener.itemPositions.addListener(() {
       final positions = itemPositionsListener.itemPositions.value;
@@ -100,7 +92,7 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
     });
   }
 
-  void _onBottomReached() {
+  Future<void> _onBottomReached() async {
     final now = DateTime.now();
 
     /// 디바운싱: 마지막 호출로부터 2초가 지나지 않았으면 무시
@@ -116,7 +108,8 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
     _lastBottomReachedTime = now;
     _isLoadingMore = true;
     // 실제 로딩 로직 실행
-    widget.onScrollBottom();
+    await widget.onScrollBottom();
+    _isLoadingMore = false;
   }
 
   @override
@@ -141,9 +134,10 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
                 itemBuilder: (context, index) => FeedCard(
                   feed: feeds[index],
                   onLike: () => widget.onLike(index),
-                  onMessage: () => widget.onMessage(index),
-                  onDelete: () => widget.onDelete(index),
-                  onReport: () => widget.onReport(index),
+                  onMessage: () => widget.onMessage(context, index),
+                  onDelete: () => widget.onDelete(context, index),
+                  onReport: () => widget.onReport(context, index),
+                  onClickProfile: () => widget.onClickProfile(index),
                 ),
                 separatorBuilder: (context, index) => const Divider(
                   color: ColorName.g7,
