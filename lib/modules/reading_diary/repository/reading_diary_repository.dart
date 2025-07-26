@@ -54,6 +54,14 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
+  /// 팔로잉하는 사용자들의 독서일지를 최신순으로 조회합니다.
+  @GET('/reading-diaries/following/feed')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getReadingDiariesMembersFollowingFeed({
+    @Query('cursor') int? cursor, // 서버 명세에 따라 파라미터 이름이 다를 수 있음
+    @Query('size') int? size,
+  });
+
   @GET('/reading-diaries/books/{bookId}')
   Future<ResponseForm<CursorPageResponse<DiaryResponse>>> getBookDiaries(
     @Path('bookId') int bookId, {

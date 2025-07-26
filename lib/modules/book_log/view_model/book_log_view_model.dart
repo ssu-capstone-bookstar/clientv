@@ -33,29 +33,41 @@ class BookLogViewModel extends _$BookLogViewModel {
   late final ProfileRepository _profileRepository;
 
   @override
-  FutureOr<BookLogState> build(int memberId) async {
+  FutureOr<BookLogState> build(int? memberId) async {
     _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
     _profileRepository = ref.watch(profileRepositoryProvider);
     return await initState(memberId);
   }
 
-  Future<BookLogState> initState(int memberId) async {
+  Future<BookLogState> initState(int? memberId) async {
     final prev = state.value ?? BookLogState();
-    final responseProfile =
-        await _profileRepository.getProfileById(memberId.toString());
-    final responseThumbnails = await _readingDiaryRepository
-        .getReadingDiariesMembersThumbnails(memberId);
-    final responseFeeds =
-        await _readingDiaryRepository.getReadingDiariesMembersFeed(memberId);
-    state = AsyncValue.data(prev.copyWith(
-      profile: responseProfile.data,
-      thumbnails: responseThumbnails.data.data,
-      feeds: responseFeeds.data.data,
-      hasNext: responseFeeds.data.hasNext,
-      nextCursor: responseFeeds.data.nextCursor ?? -1,
-      memberId: memberId,
-    ));
-    return state.value ?? BookLogState();
+
+    if (memberId == null) {
+      final responseFeeds =
+          await _readingDiaryRepository.getReadingDiariesMembersFollowingFeed();
+      state = AsyncValue.data(prev.copyWith(
+        feeds: responseFeeds.data.data,
+        hasNext: responseFeeds.data.hasNext,
+        nextCursor: responseFeeds.data.nextCursor ?? -1,
+      ));
+      return state.value ?? BookLogState();
+    } else {
+      final responseProfile =
+          await _profileRepository.getProfileById(memberId.toString());
+      final responseThumbnails = await _readingDiaryRepository
+          .getReadingDiariesMembersThumbnails(memberId);
+      final responseFeeds =
+          await _readingDiaryRepository.getReadingDiariesMembersFeed(memberId);
+      state = AsyncValue.data(prev.copyWith(
+        profile: responseProfile.data,
+        thumbnails: responseThumbnails.data.data,
+        feeds: responseFeeds.data.data,
+        hasNext: responseFeeds.data.hasNext,
+        nextCursor: responseFeeds.data.nextCursor ?? -1,
+        memberId: memberId,
+      ));
+      return state.value ?? BookLogState();
+    }
   }
 
   BookLogState? getCurrentState() {
@@ -65,21 +77,31 @@ class BookLogViewModel extends _$BookLogViewModel {
   Future<BookLogState> refreshState() async {
     final prev = state.value ?? BookLogState();
     if (prev.nextCursor != -1) {
-      final responseThumbnails = await _readingDiaryRepository
-          .getReadingDiariesMembersThumbnails(prev.memberId,
-              cursorId: prev.nextCursor);
+      if (prev.memberId == null) {
+        final responseFeeds = await _readingDiaryRepository
+            .getReadingDiariesMembersFollowingFeed(cursor: prev.nextCursor);
+        state = AsyncValue.data(prev.copyWith(
+          feeds: [...prev.feeds, ...responseFeeds.data.data],
+          hasNext: responseFeeds.data.hasNext,
+          nextCursor: responseFeeds.data.nextCursor ?? -1,
+        ));
+      } else {
+        final responseThumbnails = await _readingDiaryRepository
+            .getReadingDiariesMembersThumbnails(prev.memberId!,
+                cursorId: prev.nextCursor);
 
-      /// TODO: cursorId로 통일하는게?
-      final responseFeeds = await _readingDiaryRepository
-          .getReadingDiariesMembersFeed(prev.memberId, cursor: prev.nextCursor);
-      state = AsyncValue.data(prev.copyWith(
-        thumbnails: [...prev.thumbnails, ...responseThumbnails.data.data],
-        feeds: [...prev.feeds, ...responseFeeds.data.data],
-        hasNext: responseFeeds.data.hasNext,
-        nextCursor: responseFeeds.data.nextCursor ?? -1,
-      ));
+        final responseFeeds = await _readingDiaryRepository
+            .getReadingDiariesMembersFeed(prev.memberId!,
+                cursor: prev.nextCursor);
+        state = AsyncValue.data(prev.copyWith(
+          thumbnails: [...prev.thumbnails, ...responseThumbnails.data.data],
+          feeds: [...prev.feeds, ...responseFeeds.data.data],
+          hasNext: responseFeeds.data.hasNext,
+          nextCursor: responseFeeds.data.nextCursor ?? -1,
+        ));
 
-      return state.value ?? BookLogState();
+        return state.value ?? BookLogState();
+      }
     }
 
     return prev;
@@ -134,8 +156,10 @@ class BookLogViewModel extends _$BookLogViewModel {
     return state.value ?? BookLogState();
   }
 
-  Future<void> reportFeed(int diaryId, ReportType reportType, String content) async {
-    await _readingDiaryRepository.reportDiary(ReportDiaryRequest(readingDiaryId: diaryId, reportType: reportType, content: content));
+  Future<void> reportFeed(
+      int diaryId, ReportType reportType, String content) async {
+    await _readingDiaryRepository.reportDiary(ReportDiaryRequest(
+        readingDiaryId: diaryId, reportType: reportType, content: content));
   }
 }
 

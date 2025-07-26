@@ -6,7 +6,7 @@ part of 'book_log_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookLogViewModelHash() => r'2dd543e488c21188f984c33062661aac90a3bdce';
+String _$bookLogViewModelHash() => r'd9fa03cea72e3ffc38270416aa5158ae9d1d8947';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 
 abstract class _$BookLogViewModel
     extends BuildlessAutoDisposeAsyncNotifier<BookLogState> {
-  late final int memberId;
+  late final int? memberId;
 
   FutureOr<BookLogState> build(
-    int memberId,
+    int? memberId,
   );
 }
 
@@ -49,7 +49,7 @@ class BookLogViewModelFamily extends Family<AsyncValue<BookLogState>> {
 
   /// See also [BookLogViewModel].
   BookLogViewModelProvider call(
-    int memberId,
+    int? memberId,
   ) {
     return BookLogViewModelProvider(
       memberId,
@@ -85,7 +85,7 @@ class BookLogViewModelProvider extends AutoDisposeAsyncNotifierProviderImpl<
     BookLogViewModel, BookLogState> {
   /// See also [BookLogViewModel].
   BookLogViewModelProvider(
-    int memberId,
+    int? memberId,
   ) : this._internal(
           () => BookLogViewModel()..memberId = memberId,
           from: bookLogViewModelProvider,
@@ -110,7 +110,7 @@ class BookLogViewModelProvider extends AutoDisposeAsyncNotifierProviderImpl<
     required this.memberId,
   }) : super.internal();
 
-  final int memberId;
+  final int? memberId;
 
   @override
   FutureOr<BookLogState> runNotifierBuild(
@@ -161,7 +161,7 @@ class BookLogViewModelProvider extends AutoDisposeAsyncNotifierProviderImpl<
 // ignore: unused_element
 mixin BookLogViewModelRef on AutoDisposeAsyncNotifierProviderRef<BookLogState> {
   /// The parameter `memberId` of this provider.
-  int get memberId;
+  int? get memberId;
 }
 
 class _BookLogViewModelProviderElement
@@ -170,7 +170,7 @@ class _BookLogViewModelProviderElement
   _BookLogViewModelProviderElement(super.provider);
 
   @override
-  int get memberId => (origin as BookLogViewModelProvider).memberId;
+  int? get memberId => (origin as BookLogViewModelProvider).memberId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
