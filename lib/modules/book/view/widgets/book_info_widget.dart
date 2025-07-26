@@ -34,20 +34,25 @@ class BookInfoWidget extends StatelessWidget {
             _buildBookCover(),
             const SizedBox(width: 16),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTitleSection(),
-                      const SizedBox(height: 12),
-                      _buildInfoSection(),
-                    ],
-                  ),
-                  _buildStatsSection(),
-                ],
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: 177.5859375,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildTitleSection(),
+                        const SizedBox(height: 12),
+                        _buildInfoSection(),
+                      ],
+                    ),
+                    _buildStatsSection(),
+                  ],
+                ),
               ),
             ),
           ],

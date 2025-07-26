@@ -35,6 +35,7 @@ import '../../modules/reading_challenge/view/screens/reading_challenge_rating_sc
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
+import '../../modules/reading_challenge/view/screens/my_diary_feeds_screen.dart';
 import '../../modules/reading_diary/screens/reading_diary_entry_screen.dart';
 import '../../modules/reading_diary/screens/reading_diary_photo_screen.dart';
 
@@ -130,7 +131,8 @@ GoRouter router(Ref ref) {
                       final extra = state.extra as Map<String, dynamic>;
                       final memberId = extra['memberId'] as int;
                       final index = extra['index'] as int;
-                      return BookLogFeedsScreen(memberId: memberId, initialIndex: index);
+                      return BookLogFeedsScreen(
+                          memberId: memberId, initialIndex: index);
                     },
                   ),
                   GoRoute(
@@ -355,6 +357,21 @@ GoRouter router(Ref ref) {
                       return ReadingChallengeDiaryEncourageScreen(
                         isChallengeCompleted: isChallengeCompleted,
                         bookId: bookId,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'diary-feeds',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final extra = state.extra as Map<String, dynamic>;
+                      final bookId = extra['bookId'] as int;
+                      final memberId = extra['memberId'] as int;
+                      final index = extra['index'] as int;
+                      return MyDiaryFeedsScreen(
+                        bookId: bookId,
+                        memberId: memberId,
+                        initialIndex: index,
                       );
                     },
                   ),

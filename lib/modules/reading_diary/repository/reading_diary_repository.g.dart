@@ -541,6 +541,86 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
     return _value;
   }
 
+  @override
+  Future<ResponseForm<CursorPageResponse<DiaryFeedResponse>>> getMyDiaryFeeds(
+    int bookId, {
+    int? cursorId,
+    int? size,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursorId': cursorId,
+      r'size': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options =
+        _setStreamType<ResponseForm<CursorPageResponse<DiaryFeedResponse>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/books/${bookId}/my-reading-diaries/feed',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<CursorPageResponse<DiaryFeedResponse>> _value;
+    try {
+      _value = ResponseForm<CursorPageResponse<DiaryFeedResponse>>.fromJson(
+        _result.data!,
+        (json) => CursorPageResponse<DiaryFeedResponse>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => DiaryFeedResponse.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<PopularDiaryFeedResponse>> getMyDiaryFeedsPopular(
+    int bookId, {
+    int? page,
+    int? size,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'page': page, r'size': size};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<PopularDiaryFeedResponse>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/books/${bookId}/my-reading-diaries/feed/popular',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<PopularDiaryFeedResponse> _value;
+    try {
+      _value = ResponseForm<PopularDiaryFeedResponse>.fromJson(
+        _result.data!,
+        (json) =>
+            PopularDiaryFeedResponse.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
