@@ -1,3 +1,4 @@
+import 'package:book/modules/reading_diary/model/report_diary_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -101,6 +102,10 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
+  @POST('/report')
+  Future<ResponseForm<void>> reportDiary(
+    @Body() ReportDiaryRequest request,
+  );
   @GET('/books/{bookId}/my-reading-diaries/thumbnail')
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getMyRelatedDiaries(

@@ -4,6 +4,7 @@ import 'package:book/modules/profile/model/profile_with_counts.dart';
 import 'package:book/modules/profile/repository/profile_repository.dart';
 import 'package:book/modules/profile/view_model/profile_view_model.dart';
 import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:book/modules/reading_diary/model/report_diary_request.dart';
 import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -120,4 +121,43 @@ class BookLogViewModel extends _$BookLogViewModel {
     ));
     return state.value ?? BookLogState();
   }
+
+  Future<BookLogState> deleteFeed(int diaryId) async {
+    await _readingDiaryRepository.deleteDiary(diaryId);
+    final prev = state.value ?? BookLogState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.where((feed) => feed.diaryId != diaryId).toList(),
+      thumbnails: prev.thumbnails
+          .where((thumbnail) => thumbnail.diaryId != diaryId)
+          .toList(),
+    ));
+    return state.value ?? BookLogState();
+  }
+
+  Future<void> reportFeed(int diaryId, ReportType reportType, String content) async {
+    await _readingDiaryRepository.reportDiary(ReportDiaryRequest(readingDiaryId: diaryId, reportType: reportType, content: content));
+  }
 }
+
+enum ReportType {
+  OBSCENE_AND_SEXUALLY_SUGGESTIVE_CONTENT("음란물 및 선정적 콘텐츠"),
+  HATE_SPEECH_AND_DISPARAGING_REMARKS("혐오 및 비하 표현"),
+  FALSE_INFORMATION_AND_FRAUD("허위 정보 및 사기"),
+  VIOLENT_AND_SELF_HARM_THREATENING_CONTENT("폭력 및 자해/위협 콘텐츠"),
+  ILLEGAL_FILMING_AND_DRUGS_GAMBLING("불법 촬영물 및 마약/도박"),
+  SPAM_AND_ADVERTISING("스팸 및 광고"),
+  OTHER("기타");
+
+  const ReportType(this.text);
+  final String text;
+}
+
+List<ReportType> reportTypes = [
+  ReportType.OBSCENE_AND_SEXUALLY_SUGGESTIVE_CONTENT,
+  ReportType.HATE_SPEECH_AND_DISPARAGING_REMARKS,
+  ReportType.FALSE_INFORMATION_AND_FRAUD,
+  ReportType.VIOLENT_AND_SELF_HARM_THREATENING_CONTENT,
+  ReportType.ILLEGAL_FILMING_AND_DRUGS_GAMBLING,
+  ReportType.SPAM_AND_ADVERTISING,
+  ReportType.OTHER,
+];
