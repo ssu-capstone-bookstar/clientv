@@ -138,36 +138,6 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     }
   }
 
-  Future<void> completeChallenge(double rating, WidgetRef ref) async {
-    if (state.challengeId == null || state.book == null) {
-      throw Exception('Challenge ID and book must be set for completion.');
-    }
-
-    final repo = ref.read(readingChallengeRepositoryProvider);
-    try {
-      // Update challenge progress
-      final progressRequest = ChallengeProgressRequest(
-        startPage: int.parse(state.startPage!),
-        endPage: int.parse(state.endPage!),
-      );
-      await repo.updateChallengeProgress(state.challengeId!, progressRequest);
-
-      // Create book rating
-      final ratingRequest = BookRatingRequest(
-        rating: rating.toInt(),
-      );
-      await repo.createBookRating(state.book!.bookId.toString(), ratingRequest);
-
-      final user = ref.read(authViewModelProvider).value;
-      final memberId = (user is AuthSuccess) ? user.memberId : 0;
-      ref.invalidate(
-          getChallengesByMemberViewModelProvider(memberId: memberId));
-    } catch (e) {
-      debugPrint('Failed to complete challenge: $e');
-      rethrow;
-    }
-  }
-
   Future<void> deleteBookRating(WidgetRef ref) async {
     if (state.book == null) {
       throw Exception('Book must be set for rating deletion.');
@@ -178,6 +148,23 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       await repo.deleteBookRating(state.book!.bookId.toString());
     } catch (e) {
       debugPrint('Failed to delete book rating: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> saveBookRating(double rating, WidgetRef ref) async {
+    if (state.book == null) {
+      throw Exception('Book must be set for rating.');
+    }
+
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    try {
+      final ratingRequest = BookRatingRequest(
+        rating: rating.toInt(),
+      );
+      await repo.createBookRating(state.book!.bookId.toString(), ratingRequest);
+    } catch (e) {
+      debugPrint('Failed to save book rating: $e');
       rethrow;
     }
   }

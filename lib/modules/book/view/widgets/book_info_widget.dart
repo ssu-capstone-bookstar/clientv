@@ -20,8 +20,8 @@ class BookInfoWidget extends StatelessWidget {
     return Padding(
       padding: AppPaddings.SCREEN_BODY_PADDING.copyWith(top: 0),
       child: Container(
-        height: 220,
         width: double.infinity,
+        constraints: const BoxConstraints(minHeight: 220),
         padding: EdgeInsets.only(top: 21, bottom: 21),
         decoration: const BoxDecoration(
           border: Border(
