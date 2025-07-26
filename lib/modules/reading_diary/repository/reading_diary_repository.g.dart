@@ -507,24 +507,17 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
-      getMyRelatedDiariesPopular(
+  Future<ResponseForm<PopularDiaryResponse>> getMyRelatedDiariesPopular(
     int bookId, {
-    int? cursorId,
-    double? cursorScore,
+    int? page,
     int? size,
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'cursorId': cursorId,
-      r'cursorScore': cursorScore,
-      r'size': size,
-    };
+    final queryParameters = <String, dynamic>{r'page': page, r'size': size};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<
-        ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>(
+    final _options = _setStreamType<ResponseForm<PopularDiaryResponse>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -532,21 +525,14 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
             queryParameters: queryParameters,
             data: _data,
           )
-          .copyWith(
-            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
-          ),
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>> _value;
+    late ResponseForm<PopularDiaryResponse> _value;
     try {
-      _value =
-          ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>.fromJson(
+      _value = ResponseForm<PopularDiaryResponse>.fromJson(
         _result.data!,
-        (json) => DualCursorPageResponse<RelatedDiaryThumbnail>.fromJson(
-          json as Map<String, dynamic>,
-          (json) =>
-              RelatedDiaryThumbnail.fromJson(json as Map<String, dynamic>),
-        ),
+        (json) => PopularDiaryResponse.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

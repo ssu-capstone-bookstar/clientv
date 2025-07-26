@@ -7,8 +7,6 @@ import '../../../../common/components/grid/async_Image_grid_view.dart';
 import '../../../../common/components/header/section_header.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/colors.gen.dart';
-import '../../../auth/view_model/auth_state.dart';
-import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book/view/widgets/book_info_widget.dart';
 import '../../../book/view_model/book_overview_view_model.dart';
 import '../../../book_pick/model/search_book_response.dart';
@@ -48,8 +46,9 @@ class _ReadingChallengeDetailScreenState
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 300) {
-      // TODO: Implement pagination if needed
-      // ref.read(relatedDiaryThumbnailsViewModelProvider.notifier).fetchNextPage();
+      ref
+          .read(myDiariesViewModelProvider(widget.bookId).notifier)
+          .fetchNextPage();
     }
   }
 
@@ -63,13 +62,6 @@ class _ReadingChallengeDetailScreenState
   @override
   Widget build(BuildContext context) {
     final bookState = ref.watch(bookOverviewViewModelProvider(widget.bookId));
-    final authState = ref.watch(authViewModelProvider);
-
-    final int? memberId = authState.when(
-      data: (data) => (data is AuthSuccess) ? data.memberId : null,
-      loading: () => null,
-      error: (e, st) => null,
-    );
 
     return Scaffold(
       appBar: PreferredSize(
@@ -101,7 +93,7 @@ class _ReadingChallengeDetailScreenState
                   _buildPointsSection(),
                   _buildCalendarSection(),
                   const SizedBox(height: 28),
-                  if (memberId != null) _buildDiarySection(),
+                  _buildDiarySection(),
                 ],
               ),
             ),
