@@ -20,6 +20,7 @@ class FeedCard extends ConsumerStatefulWidget {
     required this.onReport,
     required this.onClickProfile,
     required this.onScrap,
+    required this.onUpdate,
   });
 
   final DiaryResponse feed;
@@ -29,6 +30,7 @@ class FeedCard extends ConsumerStatefulWidget {
   final Function onReport;
   final Function onClickProfile;
   final Function onScrap;
+  final Function onUpdate;
 
   @override
   ConsumerState<FeedCard> createState() => _FeedCardState();
@@ -90,6 +92,11 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                 menus: [
                   if (isMyFeed)
                     MenuButtonItem(
+                      value: "update",
+                      label: "수정하기",
+                    ),
+                  if (isMyFeed)
+                    MenuButtonItem(
                       value: "delete",
                       label: "삭제하기",
                     ),
@@ -101,6 +108,9 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                 icon: Assets.icons.icMenuMore.svg(),
                 onSelected: (value) {
                   switch (value) {
+                    case "update":
+                      widget.onUpdate();
+                      break;
                     case "delete":
                       widget.onDelete();
                       break;
