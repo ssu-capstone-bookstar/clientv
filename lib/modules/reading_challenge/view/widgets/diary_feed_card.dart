@@ -8,12 +8,22 @@ class DiaryFeedCard extends StatelessWidget {
   final DiaryFeedResponse feed;
   final Function onLike;
   final Function onMessage;
+  final Function onDelete;
+  final Function onReport;
+  final Function onClickProfile;
+  final Function onScrap;
+  final Function onUpdate;
 
   const DiaryFeedCard({
     super.key,
     required this.feed,
     required this.onLike,
     required this.onMessage,
+    required this.onDelete,
+    required this.onReport,
+    required this.onClickProfile,
+    required this.onScrap,
+    required this.onUpdate,
   });
 
   @override
@@ -47,6 +57,11 @@ class DiaryFeedCard extends StatelessWidget {
       feed: adaptedFeed,
       onLike: onLike,
       onMessage: onMessage,
+      onDelete: onDelete,
+      onReport: onReport,
+      onClickProfile: onClickProfile,
+      onScrap: onScrap,
+      onUpdate: onUpdate,
     );
   }
 }

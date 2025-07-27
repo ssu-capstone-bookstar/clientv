@@ -7,7 +7,7 @@ part of 'my_diary_feeds_view_model.dart';
 // **************************************************************************
 
 String _$myDiaryFeedsViewModelHash() =>
-    r'93f84f9a65cc3ad788a8cd11ac7197adbc8e0c62';
+    r'6166913e7168a7f7161fc469efb1a79dc59bce75';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -174,6 +174,41 @@ class _MyDiaryFeedsScreenState extends ConsumerState<MyDiaryFeedsScreen> {
               }
             }
 
+            onDelete(int targetIndex) async {
+              final targetFeed = feeds.data[targetIndex];
+              await ref
+                  .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
+                  .handleFeedDelete(targetFeed.diaryId, targetIndex);
+            }
+
+            onReport(int targetIndex) async {
+              final targetFeed = feeds.data[targetIndex];
+              await ref
+                  .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
+                  .handleFeedReport(targetFeed.diaryId, targetIndex);
+            }
+
+            onClickProfile(int targetIndex) async {
+              final targetFeed = feeds.data[targetIndex];
+              await ref
+                  .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
+                  .handleFeedProfile(targetFeed.diaryId, targetIndex);
+            }
+
+            onScrap(int targetIndex) async {
+              final targetFeed = feeds.data[targetIndex];
+              await ref
+                  .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
+                  .handleFeedScrap(targetFeed.diaryId, targetIndex);
+            }
+
+            onUpdate(int targetIndex) async {
+              final targetFeed = feeds.data[targetIndex];
+              await ref
+                  .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
+                  .handleFeedUpdate(targetFeed.diaryId, targetIndex);
+            }
+
             return Scaffold(
               appBar: AppBar(
                 title: const Text('내가 쓴 독서 다이어리'),
@@ -201,6 +236,11 @@ class _MyDiaryFeedsScreenState extends ConsumerState<MyDiaryFeedsScreen> {
                           feed: feeds.data[index],
                           onLike: () => onLike(index),
                           onMessage: () => onMessage(context, index),
+                          onDelete: () => onDelete(index),
+                          onReport: () => onReport(index),
+                          onClickProfile: () => onClickProfile(index),
+                          onScrap: () => onScrap(index),
+                          onUpdate: () => onUpdate(index),
                         ),
                         separatorBuilder: (context, index) => const Divider(
                           color: ColorName.g7,

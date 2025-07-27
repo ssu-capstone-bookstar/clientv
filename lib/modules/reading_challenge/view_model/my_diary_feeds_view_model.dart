@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/dual_cursor_page_response.dart';
@@ -172,5 +173,30 @@ class MyDiaryFeedsViewModel extends _$MyDiaryFeedsViewModel {
     final newState = currentState.copyWith(data: feeds);
     state = AsyncValue.data(newState);
     return newState;
+  }
+
+  Future<void> handleFeedDelete(int diaryId, int targetIndex) async {
+    // TODO: Implement delete functionality
+    debugPrint('Delete feed: $diaryId at index: $targetIndex');
+  }
+
+  Future<void> handleFeedReport(int diaryId, int targetIndex) async {
+    // TODO: Implement report functionality
+    debugPrint('Report feed: $diaryId at index: $targetIndex');
+  }
+
+  Future<void> handleFeedProfile(int diaryId, int targetIndex) async {
+    // TODO: Implement profile navigation
+    debugPrint('Navigate to profile for feed: $diaryId at index: $targetIndex');
+  }
+
+  Future<void> handleFeedScrap(int diaryId, int targetIndex) async {
+    // TODO: Implement scrap functionality
+    debugPrint('Scrap feed: $diaryId at index: $targetIndex');
+  }
+
+  Future<void> handleFeedUpdate(int diaryId, int targetIndex) async {
+    // TODO: Implement update functionality
+    debugPrint('Update feed: $diaryId at index: $targetIndex');
   }
 }
