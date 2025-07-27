@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../common/theme/style/app_colors.dart';
+import '../../../../common/theme/app_style.dart';
+import '../../../../gen/colors.gen.dart';
 
 typedef GridItemBuilder<TItem> = Widget Function(TItem item);
 typedef SliverDividerBuilder = Widget Function();
@@ -49,7 +50,11 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
       data: (data) {
         final items = listBuilder(data);
         if (items.isEmpty) {
-          return emptyBuilder?.call() ?? const Center(child: Text('검색 결과가 없습니다.'));
+          return emptyBuilder?.call() ??
+              Center(
+                child: Text('검색 결과가 없습니다.',
+                    style: AppTexts.b8.copyWith(color: ColorName.g3)),
+              );
         }
 
         final rowCount = (items.length / crossAxisCount).ceil();
@@ -79,7 +84,7 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (row < rowCount - 1 || hasNext)
+                if (row < rowCount || hasNext)
                   SliverToBoxAdapter(
                     child: dividerBuilder?.call() ??
                         Padding(
@@ -106,8 +111,10 @@ class BookCoverGridView<T, TItem> extends StatelessWidget {
           ),
         );
       },
-      error: errorBuilder ?? (e, _) => Center(child: Text('에러가 발생했습니다.\nerror: $e')),
-      loading: loadingBuilder ?? () => const Center(child: CircularProgressIndicator()),
+      error: errorBuilder ??
+          (e, _) => Center(child: Text('에러가 발생했습니다.\nerror: $e')),
+      loading: loadingBuilder ??
+          () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

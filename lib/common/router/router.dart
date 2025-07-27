@@ -1,8 +1,10 @@
-import 'package:book/modules/book_log/view/screens/feed_screen.dart';
+import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
+import 'package:book/modules/reading_diary/screens/reading_diary_update_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +14,7 @@ import '../../modules/auth/view/screens/login_screen.dart';
 import '../../modules/auth/view_model/auth_state.dart';
 import '../../modules/auth/view_model/auth_view_model.dart';
 import '../../modules/book/view/screens/book_overview_screen.dart';
-import '../../modules/book_log/view/screens/book_log_diary_screen.dart';
+import '../../modules/book_log/view/screens/book_log_feed_screen.dart';
 import '../../modules/book_log/view/screens/book_log_screen.dart';
 import '../../modules/book_pick/model/search_book_response.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
@@ -87,14 +89,6 @@ GoRouter router(Ref ref) {
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
-        path: '/feeds',
-        builder: (context, state) => const FeedScreen(),
-      ),
-      GoRoute(
-        path: '/book-log-diary',
-        builder: (context, state) => const BookLogDiaryScreen(),
-      ),
-      GoRoute(
         path: '/reading-diary/:bookId',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
@@ -117,6 +111,17 @@ GoRouter router(Ref ref) {
           ),
         ],
       ),
+      GoRoute(
+        path: '/reading-diary/:diaryId/update',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final diaryId = int.parse(state.pathParameters['diaryId']!);
+          final extra = state.extra as Map<String, dynamic>;
+          final memberId = extra["memberId"] as int;
+          final request = extra["request"] as DiaryUpdateRequest;
+          return ReadingDiaryUpdateScreen(diaryId: diaryId, request: request, memberId: memberId);
+        },
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return HomeScreen(navigationShell: navigationShell);
@@ -132,6 +137,27 @@ GoRouter router(Ref ref) {
                   },
                 ),
                 routes: [
+                  GoRoute(
+                    path: 'thumbnail/:memberId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final memberId = int.parse(state.pathParameters['memberId']!);
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final requiredRefresh = extra?['requiredRefresh'] as bool? ?? false;
+                      return BookLogThumbnailScreen(memberId: memberId, requiredRefresh: requiredRefresh);
+                    },
+                  ),
+
+                  GoRoute(
+                    path: 'feed/:memberId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final memberId = int.parse(state.pathParameters['memberId']!);
+                      final extra = state.extra as Map<String, dynamic>;
+                      final index = extra['index'] as int;
+                      return BookLogFeedScreen(memberId: memberId, initialIndex: index);
+                    },
+                  ),
                   GoRoute(
                     path: 'profile',
                     parentNavigatorKey: rootNavigatorKey,

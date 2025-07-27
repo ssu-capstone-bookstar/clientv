@@ -6,6 +6,7 @@ part 'minimum_member_profile.g.dart';
 @freezed
 abstract class MinimumMemberProfile with _$MinimumMemberProfile {
   const factory MinimumMemberProfile({
+    @Default(0) int memberId,
     @Default('') String nickName,
     @Default('') String profileImage,
   }) = _MinimumMemberProfile;

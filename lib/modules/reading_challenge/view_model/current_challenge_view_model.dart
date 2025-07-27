@@ -1,6 +1,7 @@
 import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
 import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
+import 'package:book/modules/reading_challenge/model/rating_request.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -82,7 +83,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     }
   }
 
-  Future<int> updateChallengeProgress() async {
+  Future<int> updateChallengeProgress(WidgetRef ref) async {
     if (state.challengeId == null ||
         state.startPage == null ||
         state.endPage == null) {
@@ -102,6 +103,12 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       state = state.copyWith(
         progressId: res.data.progressId,
       );
+
+      final user = ref.read(authViewModelProvider).value;
+      final memberId = (user is AuthSuccess) ? user.memberId : 0;
+      ref.invalidate(
+          getChallengesByMemberViewModelProvider(memberId: memberId));
+
       return res.data.progressId;
     } catch (e) {
       debugPrint('Failed to update challenge progress: $e');
@@ -131,18 +138,49 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
     }
   }
 
+  Future<void> completeChallenge(double rating, WidgetRef ref) async {
+    if (state.challengeId == null || state.book == null) {
+      throw Exception('Challenge ID and book must be set for completion.');
+    }
+
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    try {
+      final request = RatingRequest(
+        bookId: state.book!.bookId,
+        rating: rating.toInt(),
+      );
+      await repo.completeChallenge(state.challengeId!, request);
+
+      final user = ref.read(authViewModelProvider).value;
+      final memberId = (user is AuthSuccess) ? user.memberId : 0;
+      ref.invalidate(
+          getChallengesByMemberViewModelProvider(memberId: memberId));
+    } catch (e) {
+      debugPrint('Failed to complete challenge: $e');
+      rethrow;
+    }
+  }
+
   void clear() {
     state = const CurrentChallengeState();
   }
 
   bool get isButtonEnabled {
-    bool isValidStartPage = state.startPage != null && state.startPage!.isNotEmpty;
+    bool isValidStartPage =
+        state.startPage != null && state.startPage!.isNotEmpty;
     bool isValidEndPage = state.endPage != null && state.endPage!.isNotEmpty;
-    int startLength = state.startPage?.length ?? 0;
-    int endLength = state.endPage?.length ?? 0;
-    int start = int.parse(startLength != 0 ? state.startPage! : '0');
-    int end = int.parse(endLength != 0 ? state.endPage! : '0');
-    bool isValidRange = start <= end;
-    return isValidStartPage && isValidEndPage && isValidRange;
+
+    if (!isValidStartPage || !isValidEndPage) {
+      return false;
+    }
+
+    try {
+      int start = int.parse(state.startPage!);
+      int end = int.parse(state.endPage!);
+      bool isValidRange = start <= end;
+      return isValidRange;
+    } catch (e) {
+      return false;
+    }
   }
 }

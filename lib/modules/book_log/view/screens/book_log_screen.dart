@@ -1,97 +1,177 @@
-import 'package:book/modules/book_log/view/widgets/profile_speech_bubble.dart';
+import 'package:book/common/models/image_request.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/book_log/view/widgets/book_log_feed_list.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_delete_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/diary_feed_report_success_dialog.dart';
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../gen/colors.gen.dart';
-import '../../../auth/view_model/auth_state.dart';
-import '../../../auth/view_model/auth_view_model.dart';
 import '../../view_model/book_log_view_model.dart';
-import '../widgets/book_log_header_section.dart';
-import '../widgets/book_log_low_section.dart';
-import '../widgets/book_log_mid_section.dart';
-import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
 
 class BookLogScreen extends ConsumerWidget {
-  const BookLogScreen(
-      {super.key, this.showAppBar = true, this.otherMemberId = 0});
-  final bool showAppBar;
-  final int otherMemberId;
+  const BookLogScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authViewModelProvider).value;
-    final memberId = otherMemberId == 0
-        ? ((user is AuthSuccess) ? user.memberId : 0)
-        : otherMemberId;
-    final isMyProfile = otherMemberId == 0
-        ? (user is AuthSuccess && user.memberId == memberId)
-        : false;
-
-    final profileAsync = ref.watch(bookLogProfileProvider(memberId));
-    final challengesAsync = ref
-        .watch(getChallengesByMemberViewModelProvider(memberId: memberId))
-        .challenges;
-
+    final bookLogAsync = ref.watch(bookLogViewModelProvider(null));
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
+    final userAsync = ref.watch(authViewModelProvider);
 
-    return profileAsync.when(
-        loading: _loading,
-        error: _error('프로필 정보를 불러올 수 없습니다.'),
-        data: (profile) => challengesAsync.when(
-              loading: _loading,
-              error: _error('책장 정보를 불러올 수 없습니다.'),
-              data: (challenges) => followInfoAsync.when(
-                loading: _loading,
-                error: _error('팔로워 정보를 불러올 수 없습니다.'),
-                data: (followInfo) {
-                  final targetMemberId = !isMyProfile ? memberId : -1;
-                  final isFollowing =
-                      followInfo.following.map((e) => e.memberId).contains(
-                            targetMemberId,
-                          );
-                  void onFollow() {
-                    if (isFollowing) {
-                      ref.read(followInfoViewModelProvider.notifier).unfollow(targetMemberId);
-                    } else {
-                      ref.read(followInfoViewModelProvider.notifier).follow(targetMemberId);
-                    }
+    return userAsync.when(
+      data: (user) {
+        final currentMemberProfileImage =
+            (user is AuthSuccess) ? user.profileImage : "";
+        final currentMemberId = (user is AuthSuccess) ? user.memberId : -1;
+
+        return bookLogAsync.when(
+          data: (bookLog) => followInfoAsync.when(
+            data: (followInfo) => Scaffold(
+              floatingActionButton: InkWell(
+                onTap: () {
+                  context.push('/book-log/thumbnail/$currentMemberId');
+                },
+                child: SizedBox(
+                  width: 78,
+                  height: 78,
+                  child: CircleAvatar(
+                    key: UniqueKey(),
+                    backgroundColor: ColorName.g7,
+                    backgroundImage: currentMemberProfileImage.isNotEmpty
+                        ? NetworkImage(currentMemberProfileImage)
+                        : null,
+                    child: currentMemberProfileImage.isEmpty
+                        ? const Icon(Icons.person,
+                            size: 40, color: ColorName.g5)
+                        : null,
+                  ),
+                ),
+              ),
+              body: BookLogFeedList(
+                bookLog: bookLog,
+                // followInfo: followInfo,
+                initialIndex: null,
+                onScrollBottom: () async {
+                  await ref
+                      .read(bookLogViewModelProvider(null).notifier)
+                      .refreshState();
+                },
+                onRefresh: () async {
+                  await ref
+                      .read(bookLogViewModelProvider(null).notifier)
+                      .initState(null);
+                },
+                onLike: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  ref
+                      .read(bookLogViewModelProvider(null).notifier)
+                      .handleFeedLike(
+                          targetFeed.diaryId, targetFeed.liked, targetIndex);
+                },
+                onMessage: (BuildContext ctx, int targetIndex) async {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  final result = await showModalBottomSheet(
+                      context: ctx,
+                      isScrollControlled: true,
+                      backgroundColor: ColorName.b1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      builder: (context) =>
+                          DiaryFeedCommentDialog(diaryId: targetFeed.diaryId));
+
+                  int? commentCount = result?['commentCount'];
+                  if (commentCount != null) {
+                    ref
+                        .read(bookLogViewModelProvider(null).notifier)
+                        .changeCommentCount(targetFeed.diaryId, commentCount);
                   }
-                  return Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 20),
-                          BookLogHeaderSection(
-                            profileImageUrl: profile.profileImageUrl,
-                            nickName: profile.nickName,
-                            diaryCount: profile.diaryCount,
-                            followingCount: profile.followingCount,
-                            followerCount: profile.followerCount,
-                            isMyProfile: isMyProfile,
-                            isFollowing: isFollowing,
-                            onEdit: () =>
-                                GoRouter.of(context).go('/book-log/profile'),
-                            onFollow: onFollow,
-                            profileImageKey: GlobalKey(),
-                          ),
-                          const SizedBox(height: 25),
-                          BookLogMidSection(books: challenges),
-                          const SizedBox(height: 20),
-                          BookLogLowSection(memberId: memberId),
-                        ],
+                },
+                onDelete: (BuildContext ctx, int targetIndex) async {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  final result = await showModalBottomSheet(
+                      context: ctx,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => DiaryFeedDeleteDialog());
+                  if (result == true) {
+                    await ref
+                        .read(bookLogViewModelProvider(null).notifier)
+                        .deleteFeed(targetFeed.diaryId);
+                  }
+                },
+                onReport: (BuildContext ctx, int targetIndex) async {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  final result = await showModalBottomSheet(
+                      context: ctx,
+                      isScrollControlled: true,
+                      backgroundColor: ColorName.b1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
                       ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: ProfileSpeechBubble(text: profile.introduction),
+                      builder: (context) => DiaryFeedReportDialog());
+
+                  if (result == null) return;
+
+                  ReportType? reportType = result?['reportType'];
+                  String? content = result?['content'];
+
+                  if (reportType == null || content == null) return;
+                  await ref
+                      .read(bookLogViewModelProvider(null).notifier)
+                      .reportFeed(targetFeed.diaryId, reportType, content);
+                  if (!ctx.mounted) return;
+                  await showModalBottomSheet(
+                      context: ctx,
+                      isScrollControlled: true,
+                      backgroundColor: ColorName.b1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
                       ),
-                    ],
-                  );
+                      builder: (context) => DiaryFeedReportSuccessDialog());
+                },
+                onClickProfile: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  context.push('/book-log/thumbnail/${targetFeed.memberId}');
+                },
+                onScrap: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  ref
+                      .read(bookLogViewModelProvider(null).notifier)
+                      .handleFeedScrap(
+                          targetFeed.diaryId, targetFeed.scraped, targetIndex);
+                },
+                onUpdate: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  context.push('/reading-diary/${targetFeed.diaryId}/update',
+                      extra: DiaryUpdateRequest(
+                          content: targetFeed.content,
+                          images: targetFeed.images
+                              .map((e) => ImageRequest(
+                                  image: e.imageUrl, sequence: e.sequence))
+                              .toList()));
                 },
               ),
-            ));
+            ),
+            error: _error("팔로우 정보를 불러올 수 없습니다."),
+            loading: _loading,
+          ),
+          error: _error("북로그 정보를 불러올 수 없습니다."),
+          loading: _loading,
+        );
+      },
+      error: _error("유저 정보를 불러올 수 없습니다."),
+      loading: _loading,
+    );
   }
 
   Widget _loading() => const Center(child: CircularProgressIndicator());

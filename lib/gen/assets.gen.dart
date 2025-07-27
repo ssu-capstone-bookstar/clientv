@@ -191,6 +191,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_heart.svg
   SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
 
+  /// File path: assets/icons/ic_heart_filled.svg
+  SvgGenImage get icHeartFilled =>
+      const SvgGenImage('assets/icons/ic_heart_filled.svg');
+
   /// File path: assets/icons/ic_login_char_front.svg
   SvgGenImage get icLoginCharFront =>
       const SvgGenImage('assets/icons/ic_login_char_front.svg');
@@ -267,6 +271,10 @@ class $AssetsIconsGen {
   SvgGenImage get icRatingStar =>
       const SvgGenImage('assets/icons/ic_rating_star.svg');
 
+  /// File path: assets/icons/ic_rating_star_filled.svg
+  SvgGenImage get icRatingStarFilled =>
+      const SvgGenImage('assets/icons/ic_rating_star_filled.svg');
+
   /// File path: assets/icons/ic_reading_challenge_char1.svg
   SvgGenImage get icReadingChallengeChar1 =>
       const SvgGenImage('assets/icons/ic_reading_challenge_char1.svg');
@@ -294,6 +302,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_scrap.svg
   SvgGenImage get icScrap => const SvgGenImage('assets/icons/ic_scrap.svg');
 
+  /// File path: assets/icons/ic_scrap_filled.svg
+  SvgGenImage get icScrapFilled =>
+      const SvgGenImage('assets/icons/ic_scrap_filled.svg');
+
   /// File path: assets/icons/ic_star.svg
   SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
 
@@ -309,70 +321,74 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
-        apple,
-        google,
-        icAddPick,
-        icArrowUpDown,
-        icBookpickChatCharacter,
-        icBookpickChatOption,
-        icBookpickChatOptionPicture,
-        icBookpickChatSendColored,
-        icBookpickChatSendDisabled,
-        icBookpickSearchCharacter,
-        icBooktalkSearchCharacter,
-        icCamera,
-        icCategoryArtHobby,
-        icCategoryBestseller,
-        icCategoryChildren,
-        icCategoryLiterature,
-        icCategoryScienceTech,
-        icCategorySocialSciences,
-        icChatNotification,
-        icCheck,
-        icDeeptypeCharBottom,
-        icDeeptypeCharBw,
-        icDeeptypeCharFront,
-        icDeeptypeFire,
-        icDeeptypeNotification1,
-        icDeeptypeNotification2,
-        icDeeptypeStickerBook,
-        icDeeptypeStickerClock,
-        icDeeptypeStickerCloud,
-        icEraser,
-        icEraser01,
-        icHeart,
-        icLoginCharFront,
-        icLoginCharTop,
-        icMail,
-        icMaximise02,
-        icMenuMore,
-        icMessage,
-        icPalette,
-        icPenTool,
-        icPencil,
-        icPencil01,
-        icPentool03,
-        icPersonCount,
-        icPhotoLibrary,
-        icPlaylistPlay,
-        icPlaylistStop,
-        icPointShopChar1,
-        icPointShopChar2,
-        icPointShopChar3,
-        icQuestionMark,
-        icRatingStar,
-        icReadingChallengeChar1,
-        icReadingChallengeChar2,
-        icReadingChallengeChar3,
-        icReadingChallengeCompleted,
-        icReadingChallengeNotCompleted,
-        icReadingComplete,
-        icScrap,
-        icStar,
-        icStar01,
-        icWithdrawal,
-        kakao,
-      ];
+    apple,
+    google,
+    icAddPick,
+    icArrowUpDown,
+    icBookpickChatCharacter,
+    icBookpickChatOption,
+    icBookpickChatOptionPicture,
+    icBookpickChatSendColored,
+    icBookpickChatSendDisabled,
+    icBookpickSearchCharacter,
+    icBooktalkSearchCharacter,
+    icCamera,
+    icCategoryArtHobby,
+    icCategoryBestseller,
+    icCategoryChildren,
+    icCategoryLiterature,
+    icCategoryScienceTech,
+    icCategorySocialSciences,
+    icChatNotification,
+    icCheck,
+    icDeeptypeCharBottom,
+    icDeeptypeCharBw,
+    icDeeptypeCharFront,
+    icDeeptypeFire,
+    icDeeptypeNotification1,
+    icDeeptypeNotification2,
+    icDeeptypeStickerBook,
+    icDeeptypeStickerClock,
+    icDeeptypeStickerCloud,
+    icEraser,
+    icEraser01,
+    icHeart,
+    icHeartFilled,
+    icLoginCharFront,
+    icLoginCharTop,
+    icMail,
+    icMaximise02,
+    icMenuMore,
+    icMessage,
+    icPalette,
+    icPenTool,
+    icPencil,
+    icPencil01,
+    icPentool03,
+    icPersonCount,
+    icPhotoLibrary,
+    icPlaylistPlay,
+    icPlaylistStop,
+    icPointShopChar1,
+    icPointShopChar2,
+    icPointShopChar3,
+    icQuestionMark,
+    icRatingStar,
+    icRatingStarFilled,
+    icReadingChallengeChar1,
+    icReadingChallengeChar2,
+    icReadingChallengeChar3,
+    icReadingChallengeCompleted,
+    icReadingChallengeNotCompleted,
+    icReadingComplete,
+    icScrap,
+    icScrapFilled,
+    icStar,
+    icStar01,
+    icWithdrawal,
+    kakao,
+  ];
+
 }
 
 class $AssetsImagesGen {

@@ -8,13 +8,22 @@ part 'diary_response.g.dart';
 @freezed
 abstract class DiaryResponse with _$DiaryResponse {
   const factory DiaryResponse({
-    required int diaryId,
-    @Default(0) int startPage,
-    @Default(0) int endPage,
+    @Default(-1) int diaryId,
     @Default('') String content,
+    @Default('') String createdDate,
+    @Default(-1) int memberId,
+    @Default('') String nickname,
+    @Default('') String profileImageUrl,
+    @Default(-1) int bookId,
+    @Default('') String bookTitle,
+    @Default('') String bookAuthor,
+    @Default(-1) double bookRating,
     @Default([]) List<DiaryImageResponse> images,
-    @Default('') String decoration,
-    required DateTime createdAt,
+    @Default(0) int likeCount,
+    @Default(0) int commentCount,
+    @Default(0) int viewCount,
+    @Default(false) bool liked,
+    @Default(false) bool scraped,
   }) = _DiaryResponse;
 
   factory DiaryResponse.fromJson(Map<String, dynamic> json) => _$DiaryResponseFromJson(json);

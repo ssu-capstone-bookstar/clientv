@@ -1,132 +1,259 @@
+import 'package:book/common/components/button/menu_button.dart';
+import 'package:book/gen/assets.gen.dart';
+import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/reading_diary/model/diary_response.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/colors.gen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
-// TODO: 실제 asset 경로로 교체 및 피그마 업데이트 되면 구현
-const String dummyProfileImage = 'assets/images/sample_book.jpg';
-const String dummyBookCover = 'assets/images/sample_book.jpg';
+class FeedCard extends ConsumerStatefulWidget {
+  const FeedCard({
+    super.key,
+    required this.feed,
+    required this.onLike,
+    required this.onMessage,
+    required this.onDelete,
+    required this.onReport,
+    required this.onClickProfile,
+    required this.onScrap,
+    required this.onUpdate,
+  });
 
-/// 피드 카드 위젯 (피그마 디자인 기반)
-/// - 프로필, 닉네임, 날짜, 본문, 책 커버, 버튼 등 포함
-/// - 각 요소별로 TODO 주석 참고하여 실제 데이터/스타일로 교체 필요
-class FeedCard extends StatelessWidget {
-  const FeedCard({super.key});
+  final DiaryResponse feed;
+  final Function onLike;
+  final Function onMessage;
+  final Function onDelete;
+  final Function onReport;
+  final Function onClickProfile;
+  final Function onScrap;
+  final Function onUpdate;
+
+  @override
+  ConsumerState<FeedCard> createState() => _FeedCardState();
+}
+
+class _FeedCardState extends ConsumerState<FeedCard> {
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16), // TODO: 피그마 spacing 일치
-      decoration: BoxDecoration(
-        color: Colors.white, // TODO: ColorName.b1 등 AppTheme 적용
-        borderRadius: BorderRadius.circular(12), // TODO: AppBorders 등 적용
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+    DateTime dt = DateTime.parse(widget.feed.createdDate);
+    String createdAt = DateFormat('yyyy/MM/dd').format(dt);
+    final user = ref.watch(authViewModelProvider).value;
+    final isMyFeed =
+        widget.feed.memberId == ((user is AuthSuccess) ? user.memberId : 0);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => widget.onClickProfile(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: CircleAvatar(
+                        backgroundColor: ColorName.g7,
+                        backgroundImage: widget.feed.profileImageUrl.isNotEmpty
+                            ? CachedNetworkImageProvider(
+                                widget.feed.profileImageUrl,
+                              )
+                            : null,
+                        child: widget.feed.profileImageUrl.isEmpty
+                            ? const Icon(Icons.person,
+                                size: 40, color: ColorName.g5)
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    // 닉네임
+                    Center(
+                      child: Text(
+                        "@${widget.feed.nickname}",
+                        style: AppTexts.b7.copyWith(color: ColorName.g3),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              MenuButton(
+                menus: [
+                  if (isMyFeed)
+                    MenuButtonItem(
+                      value: "update",
+                      label: "수정하기",
+                    ),
+                  if (isMyFeed)
+                    MenuButtonItem(
+                      value: "delete",
+                      label: "삭제하기",
+                    ),
+                  MenuButtonItem(
+                    value: "report",
+                    label: "신고하기",
+                  )
+                ],
+                icon: Assets.icons.icMenuMore.svg(),
+                onSelected: (value) {
+                  switch (value) {
+                    case "update":
+                      widget.onUpdate();
+                      break;
+                    case "delete":
+                      widget.onDelete();
+                      break;
+                    case "report":
+                      widget.onReport();
+                      break;
+                    default:
+                  }
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+        ),
+        AspectRatio(
+          aspectRatio: 1,
+          child: PageView.builder(
+            itemCount: widget.feed.images.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: CachedNetworkImage(
+                  imageUrl: widget.feed.images[index].imageUrl,
+                  fit: BoxFit.contain,
+                  errorWidget: (context, url, error) => Container(),
+                ),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 20, // TODO: 피그마 radius 일치
-                backgroundImage:
-                    AssetImage(dummyProfileImage), // TODO: 실제 프로필 이미지로 교체
-                backgroundColor: Color(0xFFF5F5F5), // TODO: ColorName.g7 등 적용
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(
-                    '닉네임',
-                    style: AppTexts.b7.copyWith(
-                      color: Color(0xFF222222), // TODO: ColorName 적용
-                      fontWeight: FontWeight.w700, // TODO: 피그마 weight 일치
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () => widget.onLike(),
+                    child: Row(
+                      children: [
+                        !widget.feed.liked
+                            ? Assets.icons.icHeart.svg()
+                            : Assets.icons.icHeartFilled.svg(),
+                        const SizedBox(width: 3),
+                        Text(
+                          widget.feed.likeCount.toString(),
+                          style: AppTexts.b10.copyWith(color: ColorName.w1),
+                        )
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () => widget.onMessage(),
+                    child: Row(
+                      children: [
+                        Assets.icons.icMessage.svg(),
+                        const SizedBox(width: 3),
+                        Text(
+                          widget.feed.commentCount.toString(),
+                          style: AppTexts.b10.copyWith(color: ColorName.w1),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () => widget.onScrap(),
+                  child: widget.feed.scraped
+                      ? Assets.icons.icScrapFilled.svg()
+                      : Assets.icons.icScrap.svg()),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.feed.bookTitle,
+                      style: AppTexts.b7.copyWith(color: ColorName.p1),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  // const SizedBox(width: 3),
+                  // StarBadge(rating: widget.feed.), // TODO: 실제 별점 데이터로 교체
                   Text(
-                    '2024.06.01',
-                    style: AppTexts.b10.copyWith(
-                      color: Color(0xFFB0B0B0), // TODO: ColorName 적용
-                      fontWeight: FontWeight.w400, // TODO: 피그마 weight 일치
+                    createdAt,
+                    style: AppTexts.b10.copyWith(color: ColorName.g3),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.feed.bookAuthor,
+                      style: AppTexts.b11.copyWith(color: ColorName.p6),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.more_vert,
-                    color: Color(0xFFB0B0B0)), // TODO: 실제 피그마 아이콘, 컬러 적용
-                onPressed: () {
-                  // TODO: 실제 기능 연결
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('피드 카드 더보기 클릭됨')),
-                  );
+              const SizedBox(height: 20),
+              Text(
+                widget.feed.content,
+                maxLines: isExpanded ? null : 10,
+                overflow: isExpanded ? null : TextOverflow.ellipsis,
+                style: AppTexts.b10.copyWith(color: ColorName.w1),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
                 },
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+                child: Text(
+                  isExpanded ? '닫기' : '더 보기',
+                  style: AppTexts.b11.copyWith(color: ColorName.g3).copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: ColorName.g3,
+                        decorationThickness: 1,
+                      ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8), // TODO: 피그마 borderRadius 일치
-            child: Image.asset(
-              dummyBookCover, // TODO: 실제 책 커버 이미지로 교체
-              height: 120, // TODO: 피그마 height 일치
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '여기에 피드 내용이 들어갑니다. 최대 2줄까지 표시됩니다.',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: AppTexts.b6.copyWith(
-              color: Color(0xFF222222), // TODO: ColorName, 스타일 적용
-              fontWeight: FontWeight.w400, // TODO: 피그마 weight 일치
-              fontSize: 16, // TODO: 피그마 fontSize 일치
-            ),
-          ),
-          const SizedBox(height: 12),
-          // TODO: 실제 버튼/태그/기타 요소로 교체
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // TODO: 실제 기능 연결
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('버튼 클릭됨')),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF654AEF), // TODO: ColorName.p1 등 적용
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // TODO: 피그마 borderRadius 일치
-                ),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12), // TODO: 피그마 padding 일치
-                elevation: 0,
-              ),
-              child: Text(
-                '버튼',
-                style: AppTexts.b7.copyWith(
-                  color: Colors.white, // TODO: ColorName.w1 등 적용
-                  fontWeight: FontWeight.w600, // TODO: 피그마 weight 일치
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

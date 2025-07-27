@@ -50,6 +50,39 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
+  Future<ResponseForm<DiaryResponse>> updateDiary(
+    int diaryId,
+    DiaryUpdateRequest request,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<ResponseForm<DiaryResponse>>(
+      Options(method: 'PUT', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reading-diaries/${diaryId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<DiaryResponse> _value;
+    try {
+      _value = ResponseForm<DiaryResponse>.fromJson(
+        _result.data!,
+        (json) => DiaryResponse.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ResponseForm<dynamic>> deleteDiary(int diaryId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -80,7 +113,8 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<List<DiaryThumbnail>>> getMemberDiaries(
+  Future<ResponseForm<CursorPageResponse<DiaryThumbnail>>>
+      getReadingDiariesMembersThumbnails(
     int memberId, {
     int? cursorId,
     int? size,
@@ -93,7 +127,8 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ResponseForm<List<DiaryThumbnail>>>(
+    final _options =
+        _setStreamType<ResponseForm<CursorPageResponse<DiaryThumbnail>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -101,20 +136,96 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
             queryParameters: queryParameters,
             data: _data,
           )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<List<DiaryThumbnail>> _value;
+    late ResponseForm<CursorPageResponse<DiaryThumbnail>> _value;
     try {
-      _value = ResponseForm<List<DiaryThumbnail>>.fromJson(
+      _value = ResponseForm<CursorPageResponse<DiaryThumbnail>>.fromJson(
         _result.data!,
-        (json) => json is List<dynamic>
-            ? json
-                .map<DiaryThumbnail>(
-                  (i) => DiaryThumbnail.fromJson(i as Map<String, dynamic>),
-                )
-                .toList()
-            : List.empty(),
+        (json) => CursorPageResponse<DiaryThumbnail>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => DiaryThumbnail.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getReadingDiariesMembersFeed(int memberId,
+          {int? cursor, int? size}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'cursor': cursor, r'size': size};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options =
+        _setStreamType<ResponseForm<CursorPageResponse<DiaryResponse>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reading-diaries/members/${memberId}/feed',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<CursorPageResponse<DiaryResponse>> _value;
+    try {
+      _value = ResponseForm<CursorPageResponse<DiaryResponse>>.fromJson(
+        _result.data!,
+        (json) => CursorPageResponse<DiaryResponse>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => DiaryResponse.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getReadingDiariesMembersFollowingFeed({int? cursor, int? size}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'cursor': cursor, r'size': size};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options =
+        _setStreamType<ResponseForm<CursorPageResponse<DiaryResponse>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/reading-diaries/following/feed',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<CursorPageResponse<DiaryResponse>> _value;
+    try {
+      _value = ResponseForm<CursorPageResponse<DiaryResponse>>.fromJson(
+        _result.data!,
+        (json) => CursorPageResponse<DiaryResponse>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => DiaryResponse.fromJson(json as Map<String, dynamic>),
+        ),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
@@ -277,6 +388,60 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
+  Future<ResponseForm<void>> scrapDiary(int diaryId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<void>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/scraps/reading-diaries/${diaryId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<void> _value;
+    try {
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<void>> unscrapDiary(int diaryId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<void>>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/scraps/reading-diaries/${diaryId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<void> _value;
+    try {
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ResponseForm<CursorPageResponse<LikedDiaryResponse>>> getLikedDiaries({
     int? cursorId,
     int? size,
@@ -323,14 +488,12 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getRelatedDiaries(
     int bookId, {
-    RelatedDiarySort? relatedDiarySort,
     int? cursorId,
     double? cursorScore,
     int? size,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'relatedDiarySort': relatedDiarySort,
       r'cursorId': cursorId,
       r'cursorScore': cursorScore,
       r'size': size,
@@ -344,6 +507,180 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
           .compose(
             _dio.options,
             '/books/${bookId}/reading-diaries/thumbnail',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>> _value;
+    try {
+      _value =
+          ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>.fromJson(
+        _result.data!,
+        (json) => DualCursorPageResponse<RelatedDiaryThumbnail>.fromJson(
+          json as Map<String, dynamic>,
+          (json) =>
+              RelatedDiaryThumbnail.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getRelatedDiariesPopular(
+    int bookId, {
+    int? cursorId,
+    double? cursorScore,
+    int? size,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursorId': cursorId,
+      r'cursorScore': cursorScore,
+      r'size': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<
+        ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/books/${bookId}/reading-diaries/thumbnail/popular',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>> _value;
+    try {
+      _value =
+          ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>.fromJson(
+        _result.data!,
+        (json) => DualCursorPageResponse<RelatedDiaryThumbnail>.fromJson(
+          json as Map<String, dynamic>,
+          (json) =>
+              RelatedDiaryThumbnail.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<void>> reportDiary(ReportDiaryRequest request) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<ResponseForm<void>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/report',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<void> _value;
+    try {
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getMyRelatedDiaries(
+    int bookId, {
+    int? cursorId,
+    double? cursorScore,
+    int? size,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursorId': cursorId,
+      r'cursorScore': cursorScore,
+      r'size': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<
+        ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/books/${bookId}/my-reading-diaries/thumbnail',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>> _value;
+    try {
+      _value =
+          ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>.fromJson(
+        _result.data!,
+        (json) => DualCursorPageResponse<RelatedDiaryThumbnail>.fromJson(
+          json as Map<String, dynamic>,
+          (json) =>
+              RelatedDiaryThumbnail.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
+      getMyRelatedDiariesPopular(
+    int bookId, {
+    int? cursorId,
+    double? cursorScore,
+    int? size,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursorId': cursorId,
+      r'cursorScore': cursorScore,
+      r'size': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<
+        ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/books/${bookId}/my-reading-diaries/thumbnail/popular',
             queryParameters: queryParameters,
             data: _data,
           )

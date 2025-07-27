@@ -24,7 +24,7 @@ final relatedDiarySortStateProvider = AutoDisposeNotifierProvider<
 
 typedef _$RelatedDiarySortState = AutoDisposeNotifier<RelatedDiarySort>;
 String _$relatedDiariesViewModelHash() =>
-    r'33da7bba516619ddc7219733e66e1e7dd7abd967';
+    r'4ebce65bfea657af705f00ea8927139049261e05';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../common/theme/style/app_texts.dart';
+import '../../../common/theme/app_style.dart';
 import '../../../common/components/modal/photo_source_modal.dart';
-import '../../../common/components/button/radio_button_1.dart';
+import '../../../modules/reading_challenge/view/widgets/challenge_option_card.dart';
 import '../../../gen/colors.gen.dart';
 
 enum PhotoSelection {
@@ -31,19 +31,6 @@ class _ReadingDiaryPhotoScreenState
   PhotoSelection? _selection;
   final ImagePicker _picker = ImagePicker();
 
-  final List<Map<String, dynamic>> _photoOptions = [
-    {
-      'value': PhotoSelection.addPhoto,
-      'title': '사진 추가하기',
-      'description': '갤러리에서 사진을 직접 골라보세요',
-    },
-    {
-      'value': PhotoSelection.noPhoto,
-      'title': '사진 추가 없음',
-      'description': '사진 없이 표지 사진으로 피드에 등록돼요',
-    },
-  ];
-
   Future<void> _pickImages(ImageSource source) async {
     List<XFile> pickedFiles = [];
     if (source == ImageSource.camera) {
@@ -67,70 +54,74 @@ class _ReadingDiaryPhotoScreenState
     }
   }
 
+  void _handleOptionSelection(PhotoSelection value) {
+    if (mounted) {
+      setState(() {
+        _selection = value;
+      });
+    }
+
+    if (value == PhotoSelection.addPhoto) {
+      PhotoSourceModal.show(context, onPick: _pickImages);
+    } else if (mounted) {
+      context.push(
+        '/reading-diary/${widget.bookId}/entry',
+        extra: {
+          'images': <String>[],
+          'bookId': widget.bookId,
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('독서 다이어리'),
+        title: Text('독서 다이어리'),
         leading: const BackButton(),
         actions: [
           IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () {
-              context.go('/reading-challenge');
-            },
+            onPressed: () => context.pop(),
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '도서에 대한 나의 감상을\n자유롭게 표현해 보세요',
-                style: AppTexts.h1.copyWith(color: ColorName.w1),
-              ),
-              const SizedBox(height: 40),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _photoOptions.length,
-                itemBuilder: (context, index) {
-                  final option = _photoOptions[index];
-                  return RadioButton1<PhotoSelection>(
-                    title: option['title'],
-                    description: option['description'],
-                    value: option['value'],
-                    groupValue: _selection,
-                    onChanged: (value) {
-                      if (mounted) {
-                        setState(() {
-                          _selection = value;
-                        });
-                      }
-                      if (value == PhotoSelection.addPhoto) {
-                        PhotoSourceModal.show(context, onPick: _pickImages);
-                      } else if (mounted) {
-                        context.push(
-                          '/reading-diary/${widget.bookId}/entry',
-                          extra: {
-                            'images': <String>[],
-                            'bookId': widget.bookId,
-                          },
-                        );
-                      }
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16),
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: AppPaddings.SCREEN_BODY_PADDING,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '도서에 대한 나의 감상을\n자유롭게 표현해 보세요',
+              style: AppTexts.b1.copyWith(color: ColorName.w1),
+            ),
+            const SizedBox(height: 22),
+            _buildOptionsSection(),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildOptionsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ChallengeOptionCard(
+          title: '사진 추가하기',
+          subtitle: '갤러리에서 사진을 직접 골라보세요',
+          selected: _selection == PhotoSelection.addPhoto,
+          onTap: () => _handleOptionSelection(PhotoSelection.addPhoto),
+        ),
+        const SizedBox(height: 12),
+        ChallengeOptionCard(
+          title: '사진 추가 없음',
+          subtitle: '사진 없이 표지 사진으로 피드에 등록돼요',
+          selected: _selection == PhotoSelection.noPhoto,
+          onTap: () => _handleOptionSelection(PhotoSelection.noPhoto),
+        ),
+      ],
     );
   }
 }

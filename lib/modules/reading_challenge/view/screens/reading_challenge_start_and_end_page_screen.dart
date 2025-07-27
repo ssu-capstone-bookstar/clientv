@@ -103,7 +103,7 @@ class _ReadingChallengeStartAndEndPageScreenState
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: AppPaddings.SCREEN_BODY_PADDING,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -113,7 +113,6 @@ class _ReadingChallengeStartAndEndPageScreenState
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
                       ChallengeBookInfoWidget(book: book),
                       const SizedBox(height: 16),
                       const StepProgressIndicator(

@@ -7,7 +7,7 @@ part of 'follow_info_view_model.dart';
 // **************************************************************************
 
 String _$followInfoViewModelHash() =>
-    r'c7cb1e65844f5d89223862d25f42dd9b1bae7ef0';
+    r'44c46ff89739323f1d0f8147b5e87f44d3a7b675';
 
 /// See also [FollowInfoViewModel].
 @ProviderFor(FollowInfoViewModel)

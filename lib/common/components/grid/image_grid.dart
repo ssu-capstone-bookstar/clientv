@@ -1,4 +1,6 @@
+import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageGrid extends StatelessWidget {
@@ -6,6 +8,8 @@ class ImageGrid extends StatelessWidget {
   final double spacing;
   final int crossAxisCount;
   final Widget? emptyWidget;
+  final Function(int)? onTap;
+  final ScrollController? scrollController;
 
   const ImageGrid({
     Key? key,
@@ -13,12 +17,17 @@ class ImageGrid extends StatelessWidget {
     this.spacing = 0,
     this.crossAxisCount = 3,
     this.emptyWidget,
+    this.onTap,
+    this.scrollController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (imageUrls.isEmpty) {
-      return emptyWidget ?? const Center(child: Text('이미지가 없습니다.'));
+      return emptyWidget ??
+          Center(
+              child: Text('이미지가 없습니다.',
+                  style: AppTexts.b8.copyWith(color: ColorName.g3)));
     }
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -26,6 +35,8 @@ class ImageGrid extends StatelessWidget {
         final double cellSize = gridWidth / crossAxisCount;
         final int totalRows = (imageUrls.length / crossAxisCount).ceil();
         return GridView.builder(
+          controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
@@ -47,24 +58,30 @@ class ImageGrid extends StatelessWidget {
               top: row == 0 ? borderSide : BorderSide.none,
             );
             final imageUrl = imageUrls[idx];
-            return Container(
-              width: cellSize,
-              height: cellSize,
-              decoration: BoxDecoration(
-                color: ColorName.g7,
-                border: border,
+            return GestureDetector(
+              onTap: () {
+                onTap?.call(idx);
+              },
+              child: Container(
+                width: cellSize,
+                height: cellSize,
+                decoration: BoxDecoration(
+                  color: ColorName.g7,
+                  border: border,
+                ),
+                child: imageUrl.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        errorWidget: (context, url, error) => Container(),
+                      )
+                    : const Center(
+                        child: Icon(Icons.image_not_supported,
+                            color: ColorName.g7, size: 36),
+                      ),
               ),
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )
-                  : const Center(
-                      child: Icon(Icons.image_not_supported,
-                          color: ColorName.g7, size: 36),
-                    ),
             );
           },
         );

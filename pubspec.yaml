@@ -51,6 +51,8 @@ dependencies:
   collection: ^1.19.1
   ably_flutter: ^1.2.40
   intl: ^0.20.2
+  scrollable_positioned_list: ^0.3.8
+  flutter_slidable: ^4.0.0
 
 dev_dependencies:
   flutter_test:

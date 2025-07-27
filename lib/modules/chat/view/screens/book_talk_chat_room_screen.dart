@@ -206,6 +206,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                   imageUrl: profileImageUrl,
                   width: 40,
                   height: 40,
+                  errorWidget: (context, url, error) => Container(),
                 ),
               ),
             )
@@ -243,7 +244,6 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
 
     Widget getDateWidget(String createdAt) {
       DateTime dt = DateTime.parse(createdAt);
-
       String formatted = DateFormat('MM/dd\nHH:mm').format(dt);
       return Text(formatted, style: AppTexts.b12.copyWith(color: ColorName.w1));
     }

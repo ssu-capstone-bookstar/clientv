@@ -20,7 +20,7 @@ enum HomeBottomNavMenu {
       case HomeBottomNavMenu.deepTime:
         return '딥타임';
       case HomeBottomNavMenu.readingChallenge:
-        return '리딩챌린지';
+        return '리딩 챌린지';
     }
   }
 

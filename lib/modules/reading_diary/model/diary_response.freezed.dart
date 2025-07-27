@@ -15,12 +15,21 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DiaryResponse {
   int get diaryId;
-  int get startPage;
-  int get endPage;
   String get content;
+  String get createdDate;
+  int get memberId;
+  String get nickname;
+  String get profileImageUrl;
+  int get bookId;
+  String get bookTitle;
+  String get bookAuthor;
+  double get bookRating;
   List<DiaryImageResponse> get images;
-  String get decoration;
-  DateTime get createdAt;
+  int get likeCount;
+  int get commentCount;
+  int get viewCount;
+  bool get liked;
+  bool get scraped;
 
   /// Create a copy of DiaryResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -39,15 +48,31 @@ mixin _$DiaryResponse {
         (other.runtimeType == runtimeType &&
             other is DiaryResponse &&
             (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
-            (identical(other.startPage, startPage) ||
-                other.startPage == startPage) &&
-            (identical(other.endPage, endPage) || other.endPage == endPage) &&
             (identical(other.content, content) || other.content == content) &&
+            (identical(other.createdDate, createdDate) ||
+                other.createdDate == createdDate) &&
+            (identical(other.memberId, memberId) ||
+                other.memberId == memberId) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.bookTitle, bookTitle) ||
+                other.bookTitle == bookTitle) &&
+            (identical(other.bookAuthor, bookAuthor) ||
+                other.bookAuthor == bookAuthor) &&
+            (identical(other.bookRating, bookRating) ||
+                other.bookRating == bookRating) &&
             const DeepCollectionEquality().equals(other.images, images) &&
-            (identical(other.decoration, decoration) ||
-                other.decoration == decoration) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.likeCount, likeCount) ||
+                other.likeCount == likeCount) &&
+            (identical(other.commentCount, commentCount) ||
+                other.commentCount == commentCount) &&
+            (identical(other.viewCount, viewCount) ||
+                other.viewCount == viewCount) &&
+            (identical(other.liked, liked) || other.liked == liked) &&
+            (identical(other.scraped, scraped) || other.scraped == scraped));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -55,16 +80,25 @@ mixin _$DiaryResponse {
   int get hashCode => Object.hash(
       runtimeType,
       diaryId,
-      startPage,
-      endPage,
       content,
+      createdDate,
+      memberId,
+      nickname,
+      profileImageUrl,
+      bookId,
+      bookTitle,
+      bookAuthor,
+      bookRating,
       const DeepCollectionEquality().hash(images),
-      decoration,
-      createdAt);
+      likeCount,
+      commentCount,
+      viewCount,
+      liked,
+      scraped);
 
   @override
   String toString() {
-    return 'DiaryResponse(diaryId: $diaryId, startPage: $startPage, endPage: $endPage, content: $content, images: $images, decoration: $decoration, createdAt: $createdAt)';
+    return 'DiaryResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, liked: $liked, scraped: $scraped)';
   }
 }
 
@@ -76,12 +110,21 @@ abstract mixin class $DiaryResponseCopyWith<$Res> {
   @useResult
   $Res call(
       {int diaryId,
-      int startPage,
-      int endPage,
       String content,
+      String createdDate,
+      int memberId,
+      String nickname,
+      String profileImageUrl,
+      int bookId,
+      String bookTitle,
+      String bookAuthor,
+      double bookRating,
       List<DiaryImageResponse> images,
-      String decoration,
-      DateTime createdAt});
+      int likeCount,
+      int commentCount,
+      int viewCount,
+      bool liked,
+      bool scraped});
 }
 
 /// @nodoc
@@ -98,42 +141,87 @@ class _$DiaryResponseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? diaryId = null,
-    Object? startPage = null,
-    Object? endPage = null,
     Object? content = null,
+    Object? createdDate = null,
+    Object? memberId = null,
+    Object? nickname = null,
+    Object? profileImageUrl = null,
+    Object? bookId = null,
+    Object? bookTitle = null,
+    Object? bookAuthor = null,
+    Object? bookRating = null,
     Object? images = null,
-    Object? decoration = null,
-    Object? createdAt = null,
+    Object? likeCount = null,
+    Object? commentCount = null,
+    Object? viewCount = null,
+    Object? liked = null,
+    Object? scraped = null,
   }) {
     return _then(_self.copyWith(
       diaryId: null == diaryId
           ? _self.diaryId
           : diaryId // ignore: cast_nullable_to_non_nullable
               as int,
-      startPage: null == startPage
-          ? _self.startPage
-          : startPage // ignore: cast_nullable_to_non_nullable
-              as int,
-      endPage: null == endPage
-          ? _self.endPage
-          : endPage // ignore: cast_nullable_to_non_nullable
-              as int,
       content: null == content
           ? _self.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
+      createdDate: null == createdDate
+          ? _self.createdDate
+          : createdDate // ignore: cast_nullable_to_non_nullable
+              as String,
+      memberId: null == memberId
+          ? _self.memberId
+          : memberId // ignore: cast_nullable_to_non_nullable
+              as int,
+      nickname: null == nickname
+          ? _self.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
+              as String,
+      profileImageUrl: null == profileImageUrl
+          ? _self.profileImageUrl
+          : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookId: null == bookId
+          ? _self.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
+              as int,
+      bookTitle: null == bookTitle
+          ? _self.bookTitle
+          : bookTitle // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookAuthor: null == bookAuthor
+          ? _self.bookAuthor
+          : bookAuthor // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookRating: null == bookRating
+          ? _self.bookRating
+          : bookRating // ignore: cast_nullable_to_non_nullable
+              as double,
       images: null == images
           ? _self.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<DiaryImageResponse>,
-      decoration: null == decoration
-          ? _self.decoration
-          : decoration // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      likeCount: null == likeCount
+          ? _self.likeCount
+          : likeCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      commentCount: null == commentCount
+          ? _self.commentCount
+          : commentCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      viewCount: null == viewCount
+          ? _self.viewCount
+          : viewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      liked: null == liked
+          ? _self.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      scraped: null == scraped
+          ? _self.scraped
+          : scraped // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -233,20 +321,44 @@ extension DiaryResponsePatterns on DiaryResponse {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
             int diaryId,
-            int startPage,
-            int endPage,
             String content,
+            String createdDate,
+            int memberId,
+            String nickname,
+            String profileImageUrl,
+            int bookId,
+            String bookTitle,
+            String bookAuthor,
+            double bookRating,
             List<DiaryImageResponse> images,
-            String decoration,
-            DateTime createdAt)?
+            int likeCount,
+            int commentCount,
+            int viewCount,
+            bool liked,
+            bool scraped)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _DiaryResponse() when $default != null:
-        return $default(_that.diaryId, _that.startPage, _that.endPage,
-            _that.content, _that.images, _that.decoration, _that.createdAt);
+        return $default(
+            _that.diaryId,
+            _that.content,
+            _that.createdDate,
+            _that.memberId,
+            _that.nickname,
+            _that.profileImageUrl,
+            _that.bookId,
+            _that.bookTitle,
+            _that.bookAuthor,
+            _that.bookRating,
+            _that.images,
+            _that.likeCount,
+            _that.commentCount,
+            _that.viewCount,
+            _that.liked,
+            _that.scraped);
       case _:
         return orElse();
     }
@@ -269,19 +381,43 @@ extension DiaryResponsePatterns on DiaryResponse {
   TResult when<TResult extends Object?>(
     TResult Function(
             int diaryId,
-            int startPage,
-            int endPage,
             String content,
+            String createdDate,
+            int memberId,
+            String nickname,
+            String profileImageUrl,
+            int bookId,
+            String bookTitle,
+            String bookAuthor,
+            double bookRating,
             List<DiaryImageResponse> images,
-            String decoration,
-            DateTime createdAt)
+            int likeCount,
+            int commentCount,
+            int viewCount,
+            bool liked,
+            bool scraped)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryResponse():
-        return $default(_that.diaryId, _that.startPage, _that.endPage,
-            _that.content, _that.images, _that.decoration, _that.createdAt);
+        return $default(
+            _that.diaryId,
+            _that.content,
+            _that.createdDate,
+            _that.memberId,
+            _that.nickname,
+            _that.profileImageUrl,
+            _that.bookId,
+            _that.bookTitle,
+            _that.bookAuthor,
+            _that.bookRating,
+            _that.images,
+            _that.likeCount,
+            _that.commentCount,
+            _that.viewCount,
+            _that.liked,
+            _that.scraped);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -303,19 +439,43 @@ extension DiaryResponsePatterns on DiaryResponse {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
             int diaryId,
-            int startPage,
-            int endPage,
             String content,
+            String createdDate,
+            int memberId,
+            String nickname,
+            String profileImageUrl,
+            int bookId,
+            String bookTitle,
+            String bookAuthor,
+            double bookRating,
             List<DiaryImageResponse> images,
-            String decoration,
-            DateTime createdAt)?
+            int likeCount,
+            int commentCount,
+            int viewCount,
+            bool liked,
+            bool scraped)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryResponse() when $default != null:
-        return $default(_that.diaryId, _that.startPage, _that.endPage,
-            _that.content, _that.images, _that.decoration, _that.createdAt);
+        return $default(
+            _that.diaryId,
+            _that.content,
+            _that.createdDate,
+            _that.memberId,
+            _that.nickname,
+            _that.profileImageUrl,
+            _that.bookId,
+            _that.bookTitle,
+            _that.bookAuthor,
+            _that.bookRating,
+            _that.images,
+            _that.likeCount,
+            _that.commentCount,
+            _that.viewCount,
+            _that.liked,
+            _that.scraped);
       case _:
         return null;
     }
@@ -326,28 +486,56 @@ extension DiaryResponsePatterns on DiaryResponse {
 @JsonSerializable()
 class _DiaryResponse implements DiaryResponse {
   const _DiaryResponse(
-      {required this.diaryId,
-      this.startPage = 0,
-      this.endPage = 0,
+      {this.diaryId = -1,
       this.content = '',
+      this.createdDate = '',
+      this.memberId = -1,
+      this.nickname = '',
+      this.profileImageUrl = '',
+      this.bookId = -1,
+      this.bookTitle = '',
+      this.bookAuthor = '',
+      this.bookRating = -1,
       final List<DiaryImageResponse> images = const [],
-      this.decoration = '',
-      required this.createdAt})
+      this.likeCount = 0,
+      this.commentCount = 0,
+      this.viewCount = 0,
+      this.liked = false,
+      this.scraped = false})
       : _images = images;
   factory _DiaryResponse.fromJson(Map<String, dynamic> json) =>
       _$DiaryResponseFromJson(json);
 
   @override
+  @JsonKey()
   final int diaryId;
   @override
   @JsonKey()
-  final int startPage;
-  @override
-  @JsonKey()
-  final int endPage;
-  @override
-  @JsonKey()
   final String content;
+  @override
+  @JsonKey()
+  final String createdDate;
+  @override
+  @JsonKey()
+  final int memberId;
+  @override
+  @JsonKey()
+  final String nickname;
+  @override
+  @JsonKey()
+  final String profileImageUrl;
+  @override
+  @JsonKey()
+  final int bookId;
+  @override
+  @JsonKey()
+  final String bookTitle;
+  @override
+  @JsonKey()
+  final String bookAuthor;
+  @override
+  @JsonKey()
+  final double bookRating;
   final List<DiaryImageResponse> _images;
   @override
   @JsonKey()
@@ -359,9 +547,19 @@ class _DiaryResponse implements DiaryResponse {
 
   @override
   @JsonKey()
-  final String decoration;
+  final int likeCount;
   @override
-  final DateTime createdAt;
+  @JsonKey()
+  final int commentCount;
+  @override
+  @JsonKey()
+  final int viewCount;
+  @override
+  @JsonKey()
+  final bool liked;
+  @override
+  @JsonKey()
+  final bool scraped;
 
   /// Create a copy of DiaryResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -384,15 +582,31 @@ class _DiaryResponse implements DiaryResponse {
         (other.runtimeType == runtimeType &&
             other is _DiaryResponse &&
             (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
-            (identical(other.startPage, startPage) ||
-                other.startPage == startPage) &&
-            (identical(other.endPage, endPage) || other.endPage == endPage) &&
             (identical(other.content, content) || other.content == content) &&
+            (identical(other.createdDate, createdDate) ||
+                other.createdDate == createdDate) &&
+            (identical(other.memberId, memberId) ||
+                other.memberId == memberId) &&
+            (identical(other.nickname, nickname) ||
+                other.nickname == nickname) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                other.profileImageUrl == profileImageUrl) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.bookTitle, bookTitle) ||
+                other.bookTitle == bookTitle) &&
+            (identical(other.bookAuthor, bookAuthor) ||
+                other.bookAuthor == bookAuthor) &&
+            (identical(other.bookRating, bookRating) ||
+                other.bookRating == bookRating) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            (identical(other.decoration, decoration) ||
-                other.decoration == decoration) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.likeCount, likeCount) ||
+                other.likeCount == likeCount) &&
+            (identical(other.commentCount, commentCount) ||
+                other.commentCount == commentCount) &&
+            (identical(other.viewCount, viewCount) ||
+                other.viewCount == viewCount) &&
+            (identical(other.liked, liked) || other.liked == liked) &&
+            (identical(other.scraped, scraped) || other.scraped == scraped));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -400,16 +614,25 @@ class _DiaryResponse implements DiaryResponse {
   int get hashCode => Object.hash(
       runtimeType,
       diaryId,
-      startPage,
-      endPage,
       content,
+      createdDate,
+      memberId,
+      nickname,
+      profileImageUrl,
+      bookId,
+      bookTitle,
+      bookAuthor,
+      bookRating,
       const DeepCollectionEquality().hash(_images),
-      decoration,
-      createdAt);
+      likeCount,
+      commentCount,
+      viewCount,
+      liked,
+      scraped);
 
   @override
   String toString() {
-    return 'DiaryResponse(diaryId: $diaryId, startPage: $startPage, endPage: $endPage, content: $content, images: $images, decoration: $decoration, createdAt: $createdAt)';
+    return 'DiaryResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, liked: $liked, scraped: $scraped)';
   }
 }
 
@@ -423,12 +646,21 @@ abstract mixin class _$DiaryResponseCopyWith<$Res>
   @useResult
   $Res call(
       {int diaryId,
-      int startPage,
-      int endPage,
       String content,
+      String createdDate,
+      int memberId,
+      String nickname,
+      String profileImageUrl,
+      int bookId,
+      String bookTitle,
+      String bookAuthor,
+      double bookRating,
       List<DiaryImageResponse> images,
-      String decoration,
-      DateTime createdAt});
+      int likeCount,
+      int commentCount,
+      int viewCount,
+      bool liked,
+      bool scraped});
 }
 
 /// @nodoc
@@ -445,42 +677,87 @@ class __$DiaryResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? diaryId = null,
-    Object? startPage = null,
-    Object? endPage = null,
     Object? content = null,
+    Object? createdDate = null,
+    Object? memberId = null,
+    Object? nickname = null,
+    Object? profileImageUrl = null,
+    Object? bookId = null,
+    Object? bookTitle = null,
+    Object? bookAuthor = null,
+    Object? bookRating = null,
     Object? images = null,
-    Object? decoration = null,
-    Object? createdAt = null,
+    Object? likeCount = null,
+    Object? commentCount = null,
+    Object? viewCount = null,
+    Object? liked = null,
+    Object? scraped = null,
   }) {
     return _then(_DiaryResponse(
       diaryId: null == diaryId
           ? _self.diaryId
           : diaryId // ignore: cast_nullable_to_non_nullable
               as int,
-      startPage: null == startPage
-          ? _self.startPage
-          : startPage // ignore: cast_nullable_to_non_nullable
-              as int,
-      endPage: null == endPage
-          ? _self.endPage
-          : endPage // ignore: cast_nullable_to_non_nullable
-              as int,
       content: null == content
           ? _self.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
+      createdDate: null == createdDate
+          ? _self.createdDate
+          : createdDate // ignore: cast_nullable_to_non_nullable
+              as String,
+      memberId: null == memberId
+          ? _self.memberId
+          : memberId // ignore: cast_nullable_to_non_nullable
+              as int,
+      nickname: null == nickname
+          ? _self.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
+              as String,
+      profileImageUrl: null == profileImageUrl
+          ? _self.profileImageUrl
+          : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookId: null == bookId
+          ? _self.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
+              as int,
+      bookTitle: null == bookTitle
+          ? _self.bookTitle
+          : bookTitle // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookAuthor: null == bookAuthor
+          ? _self.bookAuthor
+          : bookAuthor // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookRating: null == bookRating
+          ? _self.bookRating
+          : bookRating // ignore: cast_nullable_to_non_nullable
+              as double,
       images: null == images
           ? _self._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<DiaryImageResponse>,
-      decoration: null == decoration
-          ? _self.decoration
-          : decoration // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+      likeCount: null == likeCount
+          ? _self.likeCount
+          : likeCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      commentCount: null == commentCount
+          ? _self.commentCount
+          : commentCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      viewCount: null == viewCount
+          ? _self.viewCount
+          : viewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      liked: null == liked
+          ? _self.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      scraped: null == scraped
+          ? _self.scraped
+          : scraped // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../../common/theme/style/app_colors.dart';
 import '../../../../gen/colors.gen.dart';
+import '../../../../common/theme/app_style.dart';
 import '../../model/book_overview_response.dart';
+import '../../../book_pick/view/widgets/book_labeled_text.dart';
+import '../../../book_pick/view/widgets/book_icon_value_label.dart';
 
 class BookInfoWidget extends StatelessWidget {
   const BookInfoWidget({
@@ -16,66 +18,114 @@ class BookInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: CachedNetworkImage(
-              imageUrl: book.cover,
-              width: 100,
-              height: 150,
-              fit: BoxFit.cover,
-            ),
+      padding: AppPaddings.SCREEN_BODY_PADDING.copyWith(top: 0),
+      child: Container(
+        height: 220,
+        width: double.infinity,
+        padding: EdgeInsets.only(top: 21, bottom: 21),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: ColorName.g6, width: 1),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(book.title, style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 8),
-                Text('작가: ${book.author}', style: Theme.of(context).textTheme.bodyMedium),
-                Text('출판사: ${book.publisher}', style: Theme.of(context).textTheme.bodyMedium),
-                Text('출판연도: ${book.publishedDate}', style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    _buildInfoPill(
-                      icon: Icons.star,
-                      text: book.star.toString(),
-                    ),
-                    const SizedBox(width: 8),
-                    _buildInfoPill(
-                      icon: Icons.article_outlined,
-                      text: book.readingDiaryCount.toString(),
-                    ),
-                  ],
-                )
-              ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildBookCover(),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTitleSection(),
+                      const SizedBox(height: 12),
+                      _buildInfoSection(),
+                    ],
+                  ),
+                  _buildStatsSection(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildInfoPill({required IconData icon, required String text}) {
+  Widget _buildBookCover() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.grey.shade800,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: ColorName.p1, size: 16),
-          const SizedBox(width: 4),
-          Text(text, style: const TextStyle(color: Colors.white)),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xB251515C),
+            blurRadius: 46,
+            offset: const Offset(0, 0),
+          ),
         ],
       ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: book.cover,
+          width: 119,
+          height: 176.53846740722656,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitleSection() {
+    return Text(
+      book.title,
+      style: AppTexts.b3.copyWith(color: ColorName.w1),
+    );
+  }
+
+  Widget _buildInfoSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BookLabeledText(label: '작가', value: book.author),
+        BookLabeledText(label: '출판사', value: book.publisher),
+        BookLabeledText(label: '출판연도', value: book.publishedDate),
+      ],
+    );
+  }
+
+  Widget _buildStatsSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        BookIconValueLabel(
+          icon: Icon(Icons.star, color: ColorName.p1, size: 12.0),
+          value: book.star.toString(),
+          valueStyle: AppTexts.b8.copyWith(color: ColorName.p1),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(
+            color: ColorName.g7,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: ColorName.g6),
+          ),
+        ),
+        const SizedBox(width: 8),
+        BookIconValueLabel(
+          icon: Icon(Icons.article_outlined, color: ColorName.p1, size: 12.0),
+          value: book.readingDiaryCount.toString(),
+          valueStyle: AppTexts.b8.copyWith(color: ColorName.p1),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(
+            color: ColorName.g7,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: ColorName.g6),
+          ),
+        ),
+      ],
     );
   }
 }
