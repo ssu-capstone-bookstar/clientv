@@ -58,102 +58,167 @@ class _MusicPlayerWidgetState extends ConsumerState<MusicPlayerWidget> {
     final selectedMusic = ref.watch(selectedMusicProvider);
     final isMusicSelected = selectedMusic != null;
 
-    final decoration = isMusicSelected
-        ? BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: ColorName.p4),
-            gradient: const RadialGradient(
-              center: Alignment(0.45, -0.95),
-              radius: 3,
-              colors: [
-                Color.fromRGBO(119, 93, 255, 1),
-                Color.fromRGBO(46, 46, 56, 1),
-              ],
-            ),
-          )
-        : BoxDecoration(
-            color: ColorName.g7,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 1, color: ColorName.g6),
-          );
+    final BoxDecoration baseDecoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(width: 1, color: ColorName.p4),
+    );
+
+    final BoxDecoration defaultDecoration = BoxDecoration(
+      color: ColorName.g7,
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(width: 1, color: ColorName.g6),
+    );
 
     return Container(
       width: 343,
       height: 70,
-      decoration: decoration,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              isMusicSelected ? selectedMusic!.title : "현재 재생중인 곡이 없어요.",
-              style: isMusicSelected
-                  ? AppTexts.b9.copyWith(color: ColorName.w1)
-                  : AppTexts.b10.copyWith(color: ColorName.g2),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 6),
-            Row(
+      decoration: isMusicSelected ? baseDecoration : defaultDecoration,
+      child: isMusicSelected
+          ? Stack(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (isMusicSelected) {
-                      _isPlaying ? audioPlayer.pause() : audioPlayer.play();
-                    }
-                  },
-                  child: _isPlaying
-                      ? Assets.icons.icPlaylistStop.svg(
-                          width: 24,
-                          height: 24,
-                          //colorFilter: _isPlaying ? ColorFilter.mode(ColorName.p1, BlendMode.srcIn) : null,
-                        )
-                      : Assets.icons.icPlaylistPlay.svg(
-                          width: 24,
-                          height: 24,
-                          colorFilter: isMusicSelected
-                              ? ColorFilter.mode(ColorName.p1, BlendMode.srcIn)
-                              : null,
-                        ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  _formatDuration(_duration - _position),
-                  style: AppTexts.b11.copyWith(color: ColorName.g3),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      trackHeight: 2,
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 5),
-                      overlayShape: SliderComponentShape.noOverlay,
-                    ),
-                    child: Slider(
-                      min: 0,
-                      max: _duration.inSeconds.toDouble(),
-                      value: _position.inSeconds
-                          .clamp(0, _duration.inSeconds)
-                          .toDouble(),
-                      activeColor: const Color.fromRGBO(137, 114, 255, 1),
-                      inactiveColor: Colors.black,
-                      onChanged: isMusicSelected
-                          ? (value) {
-                              audioPlayer
-                                  .seek(Duration(seconds: value.toInt()));
-                            }
-                          : null,
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF1F1F25),
+                          Color(0xFF1F1F25),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: const RadialGradient(
+                        center: Alignment(-0.7572, -0.9476),
+                        radius: 2.31,
+                        colors: [
+                          Color(0x4D2E2E38),
+                          Color(0x4D775DFF),
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        selectedMusic!.title,
+                        style: AppTexts.b9.copyWith(color: ColorName.w1),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _isPlaying
+                                  ? audioPlayer.pause()
+                                  : audioPlayer.play();
+                            },
+                            child: _isPlaying
+                                ? Assets.icons.icPlaylistStop
+                                    .svg(width: 24, height: 24)
+                                : Assets.icons.icPlaylistPlay.svg(
+                                    width: 24,
+                                    height: 24,
+                                    colorFilter: ColorFilter.mode(
+                                        ColorName.p1, BlendMode.srcIn),
+                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _formatDuration(_duration - _position),
+                            style: AppTexts.b11.copyWith(color: ColorName.g3),
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                trackHeight: 2,
+                                thumbShape: const RoundSliderThumbShape(
+                                    enabledThumbRadius: 5),
+                                overlayShape: SliderComponentShape.noOverlay,
+                              ),
+                              child: Slider(
+                                min: 0,
+                                max: _duration.inSeconds.toDouble(),
+                                value: _position.inSeconds
+                                    .clamp(0, _duration.inSeconds)
+                                    .toDouble(),
+                                activeColor:
+                                    const Color.fromRGBO(137, 114, 255, 1),
+                                inactiveColor: Colors.black,
+                                onChanged: (value) {
+                                  audioPlayer
+                                      .seek(Duration(seconds: value.toInt()));
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "현재 재생중인 곡이 없어요.",
+                    style: AppTexts.b10.copyWith(color: ColorName.g2),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Assets.icons.icPlaylistPlay.svg(width: 24, height: 24),
+                      const SizedBox(width: 8),
+                      Text(
+                        _formatDuration(Duration.zero),
+                        style: AppTexts.b11.copyWith(color: ColorName.g3),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 2,
+                            thumbShape: const RoundSliderThumbShape(
+                                enabledThumbRadius: 5),
+                            overlayShape: SliderComponentShape.noOverlay,
+                          ),
+                          child: Slider(
+                            min: 0,
+                            max: 0,
+                            value: 0,
+                            activeColor: Colors.black,
+                            onChanged: null,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
