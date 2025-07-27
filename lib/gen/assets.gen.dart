@@ -181,6 +181,13 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeStickerCloud =>
       const SvgGenImage('assets/icons/ic_deeptype_sticker_cloud.svg');
 
+  /// File path: assets/icons/ic_eraser.svg
+  SvgGenImage get icEraser => const SvgGenImage('assets/icons/ic_eraser.svg');
+
+  /// File path: assets/icons/ic_eraser01.svg
+  SvgGenImage get icEraser01 =>
+      const SvgGenImage('assets/icons/ic_eraser01.svg');
+
   /// File path: assets/icons/ic_heart.svg
   SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
 
@@ -195,8 +202,30 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
 
+  /// File path: assets/icons/ic_maximise02.svg
+  SvgGenImage get icMaximise02 =>
+      const SvgGenImage('assets/icons/ic_maximise02.svg');
+
   /// File path: assets/icons/ic_message.svg
   SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
+
+  /// File path: assets/icons/ic_palette.svg
+  SvgGenImage get icPalette => const SvgGenImage('assets/icons/ic_palette.svg');
+
+  /// File path: assets/icons/ic_pen_tool.svg
+  SvgGenImage get icPenTool =>
+      const SvgGenImage('assets/icons/ic_pen_tool.svg');
+
+  /// File path: assets/icons/ic_pencil.svg
+  SvgGenImage get icPencil => const SvgGenImage('assets/icons/ic_pencil.svg');
+
+  /// File path: assets/icons/ic_pencil01.svg
+  SvgGenImage get icPencil01 =>
+      const SvgGenImage('assets/icons/ic_pencil01.svg');
+
+  /// File path: assets/icons/ic_pentool03.svg
+  SvgGenImage get icPentool03 =>
+      const SvgGenImage('assets/icons/ic_pentool03.svg');
 
   /// File path: assets/icons/ic_person_count.svg
   SvgGenImage get icPersonCount =>
@@ -205,6 +234,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_photo_library.svg
   SvgGenImage get icPhotoLibrary =>
       const SvgGenImage('assets/icons/ic_photo_library.svg');
+
+  /// File path: assets/icons/ic_playlist_play.svg
+  SvgGenImage get icPlaylistPlay =>
+      const SvgGenImage('assets/icons/ic_playlist_play.svg');
+
+  /// File path: assets/icons/ic_playlist_stop.svg
+  SvgGenImage get icPlaylistStop =>
+      const SvgGenImage('assets/icons/ic_playlist_stop.svg');
 
   /// File path: assets/icons/ic_point_shop_char1.svg
   SvgGenImage get icPointShopChar1 =>
@@ -217,6 +254,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_point_shop_char3.svg
   SvgGenImage get icPointShopChar3 =>
       const SvgGenImage('assets/icons/ic_point_shop_char3.svg');
+
+  /// File path: assets/icons/ic_question_mark.svg
+  SvgGenImage get icQuestionMark =>
+      const SvgGenImage('assets/icons/ic_question_mark.svg');
 
   /// File path: assets/icons/ic_rating_star.svg
   SvgGenImage get icRatingStar =>
@@ -251,6 +292,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/ic_star.svg
   SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
+
+  /// File path: assets/icons/ic_star01.svg
+  SvgGenImage get icStar01 => const SvgGenImage('assets/icons/ic_star01.svg');
 
   /// File path: assets/icons/ic_withdrawal.svg
   SvgGenImage get icWithdrawal =>
@@ -290,16 +334,27 @@ class $AssetsIconsGen {
     icDeeptypeStickerBook,
     icDeeptypeStickerClock,
     icDeeptypeStickerCloud,
+    icEraser,
+    icEraser01,
     icHeart,
     icLoginCharFront,
     icLoginCharTop,
     icMail,
+    icMaximise02,
     icMessage,
+    icPalette,
+    icPenTool,
+    icPencil,
+    icPencil01,
+    icPentool03,
     icPersonCount,
     icPhotoLibrary,
+    icPlaylistPlay,
+    icPlaylistStop,
     icPointShopChar1,
     icPointShopChar2,
     icPointShopChar3,
+    icQuestionMark,
     icRatingStar,
     icReadingChallengeChar1,
     icReadingChallengeChar2,
@@ -309,6 +364,7 @@ class $AssetsIconsGen {
     icReadingComplete,
     icScrap,
     icStar,
+    icStar01,
     icWithdrawal,
     kakao,
   ];

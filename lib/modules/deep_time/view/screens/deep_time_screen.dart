@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:book/common/components/button/cta_button_l1.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/common/utils/format_utils.dart';
 import 'package:book/gen/assets.gen.dart';
@@ -13,6 +11,7 @@ import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:book/modules/deep_time/view/widgets/playlist_button.dart';
 
 class DeepTimeScreen extends ConsumerWidget {
   const DeepTimeScreen({super.key});
@@ -58,46 +57,59 @@ class DeepTimeScreen extends ConsumerWidget {
       child: LayoutBuilder(builder: (context, constraints) {
         final timerSize = constraints.maxWidth * 0.7;
 
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-          child: Column(
-            children: [
-              SizedBox(height: screenHeight * 0.01),
-              _buildTodayTotalTime(state.todayTotalSeconds),
-              SizedBox(height: screenHeight * 0.05),
-              SizedBox(
-                width: timerSize,
-                height: timerSize,
-                child: Stack(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.none,
-                  children: [
-                    CircularTimer(size: timerSize),
-                    _buildTimeMarker('0', const Alignment(0, -1.25)),
-                    _buildTimeMarker('15', const Alignment(1.25, 0)),
-                    _buildTimeMarker('30', const Alignment(0, 1.25)),
-                    _buildTimeMarker('45', const Alignment(-1.25, 0)),
-                    TimerCharacter(status: status),
-                  ],
+        return Stack(alignment: Alignment.topCenter, children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // TODO: deprecate MediaQuery-based sizing.
+                SizedBox(height: screenHeight * 0.01),
+                _buildTodayTotalTime(state.todayTotalSeconds),
+                SizedBox(height: screenHeight * 0.05),
+                SizedBox(
+                  width: timerSize,
+                  height: timerSize,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.none,
+                    children: [
+                      CircularTimer(size: timerSize),
+                      _buildTimeMarker('0', const Alignment(0, -1.25)),
+                      _buildTimeMarker('15', const Alignment(1.25, 0)),
+                      _buildTimeMarker('30', const Alignment(0, 1.25)),
+                      _buildTimeMarker('45', const Alignment(-1.25, 0)),
+                      TimerCharacter(status: status),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.05),
-              if (displayDuration == Duration.zero)
-                _buildStatusText(status, displayDuration),
-              SizedBox(height: screenHeight * 0.002),
-              if (state.settingDuration > Duration.zero) ...[
-                const TimerControls(),
-                SizedBox(height: screenHeight * 0.00005),
+                SizedBox(height: screenHeight * 0.05),
+                if (displayDuration == Duration.zero)
+                  _buildStatusText(status, displayDuration),
+                SizedBox(height: screenHeight * 0.002),
+                if (state.settingDuration > Duration.zero) ...[
+                  const TimerControls(),
+                  SizedBox(height: screenHeight * 0.00005),
+                ],
+                _TimerDisplay(
+                  status: status,
+                  displayDuration: displayDuration,
+                ),
+                SizedBox(height: screenHeight * 0.02),
               ],
-              _TimerDisplay(
-                status: status,
-                displayDuration: displayDuration,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              CtaButtonL1(text: '플레이리스트', onPressed: () {}),
-            ],
+            ),
           ),
-        );
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: 26.0 + MediaQuery.of(context).viewPadding.bottom,
+              ),
+              child: PlaylistButton(),
+            ),
+          ),
+        ]);
       }),
     );
   }
