@@ -13,6 +13,6 @@ abstract class BookLogState with _$BookLogState {
     @Default([]) List<DiaryResponse> feeds,
     @Default(false) bool hasNext,
     @Default(-1) int nextCursor,
-    @Default(-1) int memberId,
+    int? memberId,
   }) = _BookLogState;
 }

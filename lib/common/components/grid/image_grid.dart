@@ -36,6 +36,7 @@ class ImageGrid extends StatelessWidget {
         final int totalRows = (imageUrls.length / crossAxisCount).ceil();
         return GridView.builder(
           controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
