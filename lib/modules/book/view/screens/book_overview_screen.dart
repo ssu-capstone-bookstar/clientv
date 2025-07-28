@@ -1,8 +1,12 @@
+import 'package:book/common/components/grid/async_Image_grid_view.dart';
 import 'package:book/common/theme/app_style.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book/model/book_overview_response.dart';
+import 'package:book/modules/reading_diary/model/related_diary_sort.dart';
+import 'package:book/modules/reading_diary/model/related_diary_thumbnail.dart';
 import 'package:book/modules/reading_diary/view_model/related_diaries_view_model.dart';
+import 'package:book/modules/reading_diary/view_model/related_diary_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -24,63 +28,94 @@ class BookOverviewScreen extends ConsumerStatefulWidget {
 
 class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
   final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+  DateTime? _lastBottomReachedTime;
+
   double currentRating = 3.0;
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    _setupScrollListener();
+  }
+
+  void _setupScrollListener() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent * 0.8 &&
+          !_isLoadingMore) {
+        _onBottomReached();
+      }
+    });
+  }
+
+  Future<void> _onBottomReached() async {
+    final now = DateTime.now();
+    // 디바운싱: 마지막 호출로부터 2초가 지나지 않았으면 무시
+    if (_lastBottomReachedTime != null &&
+        now.difference(_lastBottomReachedTime!).inSeconds < 2) {
+      return;
+    }
+    // 이미 로딩 중이면 무시
+    if (_isLoadingMore) {
+      return;
+    }
+    _lastBottomReachedTime = now;
+    _isLoadingMore = true;
+    // 실제 로딩 로직 실행
+    await ref
+        .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
+        .fetchNextPage();
+    _isLoadingMore = false;
+  }
+
+  // void _updateRating(double rating) {
+  //   setState(() {
+  //     currentRating = rating;
+  //   });
+  // }
+
+  void _onLike() {
+    ref
+        .read(bookOverviewViewModelProvider(widget.bookId).notifier)
+        .handleOverviewLike();
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
-      ref
-          .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
-          .fetchNextPage();
-    }
-  }
-
-  void _updateRating(double rating) {
-    setState(() {
-      currentRating = rating;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final bookState = ref.watch(bookOverviewViewModelProvider(widget.bookId));
-
+    final bookOverviewAsync =
+        ref.watch(bookOverviewViewModelProvider(widget.bookId));
+    final relatedDiariesAsync =
+        ref.watch(relatedDiariesViewModelProvider(widget.bookId));
+    final currentSort = ref.watch(relatedDiarySortStateProvider);
     return Scaffold(
-        body: bookState.when(
-      data: (book) {
-        return CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: 516,
-              automaticallyImplyLeading: false,
-              flexibleSpace: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      ..._buildBackgroundImage(book.cover),
-                      // Content
-                      Positioned(
-                        top: AppSizes.APP_BAR_HEIGHT,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
+        body: bookOverviewAsync.when(
+      data: (bookOverview) => relatedDiariesAsync.when(
+        data: (relatedDiaries) {
+          return CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                expandedHeight: 516,
+                automaticallyImplyLeading: false,
+                flexibleSpace: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        ..._buildBackgroundImage(bookOverview.overview.cover),
+                        Positioned(
+                          top: AppSizes.APP_BAR_HEIGHT,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,40 +123,44 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ..._buildAppBarTopSection(context, book)
+                                  ..._buildAppBarTopSection(
+                                      context, bookOverview.overview,
+                                      onLike: _onLike)
                                 ],
                               ),
-                              _buildAppBarBottomSection(
-                                  initialRating: currentRating,
-                                  updateRating: _updateRating)
+
+                              /// TODO: 별점 API 적용
+                              // _buildAppBarBottomSection(
+                              //     initialRating: currentRating,
+                              //     updateRating: _updateRating)
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(16.0),
-            //     child: Text(
-            //       '본문 내용',
-            //       style: TextStyle(fontSize: 18),
-            //     ),
-            //   ),
-            // ),
-            // // SliverToBoxAdapter(
-            // //   child: Padding(
-            // //     padding: const EdgeInsets.symmetric(horizontal: 16),
-            // //     child: BookInfoWidget(book: book),
-            // //   ),
-            // // ),
-            // // RelatedDiariesWidget(bookId: widget.bookId),
-          ],
-        );
-      },
+              SliverToBoxAdapter(
+                  child: SizedBox(
+                height: 60,
+              )),
+              SliverToBoxAdapter(
+                child: _buildRelationDiary(
+                  list: relatedDiaries.diaries,
+                  hasNext: relatedDiaries.hasNext,
+                  currentSort: currentSort,
+                  onToggle: () {
+                    ref.read(relatedDiarySortStateProvider.notifier).toggle();
+                  },
+                ),
+              )
+            ],
+          );
+        },
+        loading: _loading,
+        error: _error("관련 게시물 정보를 불러올 수 없습니다."),
+      ),
       loading: _loading,
       error: _error("북 상세 정보를 불러올 수 없습니다."),
     ));
@@ -143,7 +182,8 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
   }
 
   List<Widget> _buildAppBarTopSection(
-      BuildContext context, BookOverviewResponse book) {
+      BuildContext context, BookOverviewResponse book,
+      {required Function() onLike}) {
     return [
       BackButton(
         color: ColorName.w1,
@@ -184,7 +224,11 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                 ],
               ),
               // TODO: 좋아요 버튼
-              Assets.icons.icHeart.svg(width: 24, height: 24)
+              InkWell(
+                  onTap: onLike,
+                  child: book.liked
+                      ? Assets.icons.icHeartFilled.svg(width: 24, height: 24)
+                      : Assets.icons.icHeart.svg(width: 24, height: 24))
             ],
           ),
           SizedBox(
@@ -291,6 +335,52 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
       ),
     );
   }
+
+  Widget _buildRelationDiary(
+          {required List<RelatedDiaryThumbnail> list,
+          required bool hasNext,
+          required RelatedDiarySort currentSort,
+          required Function() onToggle}) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("관련 게시물", style: AppTexts.b3.copyWith(color: ColorName.w1)),
+            SizedBox(height: 3),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "북스타 유저들이 공유한 관련 게시물을 확인해 보세요",
+                  style: AppTexts.b10.copyWith(color: ColorName.g2),
+                ),
+                GestureDetector(
+                  onTap: onToggle,
+                  child: Row(
+                    children: [
+                      Text(
+                        currentSort == RelatedDiarySort.LATEST ? '최신순' : '인기순',
+                        style: AppTexts.b10.copyWith(color: ColorName.g3),
+                      ),
+                      Assets.icons.icArrowUpDown.svg(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            AsyncImageGridView<RelatedDiaryState, RelatedDiaryThumbnail>(
+              asyncValue: AsyncValue.data(RelatedDiaryState(diaries: list)),
+              getItems: (state) => state.diaries,
+              getImageUrl: (diary) => diary.firstImage.imageUrl,
+              hasNext: hasNext,
+              emptyText: '관련 독서일기가 없습니다.',
+              errorText: '게시물을 불러올 수 없습니다.',
+            ),
+          ],
+        ),
+      );
 
   Widget _loading() => const Center(child: CircularProgressIndicator());
   Widget Function(Object, StackTrace) _error(String msg) => (e, st) =>

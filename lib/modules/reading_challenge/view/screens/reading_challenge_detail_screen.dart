@@ -91,7 +91,7 @@ class _ReadingChallengeDetailScreenState
                 spacing: 15,
                 children: [
                   bookState.when(
-                    data: (book) => BookInfoWidget(book: book),
+                    data: (book) => BookInfoWidget(book: book.overview),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                     error: (error, stack) =>
@@ -115,12 +115,12 @@ class _ReadingChallengeDetailScreenState
             text: '리딩 챌린지 진행하기',
             onPressed: () {
               final bookForRoute = SearchBookResponse(
-                bookId: book.id,
-                title: book.title,
-                author: book.author,
-                bookCover: book.cover,
-                pubDate: book.publishedDate,
-                publisher: book.publisher,
+                bookId: book.overview.id,
+                title: book.overview.title,
+                author: book.overview.author,
+                bookCover: book.overview.cover,
+                pubDate: book.overview.publishedDate,
+                publisher: book.overview.publisher,
               );
               context.push(
                 '/reading-challenge/start-and-end',

@@ -7,7 +7,7 @@ part of 'book_overview_view_model.dart';
 // **************************************************************************
 
 String _$bookOverviewViewModelHash() =>
-    r'acb9ddcb074540a63902ff1a2985f7474fb7461c';
+    r'4346cf74f65baff19def8be4b5e27842f598eae7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$BookOverviewViewModel
-    extends BuildlessAutoDisposeAsyncNotifier<BookOverviewResponse> {
+    extends BuildlessAutoDisposeAsyncNotifier<BookOverviewState> {
   late final int bookId;
 
-  FutureOr<BookOverviewResponse> build(
+  FutureOr<BookOverviewState> build(
     int bookId,
   );
 }
@@ -45,7 +45,7 @@ const bookOverviewViewModelProvider = BookOverviewViewModelFamily();
 
 /// See also [BookOverviewViewModel].
 class BookOverviewViewModelFamily
-    extends Family<AsyncValue<BookOverviewResponse>> {
+    extends Family<AsyncValue<BookOverviewState>> {
   /// See also [BookOverviewViewModel].
   const BookOverviewViewModelFamily();
 
@@ -85,7 +85,7 @@ class BookOverviewViewModelFamily
 /// See also [BookOverviewViewModel].
 class BookOverviewViewModelProvider
     extends AutoDisposeAsyncNotifierProviderImpl<BookOverviewViewModel,
-        BookOverviewResponse> {
+        BookOverviewState> {
   /// See also [BookOverviewViewModel].
   BookOverviewViewModelProvider(
     int bookId,
@@ -116,7 +116,7 @@ class BookOverviewViewModelProvider
   final int bookId;
 
   @override
-  FutureOr<BookOverviewResponse> runNotifierBuild(
+  FutureOr<BookOverviewState> runNotifierBuild(
     covariant BookOverviewViewModel notifier,
   ) {
     return notifier.build(
@@ -142,7 +142,7 @@ class BookOverviewViewModelProvider
 
   @override
   AutoDisposeAsyncNotifierProviderElement<BookOverviewViewModel,
-      BookOverviewResponse> createElement() {
+      BookOverviewState> createElement() {
     return _BookOverviewViewModelProviderElement(this);
   }
 
@@ -163,14 +163,14 @@ class BookOverviewViewModelProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin BookOverviewViewModelRef
-    on AutoDisposeAsyncNotifierProviderRef<BookOverviewResponse> {
+    on AutoDisposeAsyncNotifierProviderRef<BookOverviewState> {
   /// The parameter `bookId` of this provider.
   int get bookId;
 }
 
 class _BookOverviewViewModelProviderElement
     extends AutoDisposeAsyncNotifierProviderElement<BookOverviewViewModel,
-        BookOverviewResponse> with BookOverviewViewModelRef {
+        BookOverviewState> with BookOverviewViewModelRef {
   _BookOverviewViewModelProviderElement(super.provider);
 
   @override
