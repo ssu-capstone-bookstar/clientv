@@ -1,11 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'liked_diary_thumbnail_response.freezed.dart';
 part 'liked_diary_thumbnail_response.g.dart';
 
 @freezed
-class LikedDiaryThumbnailResponse with _$LikedDiaryThumbnailResponse {
+abstract class LikedDiaryThumbnailResponse with _$LikedDiaryThumbnailResponse {
   const factory LikedDiaryThumbnailResponse({
     required StatusResponse statusResponse,
     required LikedDiaryThumbnailData data,
@@ -16,7 +15,7 @@ class LikedDiaryThumbnailResponse with _$LikedDiaryThumbnailResponse {
 }
 
 @freezed
-class StatusResponse with _$StatusResponse {
+abstract class StatusResponse with _$StatusResponse {
   const factory StatusResponse({
     required String resultCode,
     required String resultMessage,
@@ -27,7 +26,7 @@ class StatusResponse with _$StatusResponse {
 }
 
 @freezed
-class LikedDiaryThumbnailData with _$LikedDiaryThumbnailData {
+abstract class LikedDiaryThumbnailData with _$LikedDiaryThumbnailData {
   const factory LikedDiaryThumbnailData({
     required List<LikedDiaryThumbnail> data,
     required int nextCursor,
@@ -39,7 +38,7 @@ class LikedDiaryThumbnailData with _$LikedDiaryThumbnailData {
 }
 
 @freezed
-class LikedDiaryThumbnail with _$LikedDiaryThumbnail {
+abstract class LikedDiaryThumbnail with _$LikedDiaryThumbnail {
   const factory LikedDiaryThumbnail({
     required int diaryLikeId,
     required int diaryId,
@@ -51,7 +50,7 @@ class LikedDiaryThumbnail with _$LikedDiaryThumbnail {
 }
 
 @freezed
-class DiaryImage with _$DiaryImage {
+abstract class DiaryImage with _$DiaryImage {
   const factory DiaryImage({
     required String imageUrl,
   }) = _DiaryImage;
