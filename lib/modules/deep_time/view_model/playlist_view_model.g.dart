@@ -8,9 +8,7 @@ part of 'playlist_view_model.dart';
 
 String _$audioPlayerHash() => r'b93f5254acea43acaaed34a3606e66a77674fb80';
 
-/// Audio Player Provider
-///
-/// Copied from [audioPlayer].
+/// See also [audioPlayer].
 @ProviderFor(audioPlayer)
 final audioPlayerProvider = AutoDisposeProvider<AudioPlayer>.internal(
   audioPlayer,
@@ -26,9 +24,7 @@ final audioPlayerProvider = AutoDisposeProvider<AudioPlayer>.internal(
 typedef AudioPlayerRef = AutoDisposeProviderRef<AudioPlayer>;
 String _$playlistHash() => r'c8f8b034b614c1b6e557386a1ad82c7ba32e0954';
 
-/// Playlist Provider (derived from MusicListViewModel)
-///
-/// Copied from [playlist].
+/// See also [playlist].
 @ProviderFor(playlist)
 final playlistProvider = AutoDisposeProvider<List<MusicItem>>.internal(
   playlist,
@@ -63,9 +59,7 @@ typedef _$SelectedMusic = AutoDisposeNotifier<MusicItem?>;
 String _$musicListViewModelHash() =>
     r'87539fafd220ac573ef7ba563fd01df6c1d8e91d';
 
-/// Music List ViewModel - async fetch & refresh
-///
-/// Copied from [MusicListViewModel].
+/// See also [MusicListViewModel].
 @ProviderFor(MusicListViewModel)
 final musicListViewModelProvider = AutoDisposeAsyncNotifierProvider<
     MusicListViewModel, MusicListResponse>.internal(

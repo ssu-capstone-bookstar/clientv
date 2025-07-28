@@ -54,16 +54,16 @@ class $AssetsFontsGen {
 
   /// List of all assets
   List<String> get values => [
-        pretendardBlack,
-        pretendardBold,
-        pretendardExtraBold,
-        pretendardExtraLight,
-        pretendardLight,
-        pretendardMedium,
-        pretendardRegular,
-        pretendardSemiBold,
-        pretendardThin,
-      ];
+    pretendardBlack,
+    pretendardBold,
+    pretendardExtraBold,
+    pretendardExtraLight,
+    pretendardLight,
+    pretendardMedium,
+    pretendardRegular,
+    pretendardSemiBold,
+    pretendardThin,
+  ];
 }
 
 class $AssetsIconsGen {
@@ -388,7 +388,6 @@ class $AssetsIconsGen {
     icWithdrawal,
     kakao,
   ];
-
 }
 
 class $AssetsImagesGen {
@@ -448,13 +447,13 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/nav_reading_challenge_selected@3x.png
   AssetGenImage get navReadingChallengeSelected3x => const AssetGenImage(
-        'assets/images/nav_reading_challenge_selected@3x.png',
-      );
+    'assets/images/nav_reading_challenge_selected@3x.png',
+  );
 
   /// File path: assets/images/nav_reading_challenge_unselected@3x.png
   AssetGenImage get navReadingChallengeUnselected3x => const AssetGenImage(
-        'assets/images/nav_reading_challenge_unselected@3x.png',
-      );
+    'assets/images/nav_reading_challenge_unselected@3x.png',
+  );
 
   /// File path: assets/images/sample_book.jpg
   AssetGenImage get sampleBook =>
@@ -466,24 +465,24 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        heroBookPick3x,
-        heroLookForward3x,
-        heroLookUp3x,
-        icSearchColored3x,
-        icSearchUncolored3x,
-        navBookLogSelected3x,
-        navBookLogUnselected3x,
-        navBookPickSelected3x,
-        navBookPickUnselected3x,
-        navBookTalkSelected3x,
-        navBookTalkUnselected3x,
-        navDeepTimeSelected3x,
-        navDeepTimeUnselected3x,
-        navReadingChallengeSelected3x,
-        navReadingChallengeUnselected3x,
-        sampleBook,
-        speechBubble,
-      ];
+    heroBookPick3x,
+    heroLookForward3x,
+    heroLookUp3x,
+    icSearchColored3x,
+    icSearchUncolored3x,
+    navBookLogSelected3x,
+    navBookLogUnselected3x,
+    navBookPickSelected3x,
+    navBookPickUnselected3x,
+    navBookTalkSelected3x,
+    navBookTalkUnselected3x,
+    navDeepTimeSelected3x,
+    navDeepTimeUnselected3x,
+    navReadingChallengeSelected3x,
+    navReadingChallengeUnselected3x,
+    sampleBook,
+    speechBubble,
+  ];
 }
 
 class Assets {
@@ -567,10 +566,10 @@ class AssetGenImage {
 
 class SvgGenImage {
   const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
-      : _isVecFormat = false;
+    : _isVecFormat = false;
 
   const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
-      : _isVecFormat = true;
+    : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -624,7 +623,8 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter: colorFilter ??
+      colorFilter:
+          colorFilter ??
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
