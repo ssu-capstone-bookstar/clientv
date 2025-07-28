@@ -41,6 +41,10 @@ class BookPickViewModel extends _$BookPickViewModel {
     return state.value ?? BookPickState();
   }
 
+  Future<void> watchYoutubeVideo(String videoId) async {
+    await _bookPickRepository.watchYoutubeVideo(videoId: videoId);
+  }
+
   FutureOr<BookPickState> refreshLikeBooks() async {
     final prev = state.value ?? BookPickState();
     if (prev.nextCursor != -1) {

@@ -9,6 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_pick_view_model.dart';
@@ -81,6 +82,17 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
     await ref.read(bookPickViewModelProvider.notifier).getOtherRecommend();
   }
 
+  void _launchYouTube(String videoId) async {
+    final url = 'https://www.youtube.com/watch?v=$videoId';
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await ref.read(bookPickViewModelProvider.notifier).watchYoutubeVideo(videoId);
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -112,12 +124,14 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
                     currentIndex: _currentIndex,
                     updateIndex: _updateIndex,
                     onItemTap: (index) {
-                      // TODO
-                      print("onItemTap: $index");
+                      final videoId =
+                          bookPickState.youtubeRecommends[index].videoId;
+                      _launchYouTube(videoId);
                     },
                     onDirectShow: () {
-                      // TODO
-                      print("onDirectShow: $_currentIndex");
+                      final videoId = bookPickState
+                          .youtubeRecommends[_currentIndex].videoId;
+                      _launchYouTube(videoId);
                     },
                     onOtherRecommend: _otherRecommend,
                   ),
@@ -165,72 +179,74 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
       );
 
   Widget _buildYoutubeBook(
-      {required BuildContext ctx,
-      required List<YoutubeRecommendResponse> list,
-      required int currentIndex,
-      required Function(int) updateIndex,
-      required Function(int) onItemTap,
-      required Function() onDirectShow,
-      required Function() onOtherRecommend}) =>
-    Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: List.generate(
-            list.length,
-            (index) => AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: currentIndex == index ? 20 : 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: currentIndex == index
-                    ? ColorName.p1 // 활성화된 인디케이터 색상
-                    : ColorName.g7, // 비활성화된 인디케이터 색상
-                borderRadius: BorderRadius.circular(4),
+          {required BuildContext ctx,
+          required List<YoutubeRecommendResponse> list,
+          required int currentIndex,
+          required Function(int) updateIndex,
+          required Function(int) onItemTap,
+          required Function() onDirectShow,
+          required Function() onOtherRecommend}) =>
+      Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: List.generate(
+              list.length,
+              (index) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: currentIndex == index ? 20 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: currentIndex == index
+                      ? ColorName.p1 // 활성화된 인디케이터 색상
+                      : ColorName.g7, // 비활성화된 인디케이터 색상
+                  borderRadius: BorderRadius.circular(4),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        CarouselSlider.builder(
-            itemCount: list.length,
-            options: CarouselOptions(
-              height: 240,
-              enlargeCenterPage: true,
-              aspectRatio: 2.0,
-              onPageChanged: (index, reason) {
-                updateIndex(index);
-              },
-            ),
-            itemBuilder: (BuildContext context, int index, int pageViewIndex) {
-              final item = list[index];
-              return YoutubeItem(item: item, onItemTap: () => onItemTap(index));
-            }),
-        SizedBox(
-          height: 45,
-        ),
-        _buildActionButton(
-          ctx,
-          '바로 보기',
-          ColorName.p1,
-          AppTexts.b7.copyWith(color: ColorName.w1),
-          onDirectShow,
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        _buildActionButton(
-          ctx,
-          '다른 추천 받기',
-          ColorName.g7,
-          AppTexts.b7.copyWith(color: ColorName.w1),
-          onOtherRecommend,
-        ),
-      ],
-    );
+          SizedBox(
+            height: 30,
+          ),
+          CarouselSlider.builder(
+              itemCount: list.length,
+              options: CarouselOptions(
+                height: 240,
+                enlargeCenterPage: true,
+                aspectRatio: 2.0,
+                onPageChanged: (index, reason) {
+                  updateIndex(index);
+                },
+              ),
+              itemBuilder:
+                  (BuildContext context, int index, int pageViewIndex) {
+                final item = list[index];
+                return YoutubeItem(
+                    item: item, onItemTap: () => onItemTap(index));
+              }),
+          SizedBox(
+            height: 45,
+          ),
+          _buildActionButton(
+            ctx,
+            '바로 보기',
+            ColorName.p1,
+            AppTexts.b7.copyWith(color: ColorName.w1),
+            onDirectShow,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          _buildActionButton(
+            ctx,
+            '다른 추천 받기',
+            ColorName.g7,
+            AppTexts.b7.copyWith(color: ColorName.w1),
+            onOtherRecommend,
+          ),
+        ],
+      );
 
   // 책픽
   // 내가 좋아요 누른 책 리스트

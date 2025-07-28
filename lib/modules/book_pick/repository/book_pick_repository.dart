@@ -31,7 +31,7 @@ abstract class BookPickRepository {
   Future<ResponseForm<List<YoutubeRecommendResponse>>> getYoutubeRecommend();
 
   @POST('/api/v2/youtube/watch/{videoId}')
-  Future<ResponseForm<void>> watchYoutubeVideo({
+  Future<void> watchYoutubeVideo({
     @Path('videoId') required String videoId,
   });
 }
