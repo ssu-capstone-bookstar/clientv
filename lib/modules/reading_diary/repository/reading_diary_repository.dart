@@ -1,3 +1,5 @@
+import 'package:book/modules/reading_diary/model/diary_update_request.dart';
+import 'package:book/modules/reading_diary/model/report_diary_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -33,6 +35,12 @@ abstract class ReadingDiaryRepository {
     @Body() DiaryRequest request,
   );
 
+  @PUT('/reading-diaries/{diaryId}')
+  Future<ResponseForm<DiaryResponse>> updateDiary(
+    @Path('diaryId') int diaryId,
+    @Body() DiaryUpdateRequest request,
+  );
+
   @DELETE('/reading-diaries/{diaryId}')
   Future<ResponseForm<dynamic>> deleteDiary(@Path('diaryId') int diaryId);
 
@@ -49,6 +57,14 @@ abstract class ReadingDiaryRepository {
   Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
       getReadingDiariesMembersFeed(
     @Path('memberId') int memberId, {
+    @Query('cursor') int? cursor, // 서버 명세에 따라 파라미터 이름이 다를 수 있음
+    @Query('size') int? size,
+  });
+
+  /// 팔로잉하는 사용자들의 독서일지를 최신순으로 조회합니다.
+  @GET('/reading-diaries/following/feed')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getReadingDiariesMembersFollowingFeed({
     @Query('cursor') int? cursor, // 서버 명세에 따라 파라미터 이름이 다를 수 있음
     @Query('size') int? size,
   });
@@ -77,6 +93,12 @@ abstract class ReadingDiaryRepository {
   @DELETE('/reading-diaries/{diaryId}/like')
   Future<ResponseForm<void>> unlikeDiary(@Path('diaryId') int diaryId);
 
+  @POST('/scraps/reading-diaries/{diaryId}')
+  Future<ResponseForm<void>> scrapDiary(@Path('diaryId') int diaryId);
+
+  @DELETE('/scraps/reading-diaries/{diaryId}')
+  Future<ResponseForm<void>> unscrapDiary(@Path('diaryId') int diaryId);
+
   @GET('/reading-diaries/me')
   Future<ResponseForm<CursorPageResponse<LikedDiaryResponse>>> getLikedDiaries({
     @Query('cursorId') int? cursorId,
@@ -101,6 +123,10 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
+  @POST('/report')
+  Future<ResponseForm<void>> reportDiary(
+    @Body() ReportDiaryRequest request,
+  );
   @GET('/books/{bookId}/my-reading-diaries/thumbnail')
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
       getMyRelatedDiaries(

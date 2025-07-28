@@ -1,4 +1,5 @@
 import 'package:book/modules/book_log/view/widgets/follow_button.dart';
+import 'package:book/modules/profile/model/profile_with_counts.dart';
 import 'package:flutter/material.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/common/theme/style/app_texts.dart';
@@ -6,24 +7,16 @@ import 'profile_stat.dart';
 import 'stat_divider.dart';
 import 'profile_edit_button.dart';
 
-class BookLogHeaderSection extends StatelessWidget {
-  final String profileImageUrl;
-  final String nickName;
-  final int diaryCount;
-  final int followingCount;
-  final int followerCount;
+class BookLogProfile extends StatelessWidget {
+  final ProfileWithCounts profile;
   final bool isMyProfile;
   final bool isFollowing;
   final VoidCallback? onEdit;
   final VoidCallback? onFollow;
   final Key? profileImageKey;
 
-  const BookLogHeaderSection({
-    required this.profileImageUrl,
-    required this.nickName,
-    required this.diaryCount,
-    required this.followingCount,
-    required this.followerCount,
+  const BookLogProfile({
+    required this.profile,
     this.isMyProfile = false,
     this.isFollowing = false,
     this.onEdit,
@@ -48,10 +41,10 @@ class BookLogHeaderSection extends StatelessWidget {
             child: CircleAvatar(
               key: profileImageKey,
               backgroundColor: ColorName.g7,
-              backgroundImage: profileImageUrl.isNotEmpty
-                  ? NetworkImage(profileImageUrl)
+              backgroundImage: profile.profileImageUrl.isNotEmpty
+                  ? NetworkImage(profile.profileImageUrl)
                   : null,
-              child: profileImageUrl.isEmpty
+              child: profile.profileImageUrl.isEmpty
                   ? const Icon(Icons.person, size: 40, color: ColorName.g5)
                   : null,
             ),
@@ -63,7 +56,7 @@ class BookLogHeaderSection extends StatelessWidget {
             height: 21,
             child: Center(
               child: Text(
-                '@$nickName',
+                '@${profile.nickName}',
                 style: AppTexts.b7.copyWith(color: ColorName.p1),
                 textAlign: TextAlign.center,
               ),
@@ -78,11 +71,11 @@ class BookLogHeaderSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ProfileStat(label: '게시물', value: diaryCount),
+                ProfileStat(label: '게시물', value: profile.diaryCount),
                 StatDivider(),
-                ProfileStat(label: '팔로잉', value: followingCount),
+                ProfileStat(label: '팔로잉', value: profile.followingCount),
                 StatDivider(),
-                ProfileStat(label: '팔로워', value: followerCount),
+                ProfileStat(label: '팔로워', value: profile.followerCount),
               ],
             ),
           ),

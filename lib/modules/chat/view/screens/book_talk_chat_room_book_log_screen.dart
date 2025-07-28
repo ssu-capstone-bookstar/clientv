@@ -1,7 +1,6 @@
-import 'package:book/modules/book_log/view/screens/book_log_screen.dart';
+import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class BookTalkChatRoomBookLogScreen extends ConsumerWidget {
   const BookTalkChatRoomBookLogScreen({super.key, required this.memberId});
@@ -11,16 +10,8 @@ class BookTalkChatRoomBookLogScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => context.pop(),
-          ),
-        ],
-      ),
-      body: BookLogScreen(
-        otherMemberId: memberId,
+      body: BookLogThumbnailScreen(
+        memberId: memberId,
       ),
     );
   }

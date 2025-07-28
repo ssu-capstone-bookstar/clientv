@@ -72,6 +72,10 @@ dev_dependencies:
   retrofit_generator: ^9.3.0
   flutter_gen_runner: ^5.10.0
 
+  # audio
+  audio_session: ^0.2.2
+  just_audio: ^0.10.4
+  
 dependency_overrides:
   build: '2.5.4'
 
