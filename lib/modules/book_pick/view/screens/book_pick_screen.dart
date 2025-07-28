@@ -171,8 +171,8 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
       required Function(int) updateIndex,
       required Function(int) onItemTap,
       required Function() onDirectShow,
-      required Function() onOtherRecommend}) {
-    return Column(
+      required Function() onOtherRecommend}) =>
+    Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -231,7 +231,6 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
         ),
       ],
     );
-  }
 
   // 책픽
   // 내가 좋아요 누른 책 리스트
