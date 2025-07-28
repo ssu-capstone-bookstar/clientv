@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../auth/view_model/auth_view_model.dart';
+import '../../../auth/view_model/auth_state.dart';
 
 import '../../../../common/components/button/cta_button_l1.dart';
 import '../../../../common/components/form/checkbox_2.dart';
@@ -13,19 +17,28 @@ import '../../../../gen/colors.gen.dart';
 import '../../../../gen/assets.gen.dart';
 import '../widgets/radio_button_1_static.dart';
 
-class DeleteAccountScreen extends StatefulWidget {
+class DeleteAccountScreen extends ConsumerStatefulWidget {
   const DeleteAccountScreen({super.key});
 
   @override
-  State<DeleteAccountScreen> createState() => _DeleteAccountScreenState();
+  ConsumerState<DeleteAccountScreen> createState() =>
+      _DeleteAccountScreenState();
 }
 
-class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
   bool isChecked = false;
   bool isDeleted = false;
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authViewModelProvider);
+    final isWithdrawCompleted = authState.when(
+      data: (data) => data is AuthWithdrawCompleted,
+      loading: () => false,
+      error: (e, t) => false,
+    );
+    final showCompletedUI = isDeleted || isWithdrawCompleted;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('회원 탈퇴'),
@@ -52,7 +65,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             padding: AppPaddings.SCREEN_BODY_PADDING,
             child: Column(
               children: [
-                isDeleted
+                showCompletedUI
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -130,7 +143,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               ],
             ),
           ),
-          if (isDeleted)
+          if (showCompletedUI)
             Align(
               alignment: Alignment.center,
               child: Assets.icons.icWithdrawal.svg(
@@ -138,7 +151,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 height: 137.0982208251953,
               ),
             ),
-          if (isDeleted)
+          if (showCompletedUI)
             Positioned(
               left: 14,
               right: 14,
@@ -160,22 +173,35 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
         child: CtaButtonL1(
-          text: isDeleted ? '로그인 하고 탈퇴 취소하기' : '탈퇴하기',
-          enabled: isDeleted ? true : isChecked,
-          onPressed: isDeleted
+          text: showCompletedUI ? '로그인 하고 탈퇴 취소하기' : '탈퇴하기',
+          enabled: showCompletedUI ? true : isChecked,
+          onPressed: showCompletedUI
               ? () {
                   GoRouter.of(context).go('/login');
                 }
               : isChecked
-                  ? () {
-                      setState(() {
-                        // TODO: 탈퇴 처리 로직 추가
-                        isDeleted = true;
-                      });
+                  ? () async {
+                      try {
+                        // 실제 탈퇴 API 호출
+                        await ref
+                            .read(authViewModelProvider.notifier)
+                            .withdraw();
+
+                        setState(() {
+                          isDeleted = true;
+                        });
+                      } catch (e) {
+                        // 에러 처리
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('탈퇴 처리 중 오류가 발생했습니다: $e')),
+                          );
+                        }
+                      }
                     }
                   : null,
-          backgroundColor: isDeleted ? ColorName.g7 : null,
-          borderColor: isDeleted ? ColorName.g6 : null,
+          backgroundColor: showCompletedUI ? ColorName.g7 : null,
+          borderColor: showCompletedUI ? ColorName.g6 : null,
         ),
       ),
     );

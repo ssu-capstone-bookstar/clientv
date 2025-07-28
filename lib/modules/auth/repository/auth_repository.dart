@@ -12,7 +12,7 @@ part 'auth_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(Ref ref) {
-  final dio = ref.watch(baseDioProvider);
+  final dio = ref.watch(dioClientProvider);
   return AuthRepository(dio);
 }
 
@@ -27,8 +27,10 @@ abstract class AuthRepository {
   Future<ResponseForm<void>> withdraw();
 
   @POST('/renew')
-  Future<ResponseForm<AuthResponse?>> renewToken(@Header('Authorization') String refreshToken);
+  Future<ResponseForm<AuthResponse?>> renewToken(
+      @Header('Authorization') String refreshToken);
 
   @POST('/login/accesstoken')
-  Future<ResponseForm<dynamic>> loginByAccessToken(@Header('Authorization') String accessToken);
+  Future<ResponseForm<dynamic>> loginByAccessToken(
+      @Header('Authorization') String accessToken);
 }

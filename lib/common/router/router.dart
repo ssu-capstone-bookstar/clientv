@@ -67,12 +67,18 @@ GoRouter router(Ref ref) {
       if (authState.value.unwrapPrevious().hasError) return '/login';
 
       final isAuthenticated = authState.value.requireValue is AuthSuccess;
+      final isWithdrawCompleted =
+          authState.value.requireValue is AuthWithdrawCompleted;
       final isLoginRoute = state.uri.path == '/login';
       // final isSplashRoute = state.uri.path == '/';
 
       // if (isSplashRoute) {
       //   return isAuthenticated ? '/book-pick' : '/login';
       // }
+
+      if (isWithdrawCompleted) {
+        return null;
+      }
 
       if (isLoginRoute && isAuthenticated) {
         return '/book-pick';

@@ -88,6 +88,16 @@ class AuthViewModel extends _$AuthViewModel {
     state = AsyncData(AuthIdle());
   }
 
+  Future<void> withdraw() async {
+    try {
+      await _authRepository.withdraw();
+      await _secureStorageRepository.deleteTokens();
+      state = AsyncData(AuthWithdrawCompleted());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> forceSignOut() async {
     print('=== FORCE SIGNOUT: Clearing all tokens ===');
     await _secureStorageRepository.deleteTokens();

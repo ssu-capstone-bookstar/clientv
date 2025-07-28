@@ -33,6 +33,8 @@ class AuthFailed extends AuthState {
 
 class AuthLoading extends AuthState {}
 
+class AuthWithdrawCompleted extends AuthState {}
+
 mixin class UserState {
   AuthState watchAuthState(WidgetRef ref) {
     final state = ref.watch(authViewModelProvider);
