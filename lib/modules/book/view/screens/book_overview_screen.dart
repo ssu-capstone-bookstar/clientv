@@ -31,8 +31,6 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
 
-  double currentRating = 3.0;
-
   @override
   void initState() {
     super.initState();
@@ -69,11 +67,11 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
     _isLoadingMore = false;
   }
 
-  // void _updateRating(double rating) {
-  //   setState(() {
-  //     currentRating = rating;
-  //   });
-  // }
+  Future<void> _updateStar(double rating) async {
+    await ref
+        .read(bookViewModelProvider(widget.bookId).notifier)
+        .handleOverviewStar(rating);
+  }
 
   void _onLike() {
     ref
@@ -90,6 +88,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     final bookAsync = ref.watch(bookViewModelProvider(widget.bookId));
+    final currentStar = bookAsync.valueOrNull?.overview.star ?? 0;
     final relatedDiariesAsync =
         ref.watch(relatedDiariesViewModelProvider(widget.bookId));
 
@@ -128,10 +127,9 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                                 ],
                               ),
 
-                              /// TODO: 별점 API 적용
-                              // _buildAppBarBottomSection(
-                              //     initialRating: currentRating,
-                              //     updateRating: _updateRating)
+                              _buildAppBarBottomSection(
+                                  initialStar: currentStar,
+                                  updateStar: _updateStar)
                             ],
                           ),
                         ),
@@ -303,8 +301,8 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
   }
 
   Widget _buildAppBarBottomSection({
-    required double initialRating,
-    required Function(double) updateRating,
+    required double initialStar,
+    required Function(double) updateStar,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
@@ -334,18 +332,18 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
               ),
               RatingBar.builder(
                 glowColor: Colors.transparent,
-                initialRating: initialRating,
+                initialRating: initialStar,
                 minRating: 0,
                 itemCount: 5,
                 itemSize: 25,
                 itemPadding: EdgeInsets.symmetric(horizontal: 2),
                 itemBuilder: (context, index) {
-                  if (index >= initialRating.floor()) {
+                  if (index >= initialStar.floor()) {
                     return Assets.icons.icRatingStar.svg(color: ColorName.g3);
                   }
                   return Assets.icons.icRatingStarFilled.svg();
                 },
-                onRatingUpdate: updateRating,
+                onRatingUpdate: updateStar,
               )
             ],
           ),

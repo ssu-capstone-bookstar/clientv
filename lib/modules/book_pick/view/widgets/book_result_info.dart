@@ -1,4 +1,7 @@
+import 'package:book/gen/assets.gen.dart';
+import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book/model/book_detail_response.dart';
+import 'package:book/modules/book_pick/view/widgets/book_icon_value_label.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/theme/app_style.dart';
@@ -81,20 +84,20 @@ class BookResultInfo extends StatelessWidget {
     return Row(
       spacing: 8,
       children: [
-        // BookIconValueLabel(
-        //   icon: Assets.icons.icStar.svg(width: 12.0, height: 12.0),
-        //   value: (4.5).toString(),
-        //   valueStyle: AppTexts.b8.copyWith(color: ColorName.p1),
-        //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-        //   decoration: BoxDecoration(
-        //     color: ColorName.g7,
-        //     borderRadius: BorderRadius.circular(20),
-        //     border: Border.all(color: ColorName.g6),
-        //   ),
-        // ),
+        BookIconValueLabel(
+          icon: Assets.icons.icStar.svg(width: 12.0, height: 12.0),
+          value: book.star.toString(),
+          valueStyle: AppTexts.b8.copyWith(color: ColorName.p1),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(
+            color: ColorName.g7,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: ColorName.g6),
+          ),
+        ),
         // BookIconValueLabel(
         //   icon: Assets.icons.icAddPick.svg(width: 12.0, height: 12.0),
-        //   value: (130).toString(),
+        //   value: book..toString(),
         //   valueStyle: AppTexts.b8.copyWith(color: ColorName.p1),
         //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         //   decoration: BoxDecoration(

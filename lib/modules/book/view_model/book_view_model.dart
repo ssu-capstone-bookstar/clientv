@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:book/modules/book/model/book_detail_response.dart';
+import 'package:book/modules/book/model/book_rating_request.dart';
 import 'package:book/modules/book/state/book_overview_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -64,6 +65,20 @@ class BookViewModel extends _$BookViewModel {
         ),
       );
     }
+    _cache[bookId] = state.value!;
+  }
+
+  Future<void> handleOverviewStar(double rating) async {
+    final prev = state.value ?? BookOverviewState();
+    await _bookRepository.rateBook(
+        prev.overview.id, BookRatingRequest(rating: rating));
+    state = AsyncValue.data(
+      prev.copyWith(
+        overview: prev.overview.copyWith(
+          star: rating,
+        ),
+      ),
+    );
     _cache[bookId] = state.value!;
   }
 }
