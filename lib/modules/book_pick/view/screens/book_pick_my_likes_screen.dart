@@ -27,6 +27,7 @@ class BookPickMyLikesScreen extends ConsumerStatefulWidget {
 
 class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
   final TextEditingController _textController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
@@ -78,6 +79,10 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
         .initLikeBooks(keyword: _textController.text);
   }
 
+    _hideKeyboard() {
+    _focusNode.unfocus();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -101,40 +106,46 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
           ),
         ),
         body: bookPickStateAsync.when(
-          data: (bookPickState) => RefreshIndicator(
-              onRefresh: _onRefresh,
-              child: Padding(
-                padding: AppPaddings.SCREEN_BODY_PADDING,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 15,
-                  children: [
-                    ..._buildSearchBook(
-                      textController: _textController,
-                      onTapSuffixIcon: _onRefresh,
-                    ),
-                    Expanded(
-                      child: BookCoverGridView<LikeBookState, LikeBookResponse>(
-                        asyncValue: AsyncValue.data(bookPickState.likeBook),
-                        itemBuilder: (book) => BookSearchResultCard(
-                          book: SearchBookResponse(
-                            bookId: book.bookId,
-                            title: book.title,
-                            bookCover: book.bookCover,
-                            pubDate: book.pubDate,
-                            author: book.author,
-                            publisher: book.publisher,
-                          ),
-                        ),
-                        listBuilder: (LikeBookState data) => data.likeBooks,
-                        hasNext: bookPickState.likeBook.hasNext,
-                        scrollController: _scrollController,
-                        crossAxisCount: 3,
+          data: (bookPickState) => GestureDetector(
+            onTap: () {
+              _hideKeyboard();
+            },
+            child: RefreshIndicator(
+                onRefresh: _onRefresh,
+                child: Padding(
+                  padding: AppPaddings.SCREEN_BODY_PADDING,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 15,
+                    children: [
+                      ..._buildSearchBook(
+                        textController: _textController,
+                        focusNode: _focusNode,
+                        onTapSuffixIcon: _onRefresh,
                       ),
-                    )
-                  ],
-                ),
-              )),
+                      Expanded(
+                        child: BookCoverGridView<LikeBookState, LikeBookResponse>(
+                          asyncValue: AsyncValue.data(bookPickState.likeBook),
+                          itemBuilder: (book) => BookSearchResultCard(
+                            book: SearchBookResponse(
+                              bookId: book.bookId,
+                              title: book.title,
+                              bookCover: book.bookCover,
+                              pubDate: book.pubDate,
+                              author: book.author,
+                              publisher: book.publisher,
+                            ),
+                          ),
+                          listBuilder: (LikeBookState data) => data.likeBooks,
+                          hasNext: bookPickState.likeBook.hasNext,
+                          scrollController: _scrollController,
+                          crossAxisCount: 3,
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+          ),
           loading: _loading,
           error: _error("책픽 정보를 불러올 수 없습니다."),
         ));
@@ -142,6 +153,7 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
 
   List<Widget> _buildSearchBook({
     required TextEditingController textController,
+    required FocusNode focusNode,
     required Function() onTapSuffixIcon,
   }) {
     return [
@@ -151,6 +163,7 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
       ),
       SearchTextField(
         controller: textController,
+        focusNode: focusNode,
         hintText: '찾고 싶은 책픽을 검색해 보세요',
         hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
         suffixIcon: textController.text.isNotEmpty
