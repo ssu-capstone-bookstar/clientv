@@ -3,36 +3,34 @@ import 'package:book/common/components/button/cta_button_l1.dart';
 import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:book/modules/book_log/model/book_log_models.dart';
+import 'package:book/modules/reading_challenge/model/challenge_response.dart';
+import 'package:book/modules/reading_challenge/state/abandoned_challenges_state.dart';
+import 'package:book/modules/reading_challenge/view_model/abandoned_challenges_view_model.dart';
 
-//TODO: abandoned_challenges_view_model.dart 참고해서 코드 수정 필요
-class ChallengeQuitBooksScreen extends StatefulWidget {
+class ChallengeQuitBooksScreen extends ConsumerStatefulWidget {
   const ChallengeQuitBooksScreen({super.key});
 
   @override
-  State<ChallengeQuitBooksScreen> createState() =>
+  ConsumerState<ChallengeQuitBooksScreen> createState() =>
       _ChallengeQuitBooksScreenState();
 }
 
-class _ChallengeQuitBooksScreenState extends State<ChallengeQuitBooksScreen> {
-  List<DummyBook> get books => dummyBooks;
-
-  // 각 도서별 체크 상태
-  late List<bool> checkedList;
-
+class _ChallengeQuitBooksScreenState
+    extends ConsumerState<ChallengeQuitBooksScreen> {
   @override
   void initState() {
     super.initState();
-    checkedList = List.generate(books.length, (_) => false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(abandonedChallengesViewModelProvider.notifier).initState();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // books 길이와 checkedList 길이 동기화
-    if (checkedList.length != books.length) {
-      checkedList = List.generate(books.length, (_) => false);
-    }
+    final state = ref.watch(abandonedChallengesViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('챌린지 중단 도서'),
@@ -49,68 +47,116 @@ class _ChallengeQuitBooksScreenState extends State<ChallengeQuitBooksScreen> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding:
-                AppPaddings.SCREEN_BODY_PADDING.copyWith(left: 0, right: 0),
-            child: ListView.builder(
-              itemCount: books.length,
-              itemBuilder: (context, index) {
-                final book = books[index];
-                return BookWithCheckbox(
-                  thumbnailUrl: book.imageUrl,
-                  title: book.title,
-                  author: book.author,
-                  lastReadAt: book.lastReadAt,
-                  checked: checkedList[index],
-                  onChanged: (v) {
-                    setState(() {
-                      checkedList[index] = v;
-                    });
-                  },
-                );
+      body: _buildBody(state),
+    );
+  }
+
+  Widget _buildBody(AbandonedChallengesState state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.errorMessage != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '오류가 발생했습니다',
+              style: TextStyle(color: ColorName.g3),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () {
+                ref
+                    .read(abandonedChallengesViewModelProvider.notifier)
+                    .initState();
               },
+              child: const Text('다시 시도'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (state.challenges.isEmpty) {
+      return const Center(
+        child: Text(
+          '중단된 챌린지가 없습니다.',
+          style: TextStyle(
+            color: ColorName.g7,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        Padding(
+          padding: AppPaddings.SCREEN_BODY_PADDING.copyWith(left: 0, right: 0),
+          child: ListView.builder(
+            itemCount: state.challenges.length,
+            itemBuilder: (context, index) {
+              final challenge = state.challenges[index];
+              final book = challenge.book;
+              return BookWithCheckbox(
+                thumbnailUrl: book.thumbnailUrl,
+                title: book.title,
+                author: book.author,
+                lastReadAt: challenge.lastReadAt?.toString() ?? '',
+                checked: state.checkedList[index],
+                onChanged: (v) {
+                  ref
+                      .read(abandonedChallengesViewModelProvider.notifier)
+                      .toggleCheck(index);
+                },
+              );
+            },
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CtaButtonL1(
+                  text: '다시 시작하기',
+                  enabled: state.checkedList.contains(true),
+                  onPressed: state.checkedList.contains(true)
+                      ? () async {
+                          await ref
+                              .read(
+                                  abandonedChallengesViewModelProvider.notifier)
+                              .restartSelectedChallenges();
+                        }
+                      : null,
+                ),
+                const SizedBox(height: 8),
+                CtaButtonL1(
+                  text: '삭제하기',
+                  enabled: state.checkedList.contains(true),
+                  onPressed: state.checkedList.contains(true)
+                      ? () async {
+                          await ref
+                              .read(
+                                  abandonedChallengesViewModelProvider.notifier)
+                              .deleteSelectedChallenges();
+                        }
+                      : null,
+                  backgroundColor: ColorName.g7,
+                  borderColor: ColorName.g6,
+                ),
+              ],
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CtaButtonL1(
-                    text: '다시 시작하기',
-                    enabled: checkedList.contains(true),
-                    onPressed: checkedList.contains(true)
-                        ? () {
-                            // TODO: 다시 시작하기 처리 로직 추가
-                            print('다시 시작하기 버튼 클릭됨');
-                          }
-                        : null,
-                  ),
-                  const SizedBox(height: 8),
-                  CtaButtonL1(
-                    text: '삭제하기',
-                    enabled: checkedList.contains(true),
-                    onPressed: checkedList.contains(true)
-                        ? () {
-                            // TODO: 삭제 처리 로직 추가
-                            print('삭제하기 버튼 클릭됨');
-                          }
-                        : null,
-                    backgroundColor: ColorName.g7,
-                    borderColor: ColorName.g6,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

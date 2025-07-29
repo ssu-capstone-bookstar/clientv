@@ -1,73 +1,98 @@
-import 'package:book/modules/reading_challenge/model/challenge_response.dart';
-import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'abandoned_challenges_view_model.freezed.dart';
-part 'abandoned_challenges_view_model.g.dart';
+import '../model/challenge_response.dart';
+import '../repository/reading_challenge_repository.dart';
+import '../state/abandoned_challenges_state.dart';
 
-@freezed
-abstract class AbandonedChallengesScreenState
-    with _$AbandonedChallengesScreenState {
-  const factory AbandonedChallengesScreenState({
-    @Default(AsyncData([])) AsyncValue<List<ChallengeResponse>> challenges,
-    @Default(false) bool isSelectionMode,
-    @Default({}) Set<int> selectedChallengeIds,
-  }) = _AbandonedChallengesScreenState;
-}
+part 'abandoned_challenges_view_model.g.dart';
 
 @riverpod
 class AbandonedChallengesViewModel extends _$AbandonedChallengesViewModel {
   @override
-  AbandonedChallengesScreenState build() {
-    Future.microtask(_fetchChallenges);
-    return const AbandonedChallengesScreenState();
+  AbandonedChallengesState build() {
+    return const AbandonedChallengesState();
   }
 
-  Future<void> _fetchChallenges() async {
-    state = state.copyWith(challenges: const AsyncLoading());
-    final repo = ref.read(readingChallengeRepositoryProvider);
+  Future<void> initState() async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
+      final repository = ref.read(readingChallengeRepositoryProvider);
+      final response = await repository.getAbandonedChallenges();
 
-    final challenges = await AsyncValue.guard(() async {
-      final res = await repo.getAbandonedChallenges();
-      return res.data;
-    });
+      final challenges = response.data;
+      final checkedList = List.generate(challenges.length, (_) => false);
 
-    state = state.copyWith(challenges: challenges);
-  }
-
-  void toggleSelectionMode() {
-    final newMode = !state.isSelectionMode;
-    state = state.copyWith(
-      isSelectionMode: newMode,
-      selectedChallengeIds: newMode ? state.selectedChallengeIds : {},
-    );
-  }
-
-  void toggleChallengeSelection(int challengeId) {
-    final newSelection = Set<int>.from(state.selectedChallengeIds);
-    if (newSelection.contains(challengeId)) {
-      newSelection.remove(challengeId);
-    } else {
-      newSelection.add(challengeId);
+      state = state.copyWith(
+        challenges: challenges,
+        checkedList: checkedList,
+        isLoading: false,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.toString(),
+      );
     }
-    state = state.copyWith(selectedChallengeIds: newSelection);
+  }
+
+  void toggleCheck(int index) {
+    final newCheckedList = List<bool>.from(state.checkedList);
+    newCheckedList[index] = !newCheckedList[index];
+    state = state.copyWith(checkedList: newCheckedList);
+  }
+
+  Future<void> restartSelectedChallenges() async {
+    final selectedIndices = <int>[];
+    for (int i = 0; i < state.checkedList.length; i++) {
+      if (state.checkedList[i]) {
+        selectedIndices.add(i);
+      }
+    }
+
+    if (selectedIndices.isEmpty) return;
+
+    try {
+      final repository = ref.read(readingChallengeRepositoryProvider);
+
+      // 선택된 챌린지들을 다시 시작
+      for (final index in selectedIndices) {
+        final challenge = state.challenges[index];
+        await repository.restartChallenge(challenge.challengeId);
+      }
+
+      // 성공 후 상태 초기화
+      await initState();
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
 
   Future<void> deleteSelectedChallenges() async {
-    final repo = ref.read(readingChallengeRepositoryProvider);
-    final idsToDelete = List<int>.from(state.selectedChallengeIds);
+    final selectedIndices = <int>[];
+    for (int i = 0; i < state.checkedList.length; i++) {
+      if (state.checkedList[i]) {
+        selectedIndices.add(i);
+      }
+    }
 
-    await Future.wait(
-      idsToDelete.map(
-        (id) => repo.deleteChallenge(id),
-      ),
-    );
+    if (selectedIndices.isEmpty) return;
 
-    state = state.copyWith(
-      selectedChallengeIds: {},
-      isSelectionMode: false,
-    );
-    ref.invalidateSelf();
+    try {
+      final repository = ref.read(readingChallengeRepositoryProvider);
+
+      // 선택된 챌린지들을 삭제
+      for (final index in selectedIndices) {
+        final challenge = state.challenges[index];
+        await repository.deleteChallenge(challenge.challengeId);
+      }
+
+      // 성공 후 상태 초기화
+      await initState();
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
   }
+
+  bool get hasSelectedItems => state.checkedList.contains(true);
 }

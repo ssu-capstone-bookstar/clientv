@@ -62,7 +62,7 @@ class OngoingChallengeViewModel extends _$OngoingChallengeViewModel {
     // TODO: 로딩 상태 처리
     await Future.wait(
       idsToDelete.map(
-        (id) => repo.deleteChallenge(id),
+        (id) => repo.abandonChallenge(id), // DELETE 대신 POST /abandon 사용
       ),
     );
 
