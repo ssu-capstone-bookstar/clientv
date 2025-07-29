@@ -1,6 +1,6 @@
 import 'package:book/modules/book_pick/model/like_book_response.dart';
 import 'package:book/modules/book_pick/model/like_book_state.dart';
-import 'package:book/modules/book_pick/view_model/book_pick_view_model.dart';
+import 'package:book/modules/book_pick/view_model/book_pick_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -70,13 +70,13 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
   }
 
   _refreshState() async {
-    await ref.read(bookPickViewModelProvider.notifier).refreshLikeBooks();
+    await ref.read(bookPickSearchViewModelProvider.notifier).refreshLikeBooks();
   }
 
   Future<void> _onRefresh() async {
     await ref
-        .read(bookPickViewModelProvider.notifier)
-        .initLikeBooks(keyword: _textController.text);
+        .read(bookPickSearchViewModelProvider.notifier)
+        .initLikeBooks(title: _textController.text);
   }
 
     _hideKeyboard() {
@@ -92,7 +92,7 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bookPickStateAsync = ref.watch(bookPickViewModelProvider);
+    final bookPickSearchStateAsync = ref.watch(bookPickSearchViewModelProvider);
 
     return Scaffold(
         appBar: PreferredSize(
@@ -105,8 +105,8 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
             leading: const BackButton(),
           ),
         ),
-        body: bookPickStateAsync.when(
-          data: (bookPickState) => GestureDetector(
+        body: bookPickSearchStateAsync.when(
+          data: (bookPickSearchState) => GestureDetector(
             onTap: () {
               _hideKeyboard();
             },
@@ -125,7 +125,7 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
                       ),
                       Expanded(
                         child: BookCoverGridView<LikeBookState, LikeBookResponse>(
-                          asyncValue: AsyncValue.data(bookPickState.likeBook),
+                          asyncValue: AsyncValue.data(bookPickSearchState.likeBook),
                           itemBuilder: (book) => BookSearchResultCard(
                             book: SearchBookResponse(
                               bookId: book.bookId,
@@ -137,7 +137,7 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
                             ),
                           ),
                           listBuilder: (LikeBookState data) => data.likeBooks,
-                          hasNext: bookPickState.likeBook.hasNext,
+                          hasNext: bookPickSearchState.likeBook.hasNext,
                           scrollController: _scrollController,
                           crossAxisCount: 3,
                         ),

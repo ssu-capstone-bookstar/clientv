@@ -66,7 +66,7 @@ class SearchTextField extends StatelessWidget {
           hintText: hintText,
           hintStyle: hintStyle,
           suffixIcon: GestureDetector(
-            onTap: controller?.text.isNotEmpty ?? false ? onTapSuffixIcon : null,
+            onTap: onTapSuffixIcon,
             child: suffixIcon,
           ),
           fillColor: backgroundColor,

@@ -25,8 +25,9 @@ abstract class BookPickRepository {
   Future<ResponseForm<CursorPageResponse<LikeBookResponse>>> getMyLikes({
     @Query('cursorId') int? cursorId,
     @Query('size') int? size,
-    @Query('keyword') String? keyword,
+    @Query('title') String? title,
   });
+
 
   @GET('/api/v2/youtube/recommend')
   Future<ResponseForm<List<YoutubeRecommendResponse>>> getYoutubeRecommend();

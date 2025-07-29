@@ -54,16 +54,16 @@ class $AssetsFontsGen {
 
   /// List of all assets
   List<String> get values => [
-        pretendardBlack,
-        pretendardBold,
-        pretendardExtraBold,
-        pretendardExtraLight,
-        pretendardLight,
-        pretendardMedium,
-        pretendardRegular,
-        pretendardSemiBold,
-        pretendardThin,
-      ];
+    pretendardBlack,
+    pretendardBold,
+    pretendardExtraBold,
+    pretendardExtraLight,
+    pretendardLight,
+    pretendardMedium,
+    pretendardRegular,
+    pretendardSemiBold,
+    pretendardThin,
+  ];
 }
 
 class $AssetsIconsGen {
@@ -324,74 +324,74 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
-        apple,
-        google,
-        icAddPick,
-        icArrowUpDown,
-        icBookpickChatCharacter,
-        icBookpickChatOption,
-        icBookpickChatOptionPicture,
-        icBookpickChatSendColored,
-        icBookpickChatSendDisabled,
-        icBookpickSearchCharacter,
-        icBooktalkSearchCharacter,
-        icCamera,
-        icCategoryArtHobby,
-        icCategoryBestseller,
-        icCategoryChildren,
-        icCategoryLiterature,
-        icCategoryScienceTech,
-        icCategorySocialSciences,
-        icChatNotification,
-        icCheck,
-        icDeeptypeCharBottom,
-        icDeeptypeCharBw,
-        icDeeptypeCharFront,
-        icDeeptypeFire,
-        icDeeptypeNotification1,
-        icDeeptypeNotification2,
-        icDeeptypeStickerBook,
-        icDeeptypeStickerClock,
-        icDeeptypeStickerCloud,
-        icEraser,
-        icEraser01,
-        icHeart,
-        icHeartFilled,
-        icLoginCharFront,
-        icLoginCharTop,
-        icMail,
-        icMaximise02,
-        icMenuMore,
-        icMessage,
-        icPalette,
-        icPenTool,
-        icPencil,
-        icPencil01,
-        icPentool03,
-        icPersonCount,
-        icPhotoLibrary,
-        icPlaylistPlay,
-        icPlaylistStop,
-        icPointShopChar1,
-        icPointShopChar2,
-        icPointShopChar3,
-        icQuestionMark,
-        icRatingStar,
-        icRatingStarFilled,
-        icReadingChallengeChar1,
-        icReadingChallengeChar2,
-        icReadingChallengeChar3,
-        icReadingChallengeCompleted,
-        icReadingChallengeNotCompleted,
-        icReadingComplete,
-        icScrap,
-        icScrapFilled,
-        icStar,
-        icStar01,
-        icUser,
-        icWithdrawal,
-        kakao,
-      ];
+    apple,
+    google,
+    icAddPick,
+    icArrowUpDown,
+    icBookpickChatCharacter,
+    icBookpickChatOption,
+    icBookpickChatOptionPicture,
+    icBookpickChatSendColored,
+    icBookpickChatSendDisabled,
+    icBookpickSearchCharacter,
+    icBooktalkSearchCharacter,
+    icCamera,
+    icCategoryArtHobby,
+    icCategoryBestseller,
+    icCategoryChildren,
+    icCategoryLiterature,
+    icCategoryScienceTech,
+    icCategorySocialSciences,
+    icChatNotification,
+    icCheck,
+    icDeeptypeCharBottom,
+    icDeeptypeCharBw,
+    icDeeptypeCharFront,
+    icDeeptypeFire,
+    icDeeptypeNotification1,
+    icDeeptypeNotification2,
+    icDeeptypeStickerBook,
+    icDeeptypeStickerClock,
+    icDeeptypeStickerCloud,
+    icEraser,
+    icEraser01,
+    icHeart,
+    icHeartFilled,
+    icLoginCharFront,
+    icLoginCharTop,
+    icMail,
+    icMaximise02,
+    icMenuMore,
+    icMessage,
+    icPalette,
+    icPenTool,
+    icPencil,
+    icPencil01,
+    icPentool03,
+    icPersonCount,
+    icPhotoLibrary,
+    icPlaylistPlay,
+    icPlaylistStop,
+    icPointShopChar1,
+    icPointShopChar2,
+    icPointShopChar3,
+    icQuestionMark,
+    icRatingStar,
+    icRatingStarFilled,
+    icReadingChallengeChar1,
+    icReadingChallengeChar2,
+    icReadingChallengeChar3,
+    icReadingChallengeCompleted,
+    icReadingChallengeNotCompleted,
+    icReadingComplete,
+    icScrap,
+    icScrapFilled,
+    icStar,
+    icStar01,
+    icUser,
+    icWithdrawal,
+    kakao,
+  ];
 }
 
 class $AssetsImagesGen {
@@ -451,13 +451,13 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/nav_reading_challenge_selected@3x.png
   AssetGenImage get navReadingChallengeSelected3x => const AssetGenImage(
-        'assets/images/nav_reading_challenge_selected@3x.png',
-      );
+    'assets/images/nav_reading_challenge_selected@3x.png',
+  );
 
   /// File path: assets/images/nav_reading_challenge_unselected@3x.png
   AssetGenImage get navReadingChallengeUnselected3x => const AssetGenImage(
-        'assets/images/nav_reading_challenge_unselected@3x.png',
-      );
+    'assets/images/nav_reading_challenge_unselected@3x.png',
+  );
 
   /// File path: assets/images/sample_book.jpg
   AssetGenImage get sampleBook =>
@@ -469,24 +469,24 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        heroBookPick3x,
-        heroLookForward3x,
-        heroLookUp3x,
-        icSearchColored3x,
-        icSearchUncolored3x,
-        navBookLogSelected3x,
-        navBookLogUnselected3x,
-        navBookPickSelected3x,
-        navBookPickUnselected3x,
-        navBookTalkSelected3x,
-        navBookTalkUnselected3x,
-        navDeepTimeSelected3x,
-        navDeepTimeUnselected3x,
-        navReadingChallengeSelected3x,
-        navReadingChallengeUnselected3x,
-        sampleBook,
-        speechBubble,
-      ];
+    heroBookPick3x,
+    heroLookForward3x,
+    heroLookUp3x,
+    icSearchColored3x,
+    icSearchUncolored3x,
+    navBookLogSelected3x,
+    navBookLogUnselected3x,
+    navBookPickSelected3x,
+    navBookPickUnselected3x,
+    navBookTalkSelected3x,
+    navBookTalkUnselected3x,
+    navDeepTimeSelected3x,
+    navDeepTimeUnselected3x,
+    navReadingChallengeSelected3x,
+    navReadingChallengeUnselected3x,
+    sampleBook,
+    speechBubble,
+  ];
 }
 
 class Assets {
@@ -570,10 +570,10 @@ class AssetGenImage {
 
 class SvgGenImage {
   const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
-      : _isVecFormat = false;
+    : _isVecFormat = false;
 
   const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
-      : _isVecFormat = true;
+    : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -627,7 +627,8 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter: colorFilter ??
+      colorFilter:
+          colorFilter ??
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
