@@ -176,10 +176,11 @@ class _ReadingDiaryUpdateScreenState
     );
   }
 
+  /// TODO: 이미지 수정 가능해지면, 이미지 추가 등도 다시 복귀
   Widget _buildImageSection() {
     final totalImageLength = uploadedImages.length + newImages.length;
 
-    return AspectRatio(
+    return totalImageLength == 0 ? const SizedBox() : AspectRatio(
       aspectRatio: 1,
       child: PageView.builder(
         controller: _pageController,
@@ -207,17 +208,17 @@ class _ReadingDiaryUpdateScreenState
                           ),
                           fit: BoxFit.contain,
                         ),
-                  Positioned(
-                    right: 40,
-                    child: InkWell(
-                      onTap: () =>
-                          PhotoSourceModal.show(context, onPick: _pickImages),
-                      child: const Center(
-                        child: Icon(Icons.add_photo_alternate,
-                            size: 24, color: ColorName.g1),
-                      ),
-                    ),
-                  ),
+                  // Positioned(
+                  //   right: 40,
+                  //   child: InkWell(
+                  //     onTap: () =>
+                  //         PhotoSourceModal.show(context, onPick: _pickImages),
+                  //     child: const Center(
+                  //       child: Icon(Icons.add_photo_alternate,
+                  //           size: 24, color: ColorName.g1),
+                  //     ),
+                  //   ),
+                  // ),
                   Positioned(
                     right: 8,
                     child: InkWell(
