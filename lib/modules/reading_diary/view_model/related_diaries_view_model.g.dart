@@ -7,7 +7,7 @@ part of 'related_diaries_view_model.dart';
 // **************************************************************************
 
 String _$relatedDiariesViewModelHash() =>
-    r'a1132b1ef4825a16d14e09fa7e4b68ec56ee99b0';
+    r'6c09f0ad1924462f4266615ed058e0cd731e3f26';
 
 /// Copied from Dart SDK
 class _SystemHash {

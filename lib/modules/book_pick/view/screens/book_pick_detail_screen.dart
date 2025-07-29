@@ -63,7 +63,7 @@ class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
     // 실제 로딩 로직 실행
     await ref
         .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
-        .fetchNextPage();
+        .refreshState();
     _isLoadingMore = false;
   }
 
@@ -109,8 +109,15 @@ class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
                       list: relatedDiaries.thumbnails,
                       hasNext: relatedDiaries.hasNext,
                       currentSort: relatedDiaries.sort,
-                      onToggle: () async  {
-                        ref.read(relatedDiariesViewModelProvider(widget.bookId).notifier).toggleSort();
+                      onToggle: () async {
+                        ref
+                            .read(relatedDiariesViewModelProvider(widget.bookId)
+                                .notifier)
+                            .toggleSort();
+                      },
+                      onItemTap: (index) {
+                        context.push('/book-log/related-feed/${widget.bookId}',
+                            extra: {'index': index});
                       },
                     ),
                   ],
@@ -150,7 +157,8 @@ class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
           {required List<RelatedDiaryThumbnail> list,
           required bool hasNext,
           required RelatedDiarySort currentSort,
-          required Function() onToggle}) =>
+          required Function() onToggle,
+          required Function(int) onItemTap}) =>
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -188,6 +196,7 @@ class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
               getItems: (state) => state.thumbnails,
               getImageUrl: (diary) => diary.firstImage.imageUrl,
               hasNext: hasNext,
+              onTap: onItemTap,
               emptyText: '관련 독서일기가 없습니다.',
               errorText: '게시물을 불러올 수 없습니다.',
             ),

@@ -1,4 +1,5 @@
 import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
+import 'package:book/modules/book_log/view/screens/book_related_feed_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_detail_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
@@ -161,6 +162,18 @@ GoRouter router(Ref ref) {
                       final index = extra['index'] as int;
                       return BookLogFeedScreen(
                           memberId: memberId, initialIndex: index);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'related-feed/:bookId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final bookId =
+                          int.parse(state.pathParameters['bookId']!);
+                      final extra = state.extra as Map<String, dynamic>;
+                      final index = extra['index'] as int;
+                      return BookRelatedFeedScreen(
+                          bookId: bookId, initialIndex: index);
                     },
                   ),
                   GoRoute(

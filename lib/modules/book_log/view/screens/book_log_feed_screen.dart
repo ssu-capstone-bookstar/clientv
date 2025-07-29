@@ -23,6 +23,7 @@ class BookLogFeedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(memberId));
+    final bookLogNotifier = ref.read(bookLogViewModelProvider(memberId).notifier);
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
     final userAsync = ref.watch(authViewModelProvider);
 
@@ -39,24 +40,18 @@ class BookLogFeedScreen extends ConsumerWidget {
                 ),
               ),
               body: BookLogFeedList(
-                bookLog: bookLog,
+                feeds: bookLog.feeds,
                 initialIndex: initialIndex,
                 onScrollBottom: () async {
-                  await ref
-                      .read(bookLogViewModelProvider(memberId).notifier)
-                      .refreshState();
+                  await bookLogNotifier.refreshState();
                 },
                 onRefresh: () async {
-                  await ref
-                      .read(bookLogViewModelProvider(memberId).notifier)
-                      .initState(memberId);
+                  await bookLogNotifier.initState(memberId);
                 },
                 onLike: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
-                  ref
-                      .read(bookLogViewModelProvider(memberId).notifier)
-                      .handleFeedLike(
-                          targetFeed.diaryId, targetFeed.liked, targetIndex);
+                  bookLogNotifier.handleFeedLike(
+                      targetFeed.diaryId, targetFeed.liked, targetIndex);
                 },
                 onMessage: (BuildContext ctx, int targetIndex) async {
                   final targetFeed = bookLog.feeds[targetIndex];
@@ -73,9 +68,7 @@ class BookLogFeedScreen extends ConsumerWidget {
 
                   int? commentCount = result?['commentCount'];
                   if (commentCount != null) {
-                    ref
-                        .read(bookLogViewModelProvider(memberId).notifier)
-                        .changeCommentCount(targetFeed.diaryId, commentCount);
+                    bookLogNotifier.changeCommentCount(targetFeed.diaryId, commentCount);
                   }
                 },
                 onDelete: (BuildContext ctx, int targetIndex) async {
@@ -86,9 +79,7 @@ class BookLogFeedScreen extends ConsumerWidget {
                       backgroundColor: Colors.transparent,
                       builder: (context) => DiaryFeedDeleteDialog());
                   if (result == true) {
-                    await ref
-                        .read(bookLogViewModelProvider(memberId).notifier)
-                        .deleteFeed(targetFeed.diaryId);
+                    await bookLogNotifier.deleteFeed(targetFeed.diaryId);
                   }
                 },
                 onReport: (BuildContext ctx, int targetIndex) async {
@@ -109,9 +100,7 @@ class BookLogFeedScreen extends ConsumerWidget {
                   String? content = result?['content'];
 
                   if (reportType == null || content == null) return;
-                  await ref
-                      .read(bookLogViewModelProvider(memberId).notifier)
-                      .reportFeed(targetFeed.diaryId, reportType, content);
+                  await bookLogNotifier.reportFeed(targetFeed.diaryId, reportType, content);
                   if (!ctx.mounted) return;
                   await showModalBottomSheet(
                       context: ctx,
@@ -129,10 +118,8 @@ class BookLogFeedScreen extends ConsumerWidget {
                 },
                 onScrap: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
-                  ref
-                      .read(bookLogViewModelProvider(memberId).notifier)
-                      .handleFeedScrap(
-                          targetFeed.diaryId, targetFeed.scraped, targetIndex);
+                  bookLogNotifier.handleFeedScrap(
+                      targetFeed.diaryId, targetFeed.scraped, targetIndex);
                 },
                 onUpdate: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];

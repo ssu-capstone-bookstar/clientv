@@ -3,6 +3,7 @@ import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_log/state/book_log_state.dart';
 import 'package:book/modules/book_log/view/widgets/feed_card.dart';
+import 'package:book/modules/reading_diary/model/diary_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -10,7 +11,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class BookLogFeedList extends ConsumerStatefulWidget {
   const BookLogFeedList(
       {super.key,
-      required this.bookLog,
+      required this.feeds,
       // required this.followInfo,
       this.initialIndex,
       required this.onScrollBottom,
@@ -22,7 +23,7 @@ class BookLogFeedList extends ConsumerStatefulWidget {
       required this.onClickProfile,
       required this.onScrap,
       required this.onUpdate});
-  final BookLogState bookLog;
+  final List<DiaryResponse> feeds;
   // final FollowInfoState followInfo;
   final int? initialIndex;
   final Future<void> Function() onScrollBottom;
@@ -87,7 +88,7 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
 
         /// 현재 보이는 아이템들 중 가장 마지막 아이템의 인덱스
         final lastVisibleIndex = visibleItems.reduce((a, b) => a > b ? a : b);
-        final totalItems = widget.bookLog.feeds.length;
+        final totalItems = widget.feeds.length;
         final threshold = (totalItems * 0.8).round();
         if (lastVisibleIndex >= threshold) {
           _onBottomReached();
@@ -123,7 +124,7 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
 
   @override
   Widget build(BuildContext context) {
-    final feeds = widget.bookLog.feeds;
+    final feeds = widget.feeds;
 
     return Scaffold(
       body: RefreshIndicator(

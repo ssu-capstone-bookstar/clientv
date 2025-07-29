@@ -65,7 +65,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
     // 실제 로딩 로직 실행
     await ref
         .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
-        .fetchNextPage();
+        .refreshState();
     _isLoadingMore = false;
   }
 
@@ -89,8 +89,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bookAsync =
-        ref.watch(bookViewModelProvider(widget.bookId));
+    final bookAsync = ref.watch(bookViewModelProvider(widget.bookId));
     final relatedDiariesAsync =
         ref.watch(relatedDiariesViewModelProvider(widget.bookId));
 
@@ -151,7 +150,14 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                   hasNext: relatedDiaries.hasNext,
                   currentSort: relatedDiaries.sort,
                   onToggle: () {
-                    ref.read(relatedDiariesViewModelProvider(widget.bookId).notifier).toggleSort();
+                    ref
+                        .read(relatedDiariesViewModelProvider(widget.bookId)
+                            .notifier)
+                        .toggleSort();
+                  },
+                  onItemTap: (index) {
+                    context.push('/book-log/related-feed/${widget.bookId}',
+                        extra: {'index': index});
                   },
                 ),
               )
@@ -352,7 +358,8 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
           {required List<RelatedDiaryThumbnail> list,
           required bool hasNext,
           required RelatedDiarySort currentSort,
-          required Function() onToggle}) =>
+          required Function() onToggle,
+          required Function(int) onItemTap}) =>
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -387,6 +394,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
               getItems: (state) => state.thumbnails,
               getImageUrl: (diary) => diary.firstImage.imageUrl,
               hasNext: hasNext,
+              onTap: onItemTap,
               emptyText: '관련 독서일기가 없습니다.',
               errorText: '게시물을 불러올 수 없습니다.',
             ),

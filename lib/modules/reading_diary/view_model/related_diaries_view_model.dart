@@ -1,4 +1,6 @@
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
+import 'package:book/modules/reading_diary/model/report_diary_request.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/dual_cursor_page_response.dart';
@@ -25,11 +27,11 @@ part 'related_diaries_view_model.g.dart';
 
 @riverpod
 class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
-  late ReadingDiaryRepository _repository;
+  late ReadingDiaryRepository _readingDiaryRepository;
 
   @override
   Future<RelatedDiaryState> build(int bookId) async {
-    _repository = ref.read(readingDiaryRepositoryProvider);
+    _readingDiaryRepository = ref.read(readingDiaryRepositoryProvider);
     return await initState(bookId, RelatedDiarySort.LATEST);
   }
 
@@ -56,15 +58,14 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
     int? cursorId,
     double? cursorScore,
   }) async {
-    print("cursorId: $cursorId, cursorScore: $cursorScore");
     final response = sort == RelatedDiarySort.LATEST
-        ? await _repository.getRelatedDiariesThumbnail(
+        ? await _readingDiaryRepository.getRelatedDiariesThumbnail(
             bookId,
             cursorId: cursorId,
             cursorScore: cursorScore,
             size: 18,
           )
-        : await _repository.getRelatedDiariesThumbnailPopular(
+        : await _readingDiaryRepository.getRelatedDiariesThumbnailPopular(
             bookId,
             cursorId: cursorId,
             cursorScore: cursorScore,
@@ -80,13 +81,13 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
     double? cursorScore,
   }) async {
     final response = sort == RelatedDiarySort.LATEST
-        ? await _repository.getRelatedDiariesFeed(
+        ? await _readingDiaryRepository.getRelatedDiariesFeed(
             bookId,
             cursorId: cursorId,
             cursorScore: cursorScore,
             size: 18,
           )
-        : await _repository.getRelatedDiariesFeedPopular(
+        : await _readingDiaryRepository.getRelatedDiariesFeedPopular(
             bookId,
             cursorId: cursorId,
             cursorScore: cursorScore,
@@ -95,7 +96,7 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
     return response.data;
   }
 
-  Future<void> fetchNextPage() async {
+  Future<void> refreshState() async {
     final prev = state.value ?? RelatedDiaryState();
 
     if (prev.hasNext) {
@@ -120,6 +121,82 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
         ),
       );
     }
+  }
+
+  Future<RelatedDiaryState> handleFeedLike(
+      int diaryId, bool liked, int index) async {
+    if (liked) {
+      await _readingDiaryRepository.unlikeDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.likeDiary(diaryId);
+    }
+    final prev = state.value ?? RelatedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            liked: !feed.liked,
+            likeCount: feed.liked ? feed.likeCount - 1 : feed.likeCount + 1,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? RelatedDiaryState();
+  }
+
+  Future<RelatedDiaryState> handleFeedScrap(
+      int diaryId, bool scraped, int index) async {
+    if (scraped) {
+      await _readingDiaryRepository.unscrapDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.scrapDiary(diaryId);
+    }
+    final prev = state.value ?? RelatedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            scraped: !feed.scraped,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? RelatedDiaryState();
+  }
+
+  RelatedDiaryState changeCommentCount(int diaryId, int commentCount) {
+    final prev = state.value ?? RelatedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            commentCount: commentCount,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? RelatedDiaryState();
+  }
+
+  Future<RelatedDiaryState> deleteFeed(int diaryId) async {
+    await _readingDiaryRepository.deleteDiary(diaryId);
+    final prev = state.value ?? RelatedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.where((feed) => feed.diaryId != diaryId).toList(),
+      thumbnails: prev.thumbnails
+          .where((thumbnail) => thumbnail.diaryId != diaryId)
+          .toList(),
+    ));
+    return state.value ?? RelatedDiaryState();
+  }
+
+  Future<void> reportFeed(
+      int diaryId, ReportType reportType, String content) async {
+    await _readingDiaryRepository.reportDiary(ReportDiaryRequest(
+        readingDiaryId: diaryId, reportType: reportType, content: content));
   }
 
   Future<void> toggleSort() async {
