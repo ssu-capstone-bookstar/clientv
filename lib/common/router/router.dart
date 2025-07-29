@@ -1,5 +1,7 @@
 import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
-import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
+import 'package:book/modules/book_log/view/screens/book_related_feed_screen.dart';
+import 'package:book/modules/book_pick/view/screens/book_pick_detail_screen.dart';
+import 'package:book/modules/book_pick/view/screens/book_pick_my_likes_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
@@ -173,6 +175,17 @@ GoRouter router(Ref ref) {
                     },
                   ),
                   GoRoute(
+                    path: 'related-feed/:bookId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final bookId = int.parse(state.pathParameters['bookId']!);
+                      final extra = state.extra as Map<String, dynamic>;
+                      final index = extra['index'] as int;
+                      return BookRelatedFeedScreen(
+                          bookId: bookId, initialIndex: index);
+                    },
+                  ),
+                  GoRoute(
                     path: 'profile',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const ProfileScreen(),
@@ -299,32 +312,38 @@ GoRouter router(Ref ref) {
                 builder: (context, state) => const BookPickScreen(),
                 routes: [
                   GoRoute(
-                    path: 'search',
+                      path: 'search',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (context, state) {
+                        final from = state.uri.queryParameters['from'];
+                        return BookPickSearchScreen(from: from);
+                      },
+                      routes: []),
+                  GoRoute(
+                      path: 'detail/:bookId',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (context, state) {
+                        final bookId =
+                            int.parse(state.pathParameters['bookId']!);
+                        return BookPickDetailScreen(bookId: bookId);
+                      },
+                      routes: [
+                        GoRoute(
+                          path: 'overview',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (context, state) {
+                            final bookId =
+                                int.parse(state.pathParameters['bookId']!);
+                            return BookOverviewScreen(bookId: bookId);
+                          },
+                        ),
+                      ]),
+                  GoRoute(
+                    path: 'my-likes',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      final from = state.uri.queryParameters['from'];
-                      return BookPickSearchScreen(from: from);
+                      return BookPickMyLikesScreen();
                     },
-                    routes: [
-                      GoRoute(
-                        path: 'book-overview/:bookId',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) {
-                          final bookId =
-                              int.parse(state.pathParameters['bookId']!);
-                          return BookOverviewScreen(bookId: bookId);
-                        },
-                      ),
-                      GoRoute(
-                        path: 'result/:bookId',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) {
-                          final book = state.extra as SearchBookResponse;
-
-                          return BookPickResultScreen(book: book);
-                        },
-                      ),
-                    ],
                   ),
                 ],
               ),

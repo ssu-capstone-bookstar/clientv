@@ -14,9 +14,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$BookDetailResponse {
-  int get id; // ignore: invalid_annotation_target
-  @JsonKey(name: 'aladingBookId')
-  int get aladinBookId;
+  int get id;
+  int get aladingBookId;
   String get title;
   String get author;
   String get isbn;
@@ -24,9 +23,9 @@ mixin _$BookDetailResponse {
   String get categoryName;
   String get description;
   String get publisher;
-  DateTime get publishedDate;
+  String get publishedDate;
   int get page;
-  int? get toc;
+  int get toc;
   String get imageUrl;
   double get star;
 
@@ -47,8 +46,8 @@ mixin _$BookDetailResponse {
         (other.runtimeType == runtimeType &&
             other is BookDetailResponse &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.aladinBookId, aladinBookId) ||
-                other.aladinBookId == aladinBookId) &&
+            (identical(other.aladingBookId, aladingBookId) ||
+                other.aladingBookId == aladingBookId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.isbn, isbn) || other.isbn == isbn) &&
@@ -73,7 +72,7 @@ mixin _$BookDetailResponse {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      aladinBookId,
+      aladingBookId,
       title,
       author,
       isbn,
@@ -89,7 +88,7 @@ mixin _$BookDetailResponse {
 
   @override
   String toString() {
-    return 'BookDetailResponse(id: $id, aladinBookId: $aladinBookId, title: $title, author: $author, isbn: $isbn, isbn13: $isbn13, categoryName: $categoryName, description: $description, publisher: $publisher, publishedDate: $publishedDate, page: $page, toc: $toc, imageUrl: $imageUrl, star: $star)';
+    return 'BookDetailResponse(id: $id, aladingBookId: $aladingBookId, title: $title, author: $author, isbn: $isbn, isbn13: $isbn13, categoryName: $categoryName, description: $description, publisher: $publisher, publishedDate: $publishedDate, page: $page, toc: $toc, imageUrl: $imageUrl, star: $star)';
   }
 }
 
@@ -101,7 +100,7 @@ abstract mixin class $BookDetailResponseCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'aladingBookId') int aladinBookId,
+      int aladingBookId,
       String title,
       String author,
       String isbn,
@@ -109,9 +108,9 @@ abstract mixin class $BookDetailResponseCopyWith<$Res> {
       String categoryName,
       String description,
       String publisher,
-      DateTime publishedDate,
+      String publishedDate,
       int page,
-      int? toc,
+      int toc,
       String imageUrl,
       double star});
 }
@@ -130,7 +129,7 @@ class _$BookDetailResponseCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? aladinBookId = null,
+    Object? aladingBookId = null,
     Object? title = null,
     Object? author = null,
     Object? isbn = null,
@@ -140,7 +139,7 @@ class _$BookDetailResponseCopyWithImpl<$Res>
     Object? publisher = null,
     Object? publishedDate = null,
     Object? page = null,
-    Object? toc = freezed,
+    Object? toc = null,
     Object? imageUrl = null,
     Object? star = null,
   }) {
@@ -149,9 +148,9 @@ class _$BookDetailResponseCopyWithImpl<$Res>
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      aladinBookId: null == aladinBookId
-          ? _self.aladinBookId
-          : aladinBookId // ignore: cast_nullable_to_non_nullable
+      aladingBookId: null == aladingBookId
+          ? _self.aladingBookId
+          : aladingBookId // ignore: cast_nullable_to_non_nullable
               as int,
       title: null == title
           ? _self.title
@@ -184,15 +183,15 @@ class _$BookDetailResponseCopyWithImpl<$Res>
       publishedDate: null == publishedDate
           ? _self.publishedDate
           : publishedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       page: null == page
           ? _self.page
           : page // ignore: cast_nullable_to_non_nullable
               as int,
-      toc: freezed == toc
+      toc: null == toc
           ? _self.toc
           : toc // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       imageUrl: null == imageUrl
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -300,7 +299,7 @@ extension BookDetailResponsePatterns on BookDetailResponse {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
             int id,
-            @JsonKey(name: 'aladingBookId') int aladinBookId,
+            int aladingBookId,
             String title,
             String author,
             String isbn,
@@ -308,9 +307,9 @@ extension BookDetailResponsePatterns on BookDetailResponse {
             String categoryName,
             String description,
             String publisher,
-            DateTime publishedDate,
+            String publishedDate,
             int page,
-            int? toc,
+            int toc,
             String imageUrl,
             double star)?
         $default, {
@@ -321,7 +320,7 @@ extension BookDetailResponsePatterns on BookDetailResponse {
       case _BookDetailResponse() when $default != null:
         return $default(
             _that.id,
-            _that.aladinBookId,
+            _that.aladingBookId,
             _that.title,
             _that.author,
             _that.isbn,
@@ -356,7 +355,7 @@ extension BookDetailResponsePatterns on BookDetailResponse {
   TResult when<TResult extends Object?>(
     TResult Function(
             int id,
-            @JsonKey(name: 'aladingBookId') int aladinBookId,
+            int aladingBookId,
             String title,
             String author,
             String isbn,
@@ -364,9 +363,9 @@ extension BookDetailResponsePatterns on BookDetailResponse {
             String categoryName,
             String description,
             String publisher,
-            DateTime publishedDate,
+            String publishedDate,
             int page,
-            int? toc,
+            int toc,
             String imageUrl,
             double star)
         $default,
@@ -376,7 +375,7 @@ extension BookDetailResponsePatterns on BookDetailResponse {
       case _BookDetailResponse():
         return $default(
             _that.id,
-            _that.aladinBookId,
+            _that.aladingBookId,
             _that.title,
             _that.author,
             _that.isbn,
@@ -410,7 +409,7 @@ extension BookDetailResponsePatterns on BookDetailResponse {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
             int id,
-            @JsonKey(name: 'aladingBookId') int aladinBookId,
+            int aladingBookId,
             String title,
             String author,
             String isbn,
@@ -418,9 +417,9 @@ extension BookDetailResponsePatterns on BookDetailResponse {
             String categoryName,
             String description,
             String publisher,
-            DateTime publishedDate,
+            String publishedDate,
             int page,
-            int? toc,
+            int toc,
             String imageUrl,
             double star)?
         $default,
@@ -430,7 +429,7 @@ extension BookDetailResponsePatterns on BookDetailResponse {
       case _BookDetailResponse() when $default != null:
         return $default(
             _that.id,
-            _that.aladinBookId,
+            _that.aladingBookId,
             _that.title,
             _that.author,
             _that.isbn,
@@ -453,52 +452,64 @@ extension BookDetailResponsePatterns on BookDetailResponse {
 @JsonSerializable()
 class _BookDetailResponse implements BookDetailResponse {
   const _BookDetailResponse(
-      {required this.id,
-      @JsonKey(name: 'aladingBookId') required this.aladinBookId,
-      required this.title,
-      required this.author,
-      required this.isbn,
-      required this.isbn13,
-      required this.categoryName,
-      required this.description,
-      required this.publisher,
-      required this.publishedDate,
-      required this.page,
-      this.toc,
-      required this.imageUrl,
-      required this.star});
+      {this.id = -1,
+      this.aladingBookId = -1,
+      this.title = '',
+      this.author = '',
+      this.isbn = '',
+      this.isbn13 = '',
+      this.categoryName = '',
+      this.description = '',
+      this.publisher = '',
+      this.publishedDate = '',
+      this.page = -1,
+      this.toc = -1,
+      this.imageUrl = '',
+      this.star = 0});
   factory _BookDetailResponse.fromJson(Map<String, dynamic> json) =>
       _$BookDetailResponseFromJson(json);
 
   @override
+  @JsonKey()
   final int id;
-// ignore: invalid_annotation_target
   @override
-  @JsonKey(name: 'aladingBookId')
-  final int aladinBookId;
+  @JsonKey()
+  final int aladingBookId;
   @override
+  @JsonKey()
   final String title;
   @override
+  @JsonKey()
   final String author;
   @override
+  @JsonKey()
   final String isbn;
   @override
+  @JsonKey()
   final String isbn13;
   @override
+  @JsonKey()
   final String categoryName;
   @override
+  @JsonKey()
   final String description;
   @override
+  @JsonKey()
   final String publisher;
   @override
-  final DateTime publishedDate;
+  @JsonKey()
+  final String publishedDate;
   @override
+  @JsonKey()
   final int page;
   @override
-  final int? toc;
+  @JsonKey()
+  final int toc;
   @override
+  @JsonKey()
   final String imageUrl;
   @override
+  @JsonKey()
   final double star;
 
   /// Create a copy of BookDetailResponse
@@ -522,8 +533,8 @@ class _BookDetailResponse implements BookDetailResponse {
         (other.runtimeType == runtimeType &&
             other is _BookDetailResponse &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.aladinBookId, aladinBookId) ||
-                other.aladinBookId == aladinBookId) &&
+            (identical(other.aladingBookId, aladingBookId) ||
+                other.aladingBookId == aladingBookId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.isbn, isbn) || other.isbn == isbn) &&
@@ -548,7 +559,7 @@ class _BookDetailResponse implements BookDetailResponse {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      aladinBookId,
+      aladingBookId,
       title,
       author,
       isbn,
@@ -564,7 +575,7 @@ class _BookDetailResponse implements BookDetailResponse {
 
   @override
   String toString() {
-    return 'BookDetailResponse(id: $id, aladinBookId: $aladinBookId, title: $title, author: $author, isbn: $isbn, isbn13: $isbn13, categoryName: $categoryName, description: $description, publisher: $publisher, publishedDate: $publishedDate, page: $page, toc: $toc, imageUrl: $imageUrl, star: $star)';
+    return 'BookDetailResponse(id: $id, aladingBookId: $aladingBookId, title: $title, author: $author, isbn: $isbn, isbn13: $isbn13, categoryName: $categoryName, description: $description, publisher: $publisher, publishedDate: $publishedDate, page: $page, toc: $toc, imageUrl: $imageUrl, star: $star)';
   }
 }
 
@@ -578,7 +589,7 @@ abstract mixin class _$BookDetailResponseCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'aladingBookId') int aladinBookId,
+      int aladingBookId,
       String title,
       String author,
       String isbn,
@@ -586,9 +597,9 @@ abstract mixin class _$BookDetailResponseCopyWith<$Res>
       String categoryName,
       String description,
       String publisher,
-      DateTime publishedDate,
+      String publishedDate,
       int page,
-      int? toc,
+      int toc,
       String imageUrl,
       double star});
 }
@@ -607,7 +618,7 @@ class __$BookDetailResponseCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = null,
-    Object? aladinBookId = null,
+    Object? aladingBookId = null,
     Object? title = null,
     Object? author = null,
     Object? isbn = null,
@@ -617,7 +628,7 @@ class __$BookDetailResponseCopyWithImpl<$Res>
     Object? publisher = null,
     Object? publishedDate = null,
     Object? page = null,
-    Object? toc = freezed,
+    Object? toc = null,
     Object? imageUrl = null,
     Object? star = null,
   }) {
@@ -626,9 +637,9 @@ class __$BookDetailResponseCopyWithImpl<$Res>
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      aladinBookId: null == aladinBookId
-          ? _self.aladinBookId
-          : aladinBookId // ignore: cast_nullable_to_non_nullable
+      aladingBookId: null == aladingBookId
+          ? _self.aladingBookId
+          : aladingBookId // ignore: cast_nullable_to_non_nullable
               as int,
       title: null == title
           ? _self.title
@@ -661,15 +672,15 @@ class __$BookDetailResponseCopyWithImpl<$Res>
       publishedDate: null == publishedDate
           ? _self.publishedDate
           : publishedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       page: null == page
           ? _self.page
           : page // ignore: cast_nullable_to_non_nullable
               as int,
-      toc: freezed == toc
+      toc: null == toc
           ? _self.toc
           : toc // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       imageUrl: null == imageUrl
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable

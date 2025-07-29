@@ -11,19 +11,18 @@ part 'search_view_model.g.dart';
 class SearchViewModel extends _$SearchViewModel {
   late final SearchRepository _repository;
   bool _isFetchingPage = false;
-  bool _isBusy = false;
 
   @override
   FutureOr<SearchState> build() async {
     _repository = ref.watch(searchRepositoryProvider);
 
-    final response = await _repository.searchBooks('베르');
+    // final response = await _repository.searchBooks('베르');
 
     state = AsyncValue.data(
       SearchState(
-        books: response.data.data,
-        start: 2,
-        hasNext: response.data.hasNext,
+        books: [],
+        // start: 1,
+        hasNext: false,
       ),
     );
 

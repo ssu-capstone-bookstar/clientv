@@ -54,16 +54,16 @@ class $AssetsFontsGen {
 
   /// List of all assets
   List<String> get values => [
-    pretendardBlack,
-    pretendardBold,
-    pretendardExtraBold,
-    pretendardExtraLight,
-    pretendardLight,
-    pretendardMedium,
-    pretendardRegular,
-    pretendardSemiBold,
-    pretendardThin,
-  ];
+        pretendardBlack,
+        pretendardBold,
+        pretendardExtraBold,
+        pretendardExtraLight,
+        pretendardLight,
+        pretendardMedium,
+        pretendardRegular,
+        pretendardSemiBold,
+        pretendardThin,
+      ];
 }
 
 class $AssetsIconsGen {
@@ -181,6 +181,13 @@ class $AssetsIconsGen {
   SvgGenImage get icDeeptypeStickerCloud =>
       const SvgGenImage('assets/icons/ic_deeptype_sticker_cloud.svg');
 
+  /// File path: assets/icons/ic_eraser.svg
+  SvgGenImage get icEraser => const SvgGenImage('assets/icons/ic_eraser.svg');
+
+  /// File path: assets/icons/ic_eraser01.svg
+  SvgGenImage get icEraser01 =>
+      const SvgGenImage('assets/icons/ic_eraser01.svg');
+
   /// File path: assets/icons/ic_heart.svg
   SvgGenImage get icHeart => const SvgGenImage('assets/icons/ic_heart.svg');
 
@@ -199,12 +206,34 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_mail.svg
   SvgGenImage get icMail => const SvgGenImage('assets/icons/ic_mail.svg');
 
+  /// File path: assets/icons/ic_maximise02.svg
+  SvgGenImage get icMaximise02 =>
+      const SvgGenImage('assets/icons/ic_maximise02.svg');
+
   /// File path: assets/icons/ic_menu_more.svg
   SvgGenImage get icMenuMore =>
       const SvgGenImage('assets/icons/ic_menu_more.svg');
 
   /// File path: assets/icons/ic_message.svg
   SvgGenImage get icMessage => const SvgGenImage('assets/icons/ic_message.svg');
+
+  /// File path: assets/icons/ic_palette.svg
+  SvgGenImage get icPalette => const SvgGenImage('assets/icons/ic_palette.svg');
+
+  /// File path: assets/icons/ic_pen_tool.svg
+  SvgGenImage get icPenTool =>
+      const SvgGenImage('assets/icons/ic_pen_tool.svg');
+
+  /// File path: assets/icons/ic_pencil.svg
+  SvgGenImage get icPencil => const SvgGenImage('assets/icons/ic_pencil.svg');
+
+  /// File path: assets/icons/ic_pencil01.svg
+  SvgGenImage get icPencil01 =>
+      const SvgGenImage('assets/icons/ic_pencil01.svg');
+
+  /// File path: assets/icons/ic_pentool03.svg
+  SvgGenImage get icPentool03 =>
+      const SvgGenImage('assets/icons/ic_pentool03.svg');
 
   /// File path: assets/icons/ic_person_count.svg
   SvgGenImage get icPersonCount =>
@@ -213,6 +242,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_photo_library.svg
   SvgGenImage get icPhotoLibrary =>
       const SvgGenImage('assets/icons/ic_photo_library.svg');
+
+  /// File path: assets/icons/ic_playlist_play.svg
+  SvgGenImage get icPlaylistPlay =>
+      const SvgGenImage('assets/icons/ic_playlist_play.svg');
+
+  /// File path: assets/icons/ic_playlist_stop.svg
+  SvgGenImage get icPlaylistStop =>
+      const SvgGenImage('assets/icons/ic_playlist_stop.svg');
 
   /// File path: assets/icons/ic_point_shop_char1.svg
   SvgGenImage get icPointShopChar1 =>
@@ -225,6 +262,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_point_shop_char3.svg
   SvgGenImage get icPointShopChar3 =>
       const SvgGenImage('assets/icons/ic_point_shop_char3.svg');
+
+  /// File path: assets/icons/ic_question_mark.svg
+  SvgGenImage get icQuestionMark =>
+      const SvgGenImage('assets/icons/ic_question_mark.svg');
 
   /// File path: assets/icons/ic_rating_star.svg
   SvgGenImage get icRatingStar =>
@@ -268,6 +309,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_star.svg
   SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
 
+  /// File path: assets/icons/ic_star01.svg
+  SvgGenImage get icStar01 => const SvgGenImage('assets/icons/ic_star01.svg');
+
   /// File path: assets/icons/ic_user.svg
   SvgGenImage get icUser => const SvgGenImage('assets/icons/ic_user.svg');
 
@@ -280,62 +324,74 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
-    apple,
-    google,
-    icAddPick,
-    icArrowUpDown,
-    icBookpickChatCharacter,
-    icBookpickChatOption,
-    icBookpickChatOptionPicture,
-    icBookpickChatSendColored,
-    icBookpickChatSendDisabled,
-    icBookpickSearchCharacter,
-    icBooktalkSearchCharacter,
-    icCamera,
-    icCategoryArtHobby,
-    icCategoryBestseller,
-    icCategoryChildren,
-    icCategoryLiterature,
-    icCategoryScienceTech,
-    icCategorySocialSciences,
-    icChatNotification,
-    icCheck,
-    icDeeptypeCharBottom,
-    icDeeptypeCharBw,
-    icDeeptypeCharFront,
-    icDeeptypeFire,
-    icDeeptypeNotification1,
-    icDeeptypeNotification2,
-    icDeeptypeStickerBook,
-    icDeeptypeStickerClock,
-    icDeeptypeStickerCloud,
-    icHeart,
-    icHeartFilled,
-    icLoginCharFront,
-    icLoginCharTop,
-    icMail,
-    icMenuMore,
-    icMessage,
-    icPersonCount,
-    icPhotoLibrary,
-    icPointShopChar1,
-    icPointShopChar2,
-    icPointShopChar3,
-    icRatingStar,
-    icRatingStarFilled,
-    icReadingChallengeChar1,
-    icReadingChallengeChar2,
-    icReadingChallengeChar3,
-    icReadingChallengeCompleted,
-    icReadingChallengeNotCompleted,
-    icReadingComplete,
-    icScrap,
-    icScrapFilled,
-    icStar,
-    icUser,
-    icWithdrawal,
-    kakao,
-  ];
+        apple,
+        google,
+        icAddPick,
+        icArrowUpDown,
+        icBookpickChatCharacter,
+        icBookpickChatOption,
+        icBookpickChatOptionPicture,
+        icBookpickChatSendColored,
+        icBookpickChatSendDisabled,
+        icBookpickSearchCharacter,
+        icBooktalkSearchCharacter,
+        icCamera,
+        icCategoryArtHobby,
+        icCategoryBestseller,
+        icCategoryChildren,
+        icCategoryLiterature,
+        icCategoryScienceTech,
+        icCategorySocialSciences,
+        icChatNotification,
+        icCheck,
+        icDeeptypeCharBottom,
+        icDeeptypeCharBw,
+        icDeeptypeCharFront,
+        icDeeptypeFire,
+        icDeeptypeNotification1,
+        icDeeptypeNotification2,
+        icDeeptypeStickerBook,
+        icDeeptypeStickerClock,
+        icDeeptypeStickerCloud,
+        icEraser,
+        icEraser01,
+        icHeart,
+        icHeartFilled,
+        icLoginCharFront,
+        icLoginCharTop,
+        icMail,
+        icMaximise02,
+        icMenuMore,
+        icMessage,
+        icPalette,
+        icPenTool,
+        icPencil,
+        icPencil01,
+        icPentool03,
+        icPersonCount,
+        icPhotoLibrary,
+        icPlaylistPlay,
+        icPlaylistStop,
+        icPointShopChar1,
+        icPointShopChar2,
+        icPointShopChar3,
+        icQuestionMark,
+        icRatingStar,
+        icRatingStarFilled,
+        icReadingChallengeChar1,
+        icReadingChallengeChar2,
+        icReadingChallengeChar3,
+        icReadingChallengeCompleted,
+        icReadingChallengeNotCompleted,
+        icReadingComplete,
+        icScrap,
+        icScrapFilled,
+        icStar,
+        icStar01,
+        icUser,
+        icWithdrawal,
+        kakao,
+      ];
 }
 
 class $AssetsImagesGen {
@@ -395,13 +451,13 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/nav_reading_challenge_selected@3x.png
   AssetGenImage get navReadingChallengeSelected3x => const AssetGenImage(
-    'assets/images/nav_reading_challenge_selected@3x.png',
-  );
+        'assets/images/nav_reading_challenge_selected@3x.png',
+      );
 
   /// File path: assets/images/nav_reading_challenge_unselected@3x.png
   AssetGenImage get navReadingChallengeUnselected3x => const AssetGenImage(
-    'assets/images/nav_reading_challenge_unselected@3x.png',
-  );
+        'assets/images/nav_reading_challenge_unselected@3x.png',
+      );
 
   /// File path: assets/images/sample_book.jpg
   AssetGenImage get sampleBook =>
@@ -413,24 +469,24 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-    heroBookPick3x,
-    heroLookForward3x,
-    heroLookUp3x,
-    icSearchColored3x,
-    icSearchUncolored3x,
-    navBookLogSelected3x,
-    navBookLogUnselected3x,
-    navBookPickSelected3x,
-    navBookPickUnselected3x,
-    navBookTalkSelected3x,
-    navBookTalkUnselected3x,
-    navDeepTimeSelected3x,
-    navDeepTimeUnselected3x,
-    navReadingChallengeSelected3x,
-    navReadingChallengeUnselected3x,
-    sampleBook,
-    speechBubble,
-  ];
+        heroBookPick3x,
+        heroLookForward3x,
+        heroLookUp3x,
+        icSearchColored3x,
+        icSearchUncolored3x,
+        navBookLogSelected3x,
+        navBookLogUnselected3x,
+        navBookPickSelected3x,
+        navBookPickUnselected3x,
+        navBookTalkSelected3x,
+        navBookTalkUnselected3x,
+        navDeepTimeSelected3x,
+        navDeepTimeUnselected3x,
+        navReadingChallengeSelected3x,
+        navReadingChallengeUnselected3x,
+        sampleBook,
+        speechBubble,
+      ];
 }
 
 class Assets {
@@ -514,10 +570,10 @@ class AssetGenImage {
 
 class SvgGenImage {
   const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
-    : _isVecFormat = false;
+      : _isVecFormat = false;
 
   const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
-    : _isVecFormat = true;
+      : _isVecFormat = true;
 
   final String _assetName;
   final Size? size;
@@ -571,8 +627,7 @@ class SvgGenImage {
       placeholderBuilder: placeholderBuilder,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
-      colorFilter:
-          colorFilter ??
+      colorFilter: colorFilter ??
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,

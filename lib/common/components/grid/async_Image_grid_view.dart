@@ -26,7 +26,7 @@ class AsyncImageGridView<T, G> extends StatelessWidget {
   final Widget Function(String)? placeHolderBuilder;
   final Widget Function(String, Object)? errorImageBuilder;
   final bool hasNext;
-  final void Function(int)? onTap;
+  final Function(int)? onTap;
 
   const AsyncImageGridView({
     super.key,

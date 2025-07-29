@@ -2,6 +2,7 @@ import 'package:book/common/components/button/menu_button.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/book_log/view/widgets/star_badge.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -207,8 +208,12 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  // const SizedBox(width: 3),
-                  // StarBadge(rating: widget.feed.), // TODO: 실제 별점 데이터로 교체
+                  if (widget.feed.bookRating > 0)
+                    const SizedBox(width: 3),
+                  if (widget.feed.bookRating > 0)
+                    StarBadge(rating: widget.feed.bookRating),
+                  if (widget.feed.bookRating > 0)
+                    const SizedBox(width: 3),
                   Text(
                     createdAt,
                     style: AppTexts.b10.copyWith(color: ColorName.g3),

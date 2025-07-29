@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'book_overview_view_model.dart';
+part of 'book_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookOverviewViewModelHash() =>
-    r'acb9ddcb074540a63902ff1a2985f7474fb7461c';
+String _$bookViewModelHash() => r'2cf5c630f6d2ad5b4978a0e959aea0b2999c885a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,37 +29,36 @@ class _SystemHash {
   }
 }
 
-abstract class _$BookOverviewViewModel
-    extends BuildlessAutoDisposeAsyncNotifier<BookOverviewResponse> {
+abstract class _$BookViewModel
+    extends BuildlessAutoDisposeAsyncNotifier<BookOverviewState> {
   late final int bookId;
 
-  FutureOr<BookOverviewResponse> build(
+  FutureOr<BookOverviewState> build(
     int bookId,
   );
 }
 
-/// See also [BookOverviewViewModel].
-@ProviderFor(BookOverviewViewModel)
-const bookOverviewViewModelProvider = BookOverviewViewModelFamily();
+/// See also [BookViewModel].
+@ProviderFor(BookViewModel)
+const bookViewModelProvider = BookViewModelFamily();
 
-/// See also [BookOverviewViewModel].
-class BookOverviewViewModelFamily
-    extends Family<AsyncValue<BookOverviewResponse>> {
-  /// See also [BookOverviewViewModel].
-  const BookOverviewViewModelFamily();
+/// See also [BookViewModel].
+class BookViewModelFamily extends Family<AsyncValue<BookOverviewState>> {
+  /// See also [BookViewModel].
+  const BookViewModelFamily();
 
-  /// See also [BookOverviewViewModel].
-  BookOverviewViewModelProvider call(
+  /// See also [BookViewModel].
+  BookViewModelProvider call(
     int bookId,
   ) {
-    return BookOverviewViewModelProvider(
+    return BookViewModelProvider(
       bookId,
     );
   }
 
   @override
-  BookOverviewViewModelProvider getProviderOverride(
-    covariant BookOverviewViewModelProvider provider,
+  BookViewModelProvider getProviderOverride(
+    covariant BookViewModelProvider provider,
   ) {
     return call(
       provider.bookId,
@@ -79,31 +77,30 @@ class BookOverviewViewModelFamily
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'bookOverviewViewModelProvider';
+  String? get name => r'bookViewModelProvider';
 }
 
-/// See also [BookOverviewViewModel].
-class BookOverviewViewModelProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<BookOverviewViewModel,
-        BookOverviewResponse> {
-  /// See also [BookOverviewViewModel].
-  BookOverviewViewModelProvider(
+/// See also [BookViewModel].
+class BookViewModelProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    BookViewModel, BookOverviewState> {
+  /// See also [BookViewModel].
+  BookViewModelProvider(
     int bookId,
   ) : this._internal(
-          () => BookOverviewViewModel()..bookId = bookId,
-          from: bookOverviewViewModelProvider,
-          name: r'bookOverviewViewModelProvider',
+          () => BookViewModel()..bookId = bookId,
+          from: bookViewModelProvider,
+          name: r'bookViewModelProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$bookOverviewViewModelHash,
-          dependencies: BookOverviewViewModelFamily._dependencies,
+                  : _$bookViewModelHash,
+          dependencies: BookViewModelFamily._dependencies,
           allTransitiveDependencies:
-              BookOverviewViewModelFamily._allTransitiveDependencies,
+              BookViewModelFamily._allTransitiveDependencies,
           bookId: bookId,
         );
 
-  BookOverviewViewModelProvider._internal(
+  BookViewModelProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -116,8 +113,8 @@ class BookOverviewViewModelProvider
   final int bookId;
 
   @override
-  FutureOr<BookOverviewResponse> runNotifierBuild(
-    covariant BookOverviewViewModel notifier,
+  FutureOr<BookOverviewState> runNotifierBuild(
+    covariant BookViewModel notifier,
   ) {
     return notifier.build(
       bookId,
@@ -125,10 +122,10 @@ class BookOverviewViewModelProvider
   }
 
   @override
-  Override overrideWith(BookOverviewViewModel Function() create) {
+  Override overrideWith(BookViewModel Function() create) {
     return ProviderOverride(
       origin: this,
-      override: BookOverviewViewModelProvider._internal(
+      override: BookViewModelProvider._internal(
         () => create()..bookId = bookId,
         from: from,
         name: null,
@@ -141,14 +138,14 @@ class BookOverviewViewModelProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<BookOverviewViewModel,
-      BookOverviewResponse> createElement() {
-    return _BookOverviewViewModelProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<BookViewModel, BookOverviewState>
+      createElement() {
+    return _BookViewModelProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is BookOverviewViewModelProvider && other.bookId == bookId;
+    return other is BookViewModelProvider && other.bookId == bookId;
   }
 
   @override
@@ -162,19 +159,19 @@ class BookOverviewViewModelProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin BookOverviewViewModelRef
-    on AutoDisposeAsyncNotifierProviderRef<BookOverviewResponse> {
+mixin BookViewModelRef
+    on AutoDisposeAsyncNotifierProviderRef<BookOverviewState> {
   /// The parameter `bookId` of this provider.
   int get bookId;
 }
 
-class _BookOverviewViewModelProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<BookOverviewViewModel,
-        BookOverviewResponse> with BookOverviewViewModelRef {
-  _BookOverviewViewModelProviderElement(super.provider);
+class _BookViewModelProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<BookViewModel,
+        BookOverviewState> with BookViewModelRef {
+  _BookViewModelProviderElement(super.provider);
 
   @override
-  int get bookId => (origin as BookOverviewViewModelProvider).bookId;
+  int get bookId => (origin as BookViewModelProvider).bookId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

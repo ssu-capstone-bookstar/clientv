@@ -110,7 +110,7 @@ abstract class ReadingDiaryRepository {
 
   @GET('/books/{bookId}/reading-diaries/thumbnail')
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
-      getRelatedDiaries(
+      getRelatedDiariesThumbnail(
     @Path('bookId') int bookId, {
     @Query('cursorId') int? cursorId,
     @Query('cursorScore') double? cursorScore,
@@ -119,7 +119,26 @@ abstract class ReadingDiaryRepository {
 
   @GET('/books/{bookId}/reading-diaries/thumbnail/popular')
   Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
-      getRelatedDiariesPopular(
+      getRelatedDiariesThumbnailPopular(
+    @Path('bookId') int bookId, {
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
+
+
+@GET('/books/{bookId}/reading-diaries/feed')
+  Future<ResponseForm<DualCursorPageResponse<DiaryResponse>>>
+      getRelatedDiariesFeed(
+    @Path('bookId') int bookId, {
+    @Query('cursorId') int? cursorId,
+    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
+
+  @GET('/books/{bookId}/reading-diaries/feed/popular')
+  Future<ResponseForm<DualCursorPageResponse<DiaryResponse>>>
+      getRelatedDiariesFeedPopular(
     @Path('bookId') int bookId, {
     @Query('cursorId') int? cursorId,
     @Query('cursorScore') double? cursorScore,
