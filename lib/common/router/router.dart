@@ -1,5 +1,5 @@
 import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
-import 'package:book/modules/book_pick/view/screens/book_pick_result_screen.dart';
+import 'package:book/modules/book_pick/view/screens/book_pick_detail_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
@@ -119,7 +119,8 @@ GoRouter router(Ref ref) {
           final extra = state.extra as Map<String, dynamic>;
           final memberId = extra["memberId"] as int;
           final request = extra["request"] as DiaryUpdateRequest;
-          return ReadingDiaryUpdateScreen(diaryId: diaryId, request: request, memberId: memberId);
+          return ReadingDiaryUpdateScreen(
+              diaryId: diaryId, request: request, memberId: memberId);
         },
       ),
       StatefulShellRoute.indexedStack(
@@ -141,21 +142,25 @@ GoRouter router(Ref ref) {
                     path: 'thumbnail/:memberId',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      final memberId = int.parse(state.pathParameters['memberId']!);
+                      final memberId =
+                          int.parse(state.pathParameters['memberId']!);
                       final extra = state.extra as Map<String, dynamic>?;
-                      final requiredRefresh = extra?['requiredRefresh'] as bool? ?? false;
-                      return BookLogThumbnailScreen(memberId: memberId, requiredRefresh: requiredRefresh);
+                      final requiredRefresh =
+                          extra?['requiredRefresh'] as bool? ?? false;
+                      return BookLogThumbnailScreen(
+                          memberId: memberId, requiredRefresh: requiredRefresh);
                     },
                   ),
-
                   GoRoute(
                     path: 'feed/:memberId',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      final memberId = int.parse(state.pathParameters['memberId']!);
+                      final memberId =
+                          int.parse(state.pathParameters['memberId']!);
                       final extra = state.extra as Map<String, dynamic>;
                       final index = extra['index'] as int;
-                      return BookLogFeedScreen(memberId: memberId, initialIndex: index);
+                      return BookLogFeedScreen(
+                          memberId: memberId, initialIndex: index);
                     },
                   ),
                   GoRoute(
@@ -260,33 +265,33 @@ GoRouter router(Ref ref) {
                 builder: (context, state) => const BookPickScreen(),
                 routes: [
                   GoRoute(
-                    path: 'search',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final from = state.uri.queryParameters['from'];
-                      return BookPickSearchScreen(from: from);
-                    },
-                    routes: [
-                      GoRoute(
-                        path: 'book-overview/:bookId',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) {
-                          final bookId =
-                              int.parse(state.pathParameters['bookId']!);
-                          return BookOverviewScreen(bookId: bookId);
-                        },
-                      ),
-                      GoRoute(
-                        path: 'result/:bookId',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) {
-                          final book = state.extra as SearchBookResponse;
-
-                          return BookPickResultScreen(book: book);
-                        },
-                      ),
-                    ],
-                  ),
+                      path: 'search',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (context, state) {
+                        final from = state.uri.queryParameters['from'];
+                        return BookPickSearchScreen(from: from);
+                      },
+                      routes: [
+                        GoRoute(
+                            path: 'detail/:bookId',
+                            parentNavigatorKey: rootNavigatorKey,
+                            builder: (context, state) {
+                              final bookId = int.parse(
+                                      state.pathParameters['bookId']!);
+                              return BookPickDetailScreen(bookId: bookId);
+                            },
+                            routes: [
+                              GoRoute(
+                                path: 'overview',
+                                parentNavigatorKey: rootNavigatorKey,
+                                builder: (context, state) {
+                                  final bookId = int.parse(
+                                      state.pathParameters['bookId']!);
+                                  return BookOverviewScreen(bookId: bookId);
+                                },
+                              ),
+                            ]),
+                      ]),
                 ],
               ),
             ],

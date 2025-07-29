@@ -146,8 +146,8 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
                       print("onAllView");
                     },
                     onItemTap: (index) {
-                      // TODO
-                      print("onItemTap: $index");
+                      final item = bookPickState.likeBook.likeBooks[index];
+                      context.push('/book-pick/search/detail/${item.bookId}');
                     },
                   ),
                 ],

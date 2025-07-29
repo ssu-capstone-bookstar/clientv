@@ -1,4 +1,5 @@
 import 'package:book/common/components/grid/async_Image_grid_view.dart';
+import 'package:book/modules/book/view_model/book_view_model.dart';
 import 'package:book/modules/reading_diary/model/related_diary_thumbnail.dart';
 import 'package:book/modules/reading_diary/view_model/related_diary_state.dart';
 import 'package:flutter/material.dart';
@@ -10,23 +11,22 @@ import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../reading_diary/model/related_diary_sort.dart';
 import '../../../reading_diary/view_model/related_diaries_view_model.dart';
-import '../../model/search_book_response.dart';
 import '../widgets/book_result_info.dart';
 
-class BookPickResultScreen extends ConsumerStatefulWidget {
-  const BookPickResultScreen({
+class BookPickDetailScreen extends ConsumerStatefulWidget {
+  const BookPickDetailScreen({
     super.key,
-    required this.book,
+    required this.bookId,
   });
 
-  final SearchBookResponse book;
+  final int bookId;
 
   @override
-  ConsumerState<BookPickResultScreen> createState() =>
-      _BookPickResultScreenState();
+  ConsumerState<BookPickDetailScreen> createState() =>
+      _BookPickDetailScreenState();
 }
 
-class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
+class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
@@ -61,7 +61,9 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
     _lastBottomReachedTime = now;
     _isLoadingMore = true;
     // 실제 로딩 로직 실행
-    await ref.read(relatedDiariesViewModelProvider(widget.book.bookId).notifier).fetchNextPage();
+    await ref
+        .read(relatedDiariesViewModelProvider(widget.bookId).notifier)
+        .fetchNextPage();
     _isLoadingMore = false;
   }
 
@@ -73,50 +75,54 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentSort = ref.watch(relatedDiarySortStateProvider);
+    final bookAsync = ref.watch(bookViewModelProvider(widget.bookId));
     final relatedDiariesAsync =
-        ref.watch(relatedDiariesViewModelProvider(widget.book.bookId));
+        ref.watch(relatedDiariesViewModelProvider(widget.bookId));
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(AppSizes.APP_BAR_HEIGHT),
-        child: AppBar(
-          title: Text('책픽', style: AppTexts.b5),
-          leading: const BackButton(),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(AppSizes.APP_BAR_HEIGHT),
+          child: AppBar(
+            title: Text('책픽', style: AppTexts.b5),
+            leading: const BackButton(),
+          ),
         ),
-      ),
-      body: relatedDiariesAsync.when(
-        data: (relatedDiaries) =>
-            CustomScrollView(controller: _scrollController, slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSearchBook(
-                  onTap: () => context.go('/book-pick/search'),
+        body: bookAsync.when(
+          data: (book) => relatedDiariesAsync.when(
+            data: (relatedDiaries) =>
+                CustomScrollView(controller: _scrollController, slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSearchBook(
+                      onTap: () => context.go('/book-pick/search'),
+                    ),
+                    SizedBox(height: 24),
+                    BookResultInfo(
+                      book: book.detail,
+                      onItemTap: () {
+                        context.go(
+                            '/book-pick/search/detail/${book.detail.id}/overview');
+                      },
+                    ),
+                    _buildRelationDiary(
+                      list: relatedDiaries.thumbnails,
+                      hasNext: relatedDiaries.hasNext,
+                      currentSort: relatedDiaries.sort,
+                      onToggle: () async  {
+                        ref.read(relatedDiariesViewModelProvider(widget.bookId).notifier).toggleSort();
+                      },
+                    ),
+                  ],
                 ),
-                SizedBox(height: 24),
-                BookResultInfo(
-                  book: widget.book,
-                  onItemTap: () {
-                    context.go('/book-pick/search/book-overview/${widget.book.bookId}');
-                  },
-                ),
-                _buildRelationDiary(
-                  list: relatedDiaries.diaries,
-                  hasNext: relatedDiaries.hasNext,
-                  currentSort: currentSort,
-                  onToggle: () {
-                    ref.read(relatedDiarySortStateProvider.notifier).toggle();
-                  },
-                ),
-              ],
-            ),
-          )
-        ]),
-        error: _error("관련 게시물을 불러올 수 없습니다."),
-        loading: _loading,
-      ),
-    );
+              )
+            ]),
+            error: _error("관련 게시물 정보를 불러올 수 없습니다."),
+            loading: _loading,
+          ),
+          error: _error("북 상세 정보를 불러올 수 없습니다."),
+          loading: _loading,
+        ));
   }
 
   Widget _buildSearchBook({required VoidCallback onTap}) => Padding(
@@ -178,8 +184,8 @@ class _BookPickResultScreenState extends ConsumerState<BookPickResultScreen> {
               height: 16,
             ),
             AsyncImageGridView<RelatedDiaryState, RelatedDiaryThumbnail>(
-              asyncValue: AsyncValue.data(RelatedDiaryState(diaries: list)),
-              getItems: (state) => state.diaries,
+              asyncValue: AsyncValue.data(RelatedDiaryState(thumbnails: list)),
+              getItems: (state) => state.thumbnails,
               getImageUrl: (diary) => diary.firstImage.imageUrl,
               hasNext: hasNext,
               emptyText: '관련 독서일기가 없습니다.',

@@ -10,7 +10,7 @@ import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book/view/widgets/book_info_widget.dart';
-import '../../../book/view_model/book_overview_view_model.dart';
+import '../../../book/view_model/book_view_model.dart';
 import '../../../book_pick/model/search_book_response.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../view_model/reading_challenge_view_model.dart';
@@ -62,7 +62,7 @@ class _ReadingChallengeDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final bookState = ref.watch(bookOverviewViewModelProvider(widget.bookId));
+    final bookState = ref.watch(bookViewModelProvider(widget.bookId));
     final authState = ref.watch(authViewModelProvider);
 
     final int? memberId = authState.when(

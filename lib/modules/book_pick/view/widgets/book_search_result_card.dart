@@ -51,8 +51,7 @@ class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
         }
       }
     } else {
-      // context.push('/book-pick/search/book-overview/${widget.book.bookId}');
-      context.push('/book-pick/search/result/${widget.book.bookId}', extra: widget.book);
+      context.push('/book-pick/search/detail/${widget.book.bookId}');
     }
   }
 

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../view_model/book_overview_view_model.dart';
+import '../../view_model/book_view_model.dart';
 
 class BookOverviewScreen extends ConsumerStatefulWidget {
   const BookOverviewScreen({
@@ -77,7 +77,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
 
   void _onLike() {
     ref
-        .read(bookOverviewViewModelProvider(widget.bookId).notifier)
+        .read(bookViewModelProvider(widget.bookId).notifier)
         .handleOverviewLike();
   }
 
@@ -89,13 +89,13 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bookOverviewAsync =
-        ref.watch(bookOverviewViewModelProvider(widget.bookId));
+    final bookAsync =
+        ref.watch(bookViewModelProvider(widget.bookId));
     final relatedDiariesAsync =
         ref.watch(relatedDiariesViewModelProvider(widget.bookId));
-    final currentSort = ref.watch(relatedDiarySortStateProvider);
+
     return Scaffold(
-        body: bookOverviewAsync.when(
+        body: bookAsync.when(
       data: (bookOverview) => relatedDiariesAsync.when(
         data: (relatedDiaries) {
           return CustomScrollView(
@@ -147,11 +147,11 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
               )),
               SliverToBoxAdapter(
                 child: _buildRelationDiary(
-                  list: relatedDiaries.diaries,
+                  list: relatedDiaries.thumbnails,
                   hasNext: relatedDiaries.hasNext,
-                  currentSort: currentSort,
+                  currentSort: relatedDiaries.sort,
                   onToggle: () {
-                    ref.read(relatedDiarySortStateProvider.notifier).toggle();
+                    ref.read(relatedDiariesViewModelProvider(widget.bookId).notifier).toggleSort();
                   },
                 ),
               )
@@ -243,9 +243,15 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
               SizedBox(
                 width: 6,
               ),
-              Text(
-                book.author,
-                style: AppTexts.b11.copyWith(color: ColorName.w3),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.8),
+                child: Text(
+                  book.author,
+                  style: AppTexts.b11.copyWith(color: ColorName.w3),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -258,9 +264,15 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
               SizedBox(
                 width: 6,
               ),
-              Text(
-                book.publisher,
-                style: AppTexts.b11.copyWith(color: ColorName.w3),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.8),
+                child: Text(
+                  book.publisher,
+                  style: AppTexts.b11.copyWith(color: ColorName.w3),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -371,8 +383,8 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
               ],
             ),
             AsyncImageGridView<RelatedDiaryState, RelatedDiaryThumbnail>(
-              asyncValue: AsyncValue.data(RelatedDiaryState(diaries: list)),
-              getItems: (state) => state.diaries,
+              asyncValue: AsyncValue.data(RelatedDiaryState(thumbnails: list)),
+              getItems: (state) => state.thumbnails,
               getImageUrl: (diary) => diary.firstImage.imageUrl,
               hasNext: hasNext,
               emptyText: '관련 독서일기가 없습니다.',

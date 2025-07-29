@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'book_overview_view_model.dart';
+part of 'book_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookOverviewViewModelHash() =>
-    r'4346cf74f65baff19def8be4b5e27842f598eae7';
+String _$bookViewModelHash() => r'c2677774a6df4c15b37349531c7f81efc2068659';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +29,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$BookOverviewViewModel
+abstract class _$BookViewModel
     extends BuildlessAutoDisposeAsyncNotifier<BookOverviewState> {
   late final int bookId;
 
@@ -39,28 +38,27 @@ abstract class _$BookOverviewViewModel
   );
 }
 
-/// See also [BookOverviewViewModel].
-@ProviderFor(BookOverviewViewModel)
-const bookOverviewViewModelProvider = BookOverviewViewModelFamily();
+/// See also [BookViewModel].
+@ProviderFor(BookViewModel)
+const bookViewModelProvider = BookViewModelFamily();
 
-/// See also [BookOverviewViewModel].
-class BookOverviewViewModelFamily
-    extends Family<AsyncValue<BookOverviewState>> {
-  /// See also [BookOverviewViewModel].
-  const BookOverviewViewModelFamily();
+/// See also [BookViewModel].
+class BookViewModelFamily extends Family<AsyncValue<BookOverviewState>> {
+  /// See also [BookViewModel].
+  const BookViewModelFamily();
 
-  /// See also [BookOverviewViewModel].
-  BookOverviewViewModelProvider call(
+  /// See also [BookViewModel].
+  BookViewModelProvider call(
     int bookId,
   ) {
-    return BookOverviewViewModelProvider(
+    return BookViewModelProvider(
       bookId,
     );
   }
 
   @override
-  BookOverviewViewModelProvider getProviderOverride(
-    covariant BookOverviewViewModelProvider provider,
+  BookViewModelProvider getProviderOverride(
+    covariant BookViewModelProvider provider,
   ) {
     return call(
       provider.bookId,
@@ -79,31 +77,30 @@ class BookOverviewViewModelFamily
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'bookOverviewViewModelProvider';
+  String? get name => r'bookViewModelProvider';
 }
 
-/// See also [BookOverviewViewModel].
-class BookOverviewViewModelProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<BookOverviewViewModel,
-        BookOverviewState> {
-  /// See also [BookOverviewViewModel].
-  BookOverviewViewModelProvider(
+/// See also [BookViewModel].
+class BookViewModelProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    BookViewModel, BookOverviewState> {
+  /// See also [BookViewModel].
+  BookViewModelProvider(
     int bookId,
   ) : this._internal(
-          () => BookOverviewViewModel()..bookId = bookId,
-          from: bookOverviewViewModelProvider,
-          name: r'bookOverviewViewModelProvider',
+          () => BookViewModel()..bookId = bookId,
+          from: bookViewModelProvider,
+          name: r'bookViewModelProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$bookOverviewViewModelHash,
-          dependencies: BookOverviewViewModelFamily._dependencies,
+                  : _$bookViewModelHash,
+          dependencies: BookViewModelFamily._dependencies,
           allTransitiveDependencies:
-              BookOverviewViewModelFamily._allTransitiveDependencies,
+              BookViewModelFamily._allTransitiveDependencies,
           bookId: bookId,
         );
 
-  BookOverviewViewModelProvider._internal(
+  BookViewModelProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -117,7 +114,7 @@ class BookOverviewViewModelProvider
 
   @override
   FutureOr<BookOverviewState> runNotifierBuild(
-    covariant BookOverviewViewModel notifier,
+    covariant BookViewModel notifier,
   ) {
     return notifier.build(
       bookId,
@@ -125,10 +122,10 @@ class BookOverviewViewModelProvider
   }
 
   @override
-  Override overrideWith(BookOverviewViewModel Function() create) {
+  Override overrideWith(BookViewModel Function() create) {
     return ProviderOverride(
       origin: this,
-      override: BookOverviewViewModelProvider._internal(
+      override: BookViewModelProvider._internal(
         () => create()..bookId = bookId,
         from: from,
         name: null,
@@ -141,14 +138,14 @@ class BookOverviewViewModelProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<BookOverviewViewModel,
-      BookOverviewState> createElement() {
-    return _BookOverviewViewModelProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<BookViewModel, BookOverviewState>
+      createElement() {
+    return _BookViewModelProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is BookOverviewViewModelProvider && other.bookId == bookId;
+    return other is BookViewModelProvider && other.bookId == bookId;
   }
 
   @override
@@ -162,19 +159,19 @@ class BookOverviewViewModelProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin BookOverviewViewModelRef
+mixin BookViewModelRef
     on AutoDisposeAsyncNotifierProviderRef<BookOverviewState> {
   /// The parameter `bookId` of this provider.
   int get bookId;
 }
 
-class _BookOverviewViewModelProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<BookOverviewViewModel,
-        BookOverviewState> with BookOverviewViewModelRef {
-  _BookOverviewViewModelProviderElement(super.provider);
+class _BookViewModelProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<BookViewModel,
+        BookOverviewState> with BookViewModelRef {
+  _BookViewModelProviderElement(super.provider);
 
   @override
-  int get bookId => (origin as BookOverviewViewModelProvider).bookId;
+  int get bookId => (origin as BookViewModelProvider).bookId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

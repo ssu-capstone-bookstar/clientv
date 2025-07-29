@@ -1,17 +1,18 @@
 import 'dart:async';
 
+import 'package:book/modules/book/model/book_detail_response.dart';
 import 'package:book/modules/book/state/book_overview_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/book_overview_response.dart';
 import '../repository/book_repository.dart';
 
-part 'book_overview_view_model.g.dart';
+part 'book_view_model.g.dart';
 
 @riverpod
-class BookOverviewViewModel extends _$BookOverviewViewModel {
+class BookViewModel extends _$BookViewModel {
   late final BookRepository _bookRepository;
-  static final Map<int, BookOverviewResponse> _cache = {};
+  static final Map<int, BookOverviewState> _cache = {};
 
   @override
   FutureOr<BookOverviewState> build(int bookId) async {
@@ -21,11 +22,13 @@ class BookOverviewViewModel extends _$BookOverviewViewModel {
 
   Future<BookOverviewState> initState(int bookId) async {
     if (_cache.containsKey(bookId)) {
-      return BookOverviewState(overview: _cache[bookId]!);
+      return _cache[bookId]!;
     } else {
-      final book = await _fetchBookOverview(bookId);
-      _cache[bookId] = book;
-      return BookOverviewState(overview: book);
+      final overview = await _fetchBookOverview(bookId);
+      final detail = await _fetchBookDetail(bookId);
+      final result = BookOverviewState(overview: overview, detail: detail);
+      _cache[bookId] = result;
+      return result;
     }
   }
 
@@ -34,10 +37,16 @@ class BookOverviewViewModel extends _$BookOverviewViewModel {
     return response.data;
   }
 
+  Future<BookDetailResponse> _fetchBookDetail(int bookId) async {
+    final response = await _bookRepository.getBookDetail(bookId);
+    return response.data;
+  }
+
   Future<void> handleOverviewLike() async {
     final prev = state.value ?? BookOverviewState();
     if (!prev.overview.liked) {
       await _bookRepository.createBookLike(prev.overview.id);
+
       state = AsyncValue.data(
         prev.copyWith(
           overview: prev.overview.copyWith(
@@ -55,5 +64,6 @@ class BookOverviewViewModel extends _$BookOverviewViewModel {
         ),
       );
     }
+    _cache[bookId] = state.value!;
   }
 }

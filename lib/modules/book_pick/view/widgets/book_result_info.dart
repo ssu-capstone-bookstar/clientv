@@ -1,7 +1,7 @@
+import 'package:book/modules/book/model/book_detail_response.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../common/theme/app_style.dart';
-import '../../model/search_book_response.dart';
 import 'book_cover_image.dart';
 import 'book_labeled_text.dart';
 
@@ -12,7 +12,7 @@ class BookResultInfo extends StatelessWidget {
     required this.onItemTap,
   });
 
-  final SearchBookResponse book;
+  final BookDetailResponse book;
   final Function() onItemTap;
 
   @override
@@ -36,7 +36,7 @@ class BookResultInfo extends StatelessWidget {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: BookCoverImage(
-                              imageUrl: book.bookCover, tag: '${book.bookId}')),
+                              imageUrl: book.imageUrl, tag: '${book.id}')),
                     ),
                     Expanded(
                       child: Column(
@@ -72,7 +72,7 @@ class BookResultInfo extends StatelessWidget {
         const SizedBox(height: 12.0),
         BookLabeledText(label: '작가', value: book.author),
         BookLabeledText(label: '출판사', value: book.publisher),
-        BookLabeledText(label: '출판연도', value: book.pubDate),
+        BookLabeledText(label: '출판연도', value: book.publishedDate),
       ],
     );
   }
