@@ -10,7 +10,7 @@ import '../../../../gen/colors.gen.dart';
 import '../../../auth/view_model/auth_state.dart';
 import '../../../auth/view_model/auth_view_model.dart';
 import '../../../book/view/widgets/book_info_widget.dart';
-import '../../../book/view_model/book_overview_view_model.dart';
+import '../../../book/view_model/book_view_model.dart';
 import '../../../book_pick/model/search_book_response.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../view_model/reading_challenge_view_model.dart';
@@ -62,7 +62,7 @@ class _ReadingChallengeDetailScreenState
 
   @override
   Widget build(BuildContext context) {
-    final bookState = ref.watch(bookOverviewViewModelProvider(widget.bookId));
+    final bookState = ref.watch(bookViewModelProvider(widget.bookId));
     final authState = ref.watch(authViewModelProvider);
 
     final int? memberId = authState.when(
@@ -91,7 +91,7 @@ class _ReadingChallengeDetailScreenState
                 spacing: 15,
                 children: [
                   bookState.when(
-                    data: (book) => BookInfoWidget(book: book),
+                    data: (book) => BookInfoWidget(book: book.overview),
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
                     error: (error, stack) =>
@@ -115,12 +115,12 @@ class _ReadingChallengeDetailScreenState
             text: '리딩 챌린지 진행하기',
             onPressed: () {
               final bookForRoute = SearchBookResponse(
-                bookId: book.id,
-                title: book.title,
-                author: book.author,
-                bookCover: book.cover,
-                pubDate: book.publishedDate,
-                publisher: book.publisher,
+                bookId: book.overview.id,
+                title: book.overview.title,
+                author: book.overview.author,
+                bookCover: book.overview.cover,
+                pubDate: book.overview.publishedDate,
+                publisher: book.overview.publisher,
               );
               context.push(
                 '/reading-challenge/start-and-end',

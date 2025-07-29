@@ -6,25 +6,8 @@ part of 'related_diaries_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$relatedDiarySortStateHash() =>
-    r'fcb040b31a826341f19c7086ab1ece26fdb7a1fa';
-
-/// See also [RelatedDiarySortState].
-@ProviderFor(RelatedDiarySortState)
-final relatedDiarySortStateProvider = AutoDisposeNotifierProvider<
-    RelatedDiarySortState, RelatedDiarySort>.internal(
-  RelatedDiarySortState.new,
-  name: r'relatedDiarySortStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$relatedDiarySortStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$RelatedDiarySortState = AutoDisposeNotifier<RelatedDiarySort>;
 String _$relatedDiariesViewModelHash() =>
-    r'4ebce65bfea657af705f00ea8927139049261e05';
+    r'bad2903a5768deae45d5578f71a5f90536c519f9';
 
 /// Copied from Dart SDK
 class _SystemHash {

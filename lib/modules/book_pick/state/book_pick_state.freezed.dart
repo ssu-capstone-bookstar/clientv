@@ -14,9 +14,11 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$BookPickState {
-  List<SearchBookResponse> get books;
-  int get start;
+// @Default([]) List<SearchBookResponse> books,
   bool get hasNext;
+  int get nextCursor;
+  LikeBookState get likeBook;
+  List<YoutubeRecommendResponse> get youtubeRecommends;
   String? get query;
 
   /// Create a copy of BookPickState
@@ -32,19 +34,23 @@ mixin _$BookPickState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is BookPickState &&
-            const DeepCollectionEquality().equals(other.books, books) &&
-            (identical(other.start, start) || other.start == start) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
+            (identical(other.nextCursor, nextCursor) ||
+                other.nextCursor == nextCursor) &&
+            (identical(other.likeBook, likeBook) ||
+                other.likeBook == likeBook) &&
+            const DeepCollectionEquality()
+                .equals(other.youtubeRecommends, youtubeRecommends) &&
             (identical(other.query, query) || other.query == query));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(books), start, hasNext, query);
+  int get hashCode => Object.hash(runtimeType, hasNext, nextCursor, likeBook,
+      const DeepCollectionEquality().hash(youtubeRecommends), query);
 
   @override
   String toString() {
-    return 'BookPickState(books: $books, start: $start, hasNext: $hasNext, query: $query)';
+    return 'BookPickState(hasNext: $hasNext, nextCursor: $nextCursor, likeBook: $likeBook, youtubeRecommends: $youtubeRecommends, query: $query)';
   }
 }
 
@@ -55,7 +61,13 @@ abstract mixin class $BookPickStateCopyWith<$Res> {
       _$BookPickStateCopyWithImpl;
   @useResult
   $Res call(
-      {List<SearchBookResponse> books, int start, bool hasNext, String? query});
+      {bool hasNext,
+      int nextCursor,
+      LikeBookState likeBook,
+      List<YoutubeRecommendResponse> youtubeRecommends,
+      String? query});
+
+  $LikeBookStateCopyWith<$Res> get likeBook;
 }
 
 /// @nodoc
@@ -71,29 +83,44 @@ class _$BookPickStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? books = null,
-    Object? start = null,
     Object? hasNext = null,
+    Object? nextCursor = null,
+    Object? likeBook = null,
+    Object? youtubeRecommends = null,
     Object? query = freezed,
   }) {
     return _then(_self.copyWith(
-      books: null == books
-          ? _self.books
-          : books // ignore: cast_nullable_to_non_nullable
-              as List<SearchBookResponse>,
-      start: null == start
-          ? _self.start
-          : start // ignore: cast_nullable_to_non_nullable
-              as int,
       hasNext: null == hasNext
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
+      nextCursor: null == nextCursor
+          ? _self.nextCursor
+          : nextCursor // ignore: cast_nullable_to_non_nullable
+              as int,
+      likeBook: null == likeBook
+          ? _self.likeBook
+          : likeBook // ignore: cast_nullable_to_non_nullable
+              as LikeBookState,
+      youtubeRecommends: null == youtubeRecommends
+          ? _self.youtubeRecommends
+          : youtubeRecommends // ignore: cast_nullable_to_non_nullable
+              as List<YoutubeRecommendResponse>,
       query: freezed == query
           ? _self.query
           : query // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
+  }
+
+  /// Create a copy of BookPickState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LikeBookStateCopyWith<$Res> get likeBook {
+    return $LikeBookStateCopyWith<$Res>(_self.likeBook, (value) {
+      return _then(_self.copyWith(likeBook: value));
+    });
   }
 }
 
@@ -190,15 +217,16 @@ extension BookPickStatePatterns on BookPickState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<SearchBookResponse> books, int start, bool hasNext,
-            String? query)?
+    TResult Function(bool hasNext, int nextCursor, LikeBookState likeBook,
+            List<YoutubeRecommendResponse> youtubeRecommends, String? query)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _BookPickState() when $default != null:
-        return $default(_that.books, _that.start, _that.hasNext, _that.query);
+        return $default(_that.hasNext, _that.nextCursor, _that.likeBook,
+            _that.youtubeRecommends, _that.query);
       case _:
         return orElse();
     }
@@ -219,14 +247,15 @@ extension BookPickStatePatterns on BookPickState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<SearchBookResponse> books, int start, bool hasNext,
-            String? query)
+    TResult Function(bool hasNext, int nextCursor, LikeBookState likeBook,
+            List<YoutubeRecommendResponse> youtubeRecommends, String? query)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BookPickState():
-        return $default(_that.books, _that.start, _that.hasNext, _that.query);
+        return $default(_that.hasNext, _that.nextCursor, _that.likeBook,
+            _that.youtubeRecommends, _that.query);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -246,14 +275,15 @@ extension BookPickStatePatterns on BookPickState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<SearchBookResponse> books, int start, bool hasNext,
-            String? query)?
+    TResult? Function(bool hasNext, int nextCursor, LikeBookState likeBook,
+            List<YoutubeRecommendResponse> youtubeRecommends, String? query)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BookPickState() when $default != null:
-        return $default(_that.books, _that.start, _that.hasNext, _that.query);
+        return $default(_that.hasNext, _that.nextCursor, _that.likeBook,
+            _that.youtubeRecommends, _that.query);
       case _:
         return null;
     }
@@ -264,27 +294,33 @@ extension BookPickStatePatterns on BookPickState {
 
 class _BookPickState implements BookPickState {
   const _BookPickState(
-      {final List<SearchBookResponse> books = const [],
-      this.start = 1,
-      this.hasNext = true,
+      {this.hasNext = false,
+      this.nextCursor = -1,
+      this.likeBook = const LikeBookState(),
+      final List<YoutubeRecommendResponse> youtubeRecommends = const [],
       this.query})
-      : _books = books;
+      : _youtubeRecommends = youtubeRecommends;
 
-  final List<SearchBookResponse> _books;
-  @override
-  @JsonKey()
-  List<SearchBookResponse> get books {
-    if (_books is EqualUnmodifiableListView) return _books;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_books);
-  }
-
-  @override
-  @JsonKey()
-  final int start;
+// @Default([]) List<SearchBookResponse> books,
   @override
   @JsonKey()
   final bool hasNext;
+  @override
+  @JsonKey()
+  final int nextCursor;
+  @override
+  @JsonKey()
+  final LikeBookState likeBook;
+  final List<YoutubeRecommendResponse> _youtubeRecommends;
+  @override
+  @JsonKey()
+  List<YoutubeRecommendResponse> get youtubeRecommends {
+    if (_youtubeRecommends is EqualUnmodifiableListView)
+      return _youtubeRecommends;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_youtubeRecommends);
+  }
+
   @override
   final String? query;
 
@@ -301,19 +337,23 @@ class _BookPickState implements BookPickState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _BookPickState &&
-            const DeepCollectionEquality().equals(other._books, _books) &&
-            (identical(other.start, start) || other.start == start) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
+            (identical(other.nextCursor, nextCursor) ||
+                other.nextCursor == nextCursor) &&
+            (identical(other.likeBook, likeBook) ||
+                other.likeBook == likeBook) &&
+            const DeepCollectionEquality()
+                .equals(other._youtubeRecommends, _youtubeRecommends) &&
             (identical(other.query, query) || other.query == query));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_books), start, hasNext, query);
+  int get hashCode => Object.hash(runtimeType, hasNext, nextCursor, likeBook,
+      const DeepCollectionEquality().hash(_youtubeRecommends), query);
 
   @override
   String toString() {
-    return 'BookPickState(books: $books, start: $start, hasNext: $hasNext, query: $query)';
+    return 'BookPickState(hasNext: $hasNext, nextCursor: $nextCursor, likeBook: $likeBook, youtubeRecommends: $youtubeRecommends, query: $query)';
   }
 }
 
@@ -326,7 +366,14 @@ abstract mixin class _$BookPickStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<SearchBookResponse> books, int start, bool hasNext, String? query});
+      {bool hasNext,
+      int nextCursor,
+      LikeBookState likeBook,
+      List<YoutubeRecommendResponse> youtubeRecommends,
+      String? query});
+
+  @override
+  $LikeBookStateCopyWith<$Res> get likeBook;
 }
 
 /// @nodoc
@@ -342,29 +389,44 @@ class __$BookPickStateCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? books = null,
-    Object? start = null,
     Object? hasNext = null,
+    Object? nextCursor = null,
+    Object? likeBook = null,
+    Object? youtubeRecommends = null,
     Object? query = freezed,
   }) {
     return _then(_BookPickState(
-      books: null == books
-          ? _self._books
-          : books // ignore: cast_nullable_to_non_nullable
-              as List<SearchBookResponse>,
-      start: null == start
-          ? _self.start
-          : start // ignore: cast_nullable_to_non_nullable
-              as int,
       hasNext: null == hasNext
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
+      nextCursor: null == nextCursor
+          ? _self.nextCursor
+          : nextCursor // ignore: cast_nullable_to_non_nullable
+              as int,
+      likeBook: null == likeBook
+          ? _self.likeBook
+          : likeBook // ignore: cast_nullable_to_non_nullable
+              as LikeBookState,
+      youtubeRecommends: null == youtubeRecommends
+          ? _self._youtubeRecommends
+          : youtubeRecommends // ignore: cast_nullable_to_non_nullable
+              as List<YoutubeRecommendResponse>,
       query: freezed == query
           ? _self.query
           : query // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
+  }
+
+  /// Create a copy of BookPickState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LikeBookStateCopyWith<$Res> get likeBook {
+    return $LikeBookStateCopyWith<$Res>(_self.likeBook, (value) {
+      return _then(_self.copyWith(likeBook: value));
+    });
   }
 }
 

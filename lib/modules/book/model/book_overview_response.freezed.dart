@@ -23,6 +23,7 @@ mixin _$BookOverviewResponse {
   String get publisher;
   double get star;
   String get publishedDate;
+  bool get liked;
 
   /// Create a copy of BookOverviewResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -51,17 +52,18 @@ mixin _$BookOverviewResponse {
                 other.publisher == publisher) &&
             (identical(other.star, star) || other.star == star) &&
             (identical(other.publishedDate, publishedDate) ||
-                other.publishedDate == publishedDate));
+                other.publishedDate == publishedDate) &&
+            (identical(other.liked, liked) || other.liked == liked));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, author, cover,
-      readingDiaryCount, isbn, publisher, star, publishedDate);
+      readingDiaryCount, isbn, publisher, star, publishedDate, liked);
 
   @override
   String toString() {
-    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate)';
+    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate, liked: $liked)';
   }
 }
 
@@ -80,7 +82,8 @@ abstract mixin class $BookOverviewResponseCopyWith<$Res> {
       String isbn,
       String publisher,
       double star,
-      String publishedDate});
+      String publishedDate,
+      bool liked});
 }
 
 /// @nodoc
@@ -105,6 +108,7 @@ class _$BookOverviewResponseCopyWithImpl<$Res>
     Object? publisher = null,
     Object? star = null,
     Object? publishedDate = null,
+    Object? liked = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -143,6 +147,10 @@ class _$BookOverviewResponseCopyWithImpl<$Res>
           ? _self.publishedDate
           : publishedDate // ignore: cast_nullable_to_non_nullable
               as String,
+      liked: null == liked
+          ? _self.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -249,7 +257,8 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             String isbn,
             String publisher,
             double star,
-            String publishedDate)?
+            String publishedDate,
+            bool liked)?
         $default, {
     required TResult orElse(),
   }) {
@@ -265,7 +274,8 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             _that.isbn,
             _that.publisher,
             _that.star,
-            _that.publishedDate);
+            _that.publishedDate,
+            _that.liked);
       case _:
         return orElse();
     }
@@ -295,7 +305,8 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             String isbn,
             String publisher,
             double star,
-            String publishedDate)
+            String publishedDate,
+            bool liked)
         $default,
   ) {
     final _that = this;
@@ -310,7 +321,8 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             _that.isbn,
             _that.publisher,
             _that.star,
-            _that.publishedDate);
+            _that.publishedDate,
+            _that.liked);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -339,7 +351,8 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             String isbn,
             String publisher,
             double star,
-            String publishedDate)?
+            String publishedDate,
+            bool liked)?
         $default,
   ) {
     final _that = this;
@@ -354,7 +367,8 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             _that.isbn,
             _that.publisher,
             _that.star,
-            _that.publishedDate);
+            _that.publishedDate,
+            _that.liked);
       case _:
         return null;
     }
@@ -366,14 +380,15 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
 class _BookOverviewResponse implements BookOverviewResponse {
   const _BookOverviewResponse(
       {this.id = -1,
-      required this.title,
-      required this.author,
-      required this.cover,
-      required this.readingDiaryCount,
-      required this.isbn,
-      required this.publisher,
-      required this.star,
-      required this.publishedDate});
+      this.title = '',
+      this.author = '',
+      this.cover = '',
+      this.readingDiaryCount = 0,
+      this.isbn = '',
+      this.publisher = '',
+      this.star = 0.0,
+      this.publishedDate = '',
+      this.liked = false});
   factory _BookOverviewResponse.fromJson(Map<String, dynamic> json) =>
       _$BookOverviewResponseFromJson(json);
 
@@ -381,21 +396,32 @@ class _BookOverviewResponse implements BookOverviewResponse {
   @JsonKey()
   final int id;
   @override
+  @JsonKey()
   final String title;
   @override
+  @JsonKey()
   final String author;
   @override
+  @JsonKey()
   final String cover;
   @override
+  @JsonKey()
   final int readingDiaryCount;
   @override
+  @JsonKey()
   final String isbn;
   @override
+  @JsonKey()
   final String publisher;
   @override
+  @JsonKey()
   final double star;
   @override
+  @JsonKey()
   final String publishedDate;
+  @override
+  @JsonKey()
+  final bool liked;
 
   /// Create a copy of BookOverviewResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -429,17 +455,18 @@ class _BookOverviewResponse implements BookOverviewResponse {
                 other.publisher == publisher) &&
             (identical(other.star, star) || other.star == star) &&
             (identical(other.publishedDate, publishedDate) ||
-                other.publishedDate == publishedDate));
+                other.publishedDate == publishedDate) &&
+            (identical(other.liked, liked) || other.liked == liked));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, author, cover,
-      readingDiaryCount, isbn, publisher, star, publishedDate);
+      readingDiaryCount, isbn, publisher, star, publishedDate, liked);
 
   @override
   String toString() {
-    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate)';
+    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate, liked: $liked)';
   }
 }
 
@@ -460,7 +487,8 @@ abstract mixin class _$BookOverviewResponseCopyWith<$Res>
       String isbn,
       String publisher,
       double star,
-      String publishedDate});
+      String publishedDate,
+      bool liked});
 }
 
 /// @nodoc
@@ -485,6 +513,7 @@ class __$BookOverviewResponseCopyWithImpl<$Res>
     Object? publisher = null,
     Object? star = null,
     Object? publishedDate = null,
+    Object? liked = null,
   }) {
     return _then(_BookOverviewResponse(
       id: null == id
@@ -523,6 +552,10 @@ class __$BookOverviewResponseCopyWithImpl<$Res>
           ? _self.publishedDate
           : publishedDate // ignore: cast_nullable_to_non_nullable
               as String,
+      liked: null == liked
+          ? _self.liked
+          : liked // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }

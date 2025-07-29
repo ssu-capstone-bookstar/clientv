@@ -1,85 +1,79 @@
 import 'dart:async';
 
+import 'package:book/modules/book_pick/model/like_book_state.dart';
+import 'package:book/modules/book_pick/repository/book_pick_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../repository/search_repository.dart';
 import '../state/book_pick_state.dart';
 
 part 'book_pick_view_model.g.dart';
 
 @riverpod
 class BookPickViewModel extends _$BookPickViewModel {
-  late final SearchRepository _repository;
-  bool _isFetchingPage = false;
-  bool _isBusy = false;
+  late final BookPickRepository _bookPickRepository;
 
   @override
   FutureOr<BookPickState> build() async {
-    _repository = ref.watch(searchRepositoryProvider);
-
-    final response = await _repository.searchBooks('베르');
-
-    return BookPickState(
-      books: response.data.data,
-      start: 2,
-      hasNext: response.data.hasNext,
-    );
+    _bookPickRepository = ref.watch(bookPickRepositoryProvider);
+    return await initState();
   }
 
-  Future<void> searchBooks(String query) async {
-    if (state is AsyncLoading) {
-      return;
-    }
+  Future<BookPickState> initState() async {
+    final responseYoutube = await _bookPickRepository.getYoutubeRecommend();
+    final responseLike = await _bookPickRepository.getMyLikes();
+    state = AsyncValue.data(BookPickState(
+      likeBook: LikeBookState(
+        likeBooks: responseLike.data.data,
+        hasNext: responseLike.data.hasNext,
+        nextCursor: responseLike.data.nextCursor ?? -1,
+      ),
+      youtubeRecommends: responseYoutube.data,
+    ));
+    return state.value ?? BookPickState();
+  }
 
-    if (query.isEmpty) {
-      state = const AsyncValue.data(BookPickState());
-      return;
-    }
+  Future<BookPickState> getOtherRecommend() async {
+    final prev = state.value ?? BookPickState();
+    final responseYoutube = await _bookPickRepository.getYoutubeRecommend();
+    state = AsyncValue.data(prev.copyWith(
+      youtubeRecommends: responseYoutube.data,
+    ));
+    return state.value ?? BookPickState();
+  }
 
-    state = const AsyncValue.loading();
+  Future<void> watchYoutubeVideo(String videoId) async {
+    await _bookPickRepository.watchYoutubeVideo(videoId: videoId);
+  }
 
-    try {
-      final response = await _repository.searchBooks(query);
-      state = AsyncValue.data(
-        BookPickState(
-          books: response.data.data,
-          hasNext: response.data.hasNext,
-          query: query,
-          start: 2,
+  Future<BookPickState> initLikeBooks({String keyword = ""}) async {
+    final prev = state.value ?? BookPickState();
+    final responseLike = await _bookPickRepository.getMyLikes(keyword: keyword);
+    state = AsyncValue.data(prev.copyWith(
+      likeBook: LikeBookState(
+        likeBooks: responseLike.data.data,
+        hasNext: responseLike.data.hasNext,
+        nextCursor: responseLike.data.nextCursor ?? -1,
+        keyword: keyword,
+      ),
+    ));
+    return state.value ?? BookPickState();
+  }
+
+  Future<BookPickState> refreshLikeBooks() async {
+    final prev = state.value ?? BookPickState();
+    if (prev.nextCursor != -1) {
+      final responseLike =
+          await _bookPickRepository.getMyLikes(cursorId: prev.nextCursor, keyword: prev.likeBook.keyword);
+      state = AsyncValue.data(prev.copyWith(
+        likeBook: LikeBookState(
+          likeBooks: [...prev.likeBook.likeBooks, ...responseLike.data.data],
+          hasNext: responseLike.data.hasNext,
+          nextCursor: responseLike.data.nextCursor ?? -1,
+          keyword: prev.likeBook.keyword,
         ),
-      );
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+      ));
+      return state.value ?? BookPickState();
     }
-  }
-
-  Future<void> fetchNextPage() async {
-    if (_isFetchingPage) return;
-
-    final currentState = state.value;
-    if (currentState == null ||
-        !currentState.hasNext ||
-        currentState.query == null) {
-      return;
-    }
-
-    _isFetchingPage = true;
-
-    try {
-      final response = await _repository.searchBooks(
-        currentState.query!,
-        start: currentState.start,
-      );
-      final newState = currentState.copyWith(
-        books: [...currentState.books, ...response.data.data],
-        start: currentState.start + 1,
-        hasNext: response.data.hasNext,
-      );
-      state = AsyncValue.data(newState);
-    } catch (e) {
-      state = AsyncValue.data(currentState.copyWith(hasNext: false));
-    } finally {
-      _isFetchingPage = false;
-    }
+    return prev;
   }
 }

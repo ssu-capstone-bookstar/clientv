@@ -14,10 +14,13 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$RelatedDiaryState {
-  List<RelatedDiaryThumbnail> get diaries;
-  int? get nextCursor;
+  List<RelatedDiaryThumbnail> get thumbnails;
+  List<DiaryResponse> get feeds;
+  int get nextCursor;
   Object? get nextSubCursor;
   bool get hasNext;
+  int get bookId;
+  RelatedDiarySort get sort;
 
   /// Create a copy of RelatedDiaryState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,25 +35,32 @@ mixin _$RelatedDiaryState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is RelatedDiaryState &&
-            const DeepCollectionEquality().equals(other.diaries, diaries) &&
+            const DeepCollectionEquality()
+                .equals(other.thumbnails, thumbnails) &&
+            const DeepCollectionEquality().equals(other.feeds, feeds) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
             const DeepCollectionEquality()
                 .equals(other.nextSubCursor, nextSubCursor) &&
-            (identical(other.hasNext, hasNext) || other.hasNext == hasNext));
+            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.sort, sort) || other.sort == sort));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(diaries),
+      const DeepCollectionEquality().hash(thumbnails),
+      const DeepCollectionEquality().hash(feeds),
       nextCursor,
       const DeepCollectionEquality().hash(nextSubCursor),
-      hasNext);
+      hasNext,
+      bookId,
+      sort);
 
   @override
   String toString() {
-    return 'RelatedDiaryState(diaries: $diaries, nextCursor: $nextCursor, nextSubCursor: $nextSubCursor, hasNext: $hasNext)';
+    return 'RelatedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, nextSubCursor: $nextSubCursor, hasNext: $hasNext, bookId: $bookId, sort: $sort)';
   }
 }
 
@@ -61,10 +71,13 @@ abstract mixin class $RelatedDiaryStateCopyWith<$Res> {
       _$RelatedDiaryStateCopyWithImpl;
   @useResult
   $Res call(
-      {List<RelatedDiaryThumbnail> diaries,
-      int? nextCursor,
+      {List<RelatedDiaryThumbnail> thumbnails,
+      List<DiaryResponse> feeds,
+      int nextCursor,
       Object? nextSubCursor,
-      bool hasNext});
+      bool hasNext,
+      int bookId,
+      RelatedDiarySort sort});
 }
 
 /// @nodoc
@@ -80,26 +93,41 @@ class _$RelatedDiaryStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? diaries = null,
-    Object? nextCursor = freezed,
+    Object? thumbnails = null,
+    Object? feeds = null,
+    Object? nextCursor = null,
     Object? nextSubCursor = freezed,
     Object? hasNext = null,
+    Object? bookId = null,
+    Object? sort = null,
   }) {
     return _then(_self.copyWith(
-      diaries: null == diaries
-          ? _self.diaries
-          : diaries // ignore: cast_nullable_to_non_nullable
+      thumbnails: null == thumbnails
+          ? _self.thumbnails
+          : thumbnails // ignore: cast_nullable_to_non_nullable
               as List<RelatedDiaryThumbnail>,
-      nextCursor: freezed == nextCursor
+      feeds: null == feeds
+          ? _self.feeds
+          : feeds // ignore: cast_nullable_to_non_nullable
+              as List<DiaryResponse>,
+      nextCursor: null == nextCursor
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       nextSubCursor:
           freezed == nextSubCursor ? _self.nextSubCursor : nextSubCursor,
       hasNext: null == hasNext
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
+      bookId: null == bookId
+          ? _self.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
+              as int,
+      sort: null == sort
+          ? _self.sort
+          : sort // ignore: cast_nullable_to_non_nullable
+              as RelatedDiarySort,
     ));
   }
 }
@@ -197,16 +225,22 @@ extension RelatedDiaryStatePatterns on RelatedDiaryState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<RelatedDiaryThumbnail> diaries, int? nextCursor,
-            Object? nextSubCursor, bool hasNext)?
+    TResult Function(
+            List<RelatedDiaryThumbnail> thumbnails,
+            List<DiaryResponse> feeds,
+            int nextCursor,
+            Object? nextSubCursor,
+            bool hasNext,
+            int bookId,
+            RelatedDiarySort sort)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _RelatedDiaryState() when $default != null:
-        return $default(_that.diaries, _that.nextCursor, _that.nextSubCursor,
-            _that.hasNext);
+        return $default(_that.thumbnails, _that.feeds, _that.nextCursor,
+            _that.nextSubCursor, _that.hasNext, _that.bookId, _that.sort);
       case _:
         return orElse();
     }
@@ -227,15 +261,21 @@ extension RelatedDiaryStatePatterns on RelatedDiaryState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<RelatedDiaryThumbnail> diaries, int? nextCursor,
-            Object? nextSubCursor, bool hasNext)
+    TResult Function(
+            List<RelatedDiaryThumbnail> thumbnails,
+            List<DiaryResponse> feeds,
+            int nextCursor,
+            Object? nextSubCursor,
+            bool hasNext,
+            int bookId,
+            RelatedDiarySort sort)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _RelatedDiaryState():
-        return $default(_that.diaries, _that.nextCursor, _that.nextSubCursor,
-            _that.hasNext);
+        return $default(_that.thumbnails, _that.feeds, _that.nextCursor,
+            _that.nextSubCursor, _that.hasNext, _that.bookId, _that.sort);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -255,15 +295,21 @@ extension RelatedDiaryStatePatterns on RelatedDiaryState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<RelatedDiaryThumbnail> diaries, int? nextCursor,
-            Object? nextSubCursor, bool hasNext)?
+    TResult? Function(
+            List<RelatedDiaryThumbnail> thumbnails,
+            List<DiaryResponse> feeds,
+            int nextCursor,
+            Object? nextSubCursor,
+            bool hasNext,
+            int bookId,
+            RelatedDiarySort sort)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _RelatedDiaryState() when $default != null:
-        return $default(_that.diaries, _that.nextCursor, _that.nextSubCursor,
-            _that.hasNext);
+        return $default(_that.thumbnails, _that.feeds, _that.nextCursor,
+            _that.nextSubCursor, _that.hasNext, _that.bookId, _that.sort);
       case _:
         return null;
     }
@@ -274,28 +320,48 @@ extension RelatedDiaryStatePatterns on RelatedDiaryState {
 
 class _RelatedDiaryState implements RelatedDiaryState {
   const _RelatedDiaryState(
-      {final List<RelatedDiaryThumbnail> diaries = const [],
-      this.nextCursor,
+      {final List<RelatedDiaryThumbnail> thumbnails = const [],
+      final List<DiaryResponse> feeds = const [],
+      this.nextCursor = -1,
       this.nextSubCursor,
-      this.hasNext = true})
-      : _diaries = diaries;
+      this.hasNext = false,
+      this.bookId = -1,
+      this.sort = RelatedDiarySort.LATEST})
+      : _thumbnails = thumbnails,
+        _feeds = feeds;
 
-  final List<RelatedDiaryThumbnail> _diaries;
+  final List<RelatedDiaryThumbnail> _thumbnails;
   @override
   @JsonKey()
-  List<RelatedDiaryThumbnail> get diaries {
-    if (_diaries is EqualUnmodifiableListView) return _diaries;
+  List<RelatedDiaryThumbnail> get thumbnails {
+    if (_thumbnails is EqualUnmodifiableListView) return _thumbnails;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_diaries);
+    return EqualUnmodifiableListView(_thumbnails);
+  }
+
+  final List<DiaryResponse> _feeds;
+  @override
+  @JsonKey()
+  List<DiaryResponse> get feeds {
+    if (_feeds is EqualUnmodifiableListView) return _feeds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_feeds);
   }
 
   @override
-  final int? nextCursor;
+  @JsonKey()
+  final int nextCursor;
   @override
   final Object? nextSubCursor;
   @override
   @JsonKey()
   final bool hasNext;
+  @override
+  @JsonKey()
+  final int bookId;
+  @override
+  @JsonKey()
+  final RelatedDiarySort sort;
 
   /// Create a copy of RelatedDiaryState
   /// with the given fields replaced by the non-null parameter values.
@@ -310,25 +376,32 @@ class _RelatedDiaryState implements RelatedDiaryState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _RelatedDiaryState &&
-            const DeepCollectionEquality().equals(other._diaries, _diaries) &&
+            const DeepCollectionEquality()
+                .equals(other._thumbnails, _thumbnails) &&
+            const DeepCollectionEquality().equals(other._feeds, _feeds) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
             const DeepCollectionEquality()
                 .equals(other.nextSubCursor, nextSubCursor) &&
-            (identical(other.hasNext, hasNext) || other.hasNext == hasNext));
+            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.sort, sort) || other.sort == sort));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_diaries),
+      const DeepCollectionEquality().hash(_thumbnails),
+      const DeepCollectionEquality().hash(_feeds),
       nextCursor,
       const DeepCollectionEquality().hash(nextSubCursor),
-      hasNext);
+      hasNext,
+      bookId,
+      sort);
 
   @override
   String toString() {
-    return 'RelatedDiaryState(diaries: $diaries, nextCursor: $nextCursor, nextSubCursor: $nextSubCursor, hasNext: $hasNext)';
+    return 'RelatedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, nextSubCursor: $nextSubCursor, hasNext: $hasNext, bookId: $bookId, sort: $sort)';
   }
 }
 
@@ -341,10 +414,13 @@ abstract mixin class _$RelatedDiaryStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<RelatedDiaryThumbnail> diaries,
-      int? nextCursor,
+      {List<RelatedDiaryThumbnail> thumbnails,
+      List<DiaryResponse> feeds,
+      int nextCursor,
       Object? nextSubCursor,
-      bool hasNext});
+      bool hasNext,
+      int bookId,
+      RelatedDiarySort sort});
 }
 
 /// @nodoc
@@ -360,26 +436,41 @@ class __$RelatedDiaryStateCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? diaries = null,
-    Object? nextCursor = freezed,
+    Object? thumbnails = null,
+    Object? feeds = null,
+    Object? nextCursor = null,
     Object? nextSubCursor = freezed,
     Object? hasNext = null,
+    Object? bookId = null,
+    Object? sort = null,
   }) {
     return _then(_RelatedDiaryState(
-      diaries: null == diaries
-          ? _self._diaries
-          : diaries // ignore: cast_nullable_to_non_nullable
+      thumbnails: null == thumbnails
+          ? _self._thumbnails
+          : thumbnails // ignore: cast_nullable_to_non_nullable
               as List<RelatedDiaryThumbnail>,
-      nextCursor: freezed == nextCursor
+      feeds: null == feeds
+          ? _self._feeds
+          : feeds // ignore: cast_nullable_to_non_nullable
+              as List<DiaryResponse>,
+      nextCursor: null == nextCursor
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       nextSubCursor:
           freezed == nextSubCursor ? _self.nextSubCursor : nextSubCursor,
       hasNext: null == hasNext
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
+      bookId: null == bookId
+          ? _self.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
+              as int,
+      sort: null == sort
+          ? _self.sort
+          : sort // ignore: cast_nullable_to_non_nullable
+              as RelatedDiarySort,
     ));
   }
 }

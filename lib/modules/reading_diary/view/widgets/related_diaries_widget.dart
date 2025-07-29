@@ -19,7 +19,6 @@ class RelatedDiariesWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     final postsState = ref.watch(relatedDiariesViewModelProvider(bookId));
-    final sort = ref.watch(relatedDiarySortStateProvider);
 
     return SliverPadding(
       padding: const EdgeInsets.all(16),
@@ -39,12 +38,12 @@ class RelatedDiariesWidget extends ConsumerWidget {
                     ),
                     GestureDetector(
                       onTap: () => ref
-                          .read(relatedDiarySortStateProvider.notifier)
-                          .toggle(),
+                          .read(relatedDiariesViewModelProvider(bookId).notifier)
+                          .toggleSort(),
                       child: Row(
                         children: [
                           Text(
-                            sort == RelatedDiarySort.LATEST ? '최신순' : '인기순',
+                            postsState.valueOrNull?.sort == RelatedDiarySort.LATEST ? '최신순' : '인기순',
                             style: textTheme.bodySmall,
                           ),
                           const Icon(Icons.swap_vert, size: 16),
@@ -64,7 +63,7 @@ class RelatedDiariesWidget extends ConsumerWidget {
           ),
           postsState.when(
             data: (state) {
-              if (state.diaries.isEmpty) {
+              if (state.thumbnails.isEmpty) {
                 return SliverToBoxAdapter(
                   child: Center(
                     child: Padding(
@@ -84,7 +83,7 @@ class RelatedDiariesWidget extends ConsumerWidget {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final post = state.diaries[index];
+                    final post = state.thumbnails[index];
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
@@ -99,7 +98,7 @@ class RelatedDiariesWidget extends ConsumerWidget {
                       ),
                     );
                   },
-                  childCount: state.diaries.length,
+                  childCount: state.thumbnails.length,
                 ),
               );
             },

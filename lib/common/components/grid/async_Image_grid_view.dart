@@ -26,6 +26,7 @@ class AsyncImageGridView<T, G> extends StatelessWidget {
   final Widget Function(String)? placeHolderBuilder;
   final Widget Function(String, Object)? errorImageBuilder;
   final bool hasNext;
+  final Function(int)? onTap;
 
   const AsyncImageGridView({
     super.key,
@@ -47,6 +48,7 @@ class AsyncImageGridView<T, G> extends StatelessWidget {
     this.placeHolderBuilder,
     this.errorImageBuilder,
     this.hasNext = false,
+    this.onTap,
   });
 
   @override
@@ -83,11 +85,14 @@ class AsyncImageGridView<T, G> extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   final item = items[index];
-                  return CachedNetworkImage(
-                    imageUrl: getImageUrl(item),
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => placeHolderBuilder?.call(url) ?? _buildPlaceHolderImage(),
-                    errorWidget: (context, url, error) => errorImageBuilder?.call(url, error) ?? _buildErrorImage(),
+                  return GestureDetector(
+                    onTap: () => onTap?.call(index),
+                    child: CachedNetworkImage(
+                      imageUrl: getImageUrl(item),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => placeHolderBuilder?.call(url) ?? _buildPlaceHolderImage(),
+                      errorWidget: (context, url, error) => errorImageBuilder?.call(url, error) ?? _buildErrorImage(),
+                    ),
                   );
                 },
               ),

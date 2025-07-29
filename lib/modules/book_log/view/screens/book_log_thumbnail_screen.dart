@@ -39,8 +39,11 @@ class _BookLogThumbnailScreenState
   @override
   Widget build(BuildContext context) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(widget.memberId));
+    final bookLogNotifier = ref.read(bookLogViewModelProvider(widget.memberId)
+                                    .notifier);
     final user = ref.watch(authViewModelProvider).value;
     final followInfo = ref.watch(followInfoViewModelProvider).value;
+    final followInfoNotifier = ref.read(followInfoViewModelProvider.notifier);
     final isMyProfile =
         (user is AuthSuccess && user.memberId == widget.memberId);
     final isFollowing = followInfo?.following
@@ -76,13 +79,9 @@ class _BookLogThumbnailScreenState
                         onEdit: () => context.push('/book-log/profile'),
                         onFollow: () {
                           if (isFollowing) {
-                            ref
-                                .read(followInfoViewModelProvider.notifier)
-                                .unfollow(widget.memberId);
+                            followInfoNotifier.unfollow(widget.memberId);
                           } else {
-                            ref
-                                .read(followInfoViewModelProvider.notifier)
-                                .follow(widget.memberId);
+                            followInfoNotifier.follow(widget.memberId);
                           }
                         },
                         profileImageKey: GlobalKey(),
@@ -91,16 +90,10 @@ class _BookLogThumbnailScreenState
                       BookLogThumbnailGrid(
                           thumbnails: bookLog.thumbnails,
                           onScrollBottom: () async {
-                            await ref
-                                .read(bookLogViewModelProvider(widget.memberId)
-                                    .notifier)
-                                .refreshState();
+                            await bookLogNotifier.refreshState();
                           },
                           onRefresh: () async {
-                            await ref
-                                .read(bookLogViewModelProvider(widget.memberId)
-                                    .notifier)
-                                .initState(widget.memberId);
+                            await bookLogNotifier.initState(widget.memberId);
                           },
                           onClickThumbnail: (int targetIndex) {
                             context.push('/book-log/feed/${widget.memberId}',

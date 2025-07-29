@@ -102,6 +102,9 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
                   ? Assets.images.icSearchColored3x.image(scale: 3)
                   : Assets.images.icSearchUncolored3x.image(scale: 3),
               onSubmitted: _onSearchSubmitted,
+              onTapSuffixIcon: () {
+                _onSearchSubmitted(_textController.text);
+              },
             ),
             Expanded(
               child: searchState.maybeWhen(
