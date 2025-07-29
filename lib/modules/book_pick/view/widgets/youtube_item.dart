@@ -2,6 +2,7 @@ import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/book_pick/model/youtube_recommend_response.dart';
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class YoutubeItem extends StatelessWidget {
   const YoutubeItem({super.key, required this.item, required this.onItemTap});
@@ -11,6 +12,7 @@ class YoutubeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final unescape = HtmlUnescape();
     return GestureDetector(
       onTap: onItemTap,
       child: ClipRRect(
@@ -37,7 +39,7 @@ class YoutubeItem extends StatelessWidget {
                   SizedBox(
                     width: 160,
                     child: Text(
-                      item.title,
+                      unescape.convert(item.title),
                       style: AppTexts.b5.copyWith(color: ColorName.w1),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

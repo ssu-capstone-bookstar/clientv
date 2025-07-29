@@ -55,6 +55,7 @@ dependencies:
   flutter_slidable: ^4.0.0
   carousel_slider: ^5.1.1
   url_launcher: ^6.3.2
+  html_unescape: ^2.0.0
 
 dev_dependencies:
   flutter_test:
