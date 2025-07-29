@@ -94,10 +94,6 @@ class _LikedDiariesScreenState extends ConsumerState<LikedDiariesScreen> {
         await ref.read(likedDiaryViewModelProvider.notifier).initState();
       },
       onClickThumbnail: (index) {
-        print('Navigating to feed with index: $index');
-        print(
-            'Current route: ${GoRouter.of(context).routerDelegate.currentConfiguration.uri}');
-
         context.push('/book-log/my-page/liked-diaries/feed',
             extra: {'index': index});
       },

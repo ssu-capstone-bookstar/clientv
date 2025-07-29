@@ -28,6 +28,7 @@ import '../../modules/my_page/view/screens/delete_account_screen.dart';
 import '../../modules/my_page/view/screens/follower_management_screen.dart';
 import '../../modules/my_page/view/screens/liked_diaries_screen.dart';
 import '../../modules/reading_diary/view/screens/liked_diary_feed_screen.dart';
+import '../../modules/reading_diary/view/screens/scrapped_diary_feed_screen.dart';
 import '../../modules/my_page/view/screens/login_info_screen.dart';
 import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
@@ -204,6 +205,19 @@ GoRouter router(Ref ref) {
                         parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) =>
                             const ScrappedDiariesScreen(),
+                        routes: [
+                          GoRoute(
+                            path: 'feed',
+                            parentNavigatorKey: rootNavigatorKey,
+                            builder: (context, state) {
+                              final extra =
+                                  state.extra as Map<String, dynamic>?;
+                              final index = extra?['index'] as int? ?? 0;
+                              return ScrappedDiaryFeedScreen(
+                                  initialIndex: index);
+                            },
+                          ),
+                        ],
                       ),
                       GoRoute(
                         path: 'follower-management',
@@ -223,7 +237,6 @@ GoRouter router(Ref ref) {
                               final extra =
                                   state.extra as Map<String, dynamic>?;
                               final index = extra?['index'] as int? ?? 0;
-                              print('Router: Received index: $index');
                               return LikedDiaryFeedScreen(initialIndex: index);
                             },
                           ),

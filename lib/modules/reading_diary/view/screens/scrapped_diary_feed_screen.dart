@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../../gen/colors.gen.dart';
-import '../../model/liked_diary_feed_response.dart';
+import '../../model/scrapped_diary_feed_response.dart';
 import '../../model/diary_response.dart';
 import '../../model/diary_image_response.dart';
-import '../../view_model/liked_diary_view_model.dart';
+import '../../view_model/scrapped_diary_view_model.dart';
 import '../../../book_log/view/widgets/feed_card.dart';
 
-class LikedDiaryFeedScreen extends ConsumerStatefulWidget {
-  const LikedDiaryFeedScreen({
+class ScrappedDiaryFeedScreen extends ConsumerStatefulWidget {
+  const ScrappedDiaryFeedScreen({
     super.key,
     required this.initialIndex,
   });
@@ -18,11 +18,12 @@ class LikedDiaryFeedScreen extends ConsumerStatefulWidget {
   final int initialIndex;
 
   @override
-  ConsumerState<LikedDiaryFeedScreen> createState() =>
-      _LikedDiaryFeedScreenState();
+  ConsumerState<ScrappedDiaryFeedScreen> createState() =>
+      _ScrappedDiaryFeedScreenState();
 }
 
-class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
+class _ScrappedDiaryFeedScreenState
+    extends ConsumerState<ScrappedDiaryFeedScreen> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -37,10 +38,10 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
   void _jumpToIndex(int index) {
     if (!mounted) return;
 
-    final feedsAsync = ref.read(getLikedDiaryFeedsAsyncProvider);
+    final feedsAsync = ref.read(getScrappedDiaryFeedsAsyncProvider);
     if (!feedsAsync.hasValue || feedsAsync.value!.isEmpty) return;
 
-    final validIndex = index.clamp(0, feedsAsync.value!.length - 1);
+    final validIndex = index.clamp(0, feedsAsync.value!.length - 1).toInt();
 
     _attemptJump(validIndex, 0);
   }
@@ -64,8 +65,9 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<List<LikedDiaryFeed>>>(
-      getLikedDiaryFeedsAsyncProvider,
+    // 데이터가 로드된 후 스크롤 처리
+    ref.listen<AsyncValue<List<ScrappedDiaryFeed>>>(
+      getScrappedDiaryFeedsAsyncProvider,
       (previous, next) {
         if (next.hasValue && next.value!.isNotEmpty && mounted && !_hasJumped) {
           _hasJumped = true;
@@ -74,12 +76,13 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
       },
     );
 
-    final feedsAsync = ref.watch(getLikedDiaryFeedsAsyncProvider);
+    // 피드 데이터를 별도로 로드
+    final feedsAsync = ref.watch(getScrappedDiaryFeedsAsyncProvider);
 
     return feedsAsync.when(
       data: (feeds) => Scaffold(
         appBar: AppBar(
-          title: const Text('좋아요 누른 다이어리'),
+          title: const Text('스크랩한 다이어리'),
           leading: IconButton(
             icon: const BackButton(),
             onPressed: () => Navigator.of(context).pop(),
@@ -87,16 +90,16 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
         ),
         body: _buildFeedList(feeds),
       ),
-      error: _error("좋아요 누른 다이어리 정보를 불러올 수 없습니다."),
+      error: _error("스크랩한 다이어리 정보를 불러올 수 없습니다."),
       loading: _loading,
     );
   }
 
-  Widget _buildFeedList(List<LikedDiaryFeed> feeds) {
+  Widget _buildFeedList(List<ScrappedDiaryFeed> feeds) {
     if (feeds.isEmpty) {
       return const Center(
         child: Text(
-          '좋아요 누른 다이어리가 없습니다.',
+          '스크랩한 다이어리가 없습니다.',
           style: TextStyle(
             color: ColorName.g7,
             fontSize: 14,
@@ -108,7 +111,7 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await ref.read(likedDiaryViewModelProvider.notifier).initState();
+        await ref.read(scrappedDiaryViewModelProvider.notifier).initState();
       },
       child: ScrollablePositionedList.separated(
         itemCount: feeds.length,
@@ -120,13 +123,27 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
 
           return FeedCard(
             feed: diaryResponse,
-            onLike: () {},
-            onMessage: () {},
-            onDelete: () {},
-            onReport: () {},
-            onClickProfile: () {},
-            onScrap: () {},
-            onUpdate: () {},
+            onLike: () {
+              print('Like clicked at index: $index');
+            },
+            onMessage: () {
+              print('Message clicked at index: $index');
+            },
+            onDelete: () {
+              print('Delete clicked at index: $index');
+            },
+            onReport: () {
+              print('Report clicked at index: $index');
+            },
+            onClickProfile: () {
+              print('Profile clicked at index: $index');
+            },
+            onScrap: () {
+              print('Scrap clicked at index: $index');
+            },
+            onUpdate: () {
+              print('Update clicked at index: $index');
+            },
           );
         },
         separatorBuilder: (context, index) => const SizedBox(height: 0),
@@ -134,11 +151,11 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
     );
   }
 
-  DiaryResponse _convertToDiaryResponse(LikedDiaryFeed feed) {
+  DiaryResponse _convertToDiaryResponse(ScrappedDiaryFeed feed) {
     return DiaryResponse(
       diaryId: feed.diaryId,
       content: feed.content,
-      createdDate: feed.createdDate.toIso8601String(),
+      createdDate: feed.createdDate,
       memberId: feed.memberId,
       nickname: feed.nickname,
       profileImageUrl: feed.profileImageUrl,
