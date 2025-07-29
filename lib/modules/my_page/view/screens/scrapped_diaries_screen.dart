@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../reading_diary/state/scrapped_diary_state.dart';
+import '../../../reading_diary/view/widgets/scrapped_diary_thumbnail_grid.dart';
+import '../../../reading_diary/view_model/scrapped_diary_view_model.dart';
 
-// import 'package:book/modules/book_log/model/book_log_models.dart';
-
-import '../../../../common/components/grid/image_grid.dart';
-
-class ScrappedDiariesScreen extends StatelessWidget {
+class ScrappedDiariesScreen extends ConsumerStatefulWidget {
   const ScrappedDiariesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: 더미 다이어리 삭제 필요
-    // final List<String> imageUrls = dummyDiaries
-    //     .expand((diary) => diary.images.map((image) => image.imageUrl))
-    //     .toList();
-    final List<String> imageUrls = [];
+  ConsumerState<ScrappedDiariesScreen> createState() =>
+      _ScrappedDiariesScreenState();
+}
 
+class _ScrappedDiariesScreenState extends ConsumerState<ScrappedDiariesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 화면이 로드될 때 데이터 초기화
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(scrappedDiaryViewModelProvider.notifier).initState();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scrappedDiaryState = ref.watch(scrappedDiaryViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -33,14 +44,60 @@ class ScrappedDiariesScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.zero,
-        child: ImageGrid(
-          imageUrls: imageUrls,
-          crossAxisCount: 3,
-          spacing: 0,
+      body: _buildBody(scrappedDiaryState),
+    );
+  }
+
+  Widget _buildBody(ScrappedDiaryState state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.errorMessage != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '오류가 발생했습니다',
+              style: TextStyle(color: ColorName.g3),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(scrappedDiaryViewModelProvider.notifier).initState();
+              },
+              child: const Text('다시 시도'),
+            ),
+          ],
         ),
-      ),
+      );
+    }
+
+    if (state.thumbnails.isEmpty) {
+      return const Center(
+        child: Text(
+          '아직 스크랩한 다이어리가 없습니다.',
+          style: TextStyle(
+            color: ColorName.g7,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      );
+    }
+
+    return ScrappedDiaryThumbnailGrid(
+      onScrollBottom: () async {
+        await ref.read(scrappedDiaryViewModelProvider.notifier).refreshState();
+      },
+      onRefresh: () async {
+        await ref.read(scrappedDiaryViewModelProvider.notifier).initState();
+      },
+      onClickThumbnail: (index) {
+        context.push('/book-log/my-page/scrapped-diaries/feed',
+            extra: {'index': index});
+      },
     );
   }
 }

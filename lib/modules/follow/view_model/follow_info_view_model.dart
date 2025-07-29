@@ -10,11 +10,10 @@ part 'follow_info_view_model.g.dart';
 
 @riverpod
 class FollowInfoViewModel extends _$FollowInfoViewModel {
-  late final FollowRepository _followRepository;
+  FollowRepository get _followRepository => ref.watch(followRepositoryProvider);
 
   @override
   Future<FollowInfoState> build() async {
-    _followRepository = ref.watch(followRepositoryProvider);
     return _refreshInfo();
   }
 
@@ -30,8 +29,10 @@ class FollowInfoViewModel extends _$FollowInfoViewModel {
       return const FollowInfoState();
     }
 
-    final followingResponse = await _followRepository.getFollowing(currentMemberId);
-    final followersResponse = await _followRepository.getFollowers(currentMemberId);
+    final followingResponse =
+        await _followRepository.getFollowing(currentMemberId);
+    final followersResponse =
+        await _followRepository.getFollowers(currentMemberId);
     final result = FollowInfoState(
       followers: followersResponse.data,
       following: followingResponse.data,

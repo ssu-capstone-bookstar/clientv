@@ -26,7 +26,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final title = isChallengeCompleted ? '리딩 챌린지 중 (3/챌린지 성공)' : '리딩 챌린지';
+    final title = '리딩 챌린지';
     final subtitle = isChallengeCompleted ? '완독하셨네요! 챌린지 성공을 축하드려요' : null;
     final image = isChallengeCompleted
         ? Assets.icons.icReadingChallengeCompleted.svg()
@@ -61,10 +61,16 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
               if (subtitle != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  // TODO: 보라색 그라데이션 효과
-                  child: Text(
-                    subtitle,
-                    style: AppTexts.b8.copyWith(color: ColorName.p1),
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [Color(0xFFB9ACFF), Color(0xFF473899)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ).createShader(bounds),
+                    child: Text(
+                      subtitle,
+                      style: AppTexts.b8.copyWith(color: ColorName.w1),
+                    ),
                   ),
                 ),
               const SizedBox(height: 14),
@@ -73,7 +79,10 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 currentStep: 3,
               ),
               const Spacer(),
-              image,
+              SizedBox(
+                width: 200,
+                child: image,
+              ),
               const Spacer(),
               _buildBottomButtons(context, ref),
             ],
@@ -111,6 +120,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 cancelButtonText: '나중에 하기',
                 onConfirm: () async {
                   await _updateChallengeProgress(ref);
+                  if (!context.mounted) return;
                   final bookId =
                       ref.read(currentChallengeViewModelProvider).book?.bookId;
                   if (bookId == null) return;
@@ -119,6 +129,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 },
                 onCancel: () async {
                   await _updateChallengeProgress(ref);
+                  if (!context.mounted) return;
                   context.go('/reading-challenge');
                 },
                 icon: Assets.icons.icReadingChallengeChar3.svg(

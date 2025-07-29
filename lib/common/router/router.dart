@@ -29,6 +29,8 @@ import '../../modules/my_page/view/screens/customer_support_screen.dart';
 import '../../modules/my_page/view/screens/delete_account_screen.dart';
 import '../../modules/my_page/view/screens/follower_management_screen.dart';
 import '../../modules/my_page/view/screens/liked_diaries_screen.dart';
+import '../../modules/reading_diary/view/screens/liked_diary_feed_screen.dart';
+import '../../modules/reading_diary/view/screens/scrapped_diary_feed_screen.dart';
 import '../../modules/my_page/view/screens/login_info_screen.dart';
 import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
@@ -40,6 +42,7 @@ import '../../modules/reading_challenge/view/screens/reading_challenge_rating_sc
 import '../../modules/reading_challenge/view/screens/reading_challenge_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
+import '../../modules/reading_challenge/view/screens/my_diary_feeds_screen.dart';
 import '../../modules/reading_diary/screens/reading_diary_entry_screen.dart';
 import '../../modules/reading_diary/screens/reading_diary_photo_screen.dart';
 
@@ -68,12 +71,18 @@ GoRouter router(Ref ref) {
       if (authState.value.unwrapPrevious().hasError) return '/login';
 
       final isAuthenticated = authState.value.requireValue is AuthSuccess;
+      final isWithdrawCompleted =
+          authState.value.requireValue is AuthWithdrawCompleted;
       final isLoginRoute = state.uri.path == '/login';
       // final isSplashRoute = state.uri.path == '/';
 
       // if (isSplashRoute) {
       //   return isAuthenticated ? '/book-pick' : '/login';
       // }
+
+      if (isWithdrawCompleted) {
+        return null;
+      }
 
       if (isLoginRoute && isAuthenticated) {
         return '/book-pick';
@@ -209,6 +218,19 @@ GoRouter router(Ref ref) {
                         parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) =>
                             const ScrappedDiariesScreen(),
+                        routes: [
+                          GoRoute(
+                            path: 'feed',
+                            parentNavigatorKey: rootNavigatorKey,
+                            builder: (context, state) {
+                              final extra =
+                                  state.extra as Map<String, dynamic>?;
+                              final index = extra?['index'] as int? ?? 0;
+                              return ScrappedDiaryFeedScreen(
+                                  initialIndex: index);
+                            },
+                          ),
+                        ],
                       ),
                       GoRoute(
                         path: 'follower-management',
@@ -220,6 +242,18 @@ GoRouter router(Ref ref) {
                         path: 'liked-diaries',
                         parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) => const LikedDiariesScreen(),
+                        routes: [
+                          GoRoute(
+                            path: 'feed',
+                            parentNavigatorKey: rootNavigatorKey,
+                            builder: (context, state) {
+                              final extra =
+                                  state.extra as Map<String, dynamic>?;
+                              final index = extra?['index'] as int? ?? 0;
+                              return LikedDiaryFeedScreen(initialIndex: index);
+                            },
+                          ),
+                        ],
                       ),
                       GoRoute(
                         path: 'login-info',
@@ -404,6 +438,21 @@ GoRouter router(Ref ref) {
                       return ReadingChallengeDiaryEncourageScreen(
                         isChallengeCompleted: isChallengeCompleted,
                         bookId: bookId,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'diary-feeds',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final extra = state.extra as Map<String, dynamic>;
+                      final bookId = extra['bookId'] as int;
+                      final memberId = extra['memberId'] as int;
+                      final index = extra['index'] as int;
+                      return MyDiaryFeedsScreen(
+                        bookId: bookId,
+                        memberId: memberId,
+                        initialIndex: index,
                       );
                     },
                   ),

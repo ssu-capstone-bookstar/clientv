@@ -31,8 +31,7 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context, ref, viewModel, state),
-      bottomNavigationBar:
-          state.rating != null ? _buildBottomNavigationBar(context, ref) : null,
+      bottomNavigationBar: _buildBottomNavigationBar(context, ref),
     );
   }
 
@@ -146,13 +145,9 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
     ReadingChallengeRatingState state,
   ) async {
     try {
-      final currentChallenge = ref.read(currentChallengeViewModelProvider);
-
-      if (currentChallenge.challengeId != null) {
-        await ref
-            .read(currentChallengeViewModelProvider.notifier)
-            .completeChallenge(state.rating!, ref);
-      }
+      await ref
+          .read(currentChallengeViewModelProvider.notifier)
+          .saveBookRating(state.rating, ref);
 
       if (context.mounted) {
         context.push(
@@ -164,28 +159,19 @@ class ReadingChallengeRatingScreen extends ConsumerWidget {
         );
       }
     } catch (e) {
-      debugPrint('Failed to complete challenge: $e');
+      debugPrint('Failed to save book rating: $e');
     }
   }
 
   Future<void> _handleSkipButton(BuildContext context, WidgetRef ref) async {
-    try {
-      final currentChallenge = ref.read(currentChallengeViewModelProvider);
-
-      if (currentChallenge.challengeId != null) {
-        await ref
-            .read(currentChallengeViewModelProvider.notifier)
-            .updateChallengeProgress(ref);
-      }
-
-      if (context.mounted) {
-        context.go('/reading-challenge');
-      }
-    } catch (e) {
-      debugPrint('Failed to update challenge progress: $e');
-      if (context.mounted) {
-        context.go('/reading-challenge');
-      }
+    if (context.mounted) {
+      context.push(
+        '/reading-challenge/diary-encourage',
+        extra: {
+          'isChallengeCompleted': true,
+          'bookId': book.bookId,
+        },
+      );
     }
   }
 

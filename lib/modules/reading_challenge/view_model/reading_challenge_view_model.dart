@@ -55,9 +55,12 @@ class MyDiariesViewModel extends _$MyDiariesViewModel {
     });
 
     _repository ??= ref.read(readingDiaryRepositoryProvider);
-    final sort = ref.watch(myDiarySortStateProvider);
+
+    // sort 변경을 감지하기 위해 watch 사용
+    ref.watch(myDiarySortStateProvider);
 
     try {
+      final sort = ref.read(myDiarySortStateProvider);
       final response = await _fetchDiaries(bookId: bookId, sort: sort);
       return MyDiaryState(
         diaries: response.data
@@ -81,24 +84,35 @@ class MyDiariesViewModel extends _$MyDiariesViewModel {
     required MyDiarySort sort,
     int? cursorId,
     double? cursorScore,
+    int? page,
   }) async {
     try {
       final repository = _repository!;
-      final response = sort == MyDiarySort.LATEST
-          ? await repository.getMyRelatedDiaries(
-              bookId,
-              cursorId: cursorId,
-              cursorScore: cursorScore,
-              size: 18,
-            )
-          : await repository.getMyRelatedDiariesPopular(
-              bookId,
-              cursorId: cursorId,
-              cursorScore: cursorScore,
-              size: 18,
-            );
 
-      return response.data;
+      if (sort == MyDiarySort.LATEST) {
+        final response = await repository.getMyRelatedDiaries(
+          bookId,
+          cursorId: cursorId,
+          cursorScore: cursorScore,
+          size: 18,
+        );
+        return response.data;
+      } else {
+        // 인기순은 page 기반 pagination 사용
+        final response = await repository.getMyRelatedDiariesPopular(
+          bookId,
+          page: page ?? 0,
+          size: 18,
+        );
+
+        // PopularDiaryResponse를 DualCursorPageResponse로 변환
+        return DualCursorPageResponse(
+          data: response.data.content,
+          nextCursor: response.data.hasNext ? (page ?? 0) + 1 : null,
+          nextSubCursor: null,
+          hasNext: response.data.hasNext,
+        );
+      }
     } catch (e) {
       rethrow;
     }
@@ -117,8 +131,11 @@ class MyDiariesViewModel extends _$MyDiariesViewModel {
       final response = await _fetchDiaries(
         bookId: _bookId!,
         sort: sort,
-        cursorId: currentState.nextCursor,
-        cursorScore: currentState.nextSubCursor as double?,
+        cursorId: sort == MyDiarySort.LATEST ? currentState.nextCursor : null,
+        cursorScore: sort == MyDiarySort.LATEST
+            ? currentState.nextSubCursor as double?
+            : null,
+        page: sort == MyDiarySort.POPULAR ? currentState.nextCursor : null,
       );
 
       if (key != _key) return;

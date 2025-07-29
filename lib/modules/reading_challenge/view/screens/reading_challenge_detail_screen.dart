@@ -48,8 +48,9 @@ class _ReadingChallengeDetailScreenState
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 300) {
-      // TODO: Implement pagination if needed
-      // ref.read(relatedDiaryThumbnailsViewModelProvider.notifier).fetchNextPage();
+      ref
+          .read(myDiariesViewModelProvider(widget.bookId).notifier)
+          .fetchNextPage();
     }
   }
 
@@ -101,7 +102,7 @@ class _ReadingChallengeDetailScreenState
                   _buildPointsSection(),
                   _buildCalendarSection(),
                   const SizedBox(height: 28),
-                  if (memberId != null) _buildDiarySection(),
+                  _buildDiarySection(memberId),
                 ],
               ),
             ),
@@ -214,7 +215,7 @@ class _ReadingChallengeDetailScreenState
     );
   }
 
-  Widget _buildDiarySection() {
+  Widget _buildDiarySection(int? memberId) {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Column(
@@ -253,6 +254,15 @@ class _ReadingChallengeDetailScreenState
                 false,
             emptyText: '내가 쓴 독서일기가 없습니다.',
             errorText: '게시물을 불러올 수 없습니다.',
+            onTap: memberId != null
+                ? (index) {
+                    context.push('/reading-challenge/diary-feeds', extra: {
+                      'bookId': widget.bookId,
+                      'memberId': memberId,
+                      'index': index,
+                    });
+                  }
+                : null,
           ),
         ],
       ),

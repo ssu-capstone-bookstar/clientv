@@ -172,7 +172,7 @@ class _AuthRepository implements AuthRepository {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRepositoryHash() => r'dcd6f40f05cb7ab2eae0c34cd8f276b07188c39f';
+String _$authRepositoryHash() => r'fca2529c96a864d9f6b370dbff36f4bb4431f46b';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)

@@ -2,14 +2,29 @@ import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/modules/my_page/view/widgets/label_section.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:book/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:book/common/components/dialog/custom_dialog.dart';
 
 class LoginInfoScreen extends ConsumerWidget {
   const LoginInfoScreen({super.key});
+
+  Widget _getProviderIcon(String providerType) {
+    switch (providerType.toUpperCase()) {
+      case 'GOOGLE':
+        return Assets.icons.google.svg(width: 13, height: 13);
+      case 'KAKAO':
+        return Assets.icons.kakao.svg(width: 13, height: 13);
+      case 'APPLE':
+        return Assets.icons.apple.svg(width: 13, height: 13);
+      default:
+        return Assets.icons.google.svg(width: 14, height: 14);
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,25 +62,87 @@ class LoginInfoScreen extends ConsumerWidget {
                     child: LabelSection('간편 회원 가입'),
                   ),
                   const SizedBox(width: 18),
+                  ...authState.when(
+                    data: (data) => data is AuthSuccess
+                        ? [
+                            Container(
+                              width: 22,
+                              height: 22,
+                              decoration: BoxDecoration(
+                                color: data.providerType == 'KAKAO'
+                                    ? const Color(0xFFFEE500)
+                                    : ColorName.w1,
+                                borderRadius: BorderRadius.circular(11),
+                              ),
+                              child: Center(
+                                child: _getProviderIcon(data.providerType),
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                          ]
+                        : [],
+                    loading: () => [],
+                    error: (e, t) => [],
+                  ),
                   Expanded(
-                      child: TextField(
-                    enabled: false,
-                    maxLines: 1,
-                    minLines: 1,
-                    style: AppTexts.b6.copyWith(color: ColorName.w1),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      hintText: authState.when(
-                        data: (data) =>
-                            data is AuthSuccess ? data.email : '이메일 정보 없음',
-                        loading: () => '이메일 정보 없음',
-                        error: (e, t) => '이메일 정보 없음',
+                      child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => CustomDialog(
+                          title: '로그아웃',
+                          content: '정말 로그아웃하시겠어요?',
+                          icon: Assets.icons.icReadingChallengeChar1
+                              .svg(width: 100, height: 106.8803482055664),
+                          cancelButtonText: '취소',
+                          confirmButtonText: '로그아웃',
+                          onCancel: () => Navigator.of(context).pop(),
+                          onConfirm: () async {
+                            await ref
+                                .read(authViewModelProvider.notifier)
+                                .signOut();
+                            if (context.mounted) {
+                              Navigator.of(context).pop();
+                              context.go('/login');
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    child: TextField(
+                      enabled: false,
+                      maxLines: 1,
+                      minLines: 1,
+                      style: AppTexts.b8.copyWith(color: ColorName.w1),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.transparent,
+                        hintText: authState.when(
+                          data: (data) =>
+                              data is AuthSuccess ? data.email : '이메일 정보 없음',
+                          loading: () => '이메일 정보 없음',
+                          error: (e, t) => '이메일 정보 없음',
+                        ),
+                        hintStyle: authState.when(
+                          data: (data) => data is AuthSuccess
+                              ? AppTexts.b8.copyWith(color: ColorName.w1)
+                              : AppTexts.b8.copyWith(
+                                  color: ColorName.e0,
+                                  decoration: TextDecoration.underline,
+                                ),
+                          loading: () => AppTexts.b8.copyWith(
+                            color: ColorName.e0,
+                            decoration: TextDecoration.underline,
+                          ),
+                          error: (e, t) => AppTexts.b8.copyWith(
+                            color: ColorName.e0,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        isCollapsed: true,
+                        contentPadding: EdgeInsets.zero,
                       ),
-                      hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
-                      isCollapsed: true,
-                      contentPadding: EdgeInsets.zero,
                     ),
                   )),
                 ],
@@ -87,18 +164,32 @@ class LoginInfoScreen extends ConsumerWidget {
                       enabled: false,
                       maxLines: 1,
                       minLines: 1,
-                      style: AppTexts.b6.copyWith(color: ColorName.w1),
+                      style: AppTexts.b8.copyWith(color: ColorName.w1),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.transparent,
                         hintText: authState.when(
-                          data: (data) =>
-                              data is AuthSuccess ? data.providerType : '연동 상태',
+                          data: (data) => data is AuthSuccess ? "연동중" : '연동 문재',
                           loading: () => '연동 상태',
                           error: (e, t) => '연동 상태',
                         ),
-                        hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
+                        hintStyle: authState.when(
+                          data: (data) => data is AuthSuccess
+                              ? AppTexts.b8.copyWith(color: ColorName.w1)
+                              : AppTexts.b8.copyWith(
+                                  color: ColorName.e0,
+                                  decoration: TextDecoration.underline,
+                                ),
+                          loading: () => AppTexts.b8.copyWith(
+                            color: ColorName.e0,
+                            decoration: TextDecoration.underline,
+                          ),
+                          error: (e, t) => AppTexts.b8.copyWith(
+                            color: ColorName.e0,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
                         isCollapsed: true,
                         contentPadding: EdgeInsets.zero,
                       ),

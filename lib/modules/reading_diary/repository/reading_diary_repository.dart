@@ -10,10 +10,13 @@ import '../../../common/models/cursor_page_response.dart';
 import '../../../common/models/dual_cursor_page_response.dart';
 import '../../../common/models/response_form.dart';
 import '../model/challenge_diary_thumbnail_response.dart';
+import '../model/diary_feed_response.dart';
 import '../model/diary_request.dart';
 import '../model/diary_response.dart';
 import '../model/diary_thumbnail_response.dart';
 import '../model/liked_diary_response.dart';
+import '../model/popular_diary_response.dart';
+import '../model/popular_diary_feed_response.dart';
 import '../model/related_diary_sort.dart';
 import '../model/related_diary_thumbnail.dart';
 
@@ -156,11 +159,23 @@ abstract class ReadingDiaryRepository {
   });
 
   @GET('/books/{bookId}/my-reading-diaries/thumbnail/popular')
-  Future<ResponseForm<DualCursorPageResponse<RelatedDiaryThumbnail>>>
-      getMyRelatedDiariesPopular(
+  Future<ResponseForm<PopularDiaryResponse>> getMyRelatedDiariesPopular(
+    @Path('bookId') int bookId, {
+    @Query('page') int? page,
+    @Query('size') int? size,
+  });
+
+  @GET('/books/{bookId}/my-reading-diaries/feed')
+  Future<ResponseForm<CursorPageResponse<DiaryFeedResponse>>> getMyDiaryFeeds(
     @Path('bookId') int bookId, {
     @Query('cursorId') int? cursorId,
-    @Query('cursorScore') double? cursorScore,
+    @Query('size') int? size,
+  });
+
+  @GET('/books/{bookId}/my-reading-diaries/feed/popular')
+  Future<ResponseForm<PopularDiaryFeedResponse>> getMyDiaryFeedsPopular(
+    @Path('bookId') int bookId, {
+    @Query('page') int? page,
     @Query('size') int? size,
   });
 }

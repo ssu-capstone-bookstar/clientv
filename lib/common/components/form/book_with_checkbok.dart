@@ -30,7 +30,7 @@ class BookWithCheckbox extends StatelessWidget {
   final bool enabled;
 
   const BookWithCheckbox({
-    Key? key,
+    super.key,
     required this.thumbnailUrl,
     required this.title,
     required this.author,
@@ -38,7 +38,16 @@ class BookWithCheckbox extends StatelessWidget {
     required this.checked,
     required this.onChanged,
     this.enabled = true,
-  }) : super(key: key);
+  });
+
+  String _formatDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    } catch (e) {
+      return dateString;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +75,6 @@ class BookWithCheckbox extends StatelessWidget {
                   Container(
                     width: 65,
                     height: 65,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 6.3, horizontal: 4.5),
                     decoration: BoxDecoration(
                       color: ColorName.g7,
                       borderRadius: BorderRadius.circular(3.6),
@@ -105,14 +112,14 @@ class BookWithCheckbox extends StatelessWidget {
                         ),
                         const SizedBox(height: 3),
                         SizedBox(
-                          width: 69,
+                          width: 85,
                           height: 38,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: 69,
+                                width: 85,
                                 height: 19,
                                 child: Text(
                                   author,
@@ -123,10 +130,10 @@ class BookWithCheckbox extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                width: 69,
+                                width: 85,
                                 height: 19,
                                 child: Text(
-                                  lastReadAt,
+                                  '~${_formatDate(lastReadAt)}',
                                   style: AppTexts.b10
                                       .copyWith(color: ColorName.g3),
                                   maxLines: 1,

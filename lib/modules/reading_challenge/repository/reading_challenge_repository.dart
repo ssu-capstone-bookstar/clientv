@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/challenge_detail_response.dart';
 import '../model/challenge_response.dart';
-import '../model/rating_request.dart';
+import '../model/book_rating_request.dart';
 import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
 import 'package:book/common/models/cursor_page_response.dart';
@@ -55,10 +55,15 @@ abstract class ReadingChallengeRepository {
     @Path('memberId') int memberId,
   );
 
-  @POST('/api/v2/reading-challenges/{challengeId}/complete')
-  Future<ResponseForm<dynamic>> completeChallenge(
-    @Path('challengeId') int challengeId,
-    @Body() RatingRequest request,
+  @POST('/api/v2/books/{bookId}/ratings')
+  Future<ResponseForm<dynamic>> createBookRating(
+    @Path('bookId') String bookId,
+    @Body() BookRatingRequest request,
+  );
+
+  @DELETE('/api/v2/books/{bookId}/ratings')
+  Future<ResponseForm<dynamic>> deleteBookRating(
+    @Path('bookId') String bookId,
   );
 
   @POST('/api/v2/reading-challenges/{challengeId}/restart')
