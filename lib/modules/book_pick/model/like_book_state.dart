@@ -9,5 +9,6 @@ abstract class LikeBookState with _$LikeBookState {
     @Default([]) List<LikeBookResponse> likeBooks,
     @Default(false) bool hasNext,
     @Default(-1) int nextCursor,
+    @Default("") String keyword,
   }) = _LikeBookState;
 }

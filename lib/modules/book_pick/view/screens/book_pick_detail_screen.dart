@@ -83,7 +83,7 @@ class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
           preferredSize: const Size.fromHeight(AppSizes.APP_BAR_HEIGHT),
           child: AppBar(
             title: Text('책픽', style: AppTexts.b5),
-            leading: const BackButton(),
+            leading: BackButton(),
           ),
         ),
         body: bookAsync.when(
@@ -101,8 +101,8 @@ class _BookPickDetailScreenState extends ConsumerState<BookPickDetailScreen> {
                     BookResultInfo(
                       book: book.detail,
                       onItemTap: () {
-                        context.go(
-                            '/book-pick/search/detail/${book.detail.id}/overview');
+                        context
+                            .go('/book-pick/detail/${book.detail.id}/overview');
                       },
                     ),
                     _buildRelationDiary(

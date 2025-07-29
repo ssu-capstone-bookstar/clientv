@@ -21,11 +21,13 @@ class _BookPickRepository implements BookPickRepository {
   Future<ResponseForm<CursorPageResponse<LikeBookResponse>>> getMyLikes({
     int? cursorId,
     int? size,
+    String? keyword,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'cursorId': cursorId,
       r'size': size,
+      r'keyword': keyword,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

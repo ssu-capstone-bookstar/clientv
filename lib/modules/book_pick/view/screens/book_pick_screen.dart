@@ -142,12 +142,11 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
                     controller: _scrollController,
                     list: bookPickState.likeBook.likeBooks,
                     onAllView: () {
-                      // TODO
-                      print("onAllView");
+                      context.push('/book-pick/my-likes');
                     },
                     onItemTap: (index) {
                       final item = bookPickState.likeBook.likeBooks[index];
-                      context.push('/book-pick/search/detail/${item.bookId}');
+                      context.push('/book-pick/detail/${item.bookId}');
                     },
                   ),
                 ],

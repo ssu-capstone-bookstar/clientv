@@ -6,7 +6,7 @@ part of 'book_pick_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bookPickViewModelHash() => r'806eb3eb51a06648bccbd330608259132d2bc5f0';
+String _$bookPickViewModelHash() => r'd824ddd404b457a0f228fadbd7bca2e1f255019c';
 
 /// See also [BookPickViewModel].
 @ProviderFor(BookPickViewModel)

@@ -17,6 +17,7 @@ mixin _$LikeBookState {
   List<LikeBookResponse> get likeBooks;
   bool get hasNext;
   int get nextCursor;
+  String get keyword;
 
   /// Create a copy of LikeBookState
   /// with the given fields replaced by the non-null parameter values.
@@ -34,16 +35,21 @@ mixin _$LikeBookState {
             const DeepCollectionEquality().equals(other.likeBooks, likeBooks) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
             (identical(other.nextCursor, nextCursor) ||
-                other.nextCursor == nextCursor));
+                other.nextCursor == nextCursor) &&
+            (identical(other.keyword, keyword) || other.keyword == keyword));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(likeBooks), hasNext, nextCursor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(likeBooks),
+      hasNext,
+      nextCursor,
+      keyword);
 
   @override
   String toString() {
-    return 'LikeBookState(likeBooks: $likeBooks, hasNext: $hasNext, nextCursor: $nextCursor)';
+    return 'LikeBookState(likeBooks: $likeBooks, hasNext: $hasNext, nextCursor: $nextCursor, keyword: $keyword)';
   }
 }
 
@@ -53,7 +59,11 @@ abstract mixin class $LikeBookStateCopyWith<$Res> {
           LikeBookState value, $Res Function(LikeBookState) _then) =
       _$LikeBookStateCopyWithImpl;
   @useResult
-  $Res call({List<LikeBookResponse> likeBooks, bool hasNext, int nextCursor});
+  $Res call(
+      {List<LikeBookResponse> likeBooks,
+      bool hasNext,
+      int nextCursor,
+      String keyword});
 }
 
 /// @nodoc
@@ -72,6 +82,7 @@ class _$LikeBookStateCopyWithImpl<$Res>
     Object? likeBooks = null,
     Object? hasNext = null,
     Object? nextCursor = null,
+    Object? keyword = null,
   }) {
     return _then(_self.copyWith(
       likeBooks: null == likeBooks
@@ -86,6 +97,10 @@ class _$LikeBookStateCopyWithImpl<$Res>
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
               as int,
+      keyword: null == keyword
+          ? _self.keyword
+          : keyword // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -183,15 +198,16 @@ extension LikeBookStatePatterns on LikeBookState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            List<LikeBookResponse> likeBooks, bool hasNext, int nextCursor)?
+    TResult Function(List<LikeBookResponse> likeBooks, bool hasNext,
+            int nextCursor, String keyword)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _LikeBookState() when $default != null:
-        return $default(_that.likeBooks, _that.hasNext, _that.nextCursor);
+        return $default(
+            _that.likeBooks, _that.hasNext, _that.nextCursor, _that.keyword);
       case _:
         return orElse();
     }
@@ -212,14 +228,15 @@ extension LikeBookStatePatterns on LikeBookState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            List<LikeBookResponse> likeBooks, bool hasNext, int nextCursor)
+    TResult Function(List<LikeBookResponse> likeBooks, bool hasNext,
+            int nextCursor, String keyword)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _LikeBookState():
-        return $default(_that.likeBooks, _that.hasNext, _that.nextCursor);
+        return $default(
+            _that.likeBooks, _that.hasNext, _that.nextCursor, _that.keyword);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -239,14 +256,15 @@ extension LikeBookStatePatterns on LikeBookState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            List<LikeBookResponse> likeBooks, bool hasNext, int nextCursor)?
+    TResult? Function(List<LikeBookResponse> likeBooks, bool hasNext,
+            int nextCursor, String keyword)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _LikeBookState() when $default != null:
-        return $default(_that.likeBooks, _that.hasNext, _that.nextCursor);
+        return $default(
+            _that.likeBooks, _that.hasNext, _that.nextCursor, _that.keyword);
       case _:
         return null;
     }
@@ -259,7 +277,8 @@ class _LikeBookState implements LikeBookState {
   const _LikeBookState(
       {final List<LikeBookResponse> likeBooks = const [],
       this.hasNext = false,
-      this.nextCursor = -1})
+      this.nextCursor = -1,
+      this.keyword = ""})
       : _likeBooks = likeBooks;
 
   final List<LikeBookResponse> _likeBooks;
@@ -277,6 +296,9 @@ class _LikeBookState implements LikeBookState {
   @override
   @JsonKey()
   final int nextCursor;
+  @override
+  @JsonKey()
+  final String keyword;
 
   /// Create a copy of LikeBookState
   /// with the given fields replaced by the non-null parameter values.
@@ -295,16 +317,21 @@ class _LikeBookState implements LikeBookState {
                 .equals(other._likeBooks, _likeBooks) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
             (identical(other.nextCursor, nextCursor) ||
-                other.nextCursor == nextCursor));
+                other.nextCursor == nextCursor) &&
+            (identical(other.keyword, keyword) || other.keyword == keyword));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_likeBooks), hasNext, nextCursor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_likeBooks),
+      hasNext,
+      nextCursor,
+      keyword);
 
   @override
   String toString() {
-    return 'LikeBookState(likeBooks: $likeBooks, hasNext: $hasNext, nextCursor: $nextCursor)';
+    return 'LikeBookState(likeBooks: $likeBooks, hasNext: $hasNext, nextCursor: $nextCursor, keyword: $keyword)';
   }
 }
 
@@ -316,7 +343,11 @@ abstract mixin class _$LikeBookStateCopyWith<$Res>
       __$LikeBookStateCopyWithImpl;
   @override
   @useResult
-  $Res call({List<LikeBookResponse> likeBooks, bool hasNext, int nextCursor});
+  $Res call(
+      {List<LikeBookResponse> likeBooks,
+      bool hasNext,
+      int nextCursor,
+      String keyword});
 }
 
 /// @nodoc
@@ -335,6 +366,7 @@ class __$LikeBookStateCopyWithImpl<$Res>
     Object? likeBooks = null,
     Object? hasNext = null,
     Object? nextCursor = null,
+    Object? keyword = null,
   }) {
     return _then(_LikeBookState(
       likeBooks: null == likeBooks
@@ -349,6 +381,10 @@ class __$LikeBookStateCopyWithImpl<$Res>
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
               as int,
+      keyword: null == keyword
+          ? _self.keyword
+          : keyword // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
