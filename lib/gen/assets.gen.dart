@@ -268,6 +268,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_star.svg
   SvgGenImage get icStar => const SvgGenImage('assets/icons/ic_star.svg');
 
+  /// File path: assets/icons/ic_user.svg
+  SvgGenImage get icUser => const SvgGenImage('assets/icons/ic_user.svg');
+
   /// File path: assets/icons/ic_withdrawal.svg
   SvgGenImage get icWithdrawal =>
       const SvgGenImage('assets/icons/ic_withdrawal.svg');
@@ -329,6 +332,7 @@ class $AssetsIconsGen {
     icScrap,
     icScrapFilled,
     icStar,
+    icUser,
     icWithdrawal,
     kakao,
   ];
