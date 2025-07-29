@@ -247,13 +247,6 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
         ],
       );
 
-  // 책픽
-  // 내가 좋아요 누른 책 리스트
-  // 더보기 클릭시 좋아요 책 리스트
-  // 책 클릭시 상세 페이지1
-  // 상세 페이지1에서 책 배너 클릭시 상세페이지2
-  // 상세페이지2에서는 좋아요, 관련 게시물만 있음 (책픽 제외)
-  // 검색화면은 항상 메인 페이지로 이동
   Widget _buildBookPick(
           {required ScrollController controller,
           required List<LikeBookResponse> list,
@@ -295,7 +288,7 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
           ),
           SizedBox(
             height: 135,
-            child: ListView.separated(
+            child: list.isNotEmpty ? ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(width: 12),
                 scrollDirection: Axis.horizontal,
                 controller: controller,
@@ -304,7 +297,12 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
                   final item = list[index];
                   return BookPickItem(
                       item: item, onItemTap: () => onItemTap(index));
-                }),
+                }) : Center(
+              child: Text(
+                '내가 픽한 책이 없습니다.',
+                style: AppTexts.b8.copyWith(color: ColorName.g3),
+              ),
+            ),
           ),
           SizedBox(
             height: 70,

@@ -227,7 +227,6 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                   ),
                 ],
               ),
-              // TODO: 좋아요 버튼
               InkWell(
                   onTap: onLike,
                   child: book.liked
