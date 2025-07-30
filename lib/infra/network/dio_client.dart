@@ -49,7 +49,11 @@ class CustomInterceptor extends Interceptor {
 
     final tokens = await _ref.read(authViewModelProvider.notifier).getTokens();
     if (tokens.accessToken != null) {
-      options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
+      if (options.path == '/api/v1/auth/renew') {
+        options.headers['Authorization'] = 'Bearer ${tokens.refreshToken}';
+      } else {
+        options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
+      }
     }
     super.onRequest(options, handler);
   }
@@ -58,13 +62,14 @@ class CustomInterceptor extends Interceptor {
   Future<void> onError(
       DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 &&
+        err.requestOptions.path != '/api/v1/auth/login' &&
         err.requestOptions.path != '/api/v1/auth/renew') {
       final newAuthData =
           await _ref.read(authViewModelProvider.notifier).refreshToken();
 
       if (newAuthData != null) {
         final options = err.requestOptions;
-        options.headers['Authorization'] = 'Bearer ${newAuthData.refreshToken}';
+        options.headers['Authorization'] = 'Bearer ${newAuthData.accessToken}';
 
         try {
           final response = await _ref.read(baseDioProvider).fetch(options);
