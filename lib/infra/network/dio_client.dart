@@ -64,7 +64,7 @@ class CustomInterceptor extends Interceptor {
 
       if (newAuthData != null) {
         final options = err.requestOptions;
-        options.headers['Authorization'] = 'Bearer ${newAuthData.accessToken}';
+        options.headers['Authorization'] = 'Bearer ${newAuthData.refreshToken}';
 
         try {
           final response = await _ref.read(baseDioProvider).fetch(options);
