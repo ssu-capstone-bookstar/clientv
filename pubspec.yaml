@@ -57,6 +57,10 @@ dependencies:
   url_launcher: ^6.3.2
   html_unescape: ^2.0.0
 
+  # audio
+  audio_session: ^0.2.2
+  just_audio: ^0.10.4
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -74,9 +78,7 @@ dev_dependencies:
   retrofit_generator: ^9.3.0
   flutter_gen_runner: ^5.10.0
 
-  # audio
-  audio_session: ^0.2.2
-  just_audio: ^0.10.4
+  
   
 dependency_overrides:
   build: '2.5.4'
