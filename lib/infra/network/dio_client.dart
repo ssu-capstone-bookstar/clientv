@@ -62,8 +62,8 @@ class CustomInterceptor extends Interceptor {
   Future<void> onError(
       DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401 &&
-        err.requestOptions.path != '/api/v1/auth/login' &&
-        err.requestOptions.path != '/api/v1/auth/renew') {
+        err.requestOptions.path != '/login' &&
+        err.requestOptions.path != '/renew') {
       final newAuthData =
           await _ref.read(authViewModelProvider.notifier).refreshToken();
 

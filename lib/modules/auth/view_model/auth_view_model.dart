@@ -23,6 +23,7 @@ class AuthViewModel extends _$AuthViewModel {
     state = const AsyncLoading();
 
     try {
+      print("build refreshToken");
       await refreshToken();
     } catch (e, t) {
       state = AsyncError(e, t);
@@ -122,8 +123,10 @@ class AuthViewModel extends _$AuthViewModel {
     try {
       final authDataResponse =
           await _authRepository.renewToken('Bearer $oldRefreshToken');
+      print("authDataResponse: $authDataResponse");
 
       final authData = authDataResponse.data;
+      print("authData: $authData");
 
       if (authData == null) {
         await signOut();
@@ -164,6 +167,7 @@ class AuthViewModel extends _$AuthViewModel {
 
       return authData;
     } catch (e, _) {
+      print("error: $e");
       await signOut();
 
       return null;
