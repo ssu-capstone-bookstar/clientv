@@ -28,10 +28,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (isDeepTime) {
       return AppBar(
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: onBackTap,
-          icon: const Icon(Icons.close, color: ColorName.w1),
-        ),
         title: Text('딥타임', style: AppTexts.b5),
         centerTitle: true,
       );
