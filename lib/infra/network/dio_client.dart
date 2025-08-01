@@ -49,7 +49,7 @@ class CustomInterceptor extends Interceptor {
 
     final tokens = await _ref.read(authViewModelProvider.notifier).getTokens();
     if (tokens.accessToken != null) {
-      if (options.path == '/api/v1/auth/renew') {
+      if (options.path == '/renew') {
         options.headers['Authorization'] = 'Bearer ${tokens.refreshToken}';
       } else {
         options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
