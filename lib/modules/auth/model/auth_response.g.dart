@@ -11,8 +11,8 @@ _AuthResponse _$AuthResponseFromJson(Map<String, dynamic> json) =>
       memberId: (json['memberId'] as num).toInt(),
       nickName: json['nickName'] as String? ?? '',
       profileImage: json['profileImage'] as String? ?? '',
-      providerType: json['providerType'] as String,
-      email: json['email'] as String,
+      providerType: json['providerType'] as String? ?? '',
+      email: json['email'] as String? ?? '',
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
       accessTokenExpiration:

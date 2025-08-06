@@ -43,16 +43,16 @@ class CustomInterceptor extends Interceptor {
   @override
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    if (options.path == '/api/v1/auth/login') {
-      return super.onRequest(options, handler);
-    }
-
-    final tokens = await _ref.read(authViewModelProvider.notifier).getTokens();
-    if (tokens.accessToken != null) {
-      if (options.path == '/renew') {
-        options.headers['Authorization'] = 'Bearer ${tokens.refreshToken}';
-      } else {
-        options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
+    if (options.path == '/login') {
+      // login은 토큰이 없어도 가능
+    } else {
+      final tokens = await _ref.read(authViewModelProvider.notifier).getTokens();
+      if (tokens.accessToken != null) {
+        if (options.path == '/renew') {
+          options.headers['Authorization'] = 'Bearer ${tokens.refreshToken}';
+        } else {
+          options.headers['Authorization'] = 'Bearer ${tokens.accessToken}';
+        }
       }
     }
     super.onRequest(options, handler);

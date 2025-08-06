@@ -39,12 +39,9 @@ class AuthViewModel extends _$AuthViewModel {
       if (idToken == null) {
         return AuthFailed(errorMsg: '', errorCode: -1);
       }
-
       final request =
           LoginRequest(providerType: providerType, idToken: idToken);
-
       final response = await _authRepository.login(request);
-
       final authData = response.data;
 
       // Debug: Print the received auth data
