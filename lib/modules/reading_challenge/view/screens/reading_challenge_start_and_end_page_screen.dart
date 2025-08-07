@@ -160,7 +160,7 @@ class _ReadingChallengeStartAndEndPageScreenState
                               ],
                             ),
                             SizedBox(height: 16,),
-                            _buildBottomButtonSection(
+                            _buildSubmitButtonSection(
                                 context, book, widget.totalPages)
                           ],
                         ))));
@@ -240,7 +240,7 @@ class _ReadingChallengeStartAndEndPageScreenState
     );
   }
 
-  Widget _buildBottomButtonSection(
+  Widget _buildSubmitButtonSection(
     BuildContext context,
     SearchBookResponse book,
     int totalPages,
