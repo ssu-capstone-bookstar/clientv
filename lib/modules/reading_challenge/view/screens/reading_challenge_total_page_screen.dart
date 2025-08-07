@@ -75,7 +75,7 @@ class _ReadingChallengeTotalPageScreenState
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text("리딩 챌린지: ${MediaQuery.of(context).viewInsets.bottom}"),
+          title: Text("리딩 챌린지"),
           actions: [
             IconButton(
               icon: const Icon(Icons.close),
