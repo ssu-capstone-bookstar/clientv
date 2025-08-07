@@ -22,13 +22,16 @@ class ReadingChallengeTotalPageScreen extends ConsumerStatefulWidget {
 }
 
 class _ReadingChallengeTotalPageScreenState
-    extends ConsumerState<ReadingChallengeTotalPageScreen> {
+    extends ConsumerState<ReadingChallengeTotalPageScreen>
+    with WidgetsBindingObserver {
   final _textController = TextEditingController();
   bool _isButtonEnabled = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _textController.addListener(() {
       setState(() {
         _isButtonEnabled = _textController.text.isNotEmpty;
@@ -36,9 +39,31 @@ class _ReadingChallengeTotalPageScreenState
     });
   }
 
+  // 이 메서드는 키보드, 시스템 UI 등 화면 metric이 바뀔 때 호출됨
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+
+    final bottomInset = WidgetsBinding
+        .instance.platformDispatcher.views.first.viewInsets.bottom;
+    if (bottomInset > 0.0) {
+      // 키보드가 올라온 직후 frame build 후 스크롤
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    }
+  }
+
   @override
   void dispose() {
     _textController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -50,10 +75,7 @@ class _ReadingChallengeTotalPageScreenState
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("리딩 챌린지"),
-          leading: BackButton(
-            onPressed: context.pop,
-          ),
+          title: Text("리딩 챌린지: ${MediaQuery.of(context).viewInsets.bottom}"),
           actions: [
             IconButton(
               icon: const Icon(Icons.close),
@@ -65,29 +87,41 @@ class _ReadingChallengeTotalPageScreenState
         ),
         body: Padding(
           padding: AppPaddings.SCREEN_BODY_PADDING,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ChallengeBookInfoWidget(book: book),
-                    const SizedBox(height: 25),
-                    const StepProgressIndicator(
-                      totalSteps: 3,
-                      currentStep: 1,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                controller: _scrollController,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight + MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ChallengeBookInfoWidget(book: book),
+                            const SizedBox(height: 25),
+                            const StepProgressIndicator(
+                              totalSteps: 3,
+                              currentStep: 1,
+                            ),
+                            const SizedBox(height: 40),
+                            _buildPageInputSection(),
+                          ],
+                        ),
+                        SizedBox(height: 16,),
+                        _buildSubmitButtonSection(),
+                      ],
                     ),
-                    const SizedBox(height: 40),
-                    _buildPageInputSection(),
-                  ],
+                  ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
-        bottomNavigationBar: _buildBottomButtonSection(),
       ),
     );
   }
@@ -100,12 +134,13 @@ class _ReadingChallengeTotalPageScreenState
           controller: _textController,
           label: '선택하신 책의 전체 페이지 수를 알려주세요',
           hintText: '페이지',
+          keyboardType: TextInputType.number,
         ),
       ],
     );
   }
 
-  Widget _buildBottomButtonSection() {
+  Widget _buildSubmitButtonSection() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
       child: Column(
