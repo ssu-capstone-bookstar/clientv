@@ -1,7 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/challenge_response.dart';
 import '../repository/reading_challenge_repository.dart';
 import '../state/abandoned_challenges_state.dart';
 

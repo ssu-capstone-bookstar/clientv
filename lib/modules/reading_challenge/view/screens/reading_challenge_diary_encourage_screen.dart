@@ -104,6 +104,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
             final bookId =
                 ref.read(currentChallengeViewModelProvider).book?.bookId;
             if (bookId == null) return;
+            if (!context.mounted) return;
             context.push('/reading-diary/$bookId');
           },
         ),

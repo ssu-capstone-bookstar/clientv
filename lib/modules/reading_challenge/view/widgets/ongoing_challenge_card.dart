@@ -72,8 +72,8 @@ class OngoingChallengeCard extends StatelessWidget {
       height: 80,
       colors: [
         Colors.transparent,
-        Colors.black.withOpacity(0.1),
-        Colors.black.withOpacity(0.8),
+        Colors.black.withValues(alpha: 0.1),
+        Colors.black.withValues(alpha: 0.8),
       ],
     );
   }

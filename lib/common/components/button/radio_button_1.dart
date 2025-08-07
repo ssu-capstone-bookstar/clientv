@@ -24,7 +24,7 @@ class RadioButton1<T> extends StatefulWidget {
   final bool interactive;
 
   const RadioButton1({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.value,
@@ -32,7 +32,7 @@ class RadioButton1<T> extends StatefulWidget {
     this.onChanged,
     this.enabled = true,
     this.interactive = true,
-  }) : super(key: key);
+  });
 
   @override
   State<RadioButton1<T>> createState() => _RadioButton1State<T>();
@@ -40,7 +40,6 @@ class RadioButton1<T> extends StatefulWidget {
 
 class _RadioButton1State<T> extends State<RadioButton1<T>> {
   bool _isHovered = false;
-  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,35 +48,23 @@ class _RadioButton1State<T> extends State<RadioButton1<T>> {
 
     Color backgroundColor;
     Color borderColor;
-    Color titleColor;
-    Color descColor;
 
     // interactive: false → 항상 Default 스타일
     if (!widget.interactive) {
       backgroundColor = ColorName.g7;
       borderColor = ColorName.g6;
-      titleColor = ColorName.w1;
-      descColor = ColorName.g3;
     } else if (isDisabled) {
       backgroundColor = ColorName.g7;
       borderColor = ColorName.g6;
-      titleColor = ColorName.g3;
-      descColor = ColorName.g3;
     } else if (isSelected) {
       backgroundColor = ColorName.p5;
       borderColor = ColorName.p1;
-      titleColor = ColorName.p1;
-      descColor = ColorName.g2;
     } else if (_isHovered) {
       backgroundColor = ColorName.g6;
       borderColor = ColorName.g5;
-      titleColor = ColorName.w1;
-      descColor = ColorName.g3;
     } else {
       backgroundColor = ColorName.g7;
       borderColor = ColorName.g6;
-      titleColor = ColorName.w1;
-      descColor = ColorName.g3;
     }
 
     final child = AnimatedContainer(
@@ -114,18 +101,8 @@ class _RadioButton1State<T> extends State<RadioButton1<T>> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() {
         _isHovered = false;
-        _isPressed = false;
       }),
       child: GestureDetector(
-        onTapDown: (_) {
-          if (!isDisabled) setState(() => _isPressed = true);
-        },
-        onTapUp: (_) {
-          if (!isDisabled) setState(() => _isPressed = false);
-        },
-        onTapCancel: () {
-          if (!isDisabled) setState(() => _isPressed = false);
-        },
         onTap: isDisabled ? null : () => widget.onChanged?.call(widget.value),
         child: child,
       ),

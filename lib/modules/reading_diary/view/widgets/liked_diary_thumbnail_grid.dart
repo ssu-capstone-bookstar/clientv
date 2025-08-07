@@ -77,7 +77,7 @@ class _LikedDiaryThumbnailGridState
         .where((url) => url.isNotEmpty)
         .toList();
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height - 200,
       child: RefreshIndicator(
         onRefresh: widget.onRefresh,

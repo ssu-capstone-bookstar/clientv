@@ -126,12 +126,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         final uploadedUrl = await _uploadProfileImage(_pickedImageFile!);
         imageUrl = uploadedUrl ?? imageUrl;
       } catch (e) {
+        if (!context.mounted) return;
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('이미지 업로드 실패: $e')),
         );
         return;
       }
+      if (!context.mounted) return;
       Navigator.of(context).pop();
     }
     final request = UpdateProfileRequest(
@@ -141,6 +143,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
     final repository = ref.read(profileRepositoryProvider);
     try {
+      if (!context.mounted) return;
       showDialog(
         context: context,
         barrierDismissible: false,

@@ -129,7 +129,7 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       final challengeDetail = res.data;
       state = state.copyWith(
         totalPages: challengeDetail.totalPages,
-        challengeId: int.tryParse(challengeDetail.challengeId ?? ''),
+        challengeId: int.tryParse(challengeDetail.challengeId),
         lastReadPage: challengeDetail.lastReadPage,
       );
     } catch (e) {
