@@ -1,7 +1,6 @@
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/book_log/state/book_log_state.dart';
 import 'package:book/modules/book_log/view/widgets/feed_card.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
 import 'package:flutter/material.dart';

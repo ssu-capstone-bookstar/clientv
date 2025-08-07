@@ -21,5 +21,3 @@ abstract class ChallengeCreationResponse with _$ChallengeCreationResponse {
   factory ChallengeCreationResponse.fromJson(Map<String, dynamic> json) =>
       _$ChallengeCreationResponseFromJson(json);
 }
-
-Map<String, dynamic> _bookSummaryToJson(BookSummary book) => book.toJson();

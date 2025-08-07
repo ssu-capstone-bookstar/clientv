@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../common/components/grid/image_grid.dart';
 import '../../../../gen/colors.gen.dart';
-import '../../model/scrapped_diary_thumbnail_response.dart';
-import '../../state/scrapped_diary_state.dart';
 import '../../view_model/scrapped_diary_view_model.dart';
 
 class ScrappedDiaryThumbnailGrid extends ConsumerStatefulWidget {

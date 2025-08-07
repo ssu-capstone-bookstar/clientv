@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/app_style.dart';
-import '../../../../gen/colors.gen.dart';
 import '../../model/home_bottom_nav_menu.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
