@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:book/modules/book/model/book_detail_response.dart';
 import 'package:book/modules/book/model/book_rating_request.dart';
 import 'package:book/modules/book/state/book_overview_state.dart';
-import 'package:book/modules/book_pick/view_model/book_pick_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/book_overview_response.dart';
@@ -66,7 +65,6 @@ class BookViewModel extends _$BookViewModel {
         ),
       );
     }
-    await ref.read(bookPickViewModelProvider.notifier).initLikeBooks();
     _cache[bookId] = state.value!;
   }
 

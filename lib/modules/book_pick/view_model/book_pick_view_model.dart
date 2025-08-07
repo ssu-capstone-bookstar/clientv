@@ -45,25 +45,11 @@ class BookPickViewModel extends _$BookPickViewModel {
     await _bookPickRepository.watchYoutubeVideo(videoId: videoId);
   }
 
-  Future<BookPickState> initLikeBooks() async {
-    final prev = state.value ?? BookPickState();
-    final responseLike = await _bookPickRepository.getMyLikes();
-    state = AsyncValue.data(prev.copyWith(
-      likeBook: LikeBookState(
-        likeBooks: responseLike.data.data,
-        hasNext: responseLike.data.hasNext,
-        nextCursor: responseLike.data.nextCursor ?? -1,
-        title: prev.likeBook.title,
-      ),
-    ));
-    return state.value ?? BookPickState();
-  }
-
   Future<BookPickState> refreshLikeBooks() async {
     final prev = state.value ?? BookPickState();
     if (prev.nextCursor != -1) {
-      final responseLike = await _bookPickRepository.getMyLikes(
-          cursorId: prev.nextCursor, title: prev.likeBook.title);
+      final responseLike =
+          await _bookPickRepository.getMyLikes(cursorId: prev.nextCursor, title: prev.likeBook.title);
       state = AsyncValue.data(prev.copyWith(
         likeBook: LikeBookState(
           likeBooks: [...prev.likeBook.likeBooks, ...responseLike.data.data],
