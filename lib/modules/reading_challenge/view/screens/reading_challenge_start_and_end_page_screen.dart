@@ -30,20 +30,15 @@ class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
 }
 
 class _ReadingChallengeStartAndEndPageScreenState
-    extends ConsumerState<ReadingChallengeStartAndEndPageScreen> {
+    extends ConsumerState<ReadingChallengeStartAndEndPageScreen>with WidgetsBindingObserver  {
   final FocusNode startFocusNode = FocusNode();
   final FocusNode endFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    startFocusNode.dispose();
-    endFocusNode.dispose();
-    super.dispose();
-  }
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         ref
@@ -55,6 +50,39 @@ class _ReadingChallengeStartAndEndPageScreenState
             );
       }
     });
+  }
+
+  
+
+
+
+  // 이 메서드는 키보드, 시스템 UI 등 화면 metric이 바뀔 때 호출됨
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+
+    final bottomInset = WidgetsBinding
+        .instance.platformDispatcher.views.first.viewInsets.bottom;
+    if (bottomInset > 0.0) {
+      // 키보드가 올라온 직후 frame build 후 스크롤
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    startFocusNode.dispose();
+    endFocusNode.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   void _showSkipDialog() {
@@ -79,61 +107,66 @@ class _ReadingChallengeStartAndEndPageScreenState
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
-    final state = ref.watch(currentChallengeViewModelProvider);
     final book = widget.book;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("리딩 챌린지"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              if (widget.challengeId != null) {
-                // 진행 중인 챌린지에서 왔다면 바로 이전 화면으로
-                context.pop();
-              } else {
-                // 신규 챌린지라면 확인 다이얼로그 표시
-                _showSkipDialog();
-              }
-            },
-          ),
-        ],
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: AppPaddings.SCREEN_BODY_PADDING,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ChallengeBookInfoWidget(book: book),
-                      const SizedBox(height: 16),
-                      const StepProgressIndicator(
-                        totalSteps: 3,
-                        currentStep: 2,
-                      ),
-                      const SizedBox(height: 40),
-                      _buildPageInputSection(
-                          context, viewModel, startFocusNode, endFocusNode),
-                    ],
-                  ),
-                ),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text("리딩 챌린지"),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  if (widget.challengeId != null) {
+                    // 진행 중인 챌린지에서 왔다면 바로 이전 화면으로
+                    context.pop();
+                  } else {
+                    // 신규 챌린지라면 확인 다이얼로그 표시
+                    _showSkipDialog();
+                  }
+                },
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: (state.startPage?.isNotEmpty == true ||
-              state.endPage?.isNotEmpty == true)
-          ? _buildBottomButtonSection(context, book, widget.totalPages)
-          : null,
+          body: Padding(
+            padding: AppPaddings.SCREEN_BODY_PADDING,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                    controller: _scrollController,
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight + MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: IntrinsicHeight(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              // controller: _scrollController,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ChallengeBookInfoWidget(book: book),
+                                const SizedBox(height: 16),
+                                const StepProgressIndicator(
+                                  totalSteps: 3,
+                                  currentStep: 2,
+                                ),
+                                const SizedBox(height: 40),
+                                _buildPageInputSection(context, viewModel,
+                                    startFocusNode, endFocusNode),
+                              ],
+                            ),
+                            SizedBox(height: 16,),
+                            _buildSubmitButtonSection(
+                                context, book, widget.totalPages)
+                          ],
+                        ))));
+              },
+            ),
+          )),
     );
   }
 
@@ -207,7 +240,7 @@ class _ReadingChallengeStartAndEndPageScreenState
     );
   }
 
-  Widget _buildBottomButtonSection(
+  Widget _buildSubmitButtonSection(
     BuildContext context,
     SearchBookResponse book,
     int totalPages,
