@@ -65,6 +65,11 @@ GoRouter router(Ref ref) {
     navigatorKey: rootNavigatorKey,
     refreshListenable: authState,
     redirect: (context, state) {
+      final isKakaoRedirect = state.uri.scheme.startsWith("kakao");
+      if (isKakaoRedirect) {
+        return "/login";
+      }
+
       if (authState.value.isLoading || !authState.value.hasValue) return null;
 
       if (authState.value.unwrapPrevious().hasError) return '/login';

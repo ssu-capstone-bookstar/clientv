@@ -30,7 +30,6 @@ class SocialLoginService {
       } else {
         token = await UserApi.instance.loginWithKakaoAccount();
       }
-
       return token.idToken ?? '';
     } catch (e) {
       debugPrint('[ERROR] loginWithKakao: $e');
