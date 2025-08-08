@@ -381,8 +381,8 @@ class _AuthResponse implements AuthResponse {
       {required this.memberId,
       this.nickName = '',
       this.profileImage = '',
-      required this.providerType,
-      required this.email,
+      this.providerType = '',
+      this.email = '',
       required this.accessToken,
       required this.refreshToken,
       required this.accessTokenExpiration,
@@ -399,8 +399,10 @@ class _AuthResponse implements AuthResponse {
   @JsonKey()
   final String profileImage;
   @override
+  @JsonKey()
   final String providerType;
   @override
+  @JsonKey()
   final String email;
   @override
   final String accessToken;
