@@ -12,19 +12,52 @@ import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:book/modules/deep_time/view/widgets/playlist_button.dart';
+import 'package:book/modules/deep_time/view_model/playlist_view_model.dart';
 
-class DeepTimeScreen extends ConsumerWidget {
+class DeepTimeScreen extends ConsumerStatefulWidget {
   const DeepTimeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(deepTimeViewModelProvider, (previous, next) {
+  ConsumerState<DeepTimeScreen> createState() => _DeepTimeScreenState();
+}
+
+class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ref.listenManual(selectedMusicProvider, (previous, next) {
+      if (next != null) {
+        final audioPlayer = ref.read(audioPlayerProvider);
+        initAudioSession();
+        audioPlayer.setUrl(next.musicUrl);
+        audioPlayer.play();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final audioPlayer = ref.read(audioPlayerProvider);
+      if (audioPlayer.playing) {
+        audioPlayer.stop();
+      }
+      ref.read(selectedMusicProvider.notifier).state = null;
+    });
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.watch(audioPlayerProvider);
+    ref.listen(deepTimeViewModelProvider, (previous, next) async {
       if (next.value?.status == DeepTimeStatus.finished) {
-        showDialog(
-          context: context,
-          builder: (_) => const DeepTimeCompletionDialog(),
-          barrierDismissible: false,
-        );
+        await ref.read(deepTimeViewModelProvider.notifier).resetTimer();
+        if (!context.mounted) return;
+        await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (_) => const DeepTimeCompletionDialog());
       }
     });
 
@@ -50,67 +83,69 @@ class DeepTimeScreen extends ConsumerWidget {
             ? state.remainingDuration
             : state.settingDuration;
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return SafeArea(
-      child: LayoutBuilder(builder: (context, constraints) {
-        final timerSize = constraints.maxWidth * 0.7;
-
-        return Stack(alignment: Alignment.topCenter, children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-            child: Column(
+    return PopScope(
+      // followed by modification in lib/modules/home/view/screens/home_screen.dart.
+      // if DeepTimeStatus.running -> can't use bottom navigator bar.
+      canPop: state.status != DeepTimeStatus.running,
+      child: SafeArea(
+        child: LayoutBuilder(builder: (context, constraints) {
+          return Stack(alignment: Alignment.topCenter, children: [
+            Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // TODO: deprecate MediaQuery-based sizing.
-                SizedBox(height: screenHeight * 0.01),
-                _buildTodayTotalTime(state.todayTotalSeconds),
-                SizedBox(height: screenHeight * 0.05),
+                const SizedBox(height: 30),
                 SizedBox(
-                  width: timerSize,
-                  height: timerSize,
+                  width: 272,
+                  height: 272,
                   child: Stack(
                     alignment: Alignment.center,
                     clipBehavior: Clip.none,
                     children: [
-                      CircularTimer(size: timerSize),
-                      _buildTimeMarker('0', const Alignment(0, -1.25)),
-                      _buildTimeMarker('15', const Alignment(1.25, 0)),
-                      _buildTimeMarker('30', const Alignment(0, 1.25)),
-                      _buildTimeMarker('45', const Alignment(-1.25, 0)),
+                      CircularTimer(size: 272),
+                      _buildTimeMarker('0', const Alignment(0, -0.85)),
+                      _buildTimeMarker('15', const Alignment(0.85, 0)),
+                      _buildTimeMarker('30', const Alignment(0, 0.85)),
+                      _buildTimeMarker('45', const Alignment(-0.85, 0)),
                       TimerCharacter(status: status),
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.05),
-                if (displayDuration == Duration.zero)
+                const SizedBox(height: 30),
+
+                // time is zero
+                if (displayDuration == Duration.zero) ...[
                   _buildStatusText(status, displayDuration),
-                SizedBox(height: screenHeight * 0.002),
+                  const SizedBox(height: 30),
+                  _buildTodayTotalTime(state.todayTotalSeconds),
+                ],
+                // time is not zero
                 if (state.settingDuration > Duration.zero) ...[
                   const TimerControls(),
-                  SizedBox(height: screenHeight * 0.00005),
+                  const SizedBox(height: 20),
                 ],
+
+                // 00:00 time display
                 _TimerDisplay(
                   status: status,
                   displayDuration: displayDuration,
                 ),
-                SizedBox(height: screenHeight * 0.02),
               ],
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: 26.0 + MediaQuery.of(context).viewPadding.bottom,
+
+            // need to have bottom-fixed padding so that it doesn't change its position based on the top widgets' heights
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: 26.0 + MediaQuery.of(context).viewPadding.bottom,
+                ),
+                child: PlaylistButton(),
               ),
-              child: PlaylistButton(),
             ),
-          ),
-        ]);
-      }),
+          ]);
+        }),
+      ),
     );
   }
 
@@ -149,19 +184,22 @@ class DeepTimeScreen extends ConsumerWidget {
     final timeStr = '$hours:$minutes:$seconds';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      height: 31,
+      width: 156,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: ColorName.b1,
+        color: ColorName.dim3,
         borderRadius: BorderRadius.circular(100),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '오늘의 누적 시간',
-            style: AppTexts.b8.copyWith(color: ColorName.w1),
+            style: AppTexts.b11.copyWith(color: ColorName.g2),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 3),
           Text(
             timeStr,
             style: AppTexts.b7.copyWith(color: ColorName.p1),

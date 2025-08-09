@@ -22,6 +22,7 @@ class _MusicPlayerWidgetState extends ConsumerState<MusicPlayerWidget> {
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
   bool _isPlaying = false;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _MusicPlayerWidgetState extends ConsumerState<MusicPlayerWidget> {
       if (d != null && mounted) setState(() => _duration = d);
     });
     _positionSubscription = player.positionStream.listen((p) {
-      if (mounted) setState(() => _position = p);
+      if (mounted && !_isDragging) setState(() => _position = p);
     });
     _playerStateSubscription = player.playerStateStream.listen((state) {
       if (mounted) setState(() => _isPlaying = state.playing);
@@ -154,16 +155,32 @@ class _MusicPlayerWidgetState extends ConsumerState<MusicPlayerWidget> {
                               ),
                               child: Slider(
                                 min: 0,
-                                max: _duration.inSeconds.toDouble(),
-                                value: _position.inSeconds
-                                    .clamp(0, _duration.inSeconds)
+                                max: _duration.inMilliseconds.toDouble(),
+                                value: _position.inMilliseconds
+                                    .clamp(0, _duration.inMilliseconds)
                                     .toDouble(),
                                 activeColor:
                                     const Color.fromRGBO(137, 114, 255, 1),
                                 inactiveColor: Colors.black,
+                                onChangeStart: (value) {
+                                  setState(() {
+                                    _isDragging = true;
+                                  });
+                                },
+                                onChangeEnd: (value) {
+                                  audioPlayer.seek(
+                                      Duration(milliseconds: value.round()));
+                                  setState(() {
+                                    _isDragging = false;
+                                  });
+                                },
                                 onChanged: (value) {
-                                  audioPlayer
-                                      .seek(Duration(seconds: value.toInt()));
+                                  if (_isDragging) {
+                                    setState(() {
+                                      _position =
+                                          Duration(milliseconds: value.round());
+                                    });
+                                  }
                                 },
                               ),
                             ),

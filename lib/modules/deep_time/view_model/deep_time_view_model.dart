@@ -7,14 +7,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'deep_time_view_model.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class DeepTimeViewModel extends _$DeepTimeViewModel {
   Timer? _timer;
 
   @override
   Future<DeepTimeState> build() async {
     final repo = ref.read(deepTimeRepositoryProvider);
-    
+
     // Notifier가 dispose될 때 타이머를 취소합니다.
     ref.onDispose(() {
       _timer?.cancel();
@@ -33,8 +33,7 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
       final repo = ref.read(deepTimeRepositoryProvider);
       final response = await repo.getTodayTimer();
       state = AsyncData(
-        originalState.copyWith(
-            todayTotalSeconds: response.data.totalSeconds),
+        originalState.copyWith(todayTotalSeconds: response.data.totalSeconds),
       );
     } catch (e) {
       state = AsyncData(originalState.copyWith(errorMessage: e.toString()));
@@ -48,10 +47,12 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
     final newState = state.value?.copyWith(
       settingDuration: duration,
       remainingDuration: duration,
-      status: duration == Duration.zero ? DeepTimeStatus.initial : DeepTimeStatus.ready,
+      status: duration == Duration.zero
+          ? DeepTimeStatus.initial
+          : DeepTimeStatus.ready,
     );
-    if(newState != null){
-       state = AsyncData(newState);
+    if (newState != null) {
+      state = AsyncData(newState);
     }
   }
 
@@ -66,7 +67,7 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       final currentVal = state.value;
-      if(currentVal == null) {
+      if (currentVal == null) {
         timer.cancel();
         return;
       }
@@ -101,10 +102,10 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
     if (state.value != null && state.value!.settingDuration.inSeconds > 0) {
       await _postTimerDuration();
     }
-    
+
     final currentVal = state.value;
-    if(currentVal != null) {
-       state = AsyncData(
+    if (currentVal != null) {
+      state = AsyncData(
         currentVal.copyWith(
           status: DeepTimeStatus.initial,
           remainingDuration: Duration.zero,
@@ -117,15 +118,16 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
   // 서버에 시간 기록
   Future<void> _postTimerDuration() async {
     final currentVal = state.value;
-    if(currentVal == null || currentVal.settingDuration.inSeconds == 0) return;
-    
+    if (currentVal == null || currentVal.settingDuration.inSeconds == 0) return;
+
     try {
       final repo = ref.read(deepTimeRepositoryProvider);
       final recordedSeconds = currentVal.settingDuration.inSeconds -
           currentVal.remainingDuration.inSeconds;
 
       // settingDuration을 초기화해서 중복 기록 방지
-      final newState = currentVal.copyWith(settingDuration: Duration.zero, remainingDuration: Duration.zero);
+      final newState = currentVal.copyWith(
+          settingDuration: Duration.zero, remainingDuration: Duration.zero);
       state = AsyncData(newState);
 
       if (recordedSeconds > 0) {
@@ -136,8 +138,8 @@ class DeepTimeViewModel extends _$DeepTimeViewModel {
     } catch (e) {
       final originalState = state.value;
       if (originalState != null) {
-         state = AsyncData(originalState.copyWith(errorMessage: e.toString()));
+        state = AsyncData(originalState.copyWith(errorMessage: e.toString()));
       }
     }
   }
-} 
+}
