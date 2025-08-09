@@ -22,15 +22,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final label = HomeBottomNavMenu.values[currentIndex].label;
-    final isDeepTime = currentIndex == HomeBottomNavMenu.deepTime.index;
-
-    if (isDeepTime) {
-      return AppBar(
-        automaticallyImplyLeading: false,
-        title: Text('딥타임', style: AppTexts.b5),
-        centerTitle: true,
-      );
-    }
 
     return AppBar(
       automaticallyImplyLeading: false,

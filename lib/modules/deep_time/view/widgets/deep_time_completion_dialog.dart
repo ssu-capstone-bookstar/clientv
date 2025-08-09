@@ -1,9 +1,8 @@
 import 'package:book/gen/assets.gen.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../../common/components/dialog/custom_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class DeepTimeCompletionDialog extends ConsumerWidget {
   const DeepTimeCompletionDialog({super.key});
@@ -17,14 +16,15 @@ class DeepTimeCompletionDialog extends ConsumerWidget {
       cancelButtonText: '다시 하기',
       icon: Assets.icons.icDeeptypeNotification2.svg(width: 100),
       onConfirm: () {
-        // TODO: Navigate to reading challenge screen
+        if (!context.mounted) return;
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        context.go('/reading-challenge/');
       },
-      onCancel: () async {
-        await ref.read(deepTimeViewModelProvider.notifier).resetTimer();
-        if (context.mounted) {
-          Navigator.of(context).pop();
-        }
+      onCancel: () {
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
   }

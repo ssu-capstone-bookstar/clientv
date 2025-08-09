@@ -19,15 +19,6 @@ class PlaylistButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<MusicItem?>(selectedMusicProvider, (previous, next) {
-      if (next != null) {
-        final audioPlayer = ref.read(audioPlayerProvider);
-        initAudioSession();
-        audioPlayer.setUrl(next.musicUrl);
-        audioPlayer.play();
-      }
-    });
-
     return CtaButtonL1(
       text: '플레이 리스트',
       onPressed: () async {
@@ -41,8 +32,6 @@ class PlaylistButton extends ConsumerWidget {
             return showBottom(context);
           },
         );
-
-        ref.read(selectedMusicProvider.notifier).state = null;
       },
     );
   }
@@ -86,10 +75,6 @@ class PlaylistButton extends ConsumerWidget {
                 // SearchField(context),
               ],
             ),
-          ),
-          Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
-            child: Divider(),
           ),
           const SizedBox(height: 8),
           Consumer(

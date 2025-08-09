@@ -1,4 +1,7 @@
+import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
+import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/app_style.dart';
@@ -6,7 +9,7 @@ import '../../model/home_bottom_nav_menu.dart';
 import '../widgets/home_bottom_nav_bar.dart';
 import '../widgets/home_app_bar.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const HomeScreen({
@@ -15,10 +18,10 @@ class HomeScreen extends StatefulWidget {
   });
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _lastVisitedTabIndex = HomeBottomNavMenu.bookPick.index;
 
   // NOTE(현호): 개선 필요
@@ -40,6 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final navigationShell = widget.navigationShell;
+    // deeptime에서 타이머 돌아갈때는 bottomNavigationBar 비활성화
+    final deepTimeState = ref.watch(deepTimeViewModelProvider);
+
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
       appBar: HomeAppBar(
@@ -49,15 +55,31 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: Padding(
-          padding: navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
-              ? AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING
-              : AppPaddings.SCREEN_BODY_PADDING,
-          child: navigationShell), // NOTE(현호): 패딩 조정
-      bottomNavigationBar:
-          // navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index ? null :
-          HomeBottomNavBar(
-        currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
-        onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+        // NOTE(현호): 패딩 조정
+        padding: navigationShell.currentIndex ==
+                HomeBottomNavMenu.deepTime.index
+            // deep time 타이머 돌아갈 때  하단 그라데이션의 padding을 없애려면 필요합니다.
+            ? EdgeInsets.zero
+            : navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
+                ? AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING
+                : AppPaddings.SCREEN_BODY_PADDING,
+        child: navigationShell,
+      ),
+      bottomNavigationBar: deepTimeState.when(
+        data: (state) {
+          final isTimerRunning = state.status == DeepTimeStatus.running;
+          return AbsorbPointer(
+            absorbing: isTimerRunning,
+            child: HomeBottomNavBar(
+              currentMenu:
+                  HomeBottomNavMenu.values[navigationShell.currentIndex],
+              onTap: (tab) =>
+                  _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+            ),
+          );
+        },
+        loading: () => const SizedBox.shrink(),
+        error: (e, s) => const SizedBox.shrink(),
       ),
     );
   }
