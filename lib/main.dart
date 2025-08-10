@@ -20,8 +20,15 @@ void main() async {
   // await FlutterSecureStorage().deleteAll();
 
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 480, // 스마트폰 크기 정도로 고정
+          ),
+          child: MyApp(),
+        ),
+      ),
     ),
   );
 }
