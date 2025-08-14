@@ -83,6 +83,9 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
             ? state.remainingDuration
             : state.settingDuration;
 
+    final circularTimerSize =
+        MediaQuery.of(context).size.height > 800.0 ? 272.0 : 250.0;
+
     return PopScope(
       // followed by modification in lib/modules/home/view/screens/home_screen.dart.
       // if DeepTimeStatus.running -> can't use bottom navigator bar.
@@ -94,15 +97,15 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 SizedBox(
-                  width: 272,
-                  height: 272,
+                  width: circularTimerSize,
+                  height: circularTimerSize,
                   child: Stack(
                     alignment: Alignment.center,
                     clipBehavior: Clip.none,
                     children: [
-                      CircularTimer(size: 272),
+                      CircularTimer(size: circularTimerSize),
                       _buildTimeMarker('0', const Alignment(0, -0.85)),
                       _buildTimeMarker('15', const Alignment(0.85, 0)),
                       _buildTimeMarker('30', const Alignment(0, 0.85)),
@@ -116,29 +119,27 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
                 // time is zero
                 if (displayDuration == Duration.zero) ...[
                   _buildStatusText(status, displayDuration),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   _buildTodayTotalTime(state.todayTotalSeconds),
                 ],
                 // time is not zero
                 if (state.settingDuration > Duration.zero) ...[
                   const TimerControls(),
-                  const SizedBox(height: 20),
                 ],
 
                 // 00:00 time display
                 _TimerDisplay(
                   status: status,
                   displayDuration: displayDuration,
+                  circleSize: circularTimerSize,
                 ),
               ],
             ),
-
-            // need to have bottom-fixed padding so that it doesn't change its position based on the top widgets' heights
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.only(
-                  bottom: 26.0 + MediaQuery.of(context).viewPadding.bottom,
+                  bottom: 12.0,
                 ),
                 child: PlaylistButton(),
               ),
@@ -167,11 +168,13 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
       text = '시간을 돌려 설정해 보세요';
     }
 
-    return Text(
-      text,
-      style: AppTexts.b6.copyWith(color: ColorName.g4),
-      textAlign: TextAlign.center,
-    );
+    return SizedBox(
+        height: 24,
+        child: Text(
+          text,
+          style: AppTexts.b6.copyWith(color: ColorName.g4),
+          textAlign: TextAlign.center,
+        ));
   }
 
   Widget _buildTodayTotalTime(int totalSeconds) {
@@ -211,13 +214,14 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
 }
 
 class _TimerDisplay extends StatelessWidget {
-  const _TimerDisplay({
-    required this.status,
-    required this.displayDuration,
-  });
+  const _TimerDisplay(
+      {required this.status,
+      required this.displayDuration,
+      required this.circleSize});
 
   final DeepTimeStatus status;
   final Duration displayDuration;
+  final double circleSize;
 
   @override
   Widget build(BuildContext context) {
@@ -234,16 +238,22 @@ class _TimerDisplay extends StatelessWidget {
     );
 
     if (status != DeepTimeStatus.running) {
-      return Text(
-        FormatUtils.formatDuration(displayDuration),
-        style: timerTextStyle.copyWith(
-          color: ColorName.g5,
+      return SizedBox(
+        height: circleSize < 270 ? 65 : 90,
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: Text(
+            FormatUtils.formatDuration(displayDuration),
+            style: timerTextStyle.copyWith(
+              color: ColorName.g5,
+            ),
+          ),
         ),
       );
     }
 
-    return SizedBox(
-      height: 80,
+    return Container(
+      height: circleSize < 270 ? 85 : 120,
       width: 250,
       child: Stack(
         alignment: Alignment.center,
@@ -267,7 +277,10 @@ class _TimerDisplay extends StatelessWidget {
               ),
             ),
           ),
-          timerText,
+          SizedBox(
+            height: circleSize < 270 ? 65 : 90,
+            child: FittedBox(fit: BoxFit.cover, child: timerText),
+          ),
           Positioned(
             left: -10,
             top: -5,

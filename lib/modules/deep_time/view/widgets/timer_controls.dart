@@ -10,9 +10,6 @@ class TimerControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final iconSize = screenWidth * 0.18;
-
     final state = ref.watch(deepTimeViewModelProvider).value;
     if (state == null) {
       return const SizedBox.shrink();
@@ -52,17 +49,26 @@ class TimerControls extends ConsumerWidget {
           return ScaleTransition(scale: animation, child: child);
         },
         child: isRunning
-            ? Icon(
-                Icons.pause_circle_filled,
-                key: const ValueKey('pause'),
-                color: ColorName.p1,
-                size: iconSize,
-              )
-            : Icon(
-                Icons.play_circle_filled,
-                key: const ValueKey('play'),
-                color: isSetting ? ColorName.g5 : ColorName.p1,
-                size: iconSize,
+            ? Container(
+                padding: const EdgeInsets.all(0.0),
+                width: 66.0, // you can adjust the width as you need
+                height: 66,
+                child: Icon(
+                  Icons.pause_circle_filled,
+                  key: const ValueKey('pause'),
+                  color: ColorName.p1,
+                  size: 66,
+                ))
+            : Container(
+                padding: const EdgeInsets.all(0.0),
+                width: 66.0, // you can adjust the width as you need
+                height: 66,
+                child: Icon(
+                  Icons.play_circle_filled,
+                  key: const ValueKey('play'),
+                  color: isSetting ? ColorName.g5 : ColorName.p1,
+                  size: 66,
+                ),
               ),
       ),
     );
