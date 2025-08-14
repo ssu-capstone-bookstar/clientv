@@ -19,20 +19,24 @@ class PlaylistButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CtaButtonL1(
-      text: '플레이 리스트',
-      onPressed: () async {
-        await showModalBottomSheet(
-          useSafeArea: true,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          useRootNavigator: true,
-          context: context,
-          builder: (context) {
-            return showBottom(context);
-          },
-        );
-      },
+    return SizedBox(
+      height: 56,
+      width: 341,
+      child: CtaButtonL1(
+        text: '플레이 리스트',
+        onPressed: () async {
+          await showModalBottomSheet(
+            useSafeArea: true,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            useRootNavigator: true,
+            context: context,
+            builder: (context) {
+              return showBottom(context);
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -47,65 +51,71 @@ class PlaylistButton extends ConsumerWidget {
       ),
       width: MediaQuery.of(context).size.width,
       height: 568,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 25),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: SizedBox(
-              width: 30,
-              height: 30,
-              child: IconButton(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.zero,
-                iconSize: 24,
-                icon: const BackButton(color: ColorName.g3),
-                onPressed: () => Navigator.of(context).pop(),
+      child: Stack(children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 25),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: IconButton(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.zero,
+                  iconSize: 24,
+                  icon: const BackButton(color: ColorName.g3),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, top: 25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("플레이 리스트", style: AppTexts.b3),
-                const SizedBox(height: 16),
-                // SearchField(context),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("플레이 리스트", style: AppTexts.b3),
+                  const SizedBox(height: 16),
+                  // SearchField(context),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Consumer(
-            builder: (context, ref, child) {
-              final playlist = ref.watch(playlistProvider);
-              final selectedMusic = ref.watch(selectedMusicProvider);
+            const SizedBox(height: 8),
+            Consumer(
+              builder: (context, ref, child) {
+                final playlist = ref.watch(playlistProvider);
+                final selectedMusic = ref.watch(selectedMusicProvider);
 
-              return SizedBox(
-                height: 286,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, color: ColorName.g7),
-                  shrinkWrap: true,
-                  itemCount: playlist.length,
-                  itemBuilder: (context, index) {
-                    final music = playlist[index];
-                    final isSelected = selectedMusic?.id == music.id;
-                    return MusicInfo(
-                      context: context,
-                      music: music,
-                      isSelected: isSelected,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 12),
-          const Center(child: MusicPlayerWidget()),
-        ],
-      ),
+                return SizedBox(
+                  height: 286,
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1, color: ColorName.g7),
+                    shrinkWrap: true,
+                    itemCount: playlist.length,
+                    itemBuilder: (context, index) {
+                      final music = playlist[index];
+                      final isSelected = selectedMusic?.id == music.id;
+                      return MusicInfo(
+                        context: context,
+                        music: music,
+                        isSelected: isSelected,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+        const Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+                padding: EdgeInsetsGeometry.only(bottom: 18),
+                child: MusicPlayerWidget())),
+      ]),
     );
   }
 
