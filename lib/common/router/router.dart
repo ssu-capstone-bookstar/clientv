@@ -95,7 +95,7 @@ GoRouter router(Ref ref) {
         return isPolicyRoute ? null : '/policy';
       }
 
-      if (isLoginRoute && isAuthenticated) {
+      if (isAuthenticated && (isLoginRoute || isPolicyRoute)) {
         return '/book-pick';
       }
 
