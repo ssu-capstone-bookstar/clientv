@@ -35,7 +35,7 @@ class ReportSuccessDialog extends StatelessWidget {
             ),
             _buildActionButton(
               context,
-              '책로그 돌아가기',
+              '돌아가기',
               ColorName.p1,
               AppTexts.b7.copyWith(color: ColorName.w1),
               () {
