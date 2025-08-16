@@ -171,7 +171,6 @@ class AuthViewModel extends _$AuthViewModel {
         return null;
       }
 
-      // Debug: Print the received auth data from refresh token
       print('=== DEBUG: Refresh Token Response Data ===');
       print('memberId: ${authData.memberId}');
       print('nickName: ${authData.nickName}');
@@ -200,7 +199,6 @@ class AuthViewModel extends _$AuthViewModel {
           return authData;
         }
       } on DioException catch (e) {
-        // no Policy field detected, then init with all N values.
         if (e.response?.statusCode == 400) {
           final policyData = Policy(
             serviceUsingAgree: 'N',
@@ -218,18 +216,13 @@ class AuthViewModel extends _$AuthViewModel {
             AuthFailed(errorMsg: 'Failed to get policy', errorCode: -1));
         return null;
       }
-      // Handle cases where server might not return email and providerType yet
-      final email = authData.email.isNotEmpty ? authData.email : '이메일 정보 없음';
-      final providerType =
-          authData.providerType.isNotEmpty ? authData.providerType : '연동 상태';
-
       state = AsyncData(
         AuthSuccess(
           memberId: authData.memberId,
           nickName: authData.nickName,
           profileImage: authData.profileImage,
-          providerType: providerType,
-          email: email,
+          providerType: authData.providerType,
+          email: authData.email,
         ),
       );
 
