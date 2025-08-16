@@ -4,6 +4,7 @@ import 'package:book/modules/book_pick/view/screens/book_pick_my_likes_screen.da
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
+import 'package:book/modules/policy/view/screens/policy_screen.dart';
 import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:book/modules/reading_diary/screens/reading_diary_update_screen.dart';
 import 'package:flutter/material.dart';
@@ -74,10 +75,12 @@ GoRouter router(Ref ref) {
 
       if (authState.value.unwrapPrevious().hasError) return '/login';
 
-      final isAuthenticated = authState.value.requireValue is AuthSuccess;
-      final isWithdrawCompleted =
-          authState.value.requireValue is AuthWithdrawCompleted;
+      final authStateValue = authState.value.requireValue;
+      final isAuthenticated = authStateValue is AuthSuccess;
+      final isPolicyRequired = authStateValue is AuthPolicyRequired;
+      final isWithdrawCompleted = authStateValue is AuthWithdrawCompleted;
       final isLoginRoute = state.uri.path == '/login';
+      final isPolicyRoute = state.uri.path == '/policy';
       // final isSplashRoute = state.uri.path == '/';
 
       // if (isSplashRoute) {
@@ -86,6 +89,10 @@ GoRouter router(Ref ref) {
 
       if (isWithdrawCompleted) {
         return null;
+      }
+
+      if (isPolicyRequired) {
+        return isPolicyRoute ? null : '/policy';
       }
 
       if (isLoginRoute && isAuthenticated) {
@@ -102,6 +109,10 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/policy',
+        builder: (context, state) => const PolicyScreen(),
       ),
       GoRoute(
         path: '/reading-diary/:bookId',
@@ -324,13 +335,12 @@ GoRouter router(Ref ref) {
                       },
                       routes: []),
                   GoRoute(
-                      path: 'overview/:bookId',
-                      parentNavigatorKey: rootNavigatorKey,
-                      builder: (context, state) {
-                        final bookId =
-                            int.parse(state.pathParameters['bookId']!);
-                        return BookOverviewScreen(bookId: bookId);
-                      },
+                    path: 'overview/:bookId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final bookId = int.parse(state.pathParameters['bookId']!);
+                      return BookOverviewScreen(bookId: bookId);
+                    },
                   ),
                   GoRoute(
                     path: 'my-likes',
