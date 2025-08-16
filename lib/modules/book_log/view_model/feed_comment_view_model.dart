@@ -1,6 +1,9 @@
 import 'package:book/modules/book_log/state/feed_comment_state.dart';
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/diary_comment/model/comment_request.dart';
 import 'package:book/modules/diary_comment/repository/diary_comment_repository.dart';
+import 'package:book/modules/reading_diary/model/report_request.dart';
+import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,10 +12,12 @@ part 'feed_comment_view_model.g.dart';
 @riverpod
 class FeedCommentViewModel extends _$FeedCommentViewModel {
   late final DiaryCommentRepository _diaryCommentRepository;
+  late final ReadingDiaryRepository _readingDiaryRepository;
 
   @override
   FutureOr<FeedCommentState> build(int diaryId) async {
     _diaryCommentRepository = ref.watch(diaryCommentRepositoryProvider);
+    _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
     return await initState(diaryId);
   }
 
@@ -66,6 +71,14 @@ class FeedCommentViewModel extends _$FeedCommentViewModel {
                 .toList());
       }).toList(),
     ));
+  }
+
+  Future<void> reportComment(int commentId, ReportType reportType, String content) async {
+    await _readingDiaryRepository.report(ReportRequest(
+        diaryCommentId: commentId,
+        reportType: reportType,
+        reportDomain: ReportDomain.DIARY_COMMENT,
+        content: content));
   }
 
   Future<FeedCommentState> refreshState() async {
