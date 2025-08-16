@@ -5,6 +5,8 @@ sealed class AuthState {}
 
 class AuthIdle extends AuthState {}
 
+class AuthPolicyRequired extends AuthState {}
+
 class AuthSuccess extends AuthState {
   final int memberId;
   final String nickName;
