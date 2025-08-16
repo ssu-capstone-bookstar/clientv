@@ -3,6 +3,8 @@ import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_profile.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_thumbnail_grid.dart';
 import 'package:book/modules/book_log/view/widgets/profile_speech_bubble.dart';
+import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +27,6 @@ class BookLogThumbnailScreen extends ConsumerStatefulWidget {
 
 class _BookLogThumbnailScreenState
     extends ConsumerState<BookLogThumbnailScreen> {
-
   @override
   initState() {
     super.initState();
@@ -39,8 +40,8 @@ class _BookLogThumbnailScreenState
   @override
   Widget build(BuildContext context) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(widget.memberId));
-    final bookLogNotifier = ref.read(bookLogViewModelProvider(widget.memberId)
-                                    .notifier);
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(widget.memberId).notifier);
     final user = ref.watch(authViewModelProvider).value;
     final followInfo = ref.watch(followInfoViewModelProvider).value;
     final followInfoNotifier = ref.read(followInfoViewModelProvider.notifier);
@@ -78,11 +79,39 @@ class _BookLogThumbnailScreenState
                         isFollowing: isFollowing,
                         onEdit: () => context.push('/book-log/profile'),
                         onFollow: () {
-                          if (isFollowing) {
-                            followInfoNotifier.unfollow(widget.memberId);
-                          } else {
-                            followInfoNotifier.follow(widget.memberId);
-                          }
+                          followInfoNotifier.follow(widget.memberId);
+                        },
+                        onUnfollow: () {
+                          followInfoNotifier.unfollow(widget.memberId);
+                        },
+                        onReport: () async {
+                          final result = await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: ColorName.b1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                              ),
+                              builder: (context) => ReportDialog());
+
+                          if (result == null) return;
+                          ReportType? reportType = result?['reportType'];
+                          String? content = result?['content'];
+
+                          if (reportType == null || content == null) return;
+                          followInfoNotifier.reportMember(
+                              widget.memberId, reportType, content);
+                          if (!context.mounted) return;
+                          await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: ColorName.b1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)),
+                              ),
+                              builder: (context) => ReportSuccessDialog());
                         },
                         profileImageKey: GlobalKey(),
                       ),

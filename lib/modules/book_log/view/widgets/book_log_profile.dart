@@ -1,11 +1,11 @@
-import 'package:book/modules/book_log/view/widgets/follow_button.dart';
+import 'package:book/common/components/button/menu_button.dart';
+import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/profile/model/profile_with_counts.dart';
 import 'package:flutter/material.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'profile_stat.dart';
 import 'stat_divider.dart';
-import 'profile_edit_button.dart';
 
 class BookLogProfile extends StatelessWidget {
   final ProfileWithCounts profile;
@@ -13,6 +13,8 @@ class BookLogProfile extends StatelessWidget {
   final bool isFollowing;
   final VoidCallback? onEdit;
   final VoidCallback? onFollow;
+  final VoidCallback? onUnfollow;
+  final VoidCallback? onReport;
   final Key? profileImageKey;
 
   const BookLogProfile({
@@ -21,6 +23,8 @@ class BookLogProfile extends StatelessWidget {
     this.isFollowing = false,
     this.onEdit,
     this.onFollow,
+    this.onUnfollow,
+    this.onReport,
     this.profileImageKey,
     super.key,
   });
@@ -28,7 +32,6 @@ class BookLogProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 188,
       height: 186,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -65,10 +68,8 @@ class BookLogProfile extends StatelessWidget {
           const SizedBox(height: 6),
           // 통계
           SizedBox(
-            width: 188,
-            height: 19,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ProfileStat(label: '게시물', value: profile.diaryCount),
@@ -76,16 +77,53 @@ class BookLogProfile extends StatelessWidget {
                 ProfileStat(label: '팔로잉', value: profile.followingCount),
                 StatDivider(),
                 ProfileStat(label: '팔로워', value: profile.followerCount),
+                StatDivider(),
+                MenuButton(
+                  maxWidth: 90,
+                  menus: [
+                    if (isMyProfile)
+                      MenuButtonItem(
+                        value: "edit",
+                        label: "프로필 편집",
+                      ),
+                    if (!isMyProfile && isFollowing)
+                      MenuButtonItem(
+                        value: "unfollow",
+                        label: "팔로잉 취소",
+                      ),
+                    if (!isMyProfile && !isFollowing)
+                      MenuButtonItem(
+                        value: "follow",
+                        label: "팔로우",
+                      ),
+                    if (!isMyProfile)
+                      MenuButtonItem(
+                        value: "report",
+                        label: "신고하기",
+                      )
+                  ],
+                  icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
+                  onSelected: (value) {
+                    switch (value) {
+                      case "edit":
+                        onEdit?.call();
+                        break;
+                      case "unfollow":
+                        onUnfollow?.call();
+                        break;
+                      case "follow":
+                        onFollow?.call();
+                        break;
+                      case "report":
+                        onReport?.call();
+                        break;
+                      default:
+                    }
+                  },
+                ),
               ],
             ),
           ),
-          if (isMyProfile) ...[
-            const SizedBox(height: 16),
-            ProfileEditButton(onPressed: onEdit),
-          ] else ...[
-            const SizedBox(height: 16),
-            FollowButton(isFollowing: isFollowing, onPressed: onFollow),
-          ],
         ],
       ),
     );

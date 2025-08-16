@@ -4,8 +4,8 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class DiaryFeedReportSuccessDialog extends StatelessWidget {
-  const DiaryFeedReportSuccessDialog({super.key});
+class ReportSuccessDialog extends StatelessWidget {
+  const ReportSuccessDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
