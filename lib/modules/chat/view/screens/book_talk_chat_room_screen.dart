@@ -5,6 +5,9 @@ import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
 import 'package:book/modules/chat/model/chat_message_response.dart';
 import 'package:book/modules/chat/state/chat_state.dart';
@@ -14,6 +17,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -131,6 +135,35 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     _updateVisibleOption(false);
   }
 
+  _handleMessageReport(int messageId) async {
+     final result = await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => ReportDialog());
+
+      if (result == null) return;
+
+      ReportType? reportType = result?['reportType'];
+      String? content = result?['content'];
+
+      if (reportType == null || content == null) return;
+      await ref.read(chatViewModelProvider.notifier).reportMessage(messageId, reportType, content);
+      if (!mounted) return;
+      await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => ReportSuccessDialog());
+    
+  }
+
   @override
   void dispose() {
     _channel?.detach();
@@ -167,7 +200,11 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
             data: (data) => Column(
               children: [
                 Expanded(
-                    child: _buildChatHistory(_scrollController, data, memberId)),
+                    child: _buildChatHistory(
+                        scrollController: _scrollController,
+                        data: data,
+                        currentMemberId: memberId,
+                        onReport: _handleMessageReport)),
                 ChatInputWrap(
                   textController: _textController,
                   visibleOption: _visibleOption,
@@ -186,8 +223,12 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     );
   }
 
-  Widget _buildChatHistory(
-      ScrollController scrollController, ChatState data, int currentMemberId) {
+  Widget _buildChatHistory({
+    required ScrollController scrollController,
+    required ChatState data,
+    required int currentMemberId,
+    required Function(int) onReport,
+  }) {
     final messages = data.chatHistory;
 
     Widget? getProfileImage(int senderId) {
@@ -267,52 +308,70 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                         .copyWith(color: !isMe ? ColorName.w1 : Colors.white);
                     return Padding(
                       padding: EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: !isMe
-                            ? MainAxisAlignment.start
-                            : MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: !isMe
-                            ? [
-                                if (profileImage != null) profileImage,
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 140),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: backgroundColor,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: getChatWidget(message, textStyle),
+                      child: Slidable(
+                        enabled: !isMe,
+                        key: ValueKey(message.id),
+                        endActionPane: ActionPane(
+                          motion: const DrawerMotion(),
+                          extentRatio: 0.3,
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                onReport(message.id);
+                              },
+                              backgroundColor: ColorName.g7,
+                              foregroundColor: ColorName.r,
+                              label: '신고',
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: !isMe
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: !isMe
+                              ? [
+                                  if (profileImage != null) profileImage,
+                                  SizedBox(
+                                    width: 10,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                getDateWidget(message.createdAt),
-                              ]
-                            : [
-                                getDateWidget(message.createdAt),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 140),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: backgroundColor,
-                                      borderRadius: BorderRadius.circular(10),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(maxWidth: 140),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: backgroundColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: getChatWidget(message, textStyle),
                                     ),
-                                    child: getChatWidget(message, textStyle),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                if (profileImage != null) profileImage
-                              ],
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  getDateWidget(message.createdAt),
+                                ]
+                              : [
+                                  getDateWidget(message.createdAt),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(maxWidth: 140),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: backgroundColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: getChatWidget(message, textStyle),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  if (profileImage != null) profileImage
+                                ],
+                        ),
                       ),
                     );
                   },

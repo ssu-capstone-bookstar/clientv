@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:book/common/models/cursor_page_response.dart';
 import 'package:book/gen/assets.gen.dart';
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/chat/model/chat_message_request.dart';
 import 'package:book/modules/chat/model/chat_message_response.dart';
 import 'package:book/modules/chat/model/chat_participant_response.dart';
@@ -12,6 +13,8 @@ import 'package:book/modules/chat/state/chat_state.dart';
 import 'package:book/modules/image/model/presigned_url_request.dart';
 import 'package:book/modules/image/repository/image_repository.dart';
 import 'package:book/modules/image/repository/s3_repository.dart';
+import 'package:book/modules/reading_diary/model/report_request.dart';
+import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,6 +46,7 @@ class ChatViewModel extends _$ChatViewModel {
   late final ChatRepository _repository;
   late final ImageRepository _imageRepo;
   late final S3Repository _s3Repo;
+  late final ReadingDiaryRepository _readingDiaryRepository;
 
   static final ChatCategory defaultCategory = ChatCategory(
       roomId: 2,
@@ -88,6 +92,7 @@ class ChatViewModel extends _$ChatViewModel {
     _repository = ref.watch(chatRepositoryProvider);
     _imageRepo = ref.read(imageRepositoryProvider);
     _s3Repo = ref.read(s3RepositoryProvider);
+    _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
 
     final response = await _repository.getMyChatRooms();
     state = AsyncValue.data(
@@ -230,5 +235,13 @@ class ChatViewModel extends _$ChatViewModel {
     await _repository.leaveChatRoom(roomId);
     /** refresh */
     await getMyChatRooms();
+  }
+
+    Future<void> reportMessage(int messageId, ReportType reportType, String content) async {
+    await _readingDiaryRepository.report(ReportRequest(
+        chatMessageId: messageId,
+        reportType: reportType,
+        reportDomain: ReportDomain.CHAT,
+        content: content));
   }
 }
