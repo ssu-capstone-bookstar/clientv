@@ -1,6 +1,9 @@
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/book_log/view/widgets/comment_list.dart';
 import 'package:book/modules/book_log/view/widgets/comment_text_field.dart';
+import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/book_log/view_model/feed_comment_view_model.dart';
 import 'package:book/modules/diary_comment/model/diary_comment_response.dart';
 import 'package:flutter/material.dart';
@@ -135,6 +138,36 @@ class _DiaryFeedCommentDialogState
           .deleteComment(commentId);
     }
 
+    handleCommentReport(int commentId) async {
+      final result = await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => ReportDialog());
+
+      if (result == null) return;
+
+      ReportType? reportType = result?['reportType'];
+      String? content = result?['content'];
+
+      if (reportType == null || content == null) return;
+      await ref
+          .read(feedCommentViewModelProvider(widget.diaryId).notifier)
+          .reportComment(commentId, reportType, content);
+      if (!context.mounted) return;
+      await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: ColorName.b1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => ReportSuccessDialog());
+    }
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
@@ -177,6 +210,9 @@ class _DiaryFeedCommentDialogState
                                   comments: comments,
                                   onDelete: (int commentId) {
                                     handleCommentDelete(commentId);
+                                  },
+                                  onReport: (int commentId) {
+                                    handleCommentReport(commentId);
                                   },
                                   onReply: (int parentCommentId, int index) {
                                     final targetComment = comments[index];
