@@ -1,5 +1,3 @@
-import 'package:book/common/components/button/menu_button.dart';
-import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/profile/model/profile_with_counts.dart';
 import 'package:flutter/material.dart';
 import 'package:book/gen/colors.gen.dart';
@@ -11,20 +9,12 @@ class BookLogProfile extends StatelessWidget {
   final ProfileWithCounts profile;
   final bool isMyProfile;
   final bool isFollowing;
-  final VoidCallback? onEdit;
-  final VoidCallback? onFollow;
-  final VoidCallback? onUnfollow;
-  final VoidCallback? onReport;
   final Key? profileImageKey;
 
   const BookLogProfile({
     required this.profile,
     this.isMyProfile = false,
     this.isFollowing = false,
-    this.onEdit,
-    this.onFollow,
-    this.onUnfollow,
-    this.onReport,
     this.profileImageKey,
     super.key,
   });
@@ -77,50 +67,6 @@ class BookLogProfile extends StatelessWidget {
                 ProfileStat(label: '팔로잉', value: profile.followingCount),
                 StatDivider(),
                 ProfileStat(label: '팔로워', value: profile.followerCount),
-                StatDivider(),
-                MenuButton(
-                  maxWidth: 90,
-                  menus: [
-                    if (isMyProfile)
-                      MenuButtonItem(
-                        value: "edit",
-                        label: "프로필 편집",
-                      ),
-                    if (!isMyProfile && isFollowing)
-                      MenuButtonItem(
-                        value: "unfollow",
-                        label: "팔로잉 취소",
-                      ),
-                    if (!isMyProfile && !isFollowing)
-                      MenuButtonItem(
-                        value: "follow",
-                        label: "팔로우",
-                      ),
-                    if (!isMyProfile)
-                      MenuButtonItem(
-                        value: "report",
-                        label: "신고하기",
-                      )
-                  ],
-                  icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
-                  onSelected: (value) {
-                    switch (value) {
-                      case "edit":
-                        onEdit?.call();
-                        break;
-                      case "unfollow":
-                        onUnfollow?.call();
-                        break;
-                      case "follow":
-                        onFollow?.call();
-                        break;
-                      case "report":
-                        onReport?.call();
-                        break;
-                      default:
-                    }
-                  },
-                ),
               ],
             ),
           ),
