@@ -62,77 +62,51 @@ class _BookLogThumbnailScreenState
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: [
-            MenuButton(
-              maxWidth: 90,
-              menus: [
-                if (isMyProfile)
-                  MenuButtonItem(
-                    value: "edit",
-                    label: "프로필 편집",
-                  ),
-                if (!isMyProfile && isFollowing)
-                  MenuButtonItem(
-                    value: "unfollow",
-                    label: "팔로잉 취소",
-                  ),
-                if (!isMyProfile && !isFollowing)
-                  MenuButtonItem(
-                    value: "follow",
-                    label: "팔로우",
-                  ),
-                if (!isMyProfile)
+            if (!isMyProfile)
+              MenuButton(
+                maxWidth: 90,
+                menus: [
                   MenuButtonItem(
                     value: "report",
                     label: "신고하기",
                   )
-              ],
-              icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
-              onSelected: (value) async {
-                switch (value) {
-                  case "edit":
-                    context.push('/book-log/profile');
-                    break;
-                  case "unfollow":
-                    await followInfoNotifier.unfollow(widget.memberId);
-                    await bookLogNotifier.refreshFollowState();
-                    break;
-                  case "follow":
-                    await followInfoNotifier.follow(widget.memberId);
-                    await bookLogNotifier.refreshFollowState();
-                    break;
-                  case "report":
-                    final result = await showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: ColorName.b1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
-                        ),
-                        builder: (context) => ReportDialog());
+                ],
+                icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
+                onSelected: (value) async {
+                  switch (value) {
+                    case "report":
+                      final result = await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: ColorName.b1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (context) => ReportDialog());
 
-                    if (result == null) return;
-                    ReportType? reportType = result?['reportType'];
-                    String? content = result?['content'];
+                      if (result == null) return;
+                      ReportType? reportType = result?['reportType'];
+                      String? content = result?['content'];
 
-                    if (reportType == null || content == null) return;
-                    followInfoNotifier.reportMember(
-                        widget.memberId, reportType, content);
-                    if (!context.mounted) return;
-                    await showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: ColorName.b1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
-                        ),
-                        builder: (context) => ReportSuccessDialog());
-                    break;
-                  default:
-                }
-              },
-            ),
+                      if (reportType == null || content == null) return;
+                      followInfoNotifier.reportMember(
+                          widget.memberId, reportType, content);
+                      if (!context.mounted) return;
+                      await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: ColorName.b1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (context) => ReportSuccessDialog());
+                      break;
+                    default:
+                  }
+                },
+              ),
             if (isMyProfile)
               IconButton(
                 icon: const Icon(Icons.menu),
@@ -150,6 +124,15 @@ class _BookLogThumbnailScreenState
                         profile: bookLog.profile,
                         isMyProfile: isMyProfile,
                         isFollowing: isFollowing,
+                        onEdit: () => context.push('/book-log/profile'),
+                        onFollow: () async {
+                          if (isFollowing) {
+                            await followInfoNotifier.unfollow(widget.memberId);
+                          } else {
+                            await followInfoNotifier.follow(widget.memberId);
+                          }
+                          await bookLogNotifier.refreshFollowState();
+                        },
                         profileImageKey: GlobalKey(),
                       ),
                       const SizedBox(height: 20),
