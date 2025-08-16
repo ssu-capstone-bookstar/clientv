@@ -43,7 +43,7 @@ class BookLogFeedScreen extends ConsumerWidget {
                 feeds: bookLog.feeds,
                 initialIndex: initialIndex,
                 onScrollBottom: () async {
-                  await bookLogNotifier.refreshState();
+                  await bookLogNotifier.refreshContentState();
                 },
                 onRefresh: () async {
                   await bookLogNotifier.initState(memberId);

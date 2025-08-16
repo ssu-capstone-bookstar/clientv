@@ -78,11 +78,13 @@ class _BookLogThumbnailScreenState
                         isMyProfile: isMyProfile,
                         isFollowing: isFollowing,
                         onEdit: () => context.push('/book-log/profile'),
-                        onFollow: () {
-                          followInfoNotifier.follow(widget.memberId);
+                        onFollow: () async {
+                          await followInfoNotifier.follow(widget.memberId);
+                          await bookLogNotifier.refreshFollowState();
                         },
-                        onUnfollow: () {
-                          followInfoNotifier.unfollow(widget.memberId);
+                        onUnfollow: () async {
+                          await followInfoNotifier.unfollow(widget.memberId);
+                          await bookLogNotifier.refreshFollowState();
                         },
                         onReport: () async {
                           final result = await showModalBottomSheet(
@@ -119,7 +121,7 @@ class _BookLogThumbnailScreenState
                       BookLogThumbnailGrid(
                           thumbnails: bookLog.thumbnails,
                           onScrollBottom: () async {
-                            await bookLogNotifier.refreshState();
+                            await bookLogNotifier.refreshContentState();
                           },
                           onRefresh: () async {
                             await bookLogNotifier.initState(widget.memberId);

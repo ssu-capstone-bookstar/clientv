@@ -59,7 +59,7 @@ class BookLogScreen extends ConsumerWidget {
                 // followInfo: followInfo,
                 initialIndex: null,
                 onScrollBottom: () async {
-                  await bookLogNotifier.refreshState();
+                  await bookLogNotifier.refreshContentState();
                 },
                 onRefresh: () async {
                   await bookLogNotifier.initState(null);
