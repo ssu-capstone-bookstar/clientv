@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../infra/storage/secure_storage.dart';
@@ -8,6 +9,8 @@ import '../model/login_request.dart';
 import '../repository/auth_repository.dart';
 import '../repository/social_login_service.dart';
 import 'auth_state.dart';
+import '../../policy/model/policy.dart';
+import '../../policy/repository/policy_repository.dart';
 
 part 'auth_view_model.g.dart';
 
@@ -32,6 +35,7 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> login(ProviderType providerType) async {
+    print('AuthViewModel: login initiated with providerType: $providerType');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final String? idToken = await _getIdToken(providerType);
@@ -59,6 +63,46 @@ class AuthViewModel extends _$AuthViewModel {
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
       );
+
+      // Policy Checkin
+      print('AuthViewModel: [Login] Reading policy repository.');
+      final policyRepo = ref.read(policyRepositoryProvider);
+      print('AuthViewModel: [Login] Getting policy...');
+      try {
+        final policyResponse = await policyRepo.getPolicy();
+        print('AuthViewModel: [Login] Policy response received.');
+        final policyData = policyResponse.data;
+        print('AuthViewModel: [Login] Policy data: $policyData');
+
+        final mustShowPolicy = policyData.serviceUsingAgree != "Y" ||
+            policyData.personalInformationAgree != "Y";
+
+        print('AuthViewModel: mustShow-Policy check in login: $mustShowPolicy');
+
+        if (mustShowPolicy) {
+          // 🚨 Navigate to PolicyScreen before continuing
+          return AuthPolicyRequired();
+        }
+      } on DioException catch (e) {
+        if (e.response?.statusCode == 400) {
+          print(
+              'AuthViewModel: [Login] Policy not found, initializing with default.');
+          final policyData = Policy(
+            serviceUsingAgree: 'N',
+            personalInformationAgree: 'N',
+            marketingAgree: 'N',
+          );
+          final mustShowPolicy = policyData.serviceUsingAgree != "Y" ||
+              policyData.personalInformationAgree != "Y";
+
+          if (mustShowPolicy) {
+            return AuthPolicyRequired();
+          }
+        }
+        print('AuthViewModel: [Login] Error getting policy: $e');
+        return AuthFailed(errorMsg: 'Failed to get policy', errorCode: -1);
+      }
+      // Policy Checkin ends
 
       return AuthSuccess(
           memberId: authData.memberId,
@@ -127,7 +171,6 @@ class AuthViewModel extends _$AuthViewModel {
         return null;
       }
 
-      // Debug: Print the received auth data from refresh token
       print('=== DEBUG: Refresh Token Response Data ===');
       print('memberId: ${authData.memberId}');
       print('nickName: ${authData.nickName}');
@@ -143,18 +186,43 @@ class AuthViewModel extends _$AuthViewModel {
         refreshToken: authData.refreshToken,
       );
 
-      // Handle cases where server might not return email and providerType yet
-      final email = authData.email.isNotEmpty ? authData.email : '이메일 정보 없음';
-      final providerType =
-          authData.providerType.isNotEmpty ? authData.providerType : '연동 상태';
+      final policyRepo = ref.read(policyRepositoryProvider);
+      try {
+        final policyResponse = await policyRepo.getPolicy();
+        final policyData = policyResponse.data;
 
+        final mustShowPolicy = policyData.serviceUsingAgree != "Y" ||
+            policyData.personalInformationAgree != "Y";
+
+        if (mustShowPolicy) {
+          state = AsyncData(AuthPolicyRequired());
+          return authData;
+        }
+      } on DioException catch (e) {
+        if (e.response?.statusCode == 400) {
+          final policyData = Policy(
+            serviceUsingAgree: 'N',
+            personalInformationAgree: 'N',
+            marketingAgree: 'N',
+          );
+          final mustShowPolicy = policyData.serviceUsingAgree != "Y" ||
+              policyData.personalInformationAgree != "Y";
+          if (mustShowPolicy) {
+            state = AsyncData(AuthPolicyRequired());
+            return authData;
+          }
+        }
+        state = AsyncData(
+            AuthFailed(errorMsg: 'Failed to get policy', errorCode: -1));
+        return null;
+      }
       state = AsyncData(
         AuthSuccess(
           memberId: authData.memberId,
           nickName: authData.nickName,
           profileImage: authData.profileImage,
-          providerType: providerType,
-          email: email,
+          providerType: authData.providerType,
+          email: authData.email,
         ),
       );
 
