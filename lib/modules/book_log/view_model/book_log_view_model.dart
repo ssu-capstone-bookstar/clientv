@@ -12,7 +12,7 @@ import 'package:book/modules/profile/view_model/profile_view_model.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
 import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
 import 'package:book/modules/reading_diary/model/diary_update_request.dart';
-import 'package:book/modules/reading_diary/model/report_diary_request.dart';
+import 'package:book/modules/reading_diary/model/report_request.dart';
 import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -80,9 +80,11 @@ class DiaryRequestWithId {
 }
 
 final bookLogDiaryUpdateProvider =
-    FutureProvider.family<DiaryResponse, DiaryRequestWithId>((ref, request) async {
+    FutureProvider.family<DiaryResponse, DiaryRequestWithId>(
+        (ref, request) async {
   final diaryRepo = ref.read(readingDiaryRepositoryProvider);
-  final response = await diaryRepo.updateDiary(request.diaryId, request.request);
+  final response =
+      await diaryRepo.updateDiary(request.diaryId, request.request);
   return response.data;
 });
 
@@ -133,7 +135,7 @@ class BookLogViewModel extends _$BookLogViewModel {
     return state.value;
   }
 
-  Future<BookLogState> refreshState() async {
+  Future<BookLogState> refreshContentState() async {
     final prev = state.value ?? BookLogState();
     if (prev.nextCursor != -1) {
       if (prev.memberId == null) {
@@ -161,6 +163,20 @@ class BookLogViewModel extends _$BookLogViewModel {
 
         return state.value ?? BookLogState();
       }
+    }
+
+    return prev;
+  }
+
+  Future<BookLogState> refreshFollowState() async {
+    final prev = state.value ?? BookLogState();
+    if (memberId != null) {
+      final responseProfile =
+          await _profileRepository.getProfileById(memberId.toString());
+      state = AsyncValue.data(prev.copyWith(
+        profile: responseProfile.data,
+      ));
+      return state.value ?? BookLogState();
     }
 
     return prev;
@@ -238,9 +254,19 @@ class BookLogViewModel extends _$BookLogViewModel {
 
   Future<void> reportFeed(
       int diaryId, ReportType reportType, String content) async {
-    await _readingDiaryRepository.reportDiary(ReportDiaryRequest(
-        readingDiaryId: diaryId, reportType: reportType, content: content));
+    await _readingDiaryRepository.report(ReportRequest(
+        readingDiaryId: diaryId,
+        reportDomain: ReportDomain.READING_DIARY,
+        reportType: reportType,
+        content: content));
   }
+}
+
+enum ReportDomain {
+  USER(),
+  READING_DIARY(),
+  DIARY_COMMENT(),
+  CHAT(),
 }
 
 enum ReportType {

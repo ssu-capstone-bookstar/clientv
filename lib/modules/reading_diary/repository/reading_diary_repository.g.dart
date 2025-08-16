@@ -677,7 +677,7 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<void>> reportDiary(ReportDiaryRequest request) async {
+  Future<ResponseForm<void>> report(ReportRequest request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

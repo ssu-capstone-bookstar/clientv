@@ -5,14 +5,14 @@ import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class DiaryFeedReportDialog extends StatefulWidget {
-  const DiaryFeedReportDialog({super.key});
+class ReportDialog extends StatefulWidget {
+  const ReportDialog({super.key});
 
   @override
-  State<DiaryFeedReportDialog> createState() => _DiaryFeedReportDialogState();
+  State<ReportDialog> createState() => _ReportDialogState();
 }
 
-class _DiaryFeedReportDialogState extends State<DiaryFeedReportDialog>
+class _ReportDialogState extends State<ReportDialog>
     with WidgetsBindingObserver {
   ReportType? _selectedValue;
   final TextEditingController _textController = TextEditingController();
@@ -33,10 +33,6 @@ class _DiaryFeedReportDialogState extends State<DiaryFeedReportDialog>
   }
 
   _onSubmit() {
-    final isNotEmpty =
-        _textController.value.text.isNotEmpty && _selectedValue != null;
-    if (!isNotEmpty) return;
-
     Navigator.pop(context, {
       'content': _textController.value.text,
       "reportType": _selectedValue,

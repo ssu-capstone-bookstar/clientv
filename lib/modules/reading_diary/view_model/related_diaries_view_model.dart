@@ -1,6 +1,6 @@
 import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:book/modules/reading_diary/model/report_diary_request.dart';
+import 'package:book/modules/reading_diary/model/report_request.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/dual_cursor_page_response.dart';
@@ -195,8 +195,11 @@ class RelatedDiariesViewModel extends _$RelatedDiariesViewModel {
 
   Future<void> reportFeed(
       int diaryId, ReportType reportType, String content) async {
-    await _readingDiaryRepository.reportDiary(ReportDiaryRequest(
-        readingDiaryId: diaryId, reportType: reportType, content: content));
+    await _readingDiaryRepository.report(ReportRequest(
+        readingDiaryId: diaryId,
+        reportType: reportType,
+        reportDomain: ReportDomain.READING_DIARY,
+        content: content));
   }
 
   Future<void> toggleSort() async {
