@@ -16,13 +16,11 @@ class CommentCard extends ConsumerWidget {
       this.comment,
       this.reply,
       required this.onDelete,
-      this.onReply,
-      required this.onReport});
+      this.onReply});
   final DiaryCommentResponse? comment;
   final DiaryReplyResponse? reply;
   final Function(int) onDelete;
   final Function(int)? onReply;
-  final Function(int) onReport;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,26 +29,22 @@ class CommentCard extends ConsumerWidget {
 
     return Slidable(
       key: ValueKey(comment?.commentId ?? reply?.commentId ?? 0),
-      endActionPane: 
-          ActionPane(
+      endActionPane: isMyComment
+          ? ActionPane(
               motion: const DrawerMotion(), // 또는 StretchMotion, BehindMotion 등
               extentRatio: 0.20,
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    if (isMyComment) {
-                      onDelete(comment?.commentId ?? reply?.commentId ?? 0);
-                    } else {
-                      onReport(comment?.commentId ?? reply?.commentId ?? 0);
-                    }
+                    onDelete(comment?.commentId ?? reply?.commentId ?? 0);
                   },
                   backgroundColor: ColorName.g7,
                   foregroundColor: ColorName.r,
-                  label: isMyComment ? '삭제' : '신고',
+                  label: '삭제',
                 ),
               ],
-            ),
-          
+            )
+          : null,
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(

@@ -256,8 +256,8 @@ class BookLogViewModel extends _$BookLogViewModel {
       int diaryId, ReportType reportType, String content) async {
     await _readingDiaryRepository.report(ReportRequest(
         readingDiaryId: diaryId,
-        reportType: reportType,
         reportDomain: ReportDomain.READING_DIARY,
+        reportType: reportType,
         content: content));
   }
 }

@@ -9,13 +9,11 @@ class CommentList extends StatelessWidget {
       this.comments,
       this.replies,
       required this.onDelete,
-      required this.onReport,
       this.onReply,
       this.scrollController});
   final List<DiaryCommentResponse>? comments;
   final List<DiaryReplyResponse>? replies;
   final Function(int) onDelete;
-  final Function(int) onReport;
   final Function(int, int)? onReply;
   final ScrollController? scrollController;
 
@@ -32,13 +30,11 @@ class CommentList extends StatelessWidget {
                   CommentCard(
                       comment: comment,
                       onDelete: onDelete,
-                      onReport: onReport,
                       onReply: (commentId) => onReply?.call(commentId, index)),
                   if (comment.replies.isNotEmpty)
                     CommentList(
                         replies: comment.replies,
-                        onDelete: onDelete,
-                        onReport: onReport,)
+                        onDelete: onDelete)
                 ],
               );
             },
@@ -50,7 +46,7 @@ class CommentList extends StatelessWidget {
                 itemCount: replies!.length,
                 itemBuilder: (context, index) {
                   final reply = replies![index];
-                  return CommentCard(reply: reply, onDelete: onDelete, onReport: onReport);
+                  return CommentCard(reply: reply, onDelete: onDelete);
                 },
               )
             : Container();
