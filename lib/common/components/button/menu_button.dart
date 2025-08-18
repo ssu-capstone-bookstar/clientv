@@ -15,17 +15,19 @@ class MenuButton extends StatelessWidget {
   final List<MenuButtonItem> menus;
   final Function(String) onSelected;
   final SvgPicture icon;
+  final double maxWidth;
   const MenuButton({
     Key? key,
     required this.menus,
     required this.onSelected,
     required this.icon,
+    this.maxWidth = 80,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      constraints: const BoxConstraints(
-        maxWidth: 80,
+      constraints: BoxConstraints(
+        maxWidth: maxWidth,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),

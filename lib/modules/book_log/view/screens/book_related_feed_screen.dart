@@ -3,8 +3,8 @@ import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_feed_list.dart';
 import 'package:book/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
 import 'package:book/modules/book_log/view/widgets/diary_feed_delete_dialog.dart';
-import 'package:book/modules/book_log/view/widgets/diary_feed_report_dialog.dart';
-import 'package:book/modules/book_log/view/widgets/diary_feed_report_success_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:book/modules/reading_diary/view_model/related_diaries_view_model.dart';
@@ -95,7 +95,7 @@ class BookRelatedFeedScreen extends ConsumerWidget {
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20)),
                       ),
-                      builder: (context) => DiaryFeedReportDialog());
+                      builder: (context) => ReportDialog());
 
                   if (result == null) return;
 
@@ -113,7 +113,7 @@ class BookRelatedFeedScreen extends ConsumerWidget {
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20)),
                       ),
-                      builder: (context) => DiaryFeedReportSuccessDialog());
+                      builder: (context) => ReportSuccessDialog());
                 },
                 onClickProfile: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];

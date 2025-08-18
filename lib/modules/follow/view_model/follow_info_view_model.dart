@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
+import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:book/modules/follow/repository/follow_repository.dart';
 import 'package:book/modules/follow/state/follow_info_state.dart';
+import 'package:book/modules/reading_diary/model/report_request.dart';
+import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'follow_info_view_model.g.dart';
@@ -11,9 +14,11 @@ part 'follow_info_view_model.g.dart';
 @riverpod
 class FollowInfoViewModel extends _$FollowInfoViewModel {
   FollowRepository get _followRepository => ref.watch(followRepositoryProvider);
+  late final ReadingDiaryRepository _readingDiaryRepository;
 
   @override
   Future<FollowInfoState> build() async {
+    _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
     return _refreshInfo();
   }
 
@@ -49,6 +54,16 @@ class FollowInfoViewModel extends _$FollowInfoViewModel {
 
   Future<void> unfollow(int memberId) async {
     await _followRepository.unfollow(memberId);
+    await _refreshInfo();
+  }
+
+  Future<void> reportMember(int memberId, ReportType reportType, String content) async {
+    await _readingDiaryRepository.report(ReportRequest(
+      reportedMemberId: memberId,
+      reportDomain: ReportDomain.USER,
+      reportType: reportType,
+      content: content,
+    ));
     await _refreshInfo();
   }
 }

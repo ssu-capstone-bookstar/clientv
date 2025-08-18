@@ -1,8 +1,12 @@
+import 'package:book/common/components/button/menu_button.dart';
+import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_profile.dart';
 import 'package:book/modules/book_log/view/widgets/book_log_thumbnail_grid.dart';
 import 'package:book/modules/book_log/view/widgets/profile_speech_bubble.dart';
+import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
+import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +29,6 @@ class BookLogThumbnailScreen extends ConsumerStatefulWidget {
 
 class _BookLogThumbnailScreenState
     extends ConsumerState<BookLogThumbnailScreen> {
-
   @override
   initState() {
     super.initState();
@@ -39,8 +42,8 @@ class _BookLogThumbnailScreenState
   @override
   Widget build(BuildContext context) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(widget.memberId));
-    final bookLogNotifier = ref.read(bookLogViewModelProvider(widget.memberId)
-                                    .notifier);
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(widget.memberId).notifier);
     final user = ref.watch(authViewModelProvider).value;
     final followInfo = ref.watch(followInfoViewModelProvider).value;
     final followInfoNotifier = ref.read(followInfoViewModelProvider.notifier);
@@ -59,6 +62,51 @@ class _BookLogThumbnailScreenState
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: [
+            if (!isMyProfile)
+              MenuButton(
+                maxWidth: 90,
+                menus: [
+                  MenuButtonItem(
+                    value: "report",
+                    label: "신고하기",
+                  )
+                ],
+                icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
+                onSelected: (value) async {
+                  switch (value) {
+                    case "report":
+                      final result = await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: ColorName.b1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (context) => ReportDialog());
+
+                      if (result == null) return;
+                      ReportType? reportType = result?['reportType'];
+                      String? content = result?['content'];
+
+                      if (reportType == null || content == null) return;
+                      followInfoNotifier.reportMember(
+                          widget.memberId, reportType, content);
+                      if (!context.mounted) return;
+                      await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: ColorName.b1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (context) => ReportSuccessDialog());
+                      break;
+                    default:
+                  }
+                },
+              ),
             if (isMyProfile)
               IconButton(
                 icon: const Icon(Icons.menu),
@@ -77,12 +125,13 @@ class _BookLogThumbnailScreenState
                         isMyProfile: isMyProfile,
                         isFollowing: isFollowing,
                         onEdit: () => context.push('/book-log/profile'),
-                        onFollow: () {
+                        onFollow: () async {
                           if (isFollowing) {
-                            followInfoNotifier.unfollow(widget.memberId);
+                            await followInfoNotifier.unfollow(widget.memberId);
                           } else {
-                            followInfoNotifier.follow(widget.memberId);
+                            await followInfoNotifier.follow(widget.memberId);
                           }
+                          await bookLogNotifier.refreshFollowState();
                         },
                         profileImageKey: GlobalKey(),
                       ),
@@ -90,7 +139,7 @@ class _BookLogThumbnailScreenState
                       BookLogThumbnailGrid(
                           thumbnails: bookLog.thumbnails,
                           onScrollBottom: () async {
-                            await bookLogNotifier.refreshState();
+                            await bookLogNotifier.refreshContentState();
                           },
                           onRefresh: () async {
                             await bookLogNotifier.initState(widget.memberId);
