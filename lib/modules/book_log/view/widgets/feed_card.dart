@@ -1,4 +1,5 @@
 import 'package:book/common/components/button/menu_button.dart';
+import 'package:book/common/components/text/expandable_text.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
@@ -38,8 +39,6 @@ class FeedCard extends ConsumerStatefulWidget {
 }
 
 class _FeedCardState extends ConsumerState<FeedCard> {
-  bool isExpanded = false;
-
   @override
   Widget build(BuildContext context) {
     DateTime dt = DateTime.parse(widget.feed.createdDate);
@@ -233,28 +232,31 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                 ],
               ),
               const SizedBox(height: 20),
-              Text(
-                widget.feed.content,
-                maxLines: isExpanded ? null : 10,
-                overflow: isExpanded ? null : TextOverflow.ellipsis,
-                style: AppTexts.b10.copyWith(color: ColorName.w1),
+              ExpandableText(
+                text: widget.feed.content,
               ),
-              const SizedBox(height: 10),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isExpanded = !isExpanded;
-                  });
-                },
-                child: Text(
-                  isExpanded ? '닫기' : '더 보기',
-                  style: AppTexts.b11.copyWith(color: ColorName.g3).copyWith(
-                        decoration: TextDecoration.underline,
-                        decorationColor: ColorName.g3,
-                        decorationThickness: 1,
-                      ),
-                ),
-              ),
+              // Text(
+              //   widget.feed.content,
+              //   maxLines: isExpanded ? null : 10,
+              //   overflow: isExpanded ? null : TextOverflow.ellipsis,
+              //   style: AppTexts.b10.copyWith(color: ColorName.w1),
+              // ),
+              // const SizedBox(height: 10),
+              // GestureDetector(
+              //   onTap: () {
+              //     setState(() {
+              //       isExpanded = !isExpanded;
+              //     });
+              //   },
+              //   child: Text(
+              //     isExpanded ? '닫기' : '더 보기',
+              //     style: AppTexts.b11.copyWith(color: ColorName.g3).copyWith(
+              //           decoration: TextDecoration.underline,
+              //           decorationColor: ColorName.g3,
+              //           decorationThickness: 1,
+              //         ),
+              //   ),
+              // ),
             ],
           ),
         ),
