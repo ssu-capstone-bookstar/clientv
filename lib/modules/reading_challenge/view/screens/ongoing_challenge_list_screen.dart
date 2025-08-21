@@ -85,7 +85,7 @@ class _OngoingChallengeListScreenState
         const SizedBox(height: 12),
         SearchTextField(
           controller: textController,
-          hintText: '내가 읽은 책을 검색해 보세요',
+          hintText: '읽고 싶은 책을 검색해 보세요',
           hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
           suffixIcon: textController.text.isNotEmpty
               ? Assets.images.icSearchColored3x.image(scale: 3)

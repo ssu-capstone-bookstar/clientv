@@ -168,7 +168,7 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
             height: 16,
           ),
           SearchTextField(
-            hintText: '읽고 싶은 책픽을 검색해 보세요',
+            hintText: '읽고 싶은 책을 검색해 보세요',
             hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
             suffixIcon: Assets.images.icSearchUncolored3x.image(scale: 3),
             onTap: onTap,

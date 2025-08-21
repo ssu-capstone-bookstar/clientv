@@ -95,8 +95,7 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
             ),
             SearchTextField(
               controller: _textController,
-              hintText:
-                  isFromChallenge ? '내가 읽을 책을 검색해 보세요' : '읽고 싶은 책을 검색해 보세요',
+              hintText: '읽고 싶은 책을 검색해 보세요',
               hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
               suffixIcon: _textController.text.isNotEmpty
                   ? Assets.images.icSearchColored3x.image(scale: 3)
