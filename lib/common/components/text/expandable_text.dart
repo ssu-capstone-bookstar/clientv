@@ -50,7 +50,10 @@ class _ExpandableTextState extends State<ExpandableText> {
                 onTap: () => setState(() => isExpanded = !isExpanded),
                 child: Text(
                   isExpanded ? "닫기" : "더보기",
-                  style: AppTexts.b11.copyWith(color: ColorName.g3, decoration: TextDecoration.underline, decorationColor: ColorName.g3),
+                  style: AppTexts.b11.copyWith(
+                      color: ColorName.g3,
+                      decoration: TextDecoration.underline,
+                      decorationColor: ColorName.g3),
                 ),
               ),
             ]

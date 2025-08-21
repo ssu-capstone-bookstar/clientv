@@ -207,12 +207,10 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (widget.feed.bookRating > 0)
-                    const SizedBox(width: 3),
+                  if (widget.feed.bookRating > 0) const SizedBox(width: 3),
                   if (widget.feed.bookRating > 0)
                     StarBadge(rating: widget.feed.bookRating),
-                  if (widget.feed.bookRating > 0)
-                    const SizedBox(width: 3),
+                  if (widget.feed.bookRating > 0) const SizedBox(width: 3),
                   Text(
                     createdAt,
                     style: AppTexts.b10.copyWith(color: ColorName.g3),
