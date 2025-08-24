@@ -1,6 +1,9 @@
 import 'package:book/common/components/text_field/search_text_field.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
+import 'package:book/modules/auth/model/policy.dart';
+import 'package:book/modules/auth/view/screens/policy_screen.dart';
+import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_pick/model/like_book_response.dart';
 import 'package:book/modules/book_pick/model/youtube_recommend_response.dart';
 import 'package:book/modules/book_pick/view/widgets/book_pick_item.dart';
@@ -32,6 +35,36 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
   void initState() {
     super.initState();
     _setupScrollListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkPolicyAgreed();
+    });
+  }
+
+  Future<void> checkPolicyAgreed() async {
+    final policy = await ref.read(authViewModelProvider.notifier).getPolicy();
+    final isValidPolicyAgree = policy.serviceUsingAgree == PolicyAgree.Y &&
+        policy.personalInformationAgree == PolicyAgree.Y;
+
+    if (!isValidPolicyAgree && mounted) {
+      final result = await showModalBottomSheet(
+          isDismissible: false,
+          isScrollControlled: true,
+          context: context,
+          barrierColor: Colors.transparent,
+          builder: (_) => PolicyScreen(initPolicy: policy));
+
+      if (result != null) {
+        final serviceUsingAgree = result["serviceUsingAgree"] as PolicyAgree;
+        final personalInformationAgree =
+            result["personalInformationAgree"] as PolicyAgree;
+        final marketingAgree = result["marketingAgree"] as PolicyAgree;
+
+        await ref.read(authViewModelProvider.notifier).setPolicy(Policy(
+            serviceUsingAgree: serviceUsingAgree,
+            personalInformationAgree: personalInformationAgree,
+            marketingAgree: marketingAgree));
+      }
+    }
   }
 
   void _setupScrollListener() {
@@ -86,7 +119,9 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
     final url = 'https://www.youtube.com/watch?v=$videoId';
 
     if (await canLaunchUrl(Uri.parse(url))) {
-      await ref.read(bookPickViewModelProvider.notifier).watchYoutubeVideo(videoId);
+      await ref
+          .read(bookPickViewModelProvider.notifier)
+          .watchYoutubeVideo(videoId);
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
@@ -288,21 +323,23 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
           ),
           SizedBox(
             height: 135,
-            child: list.isNotEmpty ? ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(width: 12),
-                scrollDirection: Axis.horizontal,
-                controller: controller,
-                itemCount: list.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final item = list[index];
-                  return BookPickItem(
-                      item: item, onItemTap: () => onItemTap(index));
-                }) : Center(
-              child: Text(
-                '내가 픽한 책이 없습니다.',
-                style: AppTexts.b8.copyWith(color: ColorName.g3),
-              ),
-            ),
+            child: list.isNotEmpty
+                ? ListView.separated(
+                    separatorBuilder: (context, index) => SizedBox(width: 12),
+                    scrollDirection: Axis.horizontal,
+                    controller: controller,
+                    itemCount: list.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final item = list[index];
+                      return BookPickItem(
+                          item: item, onItemTap: () => onItemTap(index));
+                    })
+                : Center(
+                    child: Text(
+                      '내가 픽한 책이 없습니다.',
+                      style: AppTexts.b8.copyWith(color: ColorName.g3),
+                    ),
+                  ),
           ),
           SizedBox(
             height: 70,

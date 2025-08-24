@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:book/modules/auth/model/policy.dart';
+import 'package:book/modules/auth/repository/policy_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../infra/storage/secure_storage.dart';
@@ -17,6 +19,8 @@ class AuthViewModel extends _$AuthViewModel {
   late final SocialLoginService _socialLoginService = SocialLoginService();
   late final SecureStorageRepository _secureStorageRepository =
       ref.read(secureStorageRepositoryProvider);
+  late final PolicyRepository _policyRepository =
+      ref.read(policyRepositoryProvider);
 
   @override
   Future<AuthState> build() async {
@@ -175,5 +179,14 @@ class AuthViewModel extends _$AuthViewModel {
       loading: () => null,
       error: (e, t) => null,
     );
+  }
+
+  Future<Policy> getPolicy() async {
+    final policyResponse = await _policyRepository.getPolicy();
+    return policyResponse.data;
+  }
+
+  Future<void> setPolicy(Policy policy) async {
+    await _policyRepository.updatePolicy(policy);
   }
 }
