@@ -128,7 +128,7 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
               ),
               _buildActionButton(
                 context,
-                '신고하기',
+                '동의하고 시작하기',
                 isValidAgreed ? ColorName.p1 : ColorName.g7,
                 AppTexts.b7.copyWith(
                     color: isValidAgreed ? ColorName.w1 : ColorName.g3),
