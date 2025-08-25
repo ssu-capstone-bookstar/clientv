@@ -7,7 +7,7 @@ part of 'feed_comment_view_model.dart';
 // **************************************************************************
 
 String _$feedCommentViewModelHash() =>
-    r'f81392435f73fb12d1f83c711294f5729507055f';
+    r'a4b7b49c63da6645fdeefa24216ce1f78e945746';
 
 /// Copied from Dart SDK
 class _SystemHash {
