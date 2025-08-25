@@ -22,7 +22,6 @@ class PolicyDetailScreen extends ConsumerWidget {
         ),
         title: Text(
           getTitle(policyType),
-          style: const TextStyle(color: Colors.white),
         ),
       ),
       body: getTargetWidget(policyType: policyType),
