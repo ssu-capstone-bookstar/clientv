@@ -42,7 +42,7 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
       if (audioPlayer.playing) {
         audioPlayer.stop();
       }
-      ref.read(selectedMusicProvider.notifier).state = null;
+      ref.read(selectedMusicProvider.notifier).cancel();
     });
     super.dispose();
   }
@@ -87,67 +87,69 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
         MediaQuery.of(context).size.height > 800.0 ? 272.0 : 250.0;
 
     return PopScope(
-      // followed by modification in lib/modules/home/view/screens/home_screen.dart.
-      // if DeepTimeStatus.running -> can't use bottom navigator bar.
-      canPop: state.status != DeepTimeStatus.running,
-      child: SafeArea(
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Stack(alignment: Alignment.topCenter, children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: circularTimerSize,
-                  height: circularTimerSize,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.none,
+        // followed by modification in lib/modules/home/view/screens/home_screen.dart.
+        // if DeepTimeStatus.running -> can't use bottom navigator bar.
+        canPop: state.status != DeepTimeStatus.running,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircularTimer(size: circularTimerSize),
-                      _buildTimeMarker('0', const Alignment(0, -0.85)),
-                      _buildTimeMarker('15', const Alignment(0.85, 0)),
-                      _buildTimeMarker('30', const Alignment(0, 0.85)),
-                      _buildTimeMarker('45', const Alignment(-0.85, 0)),
-                      TimerCharacter(status: status),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: circularTimerSize,
+                        height: circularTimerSize,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          children: [
+                            CircularTimer(size: circularTimerSize),
+                            _buildTimeMarker('0', const Alignment(0, -0.85)),
+                            _buildTimeMarker('15', const Alignment(0.85, 0)),
+                            _buildTimeMarker('30', const Alignment(0, 0.85)),
+                            _buildTimeMarker('45', const Alignment(-0.85, 0)),
+                            TimerCharacter(status: status),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+
+                      // time is zero
+                      if (displayDuration == Duration.zero) ...[
+                        _buildStatusText(status, displayDuration),
+                        const SizedBox(height: 20),
+                        _buildTodayTotalTime(state.todayTotalSeconds),
+                      ],
+                      // time is not zero
+                      if (state.settingDuration > Duration.zero) ...[
+                        const TimerControls(),
+                      ],
+
+                      // 00:00 time display
+                      _TimerDisplay(
+                        status: status,
+                        displayDuration: displayDuration,
+                        circleSize: circularTimerSize,
+                      ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
-
-                // time is zero
-                if (displayDuration == Duration.zero) ...[
-                  _buildStatusText(status, displayDuration),
-                  const SizedBox(height: 20),
-                  _buildTodayTotalTime(state.todayTotalSeconds),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: state.settingDuration > Duration.zero ? 20 : 0,
+                      bottom: 12.0,
+                    ),
+                    child: PlaylistButton(),
+                  )
                 ],
-                // time is not zero
-                if (state.settingDuration > Duration.zero) ...[
-                  const TimerControls(),
-                ],
-
-                // 00:00 time display
-                _TimerDisplay(
-                  status: status,
-                  displayDuration: displayDuration,
-                  circleSize: circularTimerSize,
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  bottom: 12.0,
-                ),
-                child: PlaylistButton(),
               ),
-            ),
-          ]);
-        }),
-      ),
-    );
+            )
+          ],
+        ));
   }
 
   Widget _buildTimeMarker(String text, Alignment alignment) {
@@ -252,7 +254,7 @@ class _TimerDisplay extends StatelessWidget {
       );
     }
 
-    return Container(
+    return SizedBox(
       height: circleSize < 270 ? 85 : 120,
       width: 250,
       child: Stack(
@@ -282,18 +284,18 @@ class _TimerDisplay extends StatelessWidget {
             child: FittedBox(fit: BoxFit.cover, child: timerText),
           ),
           Positioned(
-            left: -10,
-            top: -5,
+            left: 0,
+            top: 0,
             child: Assets.icons.icDeeptypeStickerClock.svg(width: 40),
           ),
           Positioned(
-            right: -15,
+            right: 0,
             top: 0,
             child: Assets.icons.icDeeptypeStickerBook.svg(width: 35),
           ),
           Positioned(
-            bottom: -25,
-            right: 40,
+            bottom: 0,
+            right: -20,
             child: Assets.icons.icDeeptypeStickerCloud.svg(width: 40),
           ),
         ],
