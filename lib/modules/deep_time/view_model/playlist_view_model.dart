@@ -21,6 +21,7 @@ class SelectedMusic extends _$SelectedMusic {
   }
 
   void select(MusicItem? music) => state = music;
+  void cancel() => state = null;
 }
 
 @riverpod
