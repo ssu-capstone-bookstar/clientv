@@ -75,7 +75,9 @@ class LoginScreen extends ConsumerWidget {
       children: [
         SocialLoginButton(
           onPressed: () {
-            ref.read(authViewModelProvider.notifier).login(ProviderType.kakao);
+            ref
+                .read(authViewModelProvider.notifier)
+                .login(ProviderType.kakao);
           },
           assetName: 'assets/icons/kakao.svg',
           label: '카카오 로그인',
@@ -84,7 +86,9 @@ class LoginScreen extends ConsumerWidget {
         ),
         SocialLoginButton(
           onPressed: () {
-            ref.read(authViewModelProvider.notifier).login(ProviderType.google);
+            ref
+                .read(authViewModelProvider.notifier)
+                .login(ProviderType.google);
           },
           assetName: 'assets/icons/google.svg',
           label: 'Google로 로그인',
@@ -94,7 +98,9 @@ class LoginScreen extends ConsumerWidget {
         ),
         SocialLoginButton(
           onPressed: () {
-            ref.read(authViewModelProvider.notifier).login(ProviderType.apple);
+            ref
+                .read(authViewModelProvider.notifier)
+                .login(ProviderType.apple);
           },
           assetName: 'assets/icons/apple.svg',
           label: 'Apple로 로그인',
