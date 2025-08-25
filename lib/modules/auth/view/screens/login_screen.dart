@@ -25,7 +25,7 @@ class LoginScreen extends ConsumerWidget {
             children: [
               _buildGreetingSection(),
               _buildHeroSection(),
-              _buildButtonSection(ref, context),
+              _buildButtonSection(ref),
             ],
           ),
         ),
@@ -69,7 +69,7 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildButtonSection(WidgetRef ref, BuildContext context) {
+  Widget _buildButtonSection(WidgetRef ref) {
     return Column(
       spacing: 12.0,
       children: [
