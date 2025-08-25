@@ -38,7 +38,7 @@ final playlistProvider = AutoDisposeProvider<List<MusicItem>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef PlaylistRef = AutoDisposeProviderRef<List<MusicItem>>;
-String _$selectedMusicHash() => r'3c2b0f1c02fa06e1395f5e0d4e2387c7f8b0c3c2';
+String _$selectedMusicHash() => r'3b062f8befbc581b6c61c97c1c593d4b575b89f9';
 
 /// Selected Music State Provider
 ///
