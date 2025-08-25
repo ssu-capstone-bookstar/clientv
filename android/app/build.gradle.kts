@@ -19,7 +19,7 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.example.book"
+    namespace = "com.company.bookstar"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
     // ndkVersion = flutter.ndkVersion
