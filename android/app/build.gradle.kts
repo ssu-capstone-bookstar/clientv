@@ -25,6 +25,9 @@ android {
     // ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Enable core library desugaring
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -51,6 +54,11 @@ android {
             keyAlias = keystoreProperties["keyAlias"] as String
             keyPassword = keystoreProperties["keyPassword"] as String
         }
+    }
+
+    dependencies {
+        // Add core library desugaring dependency
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     }
 
     buildTypes {
