@@ -204,6 +204,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ConstrainedBox(
                     constraints: BoxConstraints(
@@ -215,8 +216,8 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Assets.icons.icStar.svg(width: 12, height: 12),
+                  const SizedBox(width: 4),
+                  Assets.icons.icStar.svg(width: 14, height: 14),
                   const SizedBox(width: 3),
                   Text(
                     book.star.toStringAsFixed(1),
