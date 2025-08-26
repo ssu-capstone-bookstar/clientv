@@ -221,7 +221,7 @@ class _ReadingChallengeStartAndEndPageScreenState
           child: Input1(
             hintText: '페이지',
             focusNode: focusNode,
-            keyboardType: TextInputType.numberWithOptions(signed: true),
+            keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: onChanged,
             onTap: () {
