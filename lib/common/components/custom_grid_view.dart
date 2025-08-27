@@ -40,9 +40,10 @@ class CustomGridView<T, TItem> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-final rowCount = (itemCount / crossAxisCount).ceil();
+    final rowCount = (itemCount / crossAxisCount).ceil();
 
-    return isEmpty ? Center(
+    return isEmpty
+        ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,39 +56,44 @@ final rowCount = (itemCount / crossAxisCount).ceil();
                 ),
               ],
             ),
-          ) : Padding(
+          )
+        : Padding(
             padding: gridPadding,
             child: CustomScrollView(
               controller: scrollController,
               slivers: [
                 for (int row = 0; row < rowCount; row++) ...[
-                  SliverPadding(padding: itemPadding,
-                  sliver: SliverGrid(delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final itemIndex = row * crossAxisCount + index;
-                        if (itemIndex >= itemCount) return const SizedBox();
-                        return itemBuilder(context, itemIndex);
-                      },
-                      childCount: crossAxisCount,
+                  SliverPadding(
+                    padding: itemPadding,
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final itemIndex = row * crossAxisCount + index;
+                          if (itemIndex >= itemCount) return const SizedBox();
+                          return itemBuilder(context, itemIndex);
+                        },
+                        childCount: crossAxisCount,
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: crossAxisSpacing,
+                        mainAxisSpacing: mainAxisSpacing,
+                        childAspectRatio: childAspectRatio,
+                      ),
                     ),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: crossAxisSpacing,
-                      mainAxisSpacing: mainAxisSpacing,
-                      childAspectRatio: childAspectRatio,
-                    ),),),
-                    if (row < rowCount || hasNext)
-                    SliverToBoxAdapter(
-                    child: separatorBuilder?.call(context, row) ??
-                        Padding(
-                          padding: EdgeInsets.only(top: 4.0, bottom: 30),
-                          child: Divider(
-                            thickness: 7,
-                            color: AppColors.DIVIDER_COLOR,
-                            radius: BorderRadius.circular(5.0),
-                          ),
-                        ),
                   ),
+                  if (row < rowCount || hasNext)
+                    SliverToBoxAdapter(
+                      child: separatorBuilder?.call(context, row) ??
+                          Padding(
+                            padding: EdgeInsets.only(top: 4.0, bottom: 30),
+                            child: Divider(
+                              thickness: 7,
+                              color: AppColors.DIVIDER_COLOR,
+                              radius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                    ),
                 ],
               ],
             ),

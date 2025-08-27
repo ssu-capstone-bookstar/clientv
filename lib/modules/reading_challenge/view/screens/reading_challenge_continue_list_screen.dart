@@ -71,7 +71,11 @@ class _ReadingChallengeContinueListScreenState
             Expanded(
               child: state.challenges.when(
                 data: (data) {
-                  final filteredChallenges = data.where((challenge) => challenge.book.title.toLowerCase().contains(searchQuery.toLowerCase())).toList();
+                  final filteredChallenges = data
+                      .where((challenge) => challenge.book.title
+                          .toLowerCase()
+                          .contains(searchQuery.toLowerCase()))
+                      .toList();
                   return _buildChallengeGrid(
                     challenges: filteredChallenges,
                     isSelectionMode: isSelectionMode,

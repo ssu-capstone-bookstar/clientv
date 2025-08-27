@@ -16,7 +16,7 @@ class OngoingChallengeCard extends StatelessWidget {
     super.key,
   });
 
-    final ChallengeResponse challenge;
+  final ChallengeResponse challenge;
   final bool isSelectionMode;
   final bool isSelected;
   final Function() onTap;
@@ -31,7 +31,7 @@ class OngoingChallengeCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: GestureDetector(
-            onTap: !isSelectionMode ?onTap : onToggle,
+            onTap: !isSelectionMode ? onTap : onToggle,
             child: Stack(
               fit: StackFit.expand,
               children: [

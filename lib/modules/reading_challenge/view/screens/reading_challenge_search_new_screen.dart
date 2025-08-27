@@ -123,19 +123,19 @@ class _ReadingChallengeSearchNewScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildSearchBook(
-                textController: _textController,
-                focusNode: _focusNode,
-                onTapSuffixIcon: () => _onSearchSubmitted(_textController.text),
-                onTapMyLikes: () {
-                  context.push('/reading-challenge/search-new/my-likes');
-                }
-              ),
+                  textController: _textController,
+                  focusNode: _focusNode,
+                  onTapSuffixIcon: () =>
+                      _onSearchSubmitted(_textController.text),
+                  onTapMyLikes: () {
+                    context.push('/reading-challenge/search-new/my-likes');
+                  }),
               Expanded(
                   child: state.when(
                 data: (data) {
                   final visibleSearchHistory =
                       data.books.isEmpty && data.query.isEmpty;
-        
+
                   return visibleSearchHistory
                       ? _buildSearchHistory(
                           searchHistories: data.searchHistories,
@@ -148,25 +148,28 @@ class _ReadingChallengeSearchNewScreenState
                           },
                         )
                       : _buildSearchResults(
-                    books: data.books,
-                    hasNext: data.hasNext,
-                    scrollController: _scrollController,
-                    onTapItem: (book) async {
-                      final currentChallengeNotifier =
-                          ref.read(currentChallengeViewModelProvider.notifier);
-                      final challengeExists = await currentChallengeNotifier
-                          .checkChallengeExists(book.bookId.toString());
-                      if (!context.mounted) return;
-                      if (challengeExists) {
-                        // 챌린지가 존재하면 커스텀 토스트 표시
-                        OverlayUtils.showCustomToast(context, '이미 진행중인 챌린지입니다.');
-                      } else {
-                        // 챌린지가 존재하지 않으면 다음 화면으로 이동
-                        context.push('/reading-challenge/total-page',
-                            extra: book);
-                      }
-                    },
-                  );
+                          books: data.books,
+                          hasNext: data.hasNext,
+                          scrollController: _scrollController,
+                          onTapItem: (book) async {
+                            final currentChallengeNotifier = ref.read(
+                                currentChallengeViewModelProvider.notifier);
+                            final challengeExists =
+                                await currentChallengeNotifier
+                                    .checkChallengeExists(
+                                        book.bookId.toString());
+                            if (!context.mounted) return;
+                            if (challengeExists) {
+                              // 챌린지가 존재하면 커스텀 토스트 표시
+                              OverlayUtils.showCustomToast(
+                                  context, '이미 진행중인 챌린지입니다.');
+                            } else {
+                              // 챌린지가 존재하지 않으면 다음 화면으로 이동
+                              context.push('/reading-challenge/total-page',
+                                  extra: book);
+                            }
+                          },
+                        );
                 },
                 loading: _loading,
                 error: _error("북 검색 정보를 불러올 수 없습니다."),

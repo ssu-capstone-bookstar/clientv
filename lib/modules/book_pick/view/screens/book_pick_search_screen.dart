@@ -155,7 +155,9 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
           '책 찾기',
           style: AppTexts.b1.copyWith(color: ColorName.w1),
         ),
-        SizedBox(height: 15,),
+        SizedBox(
+          height: 15,
+        ),
         SearchTextField(
           controller: textController,
           focusNode: focusNode,

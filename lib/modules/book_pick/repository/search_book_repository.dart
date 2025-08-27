@@ -20,7 +20,8 @@ SearchBookRepository searchBookRepository(Ref ref) {
 
 @RestApi()
 abstract class SearchBookRepository {
-  factory SearchBookRepository(Dio dio, {String baseUrl}) = _SearchBookRepository;
+  factory SearchBookRepository(Dio dio, {String baseUrl}) =
+      _SearchBookRepository;
 
   @GET('/api/v2/search/books/aladin')
   Future<ResponseForm<CursorPageResponse<SearchBookResponse>>> searchBooks(

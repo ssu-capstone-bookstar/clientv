@@ -131,18 +131,18 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
                         itemBuilder: (context, index) {
                           final book = data.likeBook.likeBooks[index];
                           return BookSearchResultCard(
-                            book: SearchBookResponse(
-                              bookId: book.bookId,
-                              title: book.title,
-                              bookCover: book.bookCover,
-                              pubDate: book.pubDate,
-                              author: book.author,
-                              publisher: book.publisher,
-                            ),
-                            onTap: () {
-                              context.push('/book-pick/overview/${book.bookId}');
-                            }
-                          );
+                              book: SearchBookResponse(
+                                bookId: book.bookId,
+                                title: book.title,
+                                bookCover: book.bookCover,
+                                pubDate: book.pubDate,
+                                author: book.author,
+                                publisher: book.publisher,
+                              ),
+                              onTap: () {
+                                context
+                                    .push('/book-pick/overview/${book.bookId}');
+                              });
                         },
                         hasNext: data.likeBook.hasNext,
                         scrollController: _scrollController,
@@ -168,7 +168,9 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
           '내가 PICK한 책을 확인해 보세요',
           style: AppTexts.b1.copyWith(color: ColorName.w1),
         ),
-          SizedBox(height: 15,),
+        SizedBox(
+          height: 15,
+        ),
         SearchTextField(
           controller: textController,
           focusNode: focusNode,
