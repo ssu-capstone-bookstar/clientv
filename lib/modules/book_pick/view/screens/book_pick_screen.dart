@@ -1,3 +1,4 @@
+import 'package:book/common/components/custom_list_view.dart';
 import 'package:book/common/components/text_field/search_text_field.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
@@ -5,8 +6,9 @@ import 'package:book/modules/auth/model/policy.dart';
 import 'package:book/modules/auth/view/screens/policy_screen.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_pick/model/like_book_response.dart';
+import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/book_pick/model/youtube_recommend_response.dart';
-import 'package:book/modules/book_pick/view/widgets/book_pick_item.dart';
+import 'package:book/modules/book_pick/view/widgets/book_search_result_card.dart';
 import 'package:book/modules/book_pick/view/widgets/youtube_item.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -327,24 +329,30 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
             height: 30,
           ),
           SizedBox(
-            height: 135,
-            child: list.isNotEmpty
-                ? ListView.separated(
-                    separatorBuilder: (context, index) => SizedBox(width: 12),
-                    scrollDirection: Axis.horizontal,
-                    controller: controller,
-                    itemCount: list.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = list[index];
-                      return BookPickItem(
-                          item: item, onItemTap: () => onItemTap(index));
-                    })
-                : Center(
-                    child: Text(
-                      '내가 픽한 책이 없습니다.',
-                      style: AppTexts.b8.copyWith(color: ColorName.g3),
-                    ),
+            height: list.isNotEmpty ? 135 : 135 + 38,
+            child: CustomListView(
+              scrollDirection: Axis.horizontal,
+              emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+              emptyText: '내가 픽한 책이 없습니다.',
+              isEmpty: list.isEmpty,
+              itemCount: list.length,
+              scrollController: controller,
+              itemBuilder: (context, index) {
+                final item = list[index];
+                return BookSearchResultCard(
+                  book: SearchBookResponse(
+                    bookId: item.bookId,
+                    title: item.title,
+                    bookCover: item.bookCover,
+                    pubDate: item.pubDate,
+                    author: item.author,
+                    publisher: item.publisher,
                   ),
+                  onTap: () => onItemTap(index),
+                );
+              },
+              separatorBuilder: (context, index) => SizedBox(width: 12),
+            ),
           ),
           SizedBox(
             height: 70,

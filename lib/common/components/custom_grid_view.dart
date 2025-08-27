@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/colors.gen.dart';
 
-class CustomGridView<T, TItem> extends StatelessWidget {
+class CustomGridView extends StatelessWidget {
   const CustomGridView({
     super.key,
     required this.emptyIcon,
