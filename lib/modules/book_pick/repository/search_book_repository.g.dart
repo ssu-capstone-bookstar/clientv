@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'search_repository.dart';
+part of 'search_book_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'search_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _SearchRepository implements SearchRepository {
-  _SearchRepository(this._dio, {this.baseUrl, this.errorLogger});
+class _SearchBookRepository implements SearchBookRepository {
+  _SearchBookRepository(this._dio, {this.baseUrl, this.errorLogger});
 
   final Dio _dio;
 
@@ -191,22 +191,23 @@ class _SearchRepository implements SearchRepository {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$searchRepositoryHash() => r'756c06b8b0f4295aa5b6448c77c4e0145216a131';
+String _$searchBookRepositoryHash() =>
+    r'89969b0b5d542262be6c74427fcd8d6ae66981c7';
 
-/// See also [searchRepository].
-@ProviderFor(searchRepository)
-final searchRepositoryProvider = Provider<SearchRepository>.internal(
-  searchRepository,
-  name: r'searchRepositoryProvider',
+/// See also [searchBookRepository].
+@ProviderFor(searchBookRepository)
+final searchBookRepositoryProvider = Provider<SearchBookRepository>.internal(
+  searchBookRepository,
+  name: r'searchBookRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$searchRepositoryHash,
+      : _$searchBookRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef SearchRepositoryRef = ProviderRef<SearchRepository>;
+typedef SearchBookRepositoryRef = ProviderRef<SearchBookRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

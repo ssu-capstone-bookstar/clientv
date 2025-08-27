@@ -1,7 +1,5 @@
-import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../common/utils/overlay_utils.dart';
 import '../../model/search_book_response.dart';
@@ -10,14 +8,14 @@ import 'book_cover_detail_info.dart';
 import 'book_cover_preview_info.dart';
 
 class BookSearchResultCard extends ConsumerStatefulWidget {
-  final SearchBookResponse book;
-  final String? from;
-
   const BookSearchResultCard({
     super.key,
     required this.book,
-    this.from,
+    this.onTap,
   });
+
+  final SearchBookResponse book;
+  final Function()? onTap;
 
   @override
   ConsumerState<BookSearchResultCard> createState() =>
@@ -27,32 +25,10 @@ class BookSearchResultCard extends ConsumerStatefulWidget {
 class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
   bool isSelected = false;
 
-  void _handleSingleTap() {
+  void _onLongPress() {
     setState(() {
       isSelected = !isSelected;
     });
-  }
-
-  Future<void> _handleTap() async {
-    if (widget.from == 'challenge') {
-      final viewModel = ref.read(currentChallengeViewModelProvider.notifier);
-      final challengeExists =
-          await viewModel.checkChallengeExists(widget.book.bookId.toString());
-
-      if (challengeExists) {
-        // 챌린지가 존재하면 커스텀 토스트 표시
-        if (mounted) {
-          OverlayUtils.showCustomToast(context, '이미 진행중인 챌린지입니다.');
-        }
-      } else {
-        // 챌린지가 존재하지 않으면 다음 화면으로 이동
-        if (mounted) {
-          context.push('/reading-challenge/total-page', extra: widget.book);
-        }
-      }
-    } else {
-      context.push('/book-pick/overview/${widget.book.bookId}');
-    }
   }
 
   @override
@@ -64,9 +40,9 @@ class _BookSearchResultCardState extends ConsumerState<BookSearchResultCard> {
         child: Material(
           color: Colors.transparent,
           child: GestureDetector(
-            onLongPress: _handleSingleTap,
-            onTap: _handleTap,
-            onDoubleTap: _handleTap,
+            onLongPress: _onLongPress,
+            onTap: widget.onTap,
+            onDoubleTap: widget.onTap,
             child: Stack(
               fit: StackFit.expand,
               children: [
