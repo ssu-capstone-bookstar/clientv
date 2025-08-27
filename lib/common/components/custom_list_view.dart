@@ -12,6 +12,8 @@ class CustomListView extends StatelessWidget {
     required this.isEmpty,
     required this.itemCount,
     required this.itemBuilder,
+    this.scrollDirection = Axis.vertical,
+    this.scrollController,
     this.separatorBuilder,
   });
 
@@ -20,6 +22,8 @@ class CustomListView extends StatelessWidget {
   final bool isEmpty;
   final int itemCount;
   final Widget? Function(BuildContext, int) itemBuilder;
+  final Axis scrollDirection;
+  final ScrollController? scrollController;
   final Widget Function(BuildContext, int)? separatorBuilder;
 
   @override
@@ -40,6 +44,8 @@ class CustomListView extends StatelessWidget {
             ),
           )
         : ListView.separated(
+            scrollDirection: scrollDirection,
+            controller: scrollController,
             itemCount: itemCount,
             itemBuilder: itemBuilder,
             separatorBuilder: separatorBuilder ??
