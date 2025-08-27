@@ -195,22 +195,27 @@ class _BookPickScreenState extends ConsumerState<BookPickScreen> {
     );
   }
 
-  Widget _buildSearchBook({required VoidCallback onTap}) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('책 찾기', style: AppTexts.h4.copyWith(color: ColorName.w1)),
-          SizedBox(
-            height: 16,
-          ),
-          SearchTextField(
-            hintText: '읽고 싶은 책을 검색해 보세요',
-            hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
-            suffixIcon: Assets.images.icSearchUncolored3x.image(scale: 3),
-            onTap: onTap,
-            readOnly: true,
-          ),
-        ],
-      );
+  Widget _buildSearchBook({required VoidCallback onTap}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '책 찾기',
+          style: AppTexts.b1.copyWith(color: ColorName.w1),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        SearchTextField(
+          hintText: '읽고 싶은 책을 검색해 보세요',
+          hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
+          suffixIcon: Assets.images.icSearchUncolored3x.image(scale: 3),
+          onTap: onTap,
+          readOnly: true,
+        ),
+      ],
+    );
+  }
 
   Widget _buildYoutubeBook(
           {required BuildContext ctx,

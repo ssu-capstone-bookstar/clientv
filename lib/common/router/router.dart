@@ -4,6 +4,8 @@ import 'package:book/modules/book_pick/view/screens/book_pick_my_likes_screen.da
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
 import 'package:book/modules/chat/view/screens/book_talk_chat_room_screen.dart';
+import 'package:book/modules/reading_challenge/view/screens/reading_challenge_search_new_my_likes_screen.dart';
+import 'package:book/modules/reading_challenge/view/screens/reading_challenge_search_new_screen.dart';
 import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:book/modules/reading_diary/screens/reading_diary_update_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +36,7 @@ import '../../modules/my_page/view/screens/login_info_screen.dart';
 import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
-import '../../modules/reading_challenge/view/screens/ongoing_challenge_list_screen.dart';
+import '../../modules/reading_challenge/view/screens/reading_challenge_continue_list_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_detail_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_diary_encourage_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_rating_screen.dart';
@@ -319,18 +321,16 @@ GoRouter router(Ref ref) {
                       path: 'search',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (context, state) {
-                        final from = state.uri.queryParameters['from'];
-                        return BookPickSearchScreen(from: from);
+                        return BookPickSearchScreen();
                       },
                       routes: []),
                   GoRoute(
-                      path: 'overview/:bookId',
-                      parentNavigatorKey: rootNavigatorKey,
-                      builder: (context, state) {
-                        final bookId =
-                            int.parse(state.pathParameters['bookId']!);
-                        return BookOverviewScreen(bookId: bookId);
-                      },
+                    path: 'overview/:bookId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final bookId = int.parse(state.pathParameters['bookId']!);
+                      return BookOverviewScreen(bookId: bookId);
+                    },
                   ),
                   GoRoute(
                     path: 'my-likes',
@@ -377,15 +377,23 @@ GoRouter router(Ref ref) {
                     path: 'search-new',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      final from = state.uri.queryParameters['from'];
-                      return BookPickSearchScreen(from: from);
+                      return ReadingChallengeSearchNewScreen();
                     },
+                    routes: [
+                      GoRoute(
+                        path: 'my-likes',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) {
+                          return ReadingChallengeSearchNewMyLikesScreen();
+                        },
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'continue-list',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
-                      return OngoingChallengeListScreen();
+                      return ReadingChallengeContinueListScreen();
                     },
                   ),
                   GoRoute(

@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'search_view_model.dart';
+part of 'search_book_view_model.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$searchViewModelHash() => r'65af427d71b54ed70e45c00d65a8f50aa10b1b5d';
+String _$searchBookViewModelHash() =>
+    r'3371a13544bef2031bcb0ed01c0e4eec663efad5';
 
-/// See also [SearchViewModel].
-@ProviderFor(SearchViewModel)
-final searchViewModelProvider =
-    AutoDisposeAsyncNotifierProvider<SearchViewModel, SearchState>.internal(
-  SearchViewModel.new,
-  name: r'searchViewModelProvider',
+/// See also [SearchBookViewModel].
+@ProviderFor(SearchBookViewModel)
+final searchBookViewModelProvider = AutoDisposeAsyncNotifierProvider<
+    SearchBookViewModel, SearchBookState>.internal(
+  SearchBookViewModel.new,
+  name: r'searchBookViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$searchViewModelHash,
+      : _$searchBookViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SearchViewModel = AutoDisposeAsyncNotifier<SearchState>;
+typedef _$SearchBookViewModel = AutoDisposeAsyncNotifier<SearchBookState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

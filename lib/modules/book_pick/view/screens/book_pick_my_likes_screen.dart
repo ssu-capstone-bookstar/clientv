@@ -1,24 +1,20 @@
-import 'package:book/modules/book_pick/model/like_book_response.dart';
-import 'package:book/modules/book_pick/model/like_book_state.dart';
+import 'package:book/common/components/custom_grid_view.dart';
 import 'package:book/modules/book_pick/view_model/book_pick_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/components/text_field/search_text_field.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../model/search_book_response.dart';
-import '../widgets/book_cover_grid_view.dart';
 import '../widgets/book_search_result_card.dart';
 
 class BookPickMyLikesScreen extends ConsumerStatefulWidget {
   const BookPickMyLikesScreen({
     super.key,
-    this.from,
   });
-
-  final String? from;
 
   @override
   ConsumerState<BookPickMyLikesScreen> createState() =>
@@ -79,7 +75,7 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
         .initLikeBooks(title: _textController.text);
   }
 
-    _hideKeyboard() {
+  _hideKeyboard() {
     _focusNode.unfocus();
   }
 
@@ -87,12 +83,13 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
   void dispose() {
     _scrollController.dispose();
     _textController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bookPickSearchStateAsync = ref.watch(bookPickSearchViewModelProvider);
+    final state = ref.watch(bookPickSearchViewModelProvider);
 
     return Scaffold(
         appBar: PreferredSize(
@@ -102,11 +99,14 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
               '책픽',
               style: AppTexts.b5,
             ),
-            leading: const BackButton(),
+            leading: IconButton(
+              icon: const BackButton(),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
         ),
-        body: bookPickSearchStateAsync.when(
-          data: (bookPickSearchState) => GestureDetector(
+        body: state.when(
+          data: (data) => GestureDetector(
             onTap: () {
               _hideKeyboard();
             },
@@ -116,32 +116,37 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
                   padding: AppPaddings.SCREEN_BODY_PADDING,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 15,
                     children: [
-                      ..._buildSearchBook(
+                      _buildSearchBook(
                         textController: _textController,
                         focusNode: _focusNode,
                         onTapSuffixIcon: _onRefresh,
                       ),
                       Expanded(
-                        child: BookCoverGridView<LikeBookState, LikeBookResponse>(
-                          asyncValue: AsyncValue.data(bookPickSearchState.likeBook),
-                          itemBuilder: (book) => BookSearchResultCard(
-                            book: SearchBookResponse(
-                              bookId: book.bookId,
-                              title: book.title,
-                              bookCover: book.bookCover,
-                              pubDate: book.pubDate,
-                              author: book.author,
-                              publisher: book.publisher,
-                            ),
-                          ),
-                          listBuilder: (LikeBookState data) => data.likeBooks,
-                          hasNext: bookPickSearchState.likeBook.hasNext,
-                          scrollController: _scrollController,
-                          crossAxisCount: 3,
-                        ),
-                      )
+                          child: CustomGridView(
+                        emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+                        emptyText: '검색 결과가 없습니다.',
+                        isEmpty: data.likeBook.likeBooks.isEmpty,
+                        itemCount: data.likeBook.likeBooks.length,
+                        itemBuilder: (context, index) {
+                          final book = data.likeBook.likeBooks[index];
+                          return BookSearchResultCard(
+                              book: SearchBookResponse(
+                                bookId: book.bookId,
+                                title: book.title,
+                                bookCover: book.bookCover,
+                                pubDate: book.pubDate,
+                                author: book.author,
+                                publisher: book.publisher,
+                              ),
+                              onTap: () {
+                                context
+                                    .push('/book-pick/overview/${book.bookId}');
+                              });
+                        },
+                        hasNext: data.likeBook.hasNext,
+                        scrollController: _scrollController,
+                      ))
                     ],
                   ),
                 )),
@@ -151,27 +156,33 @@ class _BookPickMyLikesScreenState extends ConsumerState<BookPickMyLikesScreen> {
         ));
   }
 
-  List<Widget> _buildSearchBook({
+  Widget _buildSearchBook({
     required TextEditingController textController,
-    required FocusNode focusNode,
+    FocusNode? focusNode,
     required Function() onTapSuffixIcon,
   }) {
-    return [
-      Text(
-        '내가 PICK한 책을 확인해 보세요',
-        style: AppTexts.b1.copyWith(color: ColorName.w1),
-      ),
-      SearchTextField(
-        controller: textController,
-        focusNode: focusNode,
-        hintText: '읽고 싶은 책을 검색해 보세요',
-        hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
-        suffixIcon: textController.text.isNotEmpty
-            ? Assets.images.icSearchColored3x.image(scale: 3)
-            : Assets.images.icSearchUncolored3x.image(scale: 3),
-        onTapSuffixIcon: onTapSuffixIcon,
-      )
-    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '내가 PICK한 책을 확인해 보세요',
+          style: AppTexts.b1.copyWith(color: ColorName.w1),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        SearchTextField(
+          controller: textController,
+          focusNode: focusNode,
+          hintText: '읽고 싶은 책을 검색해 보세요',
+          hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
+          suffixIcon: textController.text.isNotEmpty
+              ? Assets.images.icSearchColored3x.image(scale: 3)
+              : Assets.images.icSearchUncolored3x.image(scale: 3),
+          onTapSuffixIcon: onTapSuffixIcon,
+        )
+      ],
+    );
   }
 
   Widget _loading() => const Center(child: CircularProgressIndicator());

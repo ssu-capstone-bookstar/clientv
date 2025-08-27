@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'search_state.dart';
+part of 'search_book_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,72 +13,91 @@ part of 'search_state.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$SearchState {
+mixin _$SearchBookState {
   List<SearchBookResponse> get books;
+  List<String> get searchHistories;
   int get start;
   bool get hasNext;
-  String? get query;
+  String get query;
 
-  /// Create a copy of SearchState
+  /// Create a copy of SearchBookState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $SearchStateCopyWith<SearchState> get copyWith =>
-      _$SearchStateCopyWithImpl<SearchState>(this as SearchState, _$identity);
+  $SearchBookStateCopyWith<SearchBookState> get copyWith =>
+      _$SearchBookStateCopyWithImpl<SearchBookState>(
+          this as SearchBookState, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is SearchState &&
+            other is SearchBookState &&
             const DeepCollectionEquality().equals(other.books, books) &&
+            const DeepCollectionEquality()
+                .equals(other.searchHistories, searchHistories) &&
             (identical(other.start, start) || other.start == start) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
             (identical(other.query, query) || other.query == query));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(books), start, hasNext, query);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(books),
+      const DeepCollectionEquality().hash(searchHistories),
+      start,
+      hasNext,
+      query);
 
   @override
   String toString() {
-    return 'SearchState(books: $books, start: $start, hasNext: $hasNext, query: $query)';
+    return 'SearchBookState(books: $books, searchHistories: $searchHistories, start: $start, hasNext: $hasNext, query: $query)';
   }
 }
 
 /// @nodoc
-abstract mixin class $SearchStateCopyWith<$Res> {
-  factory $SearchStateCopyWith(
-          SearchState value, $Res Function(SearchState) _then) =
-      _$SearchStateCopyWithImpl;
+abstract mixin class $SearchBookStateCopyWith<$Res> {
+  factory $SearchBookStateCopyWith(
+          SearchBookState value, $Res Function(SearchBookState) _then) =
+      _$SearchBookStateCopyWithImpl;
   @useResult
   $Res call(
-      {List<SearchBookResponse> books, int start, bool hasNext, String? query});
+      {List<SearchBookResponse> books,
+      List<String> searchHistories,
+      int start,
+      bool hasNext,
+      String query});
 }
 
 /// @nodoc
-class _$SearchStateCopyWithImpl<$Res> implements $SearchStateCopyWith<$Res> {
-  _$SearchStateCopyWithImpl(this._self, this._then);
+class _$SearchBookStateCopyWithImpl<$Res>
+    implements $SearchBookStateCopyWith<$Res> {
+  _$SearchBookStateCopyWithImpl(this._self, this._then);
 
-  final SearchState _self;
-  final $Res Function(SearchState) _then;
+  final SearchBookState _self;
+  final $Res Function(SearchBookState) _then;
 
-  /// Create a copy of SearchState
+  /// Create a copy of SearchBookState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? books = null,
+    Object? searchHistories = null,
     Object? start = null,
     Object? hasNext = null,
-    Object? query = freezed,
+    Object? query = null,
   }) {
     return _then(_self.copyWith(
       books: null == books
           ? _self.books
           : books // ignore: cast_nullable_to_non_nullable
               as List<SearchBookResponse>,
+      searchHistories: null == searchHistories
+          ? _self.searchHistories
+          : searchHistories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       start: null == start
           ? _self.start
           : start // ignore: cast_nullable_to_non_nullable
@@ -87,16 +106,16 @@ class _$SearchStateCopyWithImpl<$Res> implements $SearchStateCopyWith<$Res> {
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      query: freezed == query
+      query: null == query
           ? _self.query
           : query // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [SearchState].
-extension SearchStatePatterns on SearchState {
+/// Adds pattern-matching-related methods to [SearchBookState].
+extension SearchBookStatePatterns on SearchBookState {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -111,12 +130,12 @@ extension SearchStatePatterns on SearchState {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_SearchState value)? $default, {
+    TResult Function(_SearchBookState value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _SearchState() when $default != null:
+      case _SearchBookState() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -138,11 +157,11 @@ extension SearchStatePatterns on SearchState {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_SearchState value) $default,
+    TResult Function(_SearchBookState value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _SearchState():
+      case _SearchBookState():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -163,11 +182,11 @@ extension SearchStatePatterns on SearchState {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_SearchState value)? $default,
+    TResult? Function(_SearchBookState value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _SearchState() when $default != null:
+      case _SearchBookState() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -188,15 +207,20 @@ extension SearchStatePatterns on SearchState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<SearchBookResponse> books, int start, bool hasNext,
-            String? query)?
+    TResult Function(
+            List<SearchBookResponse> books,
+            List<String> searchHistories,
+            int start,
+            bool hasNext,
+            String query)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _SearchState() when $default != null:
-        return $default(_that.books, _that.start, _that.hasNext, _that.query);
+      case _SearchBookState() when $default != null:
+        return $default(_that.books, _that.searchHistories, _that.start,
+            _that.hasNext, _that.query);
       case _:
         return orElse();
     }
@@ -217,14 +241,15 @@ extension SearchStatePatterns on SearchState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<SearchBookResponse> books, int start, bool hasNext,
-            String? query)
+    TResult Function(List<SearchBookResponse> books,
+            List<String> searchHistories, int start, bool hasNext, String query)
         $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _SearchState():
-        return $default(_that.books, _that.start, _that.hasNext, _that.query);
+      case _SearchBookState():
+        return $default(_that.books, _that.searchHistories, _that.start,
+            _that.hasNext, _that.query);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -244,14 +269,19 @@ extension SearchStatePatterns on SearchState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<SearchBookResponse> books, int start, bool hasNext,
-            String? query)?
+    TResult? Function(
+            List<SearchBookResponse> books,
+            List<String> searchHistories,
+            int start,
+            bool hasNext,
+            String query)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _SearchState() when $default != null:
-        return $default(_that.books, _that.start, _that.hasNext, _that.query);
+      case _SearchBookState() when $default != null:
+        return $default(_that.books, _that.searchHistories, _that.start,
+            _that.hasNext, _that.query);
       case _:
         return null;
     }
@@ -260,13 +290,15 @@ extension SearchStatePatterns on SearchState {
 
 /// @nodoc
 
-class _SearchState implements SearchState {
-  const _SearchState(
+class _SearchBookState implements SearchBookState {
+  const _SearchBookState(
       {final List<SearchBookResponse> books = const [],
+      final List<String> searchHistories = const [],
       this.start = 1,
-      this.hasNext = true,
-      this.query})
-      : _books = books;
+      this.hasNext = false,
+      this.query = ''})
+      : _books = books,
+        _searchHistories = searchHistories;
 
   final List<SearchBookResponse> _books;
   @override
@@ -277,6 +309,15 @@ class _SearchState implements SearchState {
     return EqualUnmodifiableListView(_books);
   }
 
+  final List<String> _searchHistories;
+  @override
+  @JsonKey()
+  List<String> get searchHistories {
+    if (_searchHistories is EqualUnmodifiableListView) return _searchHistories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchHistories);
+  }
+
   @override
   @JsonKey()
   final int start;
@@ -284,71 +325,89 @@ class _SearchState implements SearchState {
   @JsonKey()
   final bool hasNext;
   @override
-  final String? query;
+  @JsonKey()
+  final String query;
 
-  /// Create a copy of SearchState
+  /// Create a copy of SearchBookState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SearchStateCopyWith<_SearchState> get copyWith =>
-      __$SearchStateCopyWithImpl<_SearchState>(this, _$identity);
+  _$SearchBookStateCopyWith<_SearchBookState> get copyWith =>
+      __$SearchBookStateCopyWithImpl<_SearchBookState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SearchState &&
+            other is _SearchBookState &&
             const DeepCollectionEquality().equals(other._books, _books) &&
+            const DeepCollectionEquality()
+                .equals(other._searchHistories, _searchHistories) &&
             (identical(other.start, start) || other.start == start) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
             (identical(other.query, query) || other.query == query));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_books), start, hasNext, query);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_books),
+      const DeepCollectionEquality().hash(_searchHistories),
+      start,
+      hasNext,
+      query);
 
   @override
   String toString() {
-    return 'SearchState(books: $books, start: $start, hasNext: $hasNext, query: $query)';
+    return 'SearchBookState(books: $books, searchHistories: $searchHistories, start: $start, hasNext: $hasNext, query: $query)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$SearchStateCopyWith<$Res>
-    implements $SearchStateCopyWith<$Res> {
-  factory _$SearchStateCopyWith(
-          _SearchState value, $Res Function(_SearchState) _then) =
-      __$SearchStateCopyWithImpl;
+abstract mixin class _$SearchBookStateCopyWith<$Res>
+    implements $SearchBookStateCopyWith<$Res> {
+  factory _$SearchBookStateCopyWith(
+          _SearchBookState value, $Res Function(_SearchBookState) _then) =
+      __$SearchBookStateCopyWithImpl;
   @override
   @useResult
   $Res call(
-      {List<SearchBookResponse> books, int start, bool hasNext, String? query});
+      {List<SearchBookResponse> books,
+      List<String> searchHistories,
+      int start,
+      bool hasNext,
+      String query});
 }
 
 /// @nodoc
-class __$SearchStateCopyWithImpl<$Res> implements _$SearchStateCopyWith<$Res> {
-  __$SearchStateCopyWithImpl(this._self, this._then);
+class __$SearchBookStateCopyWithImpl<$Res>
+    implements _$SearchBookStateCopyWith<$Res> {
+  __$SearchBookStateCopyWithImpl(this._self, this._then);
 
-  final _SearchState _self;
-  final $Res Function(_SearchState) _then;
+  final _SearchBookState _self;
+  final $Res Function(_SearchBookState) _then;
 
-  /// Create a copy of SearchState
+  /// Create a copy of SearchBookState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
     Object? books = null,
+    Object? searchHistories = null,
     Object? start = null,
     Object? hasNext = null,
-    Object? query = freezed,
+    Object? query = null,
   }) {
-    return _then(_SearchState(
+    return _then(_SearchBookState(
       books: null == books
           ? _self._books
           : books // ignore: cast_nullable_to_non_nullable
               as List<SearchBookResponse>,
+      searchHistories: null == searchHistories
+          ? _self._searchHistories
+          : searchHistories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       start: null == start
           ? _self.start
           : start // ignore: cast_nullable_to_non_nullable
@@ -357,10 +416,10 @@ class __$SearchStateCopyWithImpl<$Res> implements _$SearchStateCopyWith<$Res> {
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      query: freezed == query
+      query: null == query
           ? _self.query
           : query // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }

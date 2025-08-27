@@ -1,6 +1,10 @@
 import 'package:book/common/components/custom_grid_view.dart';
 import 'package:book/common/components/custom_list_view.dart';
+import 'package:book/common/utils/overlay_utils.dart';
+import 'package:book/modules/book_pick/model/search_book_response.dart';
 import 'package:book/modules/book_pick/view/widgets/book_search_result_card.dart';
+import 'package:book/modules/book_pick/view_model/search_book_view_model.dart';
+import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,21 +13,21 @@ import '../../../../common/components/text_field/search_text_field.dart';
 import '../../../../common/theme/app_style.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
-import '../../model/search_book_response.dart';
-import '../../view_model/search_book_view_model.dart';
 
-class BookPickSearchScreen extends ConsumerStatefulWidget {
-  const BookPickSearchScreen({
+class ReadingChallengeSearchNewScreen extends ConsumerStatefulWidget {
+  const ReadingChallengeSearchNewScreen({
     super.key,
   });
 
   @override
-  ConsumerState<BookPickSearchScreen> createState() =>
-      _BookPickSearchScreenState();
+  ConsumerState<ReadingChallengeSearchNewScreen> createState() =>
+      _ReadingChallengeSearchNewScreenState();
 }
 
-class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
+class _ReadingChallengeSearchNewScreenState
+    extends ConsumerState<ReadingChallengeSearchNewScreen> {
   final TextEditingController _textController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
   DateTime? _lastBottomReachedTime;
@@ -34,6 +38,9 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
     _setupScrollListener();
     _textController.addListener(() {
       setState(() {});
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(searchBookViewModelProvider.notifier).initState();
     });
   }
 
@@ -75,10 +82,15 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
     }
   }
 
+  _hideKeyboard() {
+    _focusNode.unfocus();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
     _textController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -101,43 +113,69 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: AppPaddings.SCREEN_BODY_PADDING,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSearchBook(
-              textController: _textController,
-              onTapSuffixIcon: () => _onSearchSubmitted(_textController.text),
-            ),
-            Expanded(
-                child: state.when(
-              data: (data) {
-                final visibleSearchHistory =
-                    data.books.isEmpty && data.query.isEmpty;
-                return visibleSearchHistory
-                    ? _buildSearchHistory(
-                        searchHistories: data.searchHistories,
-                        onRemoveItem: (query) async {
-                          await notifier.removeHistory(query);
-                        },
-                        onSearchItem: (query) {
-                          _textController.text = query;
-                          _onSearchSubmitted(query);
-                        },
-                      )
-                    : _buildSearchResults(
-                        books: data.books,
-                        hasNext: data.hasNext,
-                        scrollController: _scrollController,
-                        onTapItem: (book) =>
-                            context.push('/book-pick/overview/${book.bookId}'),
-                      );
-              },
-              loading: _loading,
-              error: _error("북 검색 정보를 불러올 수 없습니다."),
-            )),
-          ],
+      body: GestureDetector(
+        onTap: () {
+          _hideKeyboard();
+        },
+        child: Padding(
+          padding: AppPaddings.SCREEN_BODY_PADDING,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSearchBook(
+                  textController: _textController,
+                  focusNode: _focusNode,
+                  onTapSuffixIcon: () =>
+                      _onSearchSubmitted(_textController.text),
+                  onTapMyLikes: () {
+                    context.push('/reading-challenge/search-new/my-likes');
+                  }),
+              Expanded(
+                  child: state.when(
+                data: (data) {
+                  final visibleSearchHistory =
+                      data.books.isEmpty && data.query.isEmpty;
+
+                  return visibleSearchHistory
+                      ? _buildSearchHistory(
+                          searchHistories: data.searchHistories,
+                          onRemoveItem: (query) async {
+                            await notifier.removeHistory(query);
+                          },
+                          onSearchItem: (query) {
+                            _textController.text = query;
+                            _onSearchSubmitted(query);
+                          },
+                        )
+                      : _buildSearchResults(
+                          books: data.books,
+                          hasNext: data.hasNext,
+                          scrollController: _scrollController,
+                          onTapItem: (book) async {
+                            final currentChallengeNotifier = ref.read(
+                                currentChallengeViewModelProvider.notifier);
+                            final challengeExists =
+                                await currentChallengeNotifier
+                                    .checkChallengeExists(
+                                        book.bookId.toString());
+                            if (!context.mounted) return;
+                            if (challengeExists) {
+                              // 챌린지가 존재하면 커스텀 토스트 표시
+                              OverlayUtils.showCustomToast(
+                                  context, '이미 진행중인 챌린지입니다.');
+                            } else {
+                              // 챌린지가 존재하지 않으면 다음 화면으로 이동
+                              context.push('/reading-challenge/total-page',
+                                  extra: book);
+                            }
+                          },
+                        );
+                },
+                loading: _loading,
+                error: _error("북 검색 정보를 불러올 수 없습니다."),
+              )),
+            ],
+          ),
         ),
       ),
     );
@@ -147,12 +185,13 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
     required TextEditingController textController,
     FocusNode? focusNode,
     required Function() onTapSuffixIcon,
+    required Function() onTapMyLikes,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '책 찾기',
+          '리딩 챌린지',
           style: AppTexts.b1.copyWith(color: ColorName.w1),
         ),
         SizedBox(
@@ -161,12 +200,30 @@ class _BookPickSearchScreenState extends ConsumerState<BookPickSearchScreen> {
         SearchTextField(
           controller: textController,
           focusNode: focusNode,
-          hintText: '읽고 싶은 책을 검색해 보세요',
+          hintText: '새롭게 읽을 책을 찾아보세요',
           hintStyle: AppTexts.b6.copyWith(color: ColorName.g3),
           suffixIcon: textController.text.isNotEmpty
               ? Assets.images.icSearchColored3x.image(scale: 3)
               : Assets.images.icSearchUncolored3x.image(scale: 3),
           onTapSuffixIcon: onTapSuffixIcon,
+        ),
+        const SizedBox(height: 25),
+        GestureDetector(
+          onTap: onTapMyLikes,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "내가 PICK한 책",
+                style: AppTexts.b10.copyWith(color: ColorName.g2),
+              ),
+              const Icon(
+                Icons.chevron_right,
+                color: ColorName.g2,
+                size: 20,
+              ),
+            ],
+          ),
         )
       ],
     );

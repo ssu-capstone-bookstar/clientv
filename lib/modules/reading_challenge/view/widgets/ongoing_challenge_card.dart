@@ -5,21 +5,22 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class OngoingChallengeCard extends StatelessWidget {
-  final ChallengeResponse challenge;
-  final bool isSelectionMode;
-  final bool isSelected;
-  final Function() onToggle;
-
   const OngoingChallengeCard({
     required this.challenge,
     this.isSelectionMode = false,
     this.isSelected = false,
+    required this.onTap,
     required this.onToggle,
     super.key,
   });
+
+  final ChallengeResponse challenge;
+  final bool isSelectionMode;
+  final bool isSelected;
+  final Function() onTap;
+  final Function() onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +31,7 @@ class OngoingChallengeCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: GestureDetector(
-            onTap: () {
-              if (!isSelectionMode) {
-                final uri = Uri(
-                  path: '/reading-challenge/detail/${challenge.book.id}',
-                  queryParameters: {
-                    'challengeId': challenge.challengeId.toString(),
-                    'totalPages': challenge.totalPages.toString(),
-                  },
-                );
-                context.push(uri.toString());
-              } else {
-                onToggle();
-              }
-            },
+            onTap: !isSelectionMode ? onTap : onToggle,
             child: Stack(
               fit: StackFit.expand,
               children: [

@@ -10,17 +10,18 @@ import '../model/search_book_response.dart';
 import '../model/search_history_response.dart';
 import '../model/search_user_response.dart';
 
-part 'search_repository.g.dart';
+part 'search_book_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-SearchRepository searchRepository(Ref ref) {
+SearchBookRepository searchBookRepository(Ref ref) {
   final dio = ref.watch(dioClientProvider);
-  return SearchRepository(dio);
+  return SearchBookRepository(dio);
 }
 
 @RestApi()
-abstract class SearchRepository {
-  factory SearchRepository(Dio dio, {String baseUrl}) = _SearchRepository;
+abstract class SearchBookRepository {
+  factory SearchBookRepository(Dio dio, {String baseUrl}) =
+      _SearchBookRepository;
 
   @GET('/api/v2/search/books/aladin')
   Future<ResponseForm<CursorPageResponse<SearchBookResponse>>> searchBooks(
