@@ -72,7 +72,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                             : null,
                         child: widget.feed.profileImageUrl.isEmpty
                             ? const Icon(Icons.person,
-                                size: 40, color: ColorName.g5)
+                                size: 32, color: ColorName.g5)
                             : null,
                       ),
                     ),
@@ -232,6 +232,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
               const SizedBox(height: 20),
               ExpandableText(
                 text: widget.feed.content,
+                textStyle: AppTexts.b8.copyWith(color: ColorName.w1),
               ),
             ],
           ),
