@@ -19,9 +19,10 @@ class BookLogFeedList extends ConsumerStatefulWidget {
       required this.onMessage,
       required this.onDelete,
       required this.onReport,
-      required this.onClickProfile,
+      required this.onProfile,
       required this.onScrap,
-      required this.onUpdate});
+      required this.onUpdate,
+      required this.onBookTitle});
   final List<DiaryResponse> feeds;
   // final FollowInfoState followInfo;
   final int? initialIndex;
@@ -31,9 +32,10 @@ class BookLogFeedList extends ConsumerStatefulWidget {
   final Function(BuildContext, int) onMessage;
   final Function(BuildContext, int) onDelete;
   final Function(BuildContext, int) onReport;
-  final Function(int) onClickProfile;
+  final Function(int) onProfile;
   final Function(int) onScrap;
   final Function(int) onUpdate;
+  final Function(int) onBookTitle;
 
   @override
   ConsumerState<BookLogFeedList> createState() => _BookLogFeedListState();
@@ -141,9 +143,10 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
                   onMessage: () => widget.onMessage(context, index),
                   onDelete: () => widget.onDelete(context, index),
                   onReport: () => widget.onReport(context, index),
-                  onClickProfile: () => widget.onClickProfile(index),
+                  onProfile: () => widget.onProfile(index),
                   onScrap: () => widget.onScrap(index),
                   onUpdate: () => widget.onUpdate(index),
+                  onBookTitle: () => widget.onBookTitle(index),
                 ),
                 separatorBuilder: (context, index) => const Divider(
                   color: ColorName.g7,

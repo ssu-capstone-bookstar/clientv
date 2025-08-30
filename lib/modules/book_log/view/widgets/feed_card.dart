@@ -20,9 +20,10 @@ class FeedCard extends ConsumerStatefulWidget {
     required this.onMessage,
     required this.onDelete,
     required this.onReport,
-    required this.onClickProfile,
+    required this.onProfile,
     required this.onScrap,
     required this.onUpdate,
+    required this.onBookTitle,
   });
 
   final DiaryResponse feed;
@@ -30,9 +31,10 @@ class FeedCard extends ConsumerStatefulWidget {
   final Function onMessage;
   final Function onDelete;
   final Function onReport;
-  final Function onClickProfile;
+  final Function onProfile;
   final Function onScrap;
   final Function onUpdate;
+  final Function onBookTitle;
 
   @override
   ConsumerState<FeedCard> createState() => _FeedCardState();
@@ -55,7 +57,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => widget.onClickProfile(),
+                onTap: () => widget.onProfile(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -200,11 +202,14 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.feed.bookTitle,
-                      style: AppTexts.b7.copyWith(color: ColorName.p1),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: GestureDetector(
+                      onTap: () => widget.onBookTitle(),
+                      child: Text(
+                        widget.feed.bookTitle,
+                        style: AppTexts.b7.copyWith(color: ColorName.p1),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                   if (widget.feed.bookRating > 0) const SizedBox(width: 3),

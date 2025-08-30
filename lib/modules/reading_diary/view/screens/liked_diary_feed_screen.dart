@@ -124,7 +124,8 @@ class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
             onMessage: () {},
             onDelete: () {},
             onReport: () {},
-            onClickProfile: () {},
+            onProfile: () {},
+            onBookTitle: () {},
             onScrap: () {},
             onUpdate: () {},
           );

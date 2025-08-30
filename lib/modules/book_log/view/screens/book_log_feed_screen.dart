@@ -112,9 +112,13 @@ class BookLogFeedScreen extends ConsumerWidget {
                       ),
                       builder: (context) => ReportSuccessDialog());
                 },
-                onClickProfile: (int targetIndex) {
+                onProfile: (int targetIndex) {
                   // final targetFeed = bookLog.feeds[targetIndex];
                   // context.push('/book-log/thumbnail/${targetFeed.memberId}');
+                },
+                onBookTitle: (int targetIndex) {
+                  final targetFeed = bookLog.feeds[targetIndex];
+                  context.push('/book-pick/overview/${targetFeed.bookId}');
                 },
                 onScrap: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];

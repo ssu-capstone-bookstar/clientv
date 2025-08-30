@@ -135,8 +135,11 @@ class _ScrappedDiaryFeedScreenState
             onReport: () {
               print('Report clicked at index: $index');
             },
-            onClickProfile: () {
+            onProfile: () {
               print('Profile clicked at index: $index');
+            },
+            onBookTitle: () {
+              print('Book title clicked at index: $index');
             },
             onScrap: () {
               print('Scrap clicked at index: $index');

@@ -10,9 +10,10 @@ class DiaryFeedCard extends StatelessWidget {
   final Function onMessage;
   final Function onDelete;
   final Function onReport;
-  final Function onClickProfile;
+  final Function onProfile;
   final Function onScrap;
   final Function onUpdate;
+  final Function onBookTitle;
 
   const DiaryFeedCard({
     super.key,
@@ -21,9 +22,10 @@ class DiaryFeedCard extends StatelessWidget {
     required this.onMessage,
     required this.onDelete,
     required this.onReport,
-    required this.onClickProfile,
+    required this.onProfile,
     required this.onScrap,
     required this.onUpdate,
+    required this.onBookTitle,
   });
 
   @override
@@ -59,9 +61,10 @@ class DiaryFeedCard extends StatelessWidget {
       onMessage: onMessage,
       onDelete: onDelete,
       onReport: onReport,
-      onClickProfile: onClickProfile,
+      onProfile: onProfile,
       onScrap: onScrap,
       onUpdate: onUpdate,
+      onBookTitle: onBookTitle,
     );
   }
 }
