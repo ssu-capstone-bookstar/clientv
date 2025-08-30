@@ -3,14 +3,16 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableText extends StatefulWidget {
-  final String text;
-  final int trimLines;
-
   const ExpandableText({
     super.key,
     required this.text,
     this.trimLines = 5,
+    this.textStyle,
   });
+
+  final String text;
+  final int trimLines;
+  final TextStyle? textStyle;
 
   @override
   State<ExpandableText> createState() => _ExpandableTextState();
@@ -19,6 +21,7 @@ class ExpandableText extends StatefulWidget {
 class _ExpandableTextState extends State<ExpandableText> {
   bool isExpanded = false;
 
+  TextStyle get _defaultTextStyle => AppTexts.b10.copyWith(color: ColorName.w1);
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -39,7 +42,7 @@ class _ExpandableTextState extends State<ExpandableText> {
           children: [
             Text(
               widget.text,
-              style: AppTexts.b10.copyWith(color: ColorName.w1),
+              style: widget.textStyle ?? _defaultTextStyle,
               maxLines: isExpanded ? null : widget.trimLines,
               overflow:
                   isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
