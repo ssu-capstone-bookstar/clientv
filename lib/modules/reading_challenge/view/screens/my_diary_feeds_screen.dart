@@ -188,7 +188,7 @@ class _MyDiaryFeedsScreenState extends ConsumerState<MyDiaryFeedsScreen> {
                   .handleFeedReport(targetFeed.diaryId, targetIndex);
             }
 
-            onClickProfile(int targetIndex) async {
+            onProfile(int targetIndex) async {
               final targetFeed = feeds.data[targetIndex];
               await ref
                   .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
@@ -207,6 +207,13 @@ class _MyDiaryFeedsScreenState extends ConsumerState<MyDiaryFeedsScreen> {
               await ref
                   .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
                   .handleFeedUpdate(targetFeed.diaryId, targetIndex);
+            }
+
+            onBookTitle(int targetIndex) async {
+              // final targetFeed = feeds.data[targetIndex];
+              // await ref
+              //     .read(myDiaryFeedsViewModelProvider(widget.bookId).notifier)
+              //     .handleFeedBookTitle(targetFeed.diaryId, targetIndex);
             }
 
             return Scaffold(
@@ -238,9 +245,10 @@ class _MyDiaryFeedsScreenState extends ConsumerState<MyDiaryFeedsScreen> {
                           onMessage: () => onMessage(context, index),
                           onDelete: () => onDelete(index),
                           onReport: () => onReport(index),
-                          onClickProfile: () => onClickProfile(index),
+                          onProfile: () => onProfile(index),
                           onScrap: () => onScrap(index),
                           onUpdate: () => onUpdate(index),
+                          onBookTitle: () => onBookTitle(index),
                         ),
                         separatorBuilder: (context, index) => const Divider(
                           color: ColorName.g7,
