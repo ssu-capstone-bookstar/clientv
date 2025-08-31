@@ -105,7 +105,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 ref.read(currentChallengeViewModelProvider).book?.bookId;
             if (bookId == null) return;
             if (!context.mounted) return;
-            context.push('/reading-diary/$bookId');
+            context.push('/reading-diary/$bookId/create');
           },
         ),
         const SizedBox(height: 8),
@@ -126,7 +126,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                       ref.read(currentChallengeViewModelProvider).book?.bookId;
                   if (bookId == null) return;
                   context.pop();
-                  context.push('/reading-diary/$bookId');
+                  context.push('/reading-diary/$bookId/create');
                 },
                 onCancel: () async {
                   await _updateChallengeProgress(ref);
