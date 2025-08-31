@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../common/components/dialog/custom_dialog.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../view_model/deep_time_view_model.dart';
+import '../../view_model/playlist_view_model.dart';
 
 class DeepTimePauseDialog extends ConsumerWidget {
   const DeepTimePauseDialog({super.key});
@@ -20,6 +21,11 @@ class DeepTimePauseDialog extends ConsumerWidget {
         Navigator.of(context).pop();
       },
       onCancel: () async {
+        final audioPlayer = ref.read(audioPlayerProvider);
+        if (audioPlayer.playing) {
+          await audioPlayer.stop();
+        }
+        ref.read(selectedMusicProvider.notifier).cancel();
         await ref.read(deepTimeViewModelProvider.notifier).resetTimer();
         if (context.mounted) {
           Navigator.of(context).pop();

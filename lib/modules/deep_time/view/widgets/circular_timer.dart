@@ -37,8 +37,8 @@ class CircularTimer extends ConsumerWidget {
           ),
           customColors: CustomSliderColors(
             trackColor: ColorName.g6,
-            progressBarColor: ColorName.g4,
-            dotColor: ColorName.g4,
+            progressBarColors: [ColorName.p1, ColorName.o],
+            dotColor: ColorName.w1,
             hideShadow: true,
           ),
           size: size,
