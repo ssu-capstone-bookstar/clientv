@@ -163,7 +163,7 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                 ),
               ),
             ),
-            if (isNotEmptyText) _buildSubmitButton(onSave: widget.onSave),
+            if (isNotEmptyText) _buildSubmitButton(onSave: () async => await widget.onSave()),
           ],
         ),
       ),
