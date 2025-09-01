@@ -90,14 +90,27 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
 
   Future<void> _pickImages(ImageSource source) async {
     List<XFile> pickedFiles = [];
+    final limit = IMAGE_LIMIT - uploadedImages.length - newImages.length;
     if (source == ImageSource.camera) {
-      final XFile? image = await _picker.pickImage(source: source);
-      if (image != null) {
-        pickedFiles.add(image);
+      if (limit > 0) {
+        final XFile? image = await _picker.pickImage(source: source);
+        if (image != null) {
+          pickedFiles.add(image);
+        }
+      } else {
+        // TODO: limit이 0인 경우 처리 (토스트 메시지)
       }
     } else if (source == ImageSource.gallery) {
-      final limit = IMAGE_LIMIT - uploadedImages.length - newImages.length;
-      pickedFiles = await _picker.pickMultiImage(limit: limit);
+      if (limit >= 2) {
+        pickedFiles = await _picker.pickMultiImage(limit: limit);
+      } else if (limit == 1) {
+        final XFile? image = await _picker.pickImage(source: source);
+        if (image != null) {
+          pickedFiles.add(image);
+        }
+      } else {
+        // TODO: limit이 0인 경우 처리 (토스트 메시지)
+      }
     }
 
     if (pickedFiles.isNotEmpty && mounted) {
