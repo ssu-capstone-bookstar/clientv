@@ -48,12 +48,15 @@ class _TextInputSheetState extends ConsumerState<TextInputSheet> {
         maxHeight: MediaQuery.of(context).size.height * 0.7,
       ),
       child: Container(
-        color: ColorName.b2,
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom + 16,
           left: 16,
           right: 16,
           top: 16,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          color: ColorName.g7,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +88,7 @@ class _TextInputSheetState extends ConsumerState<TextInputSheet> {
                 decoration: InputDecoration(
                   hintText: '느낀 생각을 마음껏 표현해 보세요',
                   hintStyle: AppTexts.b8.copyWith(color: ColorName.g4),
-                  fillColor: ColorName.b2,
+                  fillColor: ColorName.g7,
                   filled: true,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12,
