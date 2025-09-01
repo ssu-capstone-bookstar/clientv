@@ -27,6 +27,12 @@ class _ReadingDiaryCreateScreenState
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final List<String> _newImages = [];
+  bool _disableSave = false;
+  void _updateDisableSave(bool value) {
+    setState(() {
+      _disableSave = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,8 @@ class _ReadingDiaryCreateScreenState
             textController: _textController,
             initialImages: [],
             focusNode: _focusNode,
+            disabledSave: _disableSave,
+            onUpdateDisabledSave: _updateDisableSave,
             onFocus: (show) {
               if (show) {
                 _focusNode.requestFocus();

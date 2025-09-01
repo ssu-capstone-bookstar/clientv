@@ -29,7 +29,12 @@ class _ReadingDiaryUpdateScreenState
   final FocusNode _focusNode = FocusNode();
   final List<ImageRequest> _uploadedImages = [];
   final List<String> _newImages = [];
-
+  bool _disableSave = false;
+  void _updateDisableSave(bool value) {
+    setState(() {
+      _disableSave = value;
+    });
+  }
   @override
   void initState() {
     setState(() {
@@ -67,6 +72,8 @@ class _ReadingDiaryUpdateScreenState
             textController: _textController,
             initialImages: widget.request.images,
             focusNode: _focusNode,
+            disabledSave: _disableSave,
+            onUpdateDisabledSave: _updateDisableSave,
             onFocus: (show) {
               if (show) {
                 _focusNode.requestFocus();

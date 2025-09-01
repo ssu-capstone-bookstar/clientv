@@ -19,19 +19,23 @@ class ReadingDiaryEditForm extends ConsumerStatefulWidget {
     required this.textController,
     required this.initialImages,
     required this.focusNode,
+    required this.disabledSave,
     required this.onFocus,
     required this.onUpdateText,
     required this.onUpdateImage,
     required this.onSave,
+    required this.onUpdateDisabledSave,
   });
 
   final TextEditingController textController;
   final List<ImageRequest> initialImages;
   final FocusNode focusNode;
+  final bool disabledSave;
   final Function(bool) onFocus;
   final Function(String) onUpdateText;
   final Function(List<ImageRequest>, List<String>) onUpdateImage;
   final Function() onSave;
+  final Function(bool) onUpdateDisabledSave;
 
   @override
   ConsumerState<ReadingDiaryEditForm> createState() =>
@@ -182,7 +186,13 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
               ),
             ),
             if (isNotEmptyText)
-              _buildSubmitButton(onSave: () async => await widget.onSave()),
+              _buildSubmitButton(
+                  disabled: widget.disabledSave,
+                  onSave: () async {
+                    widget.onUpdateDisabledSave(true);
+                    await widget.onSave();
+                    widget.onUpdateDisabledSave(false);
+                  }),
           ],
         ),
       ),
@@ -325,11 +335,12 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
     );
   }
 
-  Widget _buildSubmitButton({required Function() onSave}) {
+  Widget _buildSubmitButton({required Function() onSave, required bool disabled}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: CtaButtonL1(
         text: '저장하기',
+        enabled: !disabled,
         onPressed: onSave,
       ),
     );
