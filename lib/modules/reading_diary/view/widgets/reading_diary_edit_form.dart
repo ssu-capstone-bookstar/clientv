@@ -6,9 +6,12 @@ import 'package:book/common/models/image_request.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_diary/view/widgets/text_input_sheet.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+
+const int IMAGE_LIMIT = 10;
 
 class ReadingDiaryEditForm extends ConsumerStatefulWidget {
   const ReadingDiaryEditForm({
@@ -38,9 +41,9 @@ class ReadingDiaryEditForm extends ConsumerStatefulWidget {
 class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
   final List<ImageRequest> uploadedImages = [];
   final List<String> newImages = [];
-  final PageController _pageController = PageController();
   final ImagePicker _picker = ImagePicker();
-
+  int _currentImageIndex = 0;
+  
   @override
   void initState() {
     setState(() {
@@ -51,7 +54,6 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
   }
 
@@ -78,6 +80,14 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
     });
   }
 
+  void _onImageIndexChanged(int index) {
+    int newIndex = index;
+    if (newIndex < 0) newIndex = 0;
+    setState(() {
+      _currentImageIndex = newIndex;
+    });
+  }
+
   Future<void> _pickImages(ImageSource source) async {
     List<XFile> pickedFiles = [];
     if (source == ImageSource.camera) {
@@ -86,7 +96,8 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
         pickedFiles.add(image);
       }
     } else if (source == ImageSource.gallery) {
-      pickedFiles = await _picker.pickMultiImage();
+      final limit = IMAGE_LIMIT - uploadedImages.length - newImages.length;
+      pickedFiles = await _picker.pickMultiImage(limit: limit);
     }
 
     if (pickedFiles.isNotEmpty && mounted) {
@@ -96,24 +107,14 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
           newImages.addAll(imagePaths);
         });
         widget.onUpdateImage(uploadedImages, newImages);
-        final previousLength = newImages.length;
-        if (_pageController.page?.toInt() != null &&
-            _pageController.page!.toInt() + 1 == previousLength) {
-          _goToPage(previousLength - 1);
-        }
       }
     }
   }
 
-  void _goToPage(int page) {
-    _pageController.animateToPage(
-      page,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
   _removeImage(int index) {
+    final totalImageCount = uploadedImages.length + newImages.length;
+    final isLastIndex = index == totalImageCount - 1;
+
     setState(() {
       if (index < uploadedImages.length) {
         // 서버에 업로드된 이미지인 경우
@@ -123,6 +124,9 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
         newImages.removeAt(index - uploadedImages.length);
       }
     });
+    if (isLastIndex) {
+      _onImageIndexChanged(index - 1);
+    }
     widget.onUpdateImage(uploadedImages, newImages);
   }
 
@@ -143,9 +147,10 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                     _buildImageSection(
                         uploadedImages: uploadedImages,
                         newImages: newImages,
-                        pageController: _pageController,
                         onPick: _pickImages,
-                        onRemove: _removeImage),
+                        onRemove: _removeImage,
+                        currentImageIndex: _currentImageIndex,
+                        onImageIndexChanged: _onImageIndexChanged),
                     GestureDetector(
                         onTap: _onTabText,
                         child: SizedBox(
@@ -163,7 +168,8 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                 ),
               ),
             ),
-            if (isNotEmptyText) _buildSubmitButton(onSave: () async => await widget.onSave()),
+            if (isNotEmptyText)
+              _buildSubmitButton(onSave: () async => await widget.onSave()),
           ],
         ),
       ),
@@ -173,51 +179,19 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
   Widget _buildImageSection(
       {required List<ImageRequest> uploadedImages,
       required List<String> newImages,
-      required PageController pageController,
       required Function(ImageSource) onPick,
-      required Function(int) onRemove}) {
+      required Function(int) onRemove,
+      required int currentImageIndex,
+      required Function(int) onImageIndexChanged}) {
     final totalImageLength = uploadedImages.length + newImages.length;
 
-    return AspectRatio(
-      aspectRatio: 1,
-      child: PageView.builder(
-        controller: pageController,
-        itemCount: totalImageLength == 0 ? 1 : totalImageLength,
-        itemBuilder: (context, index) {
-          if (totalImageLength == 0) {
-            return GestureDetector(
-              onTap: () => PhotoSourceModal.show(context,
-                  onPick: (source) => onPick(source)),
-              child: const Center(
-                child: Icon(Icons.add_photo_alternate,
-                    size: 24, color: ColorName.g1),
-              ),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  index < uploadedImages.length
-                      ? Image.network(uploadedImages[index].image ?? "")
-                      : Image.file(
-                          File(
-                            newImages[index - uploadedImages.length],
-                          ),
-                          fit: BoxFit.contain,
-                        ),
-                  Positioned(
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: () => onRemove(index),
-                      child: const Center(
-                        child: Icon(Icons.close, size: 24, color: ColorName.g1),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 32,
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: totalImageLength == 0
+              ? Expanded(
+                  child: Center(
                     child: GestureDetector(
                       onTap: () => PhotoSourceModal.show(context,
                           onPick: (source) => onPick(source)),
@@ -227,12 +201,87 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                       ),
                     ),
                   ),
-                ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () => PhotoSourceModal.show(context,
+                                onPick: (source) => onPick(source)),
+                            child: const Center(
+                              child: Icon(Icons.add_photo_alternate,
+                                  size: 24, color: ColorName.g1),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              onRemove(currentImageIndex);
+                            },
+                            child: const Center(
+                              child: Icon(Icons.close,
+                                  size: 24, color: ColorName.g1),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Expanded(
+                        child: PageView.builder(
+                          itemCount: totalImageLength,
+                          onPageChanged: onImageIndexChanged,
+                          itemBuilder: (context, index) {
+                            return index < uploadedImages.length
+                                ? CachedNetworkImage(
+                                    imageUrl: uploadedImages[index].image ?? "",
+                                    fit: BoxFit.contain,
+                                    errorWidget: (context, url, error) =>
+                                        Container(),
+                                  )
+                                : CachedNetworkImage(
+                                    imageUrl: newImages[
+                                        index - uploadedImages.length],
+                                    fit: BoxFit.contain,
+                                    errorWidget: (context, url, error) =>
+                                        Image.file(
+                                      File(
+                                        newImages[
+                                            index - uploadedImages.length],
+                                      ),
+                                      fit: BoxFit.contain,
+                                    ),
+                                  );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            totalImageLength,
+            (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: currentImageIndex == index ? 20 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: currentImageIndex == index
+                    ? ColorName.p1 // 활성화된 인디케이터 색상
+                    : ColorName.g7, // 비활성화된 인디케이터 색상
+                borderRadius: BorderRadius.circular(4),
               ),
-            );
-          }
-        },
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -144,12 +144,15 @@ class BookLogScreen extends ConsumerWidget {
                 onUpdate: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
                   context.push('/reading-diary/${targetFeed.diaryId}/update',
-                      extra: DiaryUpdateRequest(
+                       extra: {
+                        "memberId": targetFeed.memberId,
+                        "request": DiaryUpdateRequest(
                           content: targetFeed.content,
                           images: targetFeed.images
                               .map((e) => ImageRequest(
                                   image: e.imageUrl, sequence: e.sequence))
-                              .toList()));
+                              .toList())
+                });
                 },
               ),
             ),
