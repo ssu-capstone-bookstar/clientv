@@ -1,6 +1,7 @@
 import 'package:book/common/components/button/menu_button.dart';
 import 'package:book/common/components/text/expandable_text.dart';
 import 'package:book/gen/assets.gen.dart';
+import 'package:book/modules/auth/model/auth_response.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
 import 'package:book/modules/book_log/view/widgets/star_badge.dart';
@@ -55,6 +56,8 @@ class _FeedCardState extends ConsumerState<FeedCard> {
     final user = ref.watch(authViewModelProvider).value;
     final isMyFeed =
         widget.feed.memberId == ((user is AuthSuccess) ? user.memberId : 0);
+    final isAdmin = (user as AuthSuccess?)?.memberRole == MemberRole.ADMIN;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -104,7 +107,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                       value: "update",
                       label: "수정하기",
                     ),
-                  if (isMyFeed)
+                  if (isMyFeed || isAdmin)
                     MenuButtonItem(
                       value: "delete",
                       label: "삭제하기",

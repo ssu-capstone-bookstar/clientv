@@ -19,6 +19,7 @@ _AuthResponse _$AuthResponseFromJson(Map<String, dynamic> json) =>
           DateTime.parse(json['accessTokenExpiration'] as String),
       refreshTokenExpiration:
           DateTime.parse(json['refreshTokenExpiration'] as String),
+      memberRole: $enumDecode(_$MemberRoleEnumMap, json['memberRole']),
     );
 
 Map<String, dynamic> _$AuthResponseToJson(_AuthResponse instance) =>
@@ -33,4 +34,11 @@ Map<String, dynamic> _$AuthResponseToJson(_AuthResponse instance) =>
       'accessTokenExpiration': instance.accessTokenExpiration.toIso8601String(),
       'refreshTokenExpiration':
           instance.refreshTokenExpiration.toIso8601String(),
+      'memberRole': _$MemberRoleEnumMap[instance.memberRole]!,
     };
+
+const _$MemberRoleEnumMap = {
+  MemberRole.USER: 'USER',
+  MemberRole.ADMIN: 'ADMIN',
+  MemberRole.CRAWLER: 'CRAWLER',
+};
