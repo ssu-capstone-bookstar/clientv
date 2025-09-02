@@ -1,3 +1,4 @@
+import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         {
           return Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF6A4EFF).withValues(alpha: 0.15),
+              color: ColorName.b1,
             ),
           );
         }
@@ -94,13 +95,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           return BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+              end: Alignment.bottomLeft,
               colors: [
-                Color(0xFF6A4EFF).withValues(alpha: 0.15),
-                Color(0xFF191919).withValues(alpha: 1.0),
+                ColorName.b1,
+                ColorName.p1,
               ],
-              stops: [0.0, 1.0],
+              stops: [0.15, 1],
             ),
+          );
+        }
+      default:
+        {
+          return null;
+        }
+    }
+  }
+
+  BoxDecoration? _getBottomNavigationBarDecoration({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return BoxDecoration(
+              color: ColorName.g7,
           );
         }
       default:
@@ -128,6 +144,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         _getBodyDecoration(currentRoute: currentRoute);
     EdgeInsetsGeometry bodyPadding =
         _getBodyPadding(currentRoute: currentRoute);
+    BoxDecoration? bottomNavigationBarDecoration =
+        _getBottomNavigationBarDecoration(currentRoute: currentRoute);
 
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
@@ -147,11 +165,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: navigationShell,
         ),
       ),
-      bottomNavigationBar: AbsorbPointer(
-        absorbing: isRunningDeepTime,
-        child: HomeBottomNavBar(
-          currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
-          onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+      bottomNavigationBar: Container(
+        decoration: bottomNavigationBarDecoration,
+        child: AbsorbPointer(
+          absorbing: isRunningDeepTime,
+          child: HomeBottomNavBar(
+            currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
+            onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+          ),
         ),
       ),
     );

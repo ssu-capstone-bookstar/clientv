@@ -159,6 +159,7 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
       child: CustomListView(
           emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
           emptyText: '읽던 책이 없네요!',
+          emptyTextStyle: AppTexts.b8.copyWith(color: ColorName.w1),
           isEmpty: items.isEmpty,
           disableScroll: items.isEmpty,
           itemCount: items.length,

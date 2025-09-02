@@ -9,6 +9,7 @@ class CustomListView extends StatelessWidget {
     super.key,
     required this.emptyIcon,
     required this.emptyText,
+    this.emptyTextStyle,
     required this.isEmpty,
     required this.itemCount,
     required this.itemBuilder,
@@ -20,6 +21,7 @@ class CustomListView extends StatelessWidget {
 
   final SvgPicture emptyIcon;
   final String emptyText;
+  final TextStyle? emptyTextStyle;
   final bool isEmpty;
   final int itemCount;
   final Widget? Function(BuildContext, int) itemBuilder;
@@ -40,7 +42,7 @@ class CustomListView extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   emptyText,
-                  style: AppTexts.b8.copyWith(color: ColorName.g3),
+                  style: emptyTextStyle ?? AppTexts.b8.copyWith(color: ColorName.g3),
                 ),
               ],
             ),
