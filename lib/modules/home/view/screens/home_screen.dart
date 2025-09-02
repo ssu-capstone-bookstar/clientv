@@ -41,51 +41,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
-    if (currentRoute == "/book-log") {
-      return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
-    } else if (currentRoute == "/deep-time") {
-      return EdgeInsets.zero;
-    } else {
-      return AppPaddings.SCREEN_BODY_PADDING;
+    switch (currentRoute) {
+      case "/book-log":
+        {
+          return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
+        }
+      case "/deep-time":
+        {
+          return EdgeInsets.zero;
+        }
+      default:
+        {
+          return AppPaddings.SCREEN_BODY_PADDING;
+        }
     }
   }
 
   Color? _getAppBarBackgroundColor({required String currentRoute}) {
-    if (currentRoute == "/reading-challenge") {
-      return Colors.transparent;
-    } else {
-      return null;
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return Colors.transparent;
+        }
+      default:
+        {
+          return null;
+        }
     }
   }
 
   Widget? _getAppBarFlexibleSpace({required String currentRoute}) {
-    if (currentRoute == "/reading-challenge") {
-      return Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF6A4EFF),
-        ),
-      );
-    } else {
-      return null;
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF6A4EFF).withValues(alpha: 0.15),
+            ),
+          );
+        }
+      default:
+        {
+          return null;
+        }
     }
   }
 
   BoxDecoration? _getBodyDecoration({required String currentRoute}) {
-    if (currentRoute == "/reading-challenge") {
-      return const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF6A4EFF),
-            Color(0xFF6A4EFF),
-            Color(0xFF191919),
-          ],
-          stops: [0.0, 0.15, 1.0],
-        ),
-      );
-    } else {
-      return null;
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF6A4EFF).withValues(alpha: 0.15),
+                Color(0xFF191919).withValues(alpha: 1.0),
+              ],
+              stops: [0.0, 1.0],
+            ),
+          );
+        }
+      default:
+        {
+          return null;
+        }
     }
   }
 
