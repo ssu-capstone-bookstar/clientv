@@ -44,8 +44,7 @@ import '../../modules/reading_challenge/view/screens/reading_challenge_screen.da
 import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/my_diary_feeds_screen.dart';
-import '../../modules/reading_diary/screens/reading_diary_entry_screen.dart';
-import '../../modules/reading_diary/screens/reading_diary_photo_screen.dart';
+import '../../modules/reading_diary/screens/reading_diary_create_screen.dart';
 
 part 'router.g.dart';
 
@@ -106,27 +105,12 @@ GoRouter router(Ref ref) {
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
-        path: '/reading-diary/:bookId',
+        path: '/reading-diary/:bookId/create',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final bookId = int.parse(state.pathParameters['bookId']!);
-          return ReadingDiaryPhotoScreen(bookId: bookId);
+          return ReadingDiaryCreateScreen(bookId: bookId);
         },
-        routes: [
-          GoRoute(
-            path: 'entry',
-            parentNavigatorKey: rootNavigatorKey,
-            builder: (context, state) {
-              final extra = state.extra as Map<String, dynamic>;
-              final imagePaths = extra['images'] as List<String>;
-              final bookId = extra['bookId'] as int;
-              return ReadingDiaryEntryScreen(
-                imagePaths: imagePaths,
-                bookId: bookId,
-              );
-            },
-          ),
-        ],
       ),
       GoRoute(
         path: '/reading-diary/:diaryId/update',

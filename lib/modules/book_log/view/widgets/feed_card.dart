@@ -41,6 +41,13 @@ class FeedCard extends ConsumerStatefulWidget {
 }
 
 class _FeedCardState extends ConsumerState<FeedCard> {
+  int _currentImageIndex = 0;
+  void _onImageIndexChanged(int index) {
+    setState(() {
+      _currentImageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime dt = DateTime.parse(widget.feed.createdDate);
@@ -130,6 +137,7 @@ class _FeedCardState extends ConsumerState<FeedCard> {
           aspectRatio: 1,
           child: PageView.builder(
             itemCount: widget.feed.images.length,
+            onPageChanged: _onImageIndexChanged,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(16),
@@ -140,6 +148,24 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                 ),
               );
             },
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            widget.feed.images.length,
+            (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: _currentImageIndex == index ? 20 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: _currentImageIndex == index
+                    ? ColorName.p1 // 활성화된 인디케이터 색상
+                    : ColorName.g7, // 비활성화된 인디케이터 색상
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
           ),
         ),
         Padding(
