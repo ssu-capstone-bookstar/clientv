@@ -27,11 +27,13 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
     final state = ref.watch(ongoingChallengeViewModelProvider);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: state.challenges.when(
         data: (items) {
           final totalCount = items.length;
           final completedCount = items.where((e) => e.completed).length;
           return CustomScrollView(
+            physics: items.isEmpty ? const NeverScrollableScrollPhysics() : null,
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
@@ -158,7 +160,7 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
           emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
           emptyText: '읽던 책이 없네요!',
           isEmpty: items.isEmpty,
-          disableScroll: true,
+          disableScroll: items.isEmpty,
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];

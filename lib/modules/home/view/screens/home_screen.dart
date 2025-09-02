@@ -45,25 +45,55 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final navigationShell = widget.navigationShell;
     // deeptime에서 타이머 돌아갈때는 bottomNavigationBar 비활성화
     final deepTimeState = ref.watch(deepTimeViewModelProvider);
+    final router = GoRouter.of(context);
+    final currentRoute =
+        router.routerDelegate.currentConfiguration.uri.toString();
+    final isReadingChallengeMain = currentRoute == "/reading-challenge";
+
+    EdgeInsetsGeometry padding = AppPaddings.SCREEN_BODY_PADDING;
+    if (navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index) {
+      padding = AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
+    } else if (navigationShell.currentIndex ==
+        HomeBottomNavMenu.deepTime.index) {
+      padding = EdgeInsets.zero;
+    }
 
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
       appBar: HomeAppBar(
+        backgroundColor: isReadingChallengeMain ? Colors.transparent : null,
+        flexibleSpace: isReadingChallengeMain
+            ? Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6A4EFF),
+                ),
+              )
+            : null,
         currentIndex: navigationShell.currentIndex,
         onBackTap: () {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
       ),
-      body: Padding(
-        // NOTE(현호): 패딩 조정
-        padding: navigationShell.currentIndex ==
-                HomeBottomNavMenu.deepTime.index
-            // deep time 타이머 돌아갈 때  하단 그라데이션의 padding을 없애려면 필요합니다.
-            ? EdgeInsets.zero
-            : navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
-                ? AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING
-                : AppPaddings.SCREEN_BODY_PADDING,
-        child: navigationShell,
+      body: Container(
+        decoration: isReadingChallengeMain
+            ? const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF6A4EFF),
+                    Color(0xFF6A4EFF),
+                    Color(0xFF191919),
+                  ],
+                  stops: [0.0, 0.15, 1.0],
+                ),
+              )
+            : null,
+        child: Padding(
+          // NOTE(현호): 패딩 조정
+          padding: padding,
+          child: navigationShell,
+        ),
       ),
       bottomNavigationBar: deepTimeState.when(
         data: (state) {

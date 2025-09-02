@@ -48,7 +48,7 @@ class CustomListView extends StatelessWidget {
         : ListView.separated(
             scrollDirection: scrollDirection,
             controller: scrollController,
-            physics: disableScroll ? PageScrollPhysics() : null,
+            physics: disableScroll ? NeverScrollableScrollPhysics() : null,
             itemCount: itemCount,
             itemBuilder: itemBuilder,
             separatorBuilder: separatorBuilder ??
