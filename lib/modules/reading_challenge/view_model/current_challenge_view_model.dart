@@ -3,6 +3,7 @@ import 'package:book/modules/reading_challenge/model/challenge_progress_request.
 import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
 import 'package:book/modules/reading_challenge/model/book_rating_request.dart';
 import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
+import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -76,11 +77,17 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       final memberId = (user is AuthSuccess) ? user.memberId : 0;
       ref.invalidate(
           getChallengesByMemberViewModelProvider(memberId: memberId));
+      // 완독한 챌린지 목록도 다시 가져오기
+      final notifier =
+          ref.read(ongoingChallengeViewModelProvider.notifier);
+      await notifier.fetchChallenges();
       return res.data.progressId;
     } catch (e) {
       print('Failed to create challenge: $e');
       rethrow;
     }
+
+    
   }
 
   Future<int> updateChallengeProgress(WidgetRef ref) async {
@@ -108,7 +115,10 @@ class CurrentChallengeViewModel extends _$CurrentChallengeViewModel {
       final memberId = (user is AuthSuccess) ? user.memberId : 0;
       ref.invalidate(
           getChallengesByMemberViewModelProvider(memberId: memberId));
-
+      // 완독한 챌린지 목록도 다시 가져오기
+      final notifier =
+          ref.read(ongoingChallengeViewModelProvider.notifier);
+      await notifier.fetchChallenges();
       return res.data.progressId;
     } catch (e) {
       debugPrint('Failed to update challenge progress: $e');

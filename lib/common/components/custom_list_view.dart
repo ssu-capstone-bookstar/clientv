@@ -15,6 +15,7 @@ class CustomListView extends StatelessWidget {
     this.scrollDirection = Axis.vertical,
     this.scrollController,
     this.separatorBuilder,
+    this.disableScroll = false,
   });
 
   final SvgPicture emptyIcon;
@@ -25,6 +26,7 @@ class CustomListView extends StatelessWidget {
   final Axis scrollDirection;
   final ScrollController? scrollController;
   final Widget Function(BuildContext, int)? separatorBuilder;
+  final bool disableScroll;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class CustomListView extends StatelessWidget {
         : ListView.separated(
             scrollDirection: scrollDirection,
             controller: scrollController,
+            physics: disableScroll ? PageScrollPhysics() : null,
             itemCount: itemCount,
             itemBuilder: itemBuilder,
             separatorBuilder: separatorBuilder ??

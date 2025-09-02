@@ -1,91 +1,317 @@
-import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/modules/reading_challenge/view/widgets/challenge_option_card.dart';
-import 'package:book/modules/reading_challenge/view_model/reading_challenge_view_model.dart';
+import 'package:book/common/components/custom_list_view.dart';
+import 'package:book/common/theme/style/app_texts.dart';
+import 'package:book/gen/assets.gen.dart';
+import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/reading_challenge/model/challenge_response.dart';
+import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:book/gen/colors.gen.dart';
 
-class ReadingChallengeScreen extends ConsumerWidget {
+class ReadingChallengeScreen extends ConsumerStatefulWidget {
   const ReadingChallengeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReadingChallengeScreen> createState() => _ReadingChallengeScreenState();
+}
+
+class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen> {
+  Future<void> _onRefresh() async {
+    final notifier = ref.read(ongoingChallengeViewModelProvider.notifier);
+    await notifier.fetchChallenges();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(ongoingChallengeViewModelProvider);
+
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.zero,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: state.challenges.when(
+        data: (items) {
+          final totalCount = items.length;
+          final completedCount = items.where((e) => e.completed).length;
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    _buildHeaderSection(
+                      totalCount: totalCount,
+                      completedCount: completedCount,
+                      onCalender: () {
+                        /** 캘린더 */
+                        // TODO: 포인트 내역
+                      },
+                      onNew: () {
+                        /** 새로운책 읽기*/
+                        context.go(
+                          '/reading-challenge/search-new',
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 35,
+                    ),
+                  ],
+                ),
+              ),
+              SliverFillRemaining(
+                child: RefreshIndicator(
+                  onRefresh: _onRefresh,
+                  child: _buildListSection(
+                    items: items,
+                    onTapItem: (item) {
+                      final uri = Uri(
+                        path: '/reading-challenge/detail/${item.book.id}',
+                        queryParameters: {
+                          'challengeId': item.challengeId.toString(),
+                          'totalPages': item.totalPages.toString(),
+                          'visibleDeleteChallenge': 'true',
+                        },
+                      );
+                      context.push(uri.toString());
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        error: _error("리딩챌린지 정보를 가져오는데 실패했습니다."),
+        loading: _loading,
+      ),
+    );
+  }
+
+  Widget _buildHeaderSection(
+      {required int totalCount,
+      required int completedCount,
+      required Function onCalender,
+      required Function onNew}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '오늘은 어떤 책을 읽으셨나요?',
-              style: AppTexts.b1.copyWith(color: ColorName.w1),
+            Text.rich(
+              TextSpan(
+                  text: "지금까지 ",
+                  style: AppTexts.b5.copyWith(color: ColorName.g2),
+                  children: [
+                    TextSpan(
+                      text: "$totalCount",
+                      style: AppTexts.h4.copyWith(color: ColorName.w1),
+                    ),
+                    TextSpan(
+                      text: "권",
+                      style: AppTexts.b5.copyWith(color: ColorName.w1),
+                    ),
+                    TextSpan(
+                      text: "의 책을 읽고",
+                    ),
+                  ]),
             ),
-            SizedBox(height: 22),
-            _buildOptionsSection(ref),
+            Text.rich(TextSpan(
+                text: "$completedCount",
+                style: AppTexts.h4.copyWith(color: ColorName.w1),
+                children: [
+                  TextSpan(
+                    text: "권",
+                    style: AppTexts.b5.copyWith(color: ColorName.w1),
+                  ),
+                  TextSpan(
+                    text: "을 완독했어요!",
+                    style: AppTexts.b5.copyWith(color: ColorName.g2),
+                  ),
+                ]))
           ],
         ),
-      ),
-      bottomNavigationBar: _buildBottomSection(ref, context),
-    );
-  }
-
-  Widget _buildOptionsSection(WidgetRef ref) {
-    final selectedOption = ref.watch(readingChallengeViewModelProvider);
-    final viewModel = ref.read(readingChallengeViewModelProvider.notifier);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ChallengeOptionCard(
-          title: '읽던 책 읽기',
-          subtitle: '기존에 읽던 책을 이어서 감상해요',
-          selected: selectedOption == ReadingChallengeType.reading,
-          onTap: () => viewModel.selectOption(ReadingChallengeType.reading),
-        ),
-        const SizedBox(height: 12),
-        ChallengeOptionCard(
-          title: '새로운 책 읽기',
-          subtitle: '새롭게 읽은 도서로 리딩 챌린지를 시작해요',
-          selected: selectedOption == ReadingChallengeType.newBook,
-          onTap: () => viewModel.selectOption(ReadingChallengeType.newBook),
-        ),
-        const SizedBox(height: 12),
-        // ChallengeOptionCard(
-        //   title: '모든 포인트 확인',
-        //   subtitle: '챌린지에 참여하고 받은 포인트를 확인해 보세요',
-        //   selected: selectedOption == ReadingChallengeType.allPoints,
-        //   onTap: () => viewModel.selectOption(ReadingChallengeType.allPoints),
-        // ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              // GestureDetector(
+              //   onTap: () => onCalender(),
+              //   child: Assets.icons.icCalendar.svg(),
+              // ),
+              SizedBox(width: 8),
+              GestureDetector(
+                onTap: () => onNew(),
+                child: Assets.icons.icPlus.svg(),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
 
-  Widget _buildBottomSection(WidgetRef ref, BuildContext context) {
-    final selectedOption = ref.watch(readingChallengeViewModelProvider);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        CtaButtonL1(
-          text: '시작하기',
-          enabled: selectedOption != null,
-          onPressed: () {
-            /** 읽던 책 읽기 */
-            if (selectedOption == ReadingChallengeType.reading) {
-              context.go('/reading-challenge/continue-list');
-            } else if (selectedOption == ReadingChallengeType.newBook) {
-              /** 새로운책 읽기*/
-              context.go(
-                '/reading-challenge/search-new?from=challenge',
-              );
-            } else {
-              // TODO: Handle other options
+  Widget _buildListSection(
+      {required List<ChallengeResponse> items,
+      required Function(ChallengeResponse) onTapItem}) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20),
+      child: CustomListView(
+          emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+          emptyText: '읽던 책이 없네요!',
+          isEmpty: items.isEmpty,
+          disableScroll: true,
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+
+            double angle = 0;
+            switch (index % 3) {
+              case 0:
+                angle = 0;
+                break;
+              case 1:
+                angle = 0.2;
+                break;
+              case 2:
+                angle = -0.2;
+                break;
             }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: GestureDetector(
+                onTap: () {
+                  onTapItem(item);
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Transform.rotate(
+                      angle: angle,
+                      child: Container(
+                        width: 125,
+                        height: 170,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: BoxBorder.all(color: Color(0xFFF5F5F5)),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(14),
+                          child: CachedNetworkImage(
+                            imageUrl: item.book.thumbnailUrl,
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) {
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  item.book.title,
+                                  style:
+                                      AppTexts.b7.copyWith(color: ColorName.w1),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      Color(0xFF775DFF), // 보라색 (#775DFF)
+                                      Color(0xFF000000), // 검정 (#000000)
+                                    ],
+                                    stops: [0.2, 1.0], // 20%에서 보라 → 100%에서 검정
+                                    center: Alignment.bottomCenter, // 중심 고정
+                                    radius: 0.85, // 퍼지는 정도 (1.0이면 꽉 채움)
+                                  ),
+                                  border: Border.all(color: Color(0xFFA99AFF)),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 3),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Assets.icons.icReadingChallengeTimeRate
+                                          .svg(),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        "${item.progressPercent}%",
+                                        style: AppTexts.b7
+                                            .copyWith(color: ColorName.p2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "저자: ",
+                                style:
+                                    AppTexts.b10.copyWith(color: ColorName.g2),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  item.book.author,
+                                  style: AppTexts.b10
+                                      .copyWith(color: ColorName.w1),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       "출판사: ",
+                          //       style:
+                          //           AppTexts.b10.copyWith(color: ColorName.g2),
+                          //     ),
+                          //     Expanded(
+                          //       child: Text(
+                          //         item.book.publisher,
+                          //         style: AppTexts.b10
+                          //             .copyWith(color: ColorName.w1),
+                          //         maxLines: 1,
+                          //         overflow: TextOverflow.ellipsis,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
           },
-        ),
-        const SizedBox(height: 34),
-      ],
+          separatorBuilder: (context, index) => Container()),
     );
   }
+
+  Widget _loading() => const Center(child: CircularProgressIndicator());
+  Widget Function(Object, StackTrace) _error(String msg) => (e, st) =>
+      Center(child: Text(msg, style: TextStyle(color: ColorName.g3)));
 }

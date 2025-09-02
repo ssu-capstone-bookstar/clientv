@@ -30,7 +30,8 @@ class ReadingChallengeStartAndEndPageScreen extends ConsumerStatefulWidget {
 }
 
 class _ReadingChallengeStartAndEndPageScreenState
-    extends ConsumerState<ReadingChallengeStartAndEndPageScreen>with WidgetsBindingObserver  {
+    extends ConsumerState<ReadingChallengeStartAndEndPageScreen>
+    with WidgetsBindingObserver {
   final FocusNode startFocusNode = FocusNode();
   final FocusNode endFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
@@ -51,10 +52,6 @@ class _ReadingChallengeStartAndEndPageScreenState
       }
     });
   }
-
-  
-
-
 
   // 이 메서드는 키보드, 시스템 UI 등 화면 metric이 바뀔 때 호출됨
   @override
@@ -137,7 +134,8 @@ class _ReadingChallengeStartAndEndPageScreenState
                     controller: _scrollController,
                     child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight + MediaQuery.of(context).viewInsets.bottom,
+                          minHeight: constraints.maxHeight +
+                              MediaQuery.of(context).viewInsets.bottom,
                         ),
                         child: IntrinsicHeight(
                             child: Column(
@@ -159,7 +157,9 @@ class _ReadingChallengeStartAndEndPageScreenState
                                     startFocusNode, endFocusNode),
                               ],
                             ),
-                            SizedBox(height: 16,),
+                            SizedBox(
+                              height: 16,
+                            ),
                             _buildSubmitButtonSection(
                                 context, book, widget.totalPages)
                           ],
@@ -270,6 +270,7 @@ class _ReadingChallengeStartAndEndPageScreenState
                     extra: book,
                   );
                 } else {
+                                    if (!context.mounted) return;
                   context.push(
                     '/reading-challenge/diary-encourage',
                     extra: {

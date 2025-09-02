@@ -36,7 +36,6 @@ import '../../modules/my_page/view/screens/login_info_screen.dart';
 import '../../modules/my_page/view/screens/my_page_screen.dart';
 import '../../modules/my_page/view/screens/scrapped_diaries_screen.dart';
 import '../../modules/profile/view/screens/profile_screen.dart';
-import '../../modules/reading_challenge/view/screens/reading_challenge_continue_list_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_detail_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_diary_encourage_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_rating_screen.dart';
@@ -366,10 +365,12 @@ GoRouter router(Ref ref) {
                           state.uri.queryParameters['challengeId'] ?? '0');
                       final totalPages = int.parse(
                           state.uri.queryParameters['totalPages'] ?? '0');
+                      final visibleDeleteChallenge = (state.uri.queryParameters['visibleDeleteChallenge'] ?? 'false') == 'true';
                       return ReadingChallengeDetailScreen(
                         bookId: bookId,
                         challengeId: challengeId,
                         totalPages: totalPages,
+                        visibleDeleteChallenge: visibleDeleteChallenge,
                       );
                     },
                   ),
@@ -388,13 +389,6 @@ GoRouter router(Ref ref) {
                         },
                       ),
                     ],
-                  ),
-                  GoRoute(
-                    path: 'continue-list',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      return ReadingChallengeContinueListScreen();
-                    },
                   ),
                   GoRoute(
                     path: 'total-page',

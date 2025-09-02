@@ -111,6 +111,10 @@ class $AssetsIconsGen {
   SvgGenImage get icBooktalkSearchCharacter =>
       const SvgGenImage('assets/icons/ic_booktalk_search_character.svg');
 
+  /// File path: assets/icons/ic_calendar.svg
+  SvgGenImage get icCalendar =>
+      const SvgGenImage('assets/icons/ic_calendar.svg');
+
   /// File path: assets/icons/ic_camera.svg
   SvgGenImage get icCamera => const SvgGenImage('assets/icons/ic_camera.svg');
 
@@ -251,6 +255,9 @@ class $AssetsIconsGen {
   SvgGenImage get icPlaylistStop =>
       const SvgGenImage('assets/icons/ic_playlist_stop.svg');
 
+  /// File path: assets/icons/ic_plus.svg
+  SvgGenImage get icPlus => const SvgGenImage('assets/icons/ic_plus.svg');
+
   /// File path: assets/icons/ic_point_shop_char1.svg
   SvgGenImage get icPointShopChar1 =>
       const SvgGenImage('assets/icons/ic_point_shop_char1.svg');
@@ -295,6 +302,10 @@ class $AssetsIconsGen {
   SvgGenImage get icReadingChallengeNotCompleted =>
       const SvgGenImage('assets/icons/ic_reading_challenge_not_completed.svg');
 
+  /// File path: assets/icons/ic_reading_challenge_time_rate.svg
+  SvgGenImage get icReadingChallengeTimeRate =>
+      const SvgGenImage('assets/icons/ic_reading_challenge_time_rate.svg');
+
   /// File path: assets/icons/ic_reading_complete.svg
   SvgGenImage get icReadingComplete =>
       const SvgGenImage('assets/icons/ic_reading_complete.svg');
@@ -335,6 +346,7 @@ class $AssetsIconsGen {
     icBookpickChatSendDisabled,
     icBookpickSearchCharacter,
     icBooktalkSearchCharacter,
+    icCalendar,
     icCamera,
     icCategoryArtHobby,
     icCategoryBestseller,
@@ -372,6 +384,7 @@ class $AssetsIconsGen {
     icPhotoLibrary,
     icPlaylistPlay,
     icPlaylistStop,
+    icPlus,
     icPointShopChar1,
     icPointShopChar2,
     icPointShopChar3,
@@ -383,6 +396,7 @@ class $AssetsIconsGen {
     icReadingChallengeChar3,
     icReadingChallengeCompleted,
     icReadingChallengeNotCompleted,
+    icReadingChallengeTimeRate,
     icReadingComplete,
     icScrap,
     icScrapFilled,
