@@ -20,12 +20,12 @@ class OngoingChallengeViewModel extends _$OngoingChallengeViewModel {
   @override
   OngoingChallengeScreenState build() {
     // `build`가 완료된 직후에 `_fetchChallenges`를 실행하도록 변경
-    Future.microtask(_fetchChallenges);
+    Future.microtask(fetchChallenges);
     return const OngoingChallengeScreenState();
   }
 
-  Future<void> _fetchChallenges() async {
-    state = state.copyWith(challenges: const AsyncLoading());
+  Future<void> fetchChallenges() async {
+    // state = state.copyWith(challenges: const AsyncLoading());
     final repo = ref.read(readingChallengeRepositoryProvider);
 
     final challenges = await AsyncValue.guard(() async {
@@ -71,5 +71,10 @@ class OngoingChallengeViewModel extends _$OngoingChallengeViewModel {
       isSelectionMode: false,
     );
     ref.invalidateSelf();
+  }
+
+  Future<void> abandonChallenge(int challengeId) async {
+    final repo = ref.read(readingChallengeRepositoryProvider);
+    await repo.abandonChallenge(challengeId);
   }
 }

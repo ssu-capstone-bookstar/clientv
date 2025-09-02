@@ -1,3 +1,4 @@
+import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
@@ -40,46 +41,139 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/book-log":
+        {
+          return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
+        }
+      case "/deep-time":
+        {
+          return EdgeInsets.zero;
+        }
+      default:
+        {
+          return AppPaddings.SCREEN_BODY_PADDING;
+        }
+    }
+  }
+
+  Color? _getAppBarBackgroundColor({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return Colors.transparent;
+        }
+      default:
+        {
+          return null;
+        }
+    }
+  }
+
+  Widget? _getAppBarFlexibleSpace({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return Container(
+            decoration: BoxDecoration(
+              color: ColorName.b1,
+            ),
+          );
+        }
+      default:
+        {
+          return null;
+        }
+    }
+  }
+
+  BoxDecoration? _getBodyDecoration({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomLeft,
+              colors: [
+                ColorName.b1,
+                ColorName.p1,
+              ],
+              stops: [0.15, 1],
+            ),
+          );
+        }
+      default:
+        {
+          return null;
+        }
+    }
+  }
+
+  BoxDecoration? _getBottomNavigationBarDecoration({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/reading-challenge":
+        {
+          return BoxDecoration(
+              color: ColorName.g7,
+          );
+        }
+      default:
+        {
+          return null;
+        }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final navigationShell = widget.navigationShell;
-    // deeptime에서 타이머 돌아갈때는 bottomNavigationBar 비활성화
-    final deepTimeState = ref.watch(deepTimeViewModelProvider);
+    final isRunningDeepTime =
+        ref.watch(deepTimeViewModelProvider).value?.status ==
+            DeepTimeStatus.running;
+    final router = GoRouter.of(context);
+    final currentRoute =
+        router.routerDelegate.currentConfiguration.uri.toString();
+
+    Color? appBarBackgroundColor =
+        _getAppBarBackgroundColor(currentRoute: currentRoute);
+    Widget? appBarFlexibleSpace =
+        _getAppBarFlexibleSpace(currentRoute: currentRoute);
+    BoxDecoration? bodyDecoration =
+        _getBodyDecoration(currentRoute: currentRoute);
+    EdgeInsetsGeometry bodyPadding =
+        _getBodyPadding(currentRoute: currentRoute);
+    BoxDecoration? bottomNavigationBarDecoration =
+        _getBottomNavigationBarDecoration(currentRoute: currentRoute);
 
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
       appBar: HomeAppBar(
+        backgroundColor: appBarBackgroundColor,
+        flexibleSpace: appBarFlexibleSpace,
         currentIndex: navigationShell.currentIndex,
         onBackTap: () {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
       ),
-      body: Padding(
-        // NOTE(현호): 패딩 조정
-        padding: navigationShell.currentIndex ==
-                HomeBottomNavMenu.deepTime.index
-            // deep time 타이머 돌아갈 때  하단 그라데이션의 padding을 없애려면 필요합니다.
-            ? EdgeInsets.zero
-            : navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index
-                ? AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING
-                : AppPaddings.SCREEN_BODY_PADDING,
-        child: navigationShell,
+      body: Container(
+        decoration: bodyDecoration,
+        child: Padding(
+          // NOTE(현호): 패딩 조정
+          padding: bodyPadding,
+          child: navigationShell,
+        ),
       ),
-      bottomNavigationBar: deepTimeState.when(
-        data: (state) {
-          final isTimerRunning = state.status == DeepTimeStatus.running;
-          return AbsorbPointer(
-            absorbing: isTimerRunning,
-            child: HomeBottomNavBar(
-              currentMenu:
-                  HomeBottomNavMenu.values[navigationShell.currentIndex],
-              onTap: (tab) =>
-                  _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
-            ),
-          );
-        },
-        loading: () => const SizedBox.shrink(),
-        error: (e, s) => const SizedBox.shrink(),
+      bottomNavigationBar: Container(
+        decoration: bottomNavigationBarDecoration,
+        child: AbsorbPointer(
+          absorbing: isRunningDeepTime,
+          child: HomeBottomNavBar(
+            currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
+            onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+          ),
+        ),
       ),
     );
   }

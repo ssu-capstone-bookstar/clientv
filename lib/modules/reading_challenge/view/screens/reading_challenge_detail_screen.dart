@@ -1,3 +1,6 @@
+import 'package:book/common/components/dialog/custom_dialog.dart';
+import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
+import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,11 +27,13 @@ class ReadingChallengeDetailScreen extends ConsumerStatefulWidget {
     required this.bookId,
     required this.challengeId,
     required this.totalPages,
+    required this.visibleDeleteChallenge,
   });
 
   final int bookId;
   final int challengeId;
   final int totalPages;
+  final bool visibleDeleteChallenge;
 
   @override
   ConsumerState<ReadingChallengeDetailScreen> createState() =>
@@ -65,6 +70,7 @@ class _ReadingChallengeDetailScreenState
   Widget build(BuildContext context) {
     final bookState = ref.watch(bookViewModelProvider(widget.bookId));
     final authState = ref.watch(authViewModelProvider);
+    final notifier = ref.read(ongoingChallengeViewModelProvider.notifier);
 
     final int? memberId = authState.when(
       data: (data) => (data is AuthSuccess) ? data.memberId : null,
@@ -111,27 +117,61 @@ class _ReadingChallengeDetailScreenState
       ),
       bottomNavigationBar: bookState.maybeWhen(
         data: (book) => Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 14, 54),
-          child: CtaButtonL1(
-            text: '리딩 챌린지 진행하기',
-            onPressed: () {
-              final bookForRoute = SearchBookResponse(
-                bookId: book.overview.id,
-                title: book.overview.title,
-                author: book.overview.author,
-                bookCover: book.overview.cover,
-                pubDate: book.overview.publishedDate,
-                publisher: book.overview.publisher,
-              );
-              context.push(
-                '/reading-challenge/start-and-end',
-                extra: {
-                  'book': bookForRoute,
-                  'totalPages': widget.totalPages,
-                  'challengeId': widget.challengeId,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CtaButtonL1(
+                text: '챌린지 진행하기',
+                onPressed: () {
+                  final bookForRoute = SearchBookResponse(
+                    bookId: book.overview.id,
+                    title: book.overview.title,
+                    author: book.overview.author,
+                    bookCover: book.overview.cover,
+                    pubDate: book.overview.publishedDate,
+                    publisher: book.overview.publisher,
+                  );
+                  context.push(
+                    '/reading-challenge/start-and-end',
+                    extra: {
+                      'book': bookForRoute,
+                      'totalPages': widget.totalPages,
+                      'challengeId': widget.challengeId,
+                    },
+                  );
                 },
-              );
-            },
+              ),
+              SizedBox(height: 8),
+              if (widget.visibleDeleteChallenge)
+                CtaButtonL1(
+                  text: '챌린지 중단하기',
+                  backgroundColor: ColorName.g7,
+                  borderColor: ColorName.g7,
+                  onPressed: () {
+                    _showDeleteConfirmDialog(
+                      context: context,
+                      onCancel: () {
+                        Navigator.of(context).pop(); // Close the first dialog
+                      },
+                      onConfirm: () async {
+                        Navigator.of(context).pop(); // Close the first dialog
+                        await notifier.abandonChallenge(widget.challengeId);
+                        // BookLogScreen의 챌린지 목록 Provider invalidate
+                        final user = ref.read(authViewModelProvider).value;
+                        final memberId =
+                            (user is AuthSuccess) ? user.memberId : 0;
+                        ref.invalidate(getChallengesByMemberViewModelProvider(
+                            memberId: memberId));
+                        await notifier.fetchChallenges();
+                        if (context.mounted) {
+                          await _showDeleteSuccessDialog(context);
+                        }
+                      },
+                    );
+                  },
+                ),
+            ],
           ),
         ),
         orElse: () => const SizedBox.shrink(),
@@ -267,5 +307,47 @@ class _ReadingChallengeDetailScreenState
         ],
       ),
     );
+  }
+
+  void _showDeleteConfirmDialog({
+    required BuildContext context,
+    required Function() onCancel,
+    required Function() onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return CustomDialog(
+          title: '리딩 챌린지를 중단할까요?',
+          content: '중단한 리딩 챌린지는 마이페이지 > 중단한 리딩 챌린지에서\n언제든지 다시 진행할 수 있어요',
+          titleStyle: AppTexts.b7.copyWith(color: ColorName.w1),
+          contentStyle: AppTexts.b11.copyWith(color: ColorName.g2),
+          icon: Assets.icons.icReadingChallengeChar1
+              .svg(width: 100, height: 106.8803482055664),
+          onCancel: onCancel,
+          onConfirm: onConfirm,
+          confirmButtonText: '중단',
+          cancelButtonText: '취소',
+        );
+      },
+    );
+  }
+
+  Future<void> _showDeleteSuccessDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return CustomDialog(
+          title: '리딩 챌린지 중단',
+          content: '리딩 챌린지를 중단되었어요',
+          icon: Assets.icons.icReadingChallengeChar2.svg(),
+          onConfirm: () => Navigator.of(context).pop(),
+          onCancel: () => Navigator.of(context).pop(),
+          confirmButtonText: '확인',
+          cancelButtonText: '',
+        );
+      },
+    );
+    if (context.mounted) context.pop();
   }
 }

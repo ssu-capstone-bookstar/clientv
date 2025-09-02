@@ -7,11 +7,15 @@ import '../../model/home_bottom_nav_menu.dart';
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int currentIndex;
   final VoidCallback? onBackTap;
+  final Color? backgroundColor;
+  final Widget? flexibleSpace;
 
   const HomeAppBar({
     super.key,
     required this.currentIndex,
     this.onBackTap,
+    this.backgroundColor,
+    this.flexibleSpace,
   });
 
   bool get isBookLog => currentIndex == HomeBottomNavMenu.bookLog.index;
@@ -26,6 +30,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Text(label, style: AppTexts.b5),
+      backgroundColor: backgroundColor,
+      flexibleSpace: flexibleSpace,
       // actions: !Navigator.canPop(context)
       //     ? [
       //         // if (isBookLog)
