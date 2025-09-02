@@ -40,76 +40,98 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
+    if (currentRoute == "/book-log") {
+      return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
+    } else if (currentRoute == "/deep-time") {
+      return EdgeInsets.zero;
+    } else {
+      return AppPaddings.SCREEN_BODY_PADDING;
+    }
+  }
+
+  Color? _getAppBarBackgroundColor({required String currentRoute}) {
+    if (currentRoute == "/reading-challenge") {
+      return Colors.transparent;
+    } else {
+      return null;
+    }
+  }
+
+  Widget? _getAppBarFlexibleSpace({required String currentRoute}) {
+    if (currentRoute == "/reading-challenge") {
+      return Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF6A4EFF),
+        ),
+      );
+    } else {
+      return null;
+    }
+  }
+
+  BoxDecoration? _getBodyDecoration({required String currentRoute}) {
+    if (currentRoute == "/reading-challenge") {
+      return const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF6A4EFF),
+            Color(0xFF6A4EFF),
+            Color(0xFF191919),
+          ],
+          stops: [0.0, 0.15, 1.0],
+        ),
+      );
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final navigationShell = widget.navigationShell;
-    // deeptime에서 타이머 돌아갈때는 bottomNavigationBar 비활성화
-    final deepTimeState = ref.watch(deepTimeViewModelProvider);
+    final isRunningDeepTime =
+        ref.watch(deepTimeViewModelProvider).value?.status ==
+            DeepTimeStatus.running;
     final router = GoRouter.of(context);
     final currentRoute =
         router.routerDelegate.currentConfiguration.uri.toString();
-    final isReadingChallengeMain = currentRoute == "/reading-challenge";
 
-    EdgeInsetsGeometry padding = AppPaddings.SCREEN_BODY_PADDING;
-    if (navigationShell.currentIndex == HomeBottomNavMenu.bookLog.index) {
-      padding = AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
-    } else if (navigationShell.currentIndex ==
-        HomeBottomNavMenu.deepTime.index) {
-      padding = EdgeInsets.zero;
-    }
+    Color? appBarBackgroundColor =
+        _getAppBarBackgroundColor(currentRoute: currentRoute);
+    Widget? appBarFlexibleSpace =
+        _getAppBarFlexibleSpace(currentRoute: currentRoute);
+    BoxDecoration? bodyDecoration =
+        _getBodyDecoration(currentRoute: currentRoute);
+    EdgeInsetsGeometry bodyPadding =
+        _getBodyPadding(currentRoute: currentRoute);
 
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
       appBar: HomeAppBar(
-        backgroundColor: isReadingChallengeMain ? Colors.transparent : null,
-        flexibleSpace: isReadingChallengeMain
-            ? Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6A4EFF),
-                ),
-              )
-            : null,
+        backgroundColor: appBarBackgroundColor,
+        flexibleSpace: appBarFlexibleSpace,
         currentIndex: navigationShell.currentIndex,
         onBackTap: () {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
       ),
       body: Container(
-        decoration: isReadingChallengeMain
-            ? const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF6A4EFF),
-                    Color(0xFF6A4EFF),
-                    Color(0xFF191919),
-                  ],
-                  stops: [0.0, 0.15, 1.0],
-                ),
-              )
-            : null,
+        decoration: bodyDecoration,
         child: Padding(
           // NOTE(현호): 패딩 조정
-          padding: padding,
+          padding: bodyPadding,
           child: navigationShell,
         ),
       ),
-      bottomNavigationBar: deepTimeState.when(
-        data: (state) {
-          final isTimerRunning = state.status == DeepTimeStatus.running;
-          return AbsorbPointer(
-            absorbing: isTimerRunning,
-            child: HomeBottomNavBar(
-              currentMenu:
-                  HomeBottomNavMenu.values[navigationShell.currentIndex],
-              onTap: (tab) =>
-                  _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
-            ),
-          );
-        },
-        loading: () => const SizedBox.shrink(),
-        error: (e, s) => const SizedBox.shrink(),
+      bottomNavigationBar: AbsorbPointer(
+        absorbing: isRunningDeepTime,
+        child: HomeBottomNavBar(
+          currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
+          onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),
+        ),
       ),
     );
   }
