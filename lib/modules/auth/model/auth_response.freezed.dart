@@ -23,6 +23,7 @@ mixin _$AuthResponse {
   String get refreshToken;
   DateTime get accessTokenExpiration;
   DateTime get refreshTokenExpiration;
+  MemberRole get memberRole;
 
   /// Create a copy of AuthResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -56,7 +57,9 @@ mixin _$AuthResponse {
             (identical(other.accessTokenExpiration, accessTokenExpiration) ||
                 other.accessTokenExpiration == accessTokenExpiration) &&
             (identical(other.refreshTokenExpiration, refreshTokenExpiration) ||
-                other.refreshTokenExpiration == refreshTokenExpiration));
+                other.refreshTokenExpiration == refreshTokenExpiration) &&
+            (identical(other.memberRole, memberRole) ||
+                other.memberRole == memberRole));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -71,11 +74,12 @@ mixin _$AuthResponse {
       accessToken,
       refreshToken,
       accessTokenExpiration,
-      refreshTokenExpiration);
+      refreshTokenExpiration,
+      memberRole);
 
   @override
   String toString() {
-    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, providerType: $providerType, email: $email, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration)';
+    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, providerType: $providerType, email: $email, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration, memberRole: $memberRole)';
   }
 }
 
@@ -94,7 +98,8 @@ abstract mixin class $AuthResponseCopyWith<$Res> {
       String accessToken,
       String refreshToken,
       DateTime accessTokenExpiration,
-      DateTime refreshTokenExpiration});
+      DateTime refreshTokenExpiration,
+      MemberRole memberRole});
 }
 
 /// @nodoc
@@ -118,6 +123,7 @@ class _$AuthResponseCopyWithImpl<$Res> implements $AuthResponseCopyWith<$Res> {
     Object? refreshToken = null,
     Object? accessTokenExpiration = null,
     Object? refreshTokenExpiration = null,
+    Object? memberRole = null,
   }) {
     return _then(_self.copyWith(
       memberId: null == memberId
@@ -156,6 +162,10 @@ class _$AuthResponseCopyWithImpl<$Res> implements $AuthResponseCopyWith<$Res> {
           ? _self.refreshTokenExpiration
           : refreshTokenExpiration // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      memberRole: null == memberRole
+          ? _self.memberRole
+          : memberRole // ignore: cast_nullable_to_non_nullable
+              as MemberRole,
     ));
   }
 }
@@ -262,7 +272,8 @@ extension AuthResponsePatterns on AuthResponse {
             String accessToken,
             String refreshToken,
             DateTime accessTokenExpiration,
-            DateTime refreshTokenExpiration)?
+            DateTime refreshTokenExpiration,
+            MemberRole memberRole)?
         $default, {
     required TResult orElse(),
   }) {
@@ -278,7 +289,8 @@ extension AuthResponsePatterns on AuthResponse {
             _that.accessToken,
             _that.refreshToken,
             _that.accessTokenExpiration,
-            _that.refreshTokenExpiration);
+            _that.refreshTokenExpiration,
+            _that.memberRole);
       case _:
         return orElse();
     }
@@ -308,7 +320,8 @@ extension AuthResponsePatterns on AuthResponse {
             String accessToken,
             String refreshToken,
             DateTime accessTokenExpiration,
-            DateTime refreshTokenExpiration)
+            DateTime refreshTokenExpiration,
+            MemberRole memberRole)
         $default,
   ) {
     final _that = this;
@@ -323,7 +336,8 @@ extension AuthResponsePatterns on AuthResponse {
             _that.accessToken,
             _that.refreshToken,
             _that.accessTokenExpiration,
-            _that.refreshTokenExpiration);
+            _that.refreshTokenExpiration,
+            _that.memberRole);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -352,7 +366,8 @@ extension AuthResponsePatterns on AuthResponse {
             String accessToken,
             String refreshToken,
             DateTime accessTokenExpiration,
-            DateTime refreshTokenExpiration)?
+            DateTime refreshTokenExpiration,
+            MemberRole memberRole)?
         $default,
   ) {
     final _that = this;
@@ -367,7 +382,8 @@ extension AuthResponsePatterns on AuthResponse {
             _that.accessToken,
             _that.refreshToken,
             _that.accessTokenExpiration,
-            _that.refreshTokenExpiration);
+            _that.refreshTokenExpiration,
+            _that.memberRole);
       case _:
         return null;
     }
@@ -386,7 +402,8 @@ class _AuthResponse implements AuthResponse {
       required this.accessToken,
       required this.refreshToken,
       required this.accessTokenExpiration,
-      required this.refreshTokenExpiration});
+      required this.refreshTokenExpiration,
+      required this.memberRole});
   factory _AuthResponse.fromJson(Map<String, dynamic> json) =>
       _$AuthResponseFromJson(json);
 
@@ -412,6 +429,8 @@ class _AuthResponse implements AuthResponse {
   final DateTime accessTokenExpiration;
   @override
   final DateTime refreshTokenExpiration;
+  @override
+  final MemberRole memberRole;
 
   /// Create a copy of AuthResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -449,7 +468,9 @@ class _AuthResponse implements AuthResponse {
             (identical(other.accessTokenExpiration, accessTokenExpiration) ||
                 other.accessTokenExpiration == accessTokenExpiration) &&
             (identical(other.refreshTokenExpiration, refreshTokenExpiration) ||
-                other.refreshTokenExpiration == refreshTokenExpiration));
+                other.refreshTokenExpiration == refreshTokenExpiration) &&
+            (identical(other.memberRole, memberRole) ||
+                other.memberRole == memberRole));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -464,11 +485,12 @@ class _AuthResponse implements AuthResponse {
       accessToken,
       refreshToken,
       accessTokenExpiration,
-      refreshTokenExpiration);
+      refreshTokenExpiration,
+      memberRole);
 
   @override
   String toString() {
-    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, providerType: $providerType, email: $email, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration)';
+    return 'AuthResponse(memberId: $memberId, nickName: $nickName, profileImage: $profileImage, providerType: $providerType, email: $email, accessToken: $accessToken, refreshToken: $refreshToken, accessTokenExpiration: $accessTokenExpiration, refreshTokenExpiration: $refreshTokenExpiration, memberRole: $memberRole)';
   }
 }
 
@@ -489,7 +511,8 @@ abstract mixin class _$AuthResponseCopyWith<$Res>
       String accessToken,
       String refreshToken,
       DateTime accessTokenExpiration,
-      DateTime refreshTokenExpiration});
+      DateTime refreshTokenExpiration,
+      MemberRole memberRole});
 }
 
 /// @nodoc
@@ -514,6 +537,7 @@ class __$AuthResponseCopyWithImpl<$Res>
     Object? refreshToken = null,
     Object? accessTokenExpiration = null,
     Object? refreshTokenExpiration = null,
+    Object? memberRole = null,
   }) {
     return _then(_AuthResponse(
       memberId: null == memberId
@@ -552,6 +576,10 @@ class __$AuthResponseCopyWithImpl<$Res>
           ? _self.refreshTokenExpiration
           : refreshTokenExpiration // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      memberRole: null == memberRole
+          ? _self.memberRole
+          : memberRole // ignore: cast_nullable_to_non_nullable
+              as MemberRole,
     ));
   }
 }

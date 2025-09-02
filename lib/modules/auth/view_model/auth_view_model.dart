@@ -57,6 +57,7 @@ class AuthViewModel extends _$AuthViewModel {
       print('email: ${authData.email}');
       print('accessToken: ${authData.accessToken.substring(0, 20)}...');
       print('refreshToken: ${authData.refreshToken.substring(0, 20)}...');
+      print('memberRole: ${authData.memberRole}');
       print('================================');
 
       await _secureStorageRepository.saveTokens(
@@ -69,7 +70,9 @@ class AuthViewModel extends _$AuthViewModel {
           nickName: authData.nickName,
           profileImage: authData.profileImage,
           providerType: authData.providerType,
-          email: authData.email);
+          email: authData.email,
+          memberRole: authData.memberRole,
+        );
     });
   }
 
@@ -140,6 +143,7 @@ class AuthViewModel extends _$AuthViewModel {
       print('email: ${authData.email}');
       print('accessToken: ${authData.accessToken}');
       print('refreshToken: ${authData.refreshToken}');
+      print('memberRole: ${authData.memberRole}');
       print('==========================================');
 
       await _secureStorageRepository.saveTokens(
@@ -159,6 +163,7 @@ class AuthViewModel extends _$AuthViewModel {
           profileImage: authData.profileImage,
           providerType: providerType,
           email: email,
+          memberRole: authData.memberRole,
         ),
       );
 

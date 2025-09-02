@@ -1,3 +1,4 @@
+import 'package:book/modules/auth/model/auth_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'auth_view_model.dart';
 
@@ -11,6 +12,7 @@ class AuthSuccess extends AuthState {
   final String profileImage;
   final String providerType;
   final String email;
+  final MemberRole memberRole;
 
   AuthSuccess({
     required this.memberId,
@@ -18,6 +20,7 @@ class AuthSuccess extends AuthState {
     required this.profileImage,
     required this.providerType,
     required this.email,
+    required this.memberRole,
   });
 }
 
