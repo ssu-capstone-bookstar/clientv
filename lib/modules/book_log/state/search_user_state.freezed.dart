@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SearchUserState {
   List<SearchUserResponse> get users;
+  List<UserSearchHistory> get history;
 
   /// Create a copy of SearchUserState
   /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +30,19 @@ mixin _$SearchUserState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SearchUserState &&
-            const DeepCollectionEquality().equals(other.users, users));
+            const DeepCollectionEquality().equals(other.users, users) &&
+            const DeepCollectionEquality().equals(other.history, history));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(users));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(users),
+      const DeepCollectionEquality().hash(history));
 
   @override
   String toString() {
-    return 'SearchUserState(users: $users)';
+    return 'SearchUserState(users: $users, history: $history)';
   }
 }
 
@@ -48,7 +52,7 @@ abstract mixin class $SearchUserStateCopyWith<$Res> {
           SearchUserState value, $Res Function(SearchUserState) _then) =
       _$SearchUserStateCopyWithImpl;
   @useResult
-  $Res call({List<SearchUserResponse> users});
+  $Res call({List<SearchUserResponse> users, List<UserSearchHistory> history});
 }
 
 /// @nodoc
@@ -65,12 +69,17 @@ class _$SearchUserStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? users = null,
+    Object? history = null,
   }) {
     return _then(_self.copyWith(
       users: null == users
           ? _self.users
           : users // ignore: cast_nullable_to_non_nullable
               as List<SearchUserResponse>,
+      history: null == history
+          ? _self.history
+          : history // ignore: cast_nullable_to_non_nullable
+              as List<UserSearchHistory>,
     ));
   }
 }
@@ -168,13 +177,15 @@ extension SearchUserStatePatterns on SearchUserState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<SearchUserResponse> users)? $default, {
+    TResult Function(
+            List<SearchUserResponse> users, List<UserSearchHistory> history)?
+        $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _SearchUserState() when $default != null:
-        return $default(_that.users);
+        return $default(_that.users, _that.history);
       case _:
         return orElse();
     }
@@ -195,12 +206,14 @@ extension SearchUserStatePatterns on SearchUserState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<SearchUserResponse> users) $default,
+    TResult Function(
+            List<SearchUserResponse> users, List<UserSearchHistory> history)
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SearchUserState():
-        return $default(_that.users);
+        return $default(_that.users, _that.history);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -220,12 +233,14 @@ extension SearchUserStatePatterns on SearchUserState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<SearchUserResponse> users)? $default,
+    TResult? Function(
+            List<SearchUserResponse> users, List<UserSearchHistory> history)?
+        $default,
   ) {
     final _that = this;
     switch (_that) {
       case _SearchUserState() when $default != null:
-        return $default(_that.users);
+        return $default(_that.users, _that.history);
       case _:
         return null;
     }
@@ -235,8 +250,11 @@ extension SearchUserStatePatterns on SearchUserState {
 /// @nodoc
 
 class _SearchUserState implements SearchUserState {
-  const _SearchUserState({final List<SearchUserResponse> users = const []})
-      : _users = users;
+  const _SearchUserState(
+      {final List<SearchUserResponse> users = const [],
+      final List<UserSearchHistory> history = const []})
+      : _users = users,
+        _history = history;
 
   final List<SearchUserResponse> _users;
   @override
@@ -245,6 +263,15 @@ class _SearchUserState implements SearchUserState {
     if (_users is EqualUnmodifiableListView) return _users;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_users);
+  }
+
+  final List<UserSearchHistory> _history;
+  @override
+  @JsonKey()
+  List<UserSearchHistory> get history {
+    if (_history is EqualUnmodifiableListView) return _history;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_history);
   }
 
   /// Create a copy of SearchUserState
@@ -260,16 +287,19 @@ class _SearchUserState implements SearchUserState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _SearchUserState &&
-            const DeepCollectionEquality().equals(other._users, _users));
+            const DeepCollectionEquality().equals(other._users, _users) &&
+            const DeepCollectionEquality().equals(other._history, _history));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_users));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_users),
+      const DeepCollectionEquality().hash(_history));
 
   @override
   String toString() {
-    return 'SearchUserState(users: $users)';
+    return 'SearchUserState(users: $users, history: $history)';
   }
 }
 
@@ -281,7 +311,7 @@ abstract mixin class _$SearchUserStateCopyWith<$Res>
       __$SearchUserStateCopyWithImpl;
   @override
   @useResult
-  $Res call({List<SearchUserResponse> users});
+  $Res call({List<SearchUserResponse> users, List<UserSearchHistory> history});
 }
 
 /// @nodoc
@@ -298,12 +328,17 @@ class __$SearchUserStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? users = null,
+    Object? history = null,
   }) {
     return _then(_SearchUserState(
       users: null == users
           ? _self._users
           : users // ignore: cast_nullable_to_non_nullable
               as List<SearchUserResponse>,
+      history: null == history
+          ? _self._history
+          : history // ignore: cast_nullable_to_non_nullable
+              as List<UserSearchHistory>,
     ));
   }
 }

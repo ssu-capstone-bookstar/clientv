@@ -7,7 +7,7 @@ part of 'search_user_view_model.dart';
 // **************************************************************************
 
 String _$searchUserViewModelHash() =>
-    r'70d2e046e02824aceba8f592b0d756be276d80ca';
+    r'5aa3701022c66444d2db541b68e94add4697cf7f';
 
 /// See also [SearchUserViewModel].
 @ProviderFor(SearchUserViewModel)
