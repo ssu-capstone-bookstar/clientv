@@ -38,10 +38,10 @@ class BookLogFeedList extends ConsumerStatefulWidget {
   final Function(int) onBookTitle;
 
   @override
-  ConsumerState<BookLogFeedList> createState() => _BookLogFeedListState();
+  ConsumerState<BookLogFeedList> createState() => BookLogFeedListState();
 }
 
-class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
+class BookLogFeedListState extends ConsumerState<BookLogFeedList> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
       ScrollOffsetController();
@@ -68,11 +68,20 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
     }
   }
 
-  void _jumpToIndex(int index) {
+  void _jumpToIndex(int index, {bool animate = false}) {
     if (mounted) {
+      if (!animate) {
       itemScrollController.jumpTo(
         index: index,
       );
+      } else {
+        itemScrollController.scrollTo(
+          index: index,
+          duration: const Duration(milliseconds: 500), // 애니메이션 시간
+          curve: Curves.easeInOut,
+        );
+      }
+
     }
   }
 
@@ -121,6 +130,10 @@ class _BookLogFeedListState extends ConsumerState<BookLogFeedList> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void jumpToTop() {
+    _jumpToIndex(0, animate: true);
   }
 
   @override

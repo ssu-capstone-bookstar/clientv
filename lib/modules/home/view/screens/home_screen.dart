@@ -1,5 +1,6 @@
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
+import 'package:book/modules/book_log/view/screens/book_log_screen.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       setState(() {
         _lastVisitedTabIndex = previousIndex;
       });
+    }
+
+    if (index == HomeBottomNavMenu.bookLog.index) {
+      bookLogFeedListKey.currentState?.jumpToTop();
     }
 
     widget.navigationShell.goBranch(
