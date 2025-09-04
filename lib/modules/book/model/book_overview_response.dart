@@ -13,8 +13,10 @@ abstract class BookOverviewResponse with _$BookOverviewResponse {
     @Default(0) int readingDiaryCount,
     @Default('') String isbn,
     @Default('') String publisher,
-    @Default(0.0) double star,
     @Default('') String publishedDate,
+    @Default('') String aladinUrl,
+    @Default(0.0) double star,
+    @Default(0.0) double starFromMe,
     @Default(false) bool liked,
   }) = _BookOverviewResponse;
 

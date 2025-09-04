@@ -1,3 +1,4 @@
+import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
@@ -41,28 +42,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
-    switch (currentRoute) {
-      case "/book-log":
-        {
-          return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
-        }
-      case "/deep-time":
-        {
-          return EdgeInsets.zero;
-        }
-      default:
-        {
-          return AppPaddings.SCREEN_BODY_PADDING;
-        }
-    }
-  }
-
   Color? _getAppBarBackgroundColor({required String currentRoute}) {
     switch (currentRoute) {
       case "/reading-challenge":
         {
           return Colors.transparent;
+        }
+      default:
+        {
+          return null;
+        }
+    }
+  }
+
+  List<Widget>? _getAppBarActions({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/book-log":
+        {
+          return [
+            GestureDetector(
+              onTap: () {
+                context.push('/book-log/search');
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Assets.images.icSearchColored3x.image(scale: 3),
+              ),
+            ),
+          ];
         }
       default:
         {
@@ -111,6 +118,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/book-log":
+        {
+          return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
+        }
+      case "/deep-time":
+        {
+          return EdgeInsets.zero;
+        }
+      default:
+        {
+          return AppPaddings.SCREEN_BODY_PADDING;
+        }
+    }
+  }
+
   BoxDecoration? _getBottomNavigationBarDecoration({required String currentRoute}) {
     switch (currentRoute) {
       case "/reading-challenge":
@@ -138,6 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     Color? appBarBackgroundColor =
         _getAppBarBackgroundColor(currentRoute: currentRoute);
+    List<Widget>? appBarActions = _getAppBarActions(currentRoute: currentRoute);
     Widget? appBarFlexibleSpace =
         _getAppBarFlexibleSpace(currentRoute: currentRoute);
     BoxDecoration? bodyDecoration =
@@ -156,6 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onBackTap: () {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
+        actions: appBarActions,
       ),
       body: Container(
         decoration: bodyDecoration,

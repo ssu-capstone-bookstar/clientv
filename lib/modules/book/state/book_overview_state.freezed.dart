@@ -15,7 +15,6 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BookOverviewState {
   BookOverviewResponse get overview;
-  BookDetailResponse get detail;
 
   /// Create a copy of BookOverviewState
   /// with the given fields replaced by the non-null parameter values.
@@ -34,17 +33,16 @@ mixin _$BookOverviewState {
         (other.runtimeType == runtimeType &&
             other is BookOverviewState &&
             (identical(other.overview, overview) ||
-                other.overview == overview) &&
-            (identical(other.detail, detail) || other.detail == detail));
+                other.overview == overview));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, overview, detail);
+  int get hashCode => Object.hash(runtimeType, overview);
 
   @override
   String toString() {
-    return 'BookOverviewState(overview: $overview, detail: $detail)';
+    return 'BookOverviewState(overview: $overview)';
   }
 }
 
@@ -54,10 +52,9 @@ abstract mixin class $BookOverviewStateCopyWith<$Res> {
           BookOverviewState value, $Res Function(BookOverviewState) _then) =
       _$BookOverviewStateCopyWithImpl;
   @useResult
-  $Res call({BookOverviewResponse overview, BookDetailResponse detail});
+  $Res call({BookOverviewResponse overview});
 
   $BookOverviewResponseCopyWith<$Res> get overview;
-  $BookDetailResponseCopyWith<$Res> get detail;
 }
 
 /// @nodoc
@@ -74,17 +71,12 @@ class _$BookOverviewStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? overview = null,
-    Object? detail = null,
   }) {
     return _then(_self.copyWith(
       overview: null == overview
           ? _self.overview
           : overview // ignore: cast_nullable_to_non_nullable
               as BookOverviewResponse,
-      detail: null == detail
-          ? _self.detail
-          : detail // ignore: cast_nullable_to_non_nullable
-              as BookDetailResponse,
     ));
   }
 
@@ -95,16 +87,6 @@ class _$BookOverviewStateCopyWithImpl<$Res>
   $BookOverviewResponseCopyWith<$Res> get overview {
     return $BookOverviewResponseCopyWith<$Res>(_self.overview, (value) {
       return _then(_self.copyWith(overview: value));
-    });
-  }
-
-  /// Create a copy of BookOverviewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BookDetailResponseCopyWith<$Res> get detail {
-    return $BookDetailResponseCopyWith<$Res>(_self.detail, (value) {
-      return _then(_self.copyWith(detail: value));
     });
   }
 }
@@ -202,14 +184,13 @@ extension BookOverviewStatePatterns on BookOverviewState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BookOverviewResponse overview, BookDetailResponse detail)?
-        $default, {
+    TResult Function(BookOverviewResponse overview)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _BookOverviewState() when $default != null:
-        return $default(_that.overview, _that.detail);
+        return $default(_that.overview);
       case _:
         return orElse();
     }
@@ -230,13 +211,12 @@ extension BookOverviewStatePatterns on BookOverviewState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BookOverviewResponse overview, BookDetailResponse detail)
-        $default,
+    TResult Function(BookOverviewResponse overview) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BookOverviewState():
-        return $default(_that.overview, _that.detail);
+        return $default(_that.overview);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -256,13 +236,12 @@ extension BookOverviewStatePatterns on BookOverviewState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(BookOverviewResponse overview, BookDetailResponse detail)?
-        $default,
+    TResult? Function(BookOverviewResponse overview)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BookOverviewState() when $default != null:
-        return $default(_that.overview, _that.detail);
+        return $default(_that.overview);
       case _:
         return null;
     }
@@ -272,18 +251,13 @@ extension BookOverviewStatePatterns on BookOverviewState {
 /// @nodoc
 @JsonSerializable()
 class _BookOverviewState implements BookOverviewState {
-  const _BookOverviewState(
-      {this.overview = const BookOverviewResponse(),
-      this.detail = const BookDetailResponse()});
+  const _BookOverviewState({this.overview = const BookOverviewResponse()});
   factory _BookOverviewState.fromJson(Map<String, dynamic> json) =>
       _$BookOverviewStateFromJson(json);
 
   @override
   @JsonKey()
   final BookOverviewResponse overview;
-  @override
-  @JsonKey()
-  final BookDetailResponse detail;
 
   /// Create a copy of BookOverviewState
   /// with the given fields replaced by the non-null parameter values.
@@ -306,17 +280,16 @@ class _BookOverviewState implements BookOverviewState {
         (other.runtimeType == runtimeType &&
             other is _BookOverviewState &&
             (identical(other.overview, overview) ||
-                other.overview == overview) &&
-            (identical(other.detail, detail) || other.detail == detail));
+                other.overview == overview));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, overview, detail);
+  int get hashCode => Object.hash(runtimeType, overview);
 
   @override
   String toString() {
-    return 'BookOverviewState(overview: $overview, detail: $detail)';
+    return 'BookOverviewState(overview: $overview)';
   }
 }
 
@@ -328,12 +301,10 @@ abstract mixin class _$BookOverviewStateCopyWith<$Res>
       __$BookOverviewStateCopyWithImpl;
   @override
   @useResult
-  $Res call({BookOverviewResponse overview, BookDetailResponse detail});
+  $Res call({BookOverviewResponse overview});
 
   @override
   $BookOverviewResponseCopyWith<$Res> get overview;
-  @override
-  $BookDetailResponseCopyWith<$Res> get detail;
 }
 
 /// @nodoc
@@ -350,17 +321,12 @@ class __$BookOverviewStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? overview = null,
-    Object? detail = null,
   }) {
     return _then(_BookOverviewState(
       overview: null == overview
           ? _self.overview
           : overview // ignore: cast_nullable_to_non_nullable
               as BookOverviewResponse,
-      detail: null == detail
-          ? _self.detail
-          : detail // ignore: cast_nullable_to_non_nullable
-              as BookDetailResponse,
     ));
   }
 
@@ -371,16 +337,6 @@ class __$BookOverviewStateCopyWithImpl<$Res>
   $BookOverviewResponseCopyWith<$Res> get overview {
     return $BookOverviewResponseCopyWith<$Res>(_self.overview, (value) {
       return _then(_self.copyWith(overview: value));
-    });
-  }
-
-  /// Create a copy of BookOverviewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BookDetailResponseCopyWith<$Res> get detail {
-    return $BookDetailResponseCopyWith<$Res>(_self.detail, (value) {
-      return _then(_self.copyWith(detail: value));
     });
   }
 }

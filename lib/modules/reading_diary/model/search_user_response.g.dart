@@ -8,9 +8,9 @@ part of 'search_user_response.dart';
 
 _SearchUserResponse _$SearchUserResponseFromJson(Map<String, dynamic> json) =>
     _SearchUserResponse(
-      memberId: (json['memberId'] as num?)?.toInt() ?? 0,
-      nickName: json['nickName'] as String? ?? '',
-      profileImg: json['profileImg'] as String? ?? '',
+      memberId: (json['memberId'] as num).toInt(),
+      nickName: json['nickName'] as String,
+      profileImg: json['profileImg'] as String,
     );
 
 Map<String, dynamic> _$SearchUserResponseToJson(_SearchUserResponse instance) =>

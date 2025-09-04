@@ -1,5 +1,6 @@
 import 'package:book/modules/reading_diary/model/diary_update_request.dart';
 import 'package:book/modules/reading_diary/model/report_request.dart';
+import 'package:book/modules/reading_diary/model/search_user_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -178,4 +179,8 @@ abstract class ReadingDiaryRepository {
     @Query('page') int? page,
     @Query('size') int? size,
   });
+
+  @GET('/search/users/{nickName}')
+  Future<ResponseForm<List<SearchUserResponse>>> getSearchUsersNickName(
+    @Path('nickName') String nickName);
 }

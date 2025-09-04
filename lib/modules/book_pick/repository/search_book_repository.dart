@@ -1,3 +1,4 @@
+import 'package:book/modules/reading_diary/model/search_user_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -8,7 +9,6 @@ import '../../../common/models/cursor_page_response.dart';
 import '../../../common/models/response_form.dart';
 import '../model/search_book_response.dart';
 import '../model/search_history_response.dart';
-import '../model/search_user_response.dart';
 
 part 'search_book_repository.g.dart';
 

@@ -5,7 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../infra/network/dio_client.dart';
 import '../../../common/models/response_form.dart';
-import '../model/book_detail_response.dart';
 import '../model/book_overview_response.dart';
 import '../model/book_rating_request.dart';
 import '../../../common/models/cursor_page_response.dart';
@@ -25,11 +24,6 @@ BookRepository bookRepository(Ref ref) {
 @RestApi()
 abstract class BookRepository {
   factory BookRepository(Dio dio, {String baseUrl}) = _BookRepository;
-
-  @GET('/api/v1/books/{bookId}')
-  Future<ResponseForm<BookDetailResponse>> getBookDetail(
-    @Path('bookId') int bookId,
-  );
 
   @GET('/api/v2/books/{bookId}/overview')
   Future<ResponseForm<BookOverviewResponse>> getBookOverview(

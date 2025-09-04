@@ -21,8 +21,10 @@ mixin _$BookOverviewResponse {
   int get readingDiaryCount;
   String get isbn;
   String get publisher;
-  double get star;
   String get publishedDate;
+  String get aladinUrl;
+  double get star;
+  double get starFromMe;
   bool get liked;
 
   /// Create a copy of BookOverviewResponse
@@ -50,20 +52,36 @@ mixin _$BookOverviewResponse {
             (identical(other.isbn, isbn) || other.isbn == isbn) &&
             (identical(other.publisher, publisher) ||
                 other.publisher == publisher) &&
-            (identical(other.star, star) || other.star == star) &&
             (identical(other.publishedDate, publishedDate) ||
                 other.publishedDate == publishedDate) &&
+            (identical(other.aladinUrl, aladinUrl) ||
+                other.aladinUrl == aladinUrl) &&
+            (identical(other.star, star) || other.star == star) &&
+            (identical(other.starFromMe, starFromMe) ||
+                other.starFromMe == starFromMe) &&
             (identical(other.liked, liked) || other.liked == liked));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, author, cover,
-      readingDiaryCount, isbn, publisher, star, publishedDate, liked);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      author,
+      cover,
+      readingDiaryCount,
+      isbn,
+      publisher,
+      publishedDate,
+      aladinUrl,
+      star,
+      starFromMe,
+      liked);
 
   @override
   String toString() {
-    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate, liked: $liked)';
+    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, publishedDate: $publishedDate, aladinUrl: $aladinUrl, star: $star, starFromMe: $starFromMe, liked: $liked)';
   }
 }
 
@@ -81,8 +99,10 @@ abstract mixin class $BookOverviewResponseCopyWith<$Res> {
       int readingDiaryCount,
       String isbn,
       String publisher,
-      double star,
       String publishedDate,
+      String aladinUrl,
+      double star,
+      double starFromMe,
       bool liked});
 }
 
@@ -106,8 +126,10 @@ class _$BookOverviewResponseCopyWithImpl<$Res>
     Object? readingDiaryCount = null,
     Object? isbn = null,
     Object? publisher = null,
-    Object? star = null,
     Object? publishedDate = null,
+    Object? aladinUrl = null,
+    Object? star = null,
+    Object? starFromMe = null,
     Object? liked = null,
   }) {
     return _then(_self.copyWith(
@@ -139,14 +161,22 @@ class _$BookOverviewResponseCopyWithImpl<$Res>
           ? _self.publisher
           : publisher // ignore: cast_nullable_to_non_nullable
               as String,
-      star: null == star
-          ? _self.star
-          : star // ignore: cast_nullable_to_non_nullable
-              as double,
       publishedDate: null == publishedDate
           ? _self.publishedDate
           : publishedDate // ignore: cast_nullable_to_non_nullable
               as String,
+      aladinUrl: null == aladinUrl
+          ? _self.aladinUrl
+          : aladinUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      star: null == star
+          ? _self.star
+          : star // ignore: cast_nullable_to_non_nullable
+              as double,
+      starFromMe: null == starFromMe
+          ? _self.starFromMe
+          : starFromMe // ignore: cast_nullable_to_non_nullable
+              as double,
       liked: null == liked
           ? _self.liked
           : liked // ignore: cast_nullable_to_non_nullable
@@ -256,8 +286,10 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             int readingDiaryCount,
             String isbn,
             String publisher,
-            double star,
             String publishedDate,
+            String aladinUrl,
+            double star,
+            double starFromMe,
             bool liked)?
         $default, {
     required TResult orElse(),
@@ -273,8 +305,10 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             _that.readingDiaryCount,
             _that.isbn,
             _that.publisher,
-            _that.star,
             _that.publishedDate,
+            _that.aladinUrl,
+            _that.star,
+            _that.starFromMe,
             _that.liked);
       case _:
         return orElse();
@@ -304,8 +338,10 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             int readingDiaryCount,
             String isbn,
             String publisher,
-            double star,
             String publishedDate,
+            String aladinUrl,
+            double star,
+            double starFromMe,
             bool liked)
         $default,
   ) {
@@ -320,8 +356,10 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             _that.readingDiaryCount,
             _that.isbn,
             _that.publisher,
-            _that.star,
             _that.publishedDate,
+            _that.aladinUrl,
+            _that.star,
+            _that.starFromMe,
             _that.liked);
       case _:
         throw StateError('Unexpected subclass');
@@ -350,8 +388,10 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             int readingDiaryCount,
             String isbn,
             String publisher,
-            double star,
             String publishedDate,
+            String aladinUrl,
+            double star,
+            double starFromMe,
             bool liked)?
         $default,
   ) {
@@ -366,8 +406,10 @@ extension BookOverviewResponsePatterns on BookOverviewResponse {
             _that.readingDiaryCount,
             _that.isbn,
             _that.publisher,
-            _that.star,
             _that.publishedDate,
+            _that.aladinUrl,
+            _that.star,
+            _that.starFromMe,
             _that.liked);
       case _:
         return null;
@@ -386,8 +428,10 @@ class _BookOverviewResponse implements BookOverviewResponse {
       this.readingDiaryCount = 0,
       this.isbn = '',
       this.publisher = '',
-      this.star = 0.0,
       this.publishedDate = '',
+      this.aladinUrl = '',
+      this.star = 0.0,
+      this.starFromMe = 0.0,
       this.liked = false});
   factory _BookOverviewResponse.fromJson(Map<String, dynamic> json) =>
       _$BookOverviewResponseFromJson(json);
@@ -415,10 +459,16 @@ class _BookOverviewResponse implements BookOverviewResponse {
   final String publisher;
   @override
   @JsonKey()
+  final String publishedDate;
+  @override
+  @JsonKey()
+  final String aladinUrl;
+  @override
+  @JsonKey()
   final double star;
   @override
   @JsonKey()
-  final String publishedDate;
+  final double starFromMe;
   @override
   @JsonKey()
   final bool liked;
@@ -453,20 +503,36 @@ class _BookOverviewResponse implements BookOverviewResponse {
             (identical(other.isbn, isbn) || other.isbn == isbn) &&
             (identical(other.publisher, publisher) ||
                 other.publisher == publisher) &&
-            (identical(other.star, star) || other.star == star) &&
             (identical(other.publishedDate, publishedDate) ||
                 other.publishedDate == publishedDate) &&
+            (identical(other.aladinUrl, aladinUrl) ||
+                other.aladinUrl == aladinUrl) &&
+            (identical(other.star, star) || other.star == star) &&
+            (identical(other.starFromMe, starFromMe) ||
+                other.starFromMe == starFromMe) &&
             (identical(other.liked, liked) || other.liked == liked));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, author, cover,
-      readingDiaryCount, isbn, publisher, star, publishedDate, liked);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      author,
+      cover,
+      readingDiaryCount,
+      isbn,
+      publisher,
+      publishedDate,
+      aladinUrl,
+      star,
+      starFromMe,
+      liked);
 
   @override
   String toString() {
-    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, star: $star, publishedDate: $publishedDate, liked: $liked)';
+    return 'BookOverviewResponse(id: $id, title: $title, author: $author, cover: $cover, readingDiaryCount: $readingDiaryCount, isbn: $isbn, publisher: $publisher, publishedDate: $publishedDate, aladinUrl: $aladinUrl, star: $star, starFromMe: $starFromMe, liked: $liked)';
   }
 }
 
@@ -486,8 +552,10 @@ abstract mixin class _$BookOverviewResponseCopyWith<$Res>
       int readingDiaryCount,
       String isbn,
       String publisher,
-      double star,
       String publishedDate,
+      String aladinUrl,
+      double star,
+      double starFromMe,
       bool liked});
 }
 
@@ -511,8 +579,10 @@ class __$BookOverviewResponseCopyWithImpl<$Res>
     Object? readingDiaryCount = null,
     Object? isbn = null,
     Object? publisher = null,
-    Object? star = null,
     Object? publishedDate = null,
+    Object? aladinUrl = null,
+    Object? star = null,
+    Object? starFromMe = null,
     Object? liked = null,
   }) {
     return _then(_BookOverviewResponse(
@@ -544,14 +614,22 @@ class __$BookOverviewResponseCopyWithImpl<$Res>
           ? _self.publisher
           : publisher // ignore: cast_nullable_to_non_nullable
               as String,
-      star: null == star
-          ? _self.star
-          : star // ignore: cast_nullable_to_non_nullable
-              as double,
       publishedDate: null == publishedDate
           ? _self.publishedDate
           : publishedDate // ignore: cast_nullable_to_non_nullable
               as String,
+      aladinUrl: null == aladinUrl
+          ? _self.aladinUrl
+          : aladinUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      star: null == star
+          ? _self.star
+          : star // ignore: cast_nullable_to_non_nullable
+              as double,
+      starFromMe: null == starFromMe
+          ? _self.starFromMe
+          : starFromMe // ignore: cast_nullable_to_non_nullable
+              as double,
       liked: null == liked
           ? _self.liked
           : liked // ignore: cast_nullable_to_non_nullable
