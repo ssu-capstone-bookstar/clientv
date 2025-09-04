@@ -60,7 +60,8 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
   void _onTapUser(SearchUserResponse user) async {
     final notifier = ref.read(searchUserViewModelProvider.notifier);
     await notifier.onTapUser(nickName: user.nickName, memberId: user.memberId);
-    if (mounted) context.push("/book-log/feed/${user.memberId}");
+    if (!mounted) return;
+    context.push("/book-log/thumbnail/${user.memberId}");
   }
 
   Future<void> _onTapHistory(UserSearchHistory history) async {
@@ -70,9 +71,8 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
         _searchUser();
         break;
       case ActionType.feed:
-        if (history.memberId != null && mounted) {
-          context.push("/book-log/feed/${history.memberId}");
-        }
+        if (history.memberId == null || !mounted) return;
+        context.push("/book-log/thumbnail/${history.memberId}");
         break;
     }
   }
