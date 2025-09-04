@@ -235,11 +235,13 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
                         children: [
                           Assets.images.icSearchUncolored3x.image(scale: 3),
                           SizedBox(width: 4),
-                          Text(
-                            item.keyword,
-                            style: AppTexts.b5.copyWith(color: ColorName.g3),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          Expanded(
+                            child: Text(
+                              item.keyword,
+                              style: AppTexts.b5.copyWith(color: ColorName.g3),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           )
                         ],
                       )),
