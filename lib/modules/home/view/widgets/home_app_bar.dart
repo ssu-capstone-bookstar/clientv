@@ -9,6 +9,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackTap;
   final Color? backgroundColor;
   final Widget? flexibleSpace;
+  final List<Widget>? actions;
 
   const HomeAppBar({
     super.key,
@@ -16,6 +17,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackTap,
     this.backgroundColor,
     this.flexibleSpace,
+    this.actions,
   });
 
   bool get isBookLog => currentIndex == HomeBottomNavMenu.bookLog.index;
@@ -32,6 +34,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(label, style: AppTexts.b5),
       backgroundColor: backgroundColor,
       flexibleSpace: flexibleSpace,
+      actions: actions,
       // actions: !Navigator.canPop(context)
       //     ? [
       //         // if (isBookLog)

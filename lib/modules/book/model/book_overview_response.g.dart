@@ -16,8 +16,10 @@ _BookOverviewResponse _$BookOverviewResponseFromJson(
       readingDiaryCount: (json['readingDiaryCount'] as num?)?.toInt() ?? 0,
       isbn: json['isbn'] as String? ?? '',
       publisher: json['publisher'] as String? ?? '',
-      star: (json['star'] as num?)?.toDouble() ?? 0.0,
       publishedDate: json['publishedDate'] as String? ?? '',
+      aladinUrl: json['aladinUrl'] as String? ?? '',
+      star: (json['star'] as num?)?.toDouble() ?? 0.0,
+      starFromMe: (json['starFromMe'] as num?)?.toDouble() ?? 0.0,
       liked: json['liked'] as bool? ?? false,
     );
 
@@ -31,7 +33,9 @@ Map<String, dynamic> _$BookOverviewResponseToJson(
       'readingDiaryCount': instance.readingDiaryCount,
       'isbn': instance.isbn,
       'publisher': instance.publisher,
-      'star': instance.star,
       'publishedDate': instance.publishedDate,
+      'aladinUrl': instance.aladinUrl,
+      'star': instance.star,
+      'starFromMe': instance.starFromMe,
       'liked': instance.liked,
     };

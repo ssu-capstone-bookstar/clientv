@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:book/modules/book/model/book_detail_response.dart';
 import 'package:book/modules/book/model/book_rating_request.dart';
 import 'package:book/modules/book/state/book_overview_state.dart';
 import 'package:book/modules/book_pick/view_model/book_pick_view_model.dart';
@@ -27,8 +26,7 @@ class BookViewModel extends _$BookViewModel {
       return _cache[bookId]!;
     } else {
       final overview = await _fetchBookOverview(bookId);
-      final detail = await _fetchBookDetail(bookId);
-      final result = BookOverviewState(overview: overview, detail: detail);
+      final result = BookOverviewState(overview: overview);
       _cache[bookId] = result;
       return result;
     }
@@ -39,10 +37,6 @@ class BookViewModel extends _$BookViewModel {
     return response.data;
   }
 
-  Future<BookDetailResponse> _fetchBookDetail(int bookId) async {
-    final response = await _bookRepository.getBookDetail(bookId);
-    return response.data;
-  }
 
   Future<void> handleOverviewLike() async {
     final prev = state.value ?? BookOverviewState();

@@ -258,18 +258,17 @@ extension SearchUserResponsePatterns on SearchUserResponse {
 @JsonSerializable()
 class _SearchUserResponse implements SearchUserResponse {
   const _SearchUserResponse(
-      {this.memberId = 0, this.nickName = '', this.profileImg = ''});
+      {required this.memberId,
+      required this.nickName,
+      required this.profileImg});
   factory _SearchUserResponse.fromJson(Map<String, dynamic> json) =>
       _$SearchUserResponseFromJson(json);
 
   @override
-  @JsonKey()
   final int memberId;
   @override
-  @JsonKey()
   final String nickName;
   @override
-  @JsonKey()
   final String profileImg;
 
   /// Create a copy of SearchUserResponse

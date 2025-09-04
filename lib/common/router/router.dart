@@ -1,3 +1,4 @@
+import 'package:book/modules/book_log/view/screens/book_log_search_screen.dart';
 import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:book/modules/book_log/view/screens/book_related_feed_screen.dart';
 import 'package:book/modules/book_pick/view/screens/book_pick_my_likes_screen.dart';
@@ -139,6 +140,13 @@ GoRouter router(Ref ref) {
                 ),
                 routes: [
                   GoRoute(
+                    path: 'search',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      return const BookLogSearchScreen();
+                    },
+                  ),
+                  GoRoute(
                     path: 'thumbnail/:memberId',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
@@ -157,8 +165,8 @@ GoRouter router(Ref ref) {
                     builder: (context, state) {
                       final memberId =
                           int.parse(state.pathParameters['memberId']!);
-                      final extra = state.extra as Map<String, dynamic>;
-                      final index = extra['index'] as int;
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final index = extra?['index'] as int? ?? 0;
                       return BookLogFeedScreen(
                           memberId: memberId, initialIndex: index);
                     },

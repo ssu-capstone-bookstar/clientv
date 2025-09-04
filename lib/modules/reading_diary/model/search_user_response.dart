@@ -4,11 +4,12 @@ part 'search_user_response.freezed.dart';
 part 'search_user_response.g.dart';
 
 @freezed
-abstract class SearchUserResponse with _$SearchUserResponse {
+abstract class SearchUserResponse
+    with _$SearchUserResponse {
   const factory SearchUserResponse({
-    @Default(0) int memberId,
-    @Default('') String nickName,
-    @Default('') String profileImg,
+    required int memberId,
+    required String nickName,
+    required String profileImg,
   }) = _SearchUserResponse;
 
   factory SearchUserResponse.fromJson(Map<String, dynamic> json) =>

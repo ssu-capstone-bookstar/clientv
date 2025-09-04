@@ -23,7 +23,8 @@ class BookLogFeedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(memberId));
-    final bookLogNotifier = ref.read(bookLogViewModelProvider(memberId).notifier);
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(memberId).notifier);
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
     final userAsync = ref.watch(authViewModelProvider);
 
@@ -68,7 +69,8 @@ class BookLogFeedScreen extends ConsumerWidget {
 
                   int? commentCount = result?['commentCount'];
                   if (commentCount != null) {
-                    bookLogNotifier.changeCommentCount(targetFeed.diaryId, commentCount);
+                    bookLogNotifier.changeCommentCount(
+                        targetFeed.diaryId, commentCount);
                   }
                 },
                 onDelete: (BuildContext ctx, int targetIndex) async {
@@ -100,7 +102,8 @@ class BookLogFeedScreen extends ConsumerWidget {
                   String? content = result?['content'];
 
                   if (reportType == null || content == null) return;
-                  await bookLogNotifier.reportFeed(targetFeed.diaryId, reportType, content);
+                  await bookLogNotifier.reportFeed(
+                      targetFeed.diaryId, reportType, content);
                   if (!ctx.mounted) return;
                   await showModalBottomSheet(
                       context: ctx,
@@ -131,12 +134,12 @@ class BookLogFeedScreen extends ConsumerWidget {
                       extra: {
                         "memberId": targetFeed.memberId,
                         "request": DiaryUpdateRequest(
-                          content: targetFeed.content,
-                          images: targetFeed.images
-                              .map((e) => ImageRequest(
-                                  image: e.imageUrl, sequence: e.sequence))
-                              .toList())
-                });
+                            content: targetFeed.content,
+                            images: targetFeed.images
+                                .map((e) => ImageRequest(
+                                    image: e.imageUrl, sequence: e.sequence))
+                                .toList())
+                      });
                 },
               ),
             ),
