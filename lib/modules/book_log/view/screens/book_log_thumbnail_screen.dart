@@ -1,4 +1,5 @@
 import 'package:book/common/components/button/menu_button.dart';
+import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/modules/auth/view_model/auth_state.dart';
 import 'package:book/modules/auth/view_model/auth_view_model.dart';
@@ -37,6 +38,45 @@ class _BookLogThumbnailScreenState
           .read(bookLogViewModelProvider(widget.memberId).notifier)
           .initState(widget.memberId);
     }
+  }
+
+  _onTapBubble(String introduction) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+
+    showDialog(
+      context: context,
+      barrierColor: ColorName.b1.withAlpha(204),
+      builder: (context) {
+        return Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: deviceWidth * 0.8,
+              maxHeight: deviceWidth * 0.8,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Assets.images.speechBubble.image(
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.fill,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24, vertical: 24),
+                  child: Text(
+                    introduction,
+                    style: AppTexts.h4.copyWith(color: ColorName.w1),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -154,8 +194,10 @@ class _BookLogThumbnailScreenState
                   ),
                   Align(
                     alignment: Alignment.topCenter,
-                    child:
-                        ProfileSpeechBubble(text: bookLog.profile.introduction),
+                    child: ProfileSpeechBubble(
+                        text: bookLog.profile.introduction,
+                        onTap: () =>
+                            _onTapBubble(bookLog.profile.introduction)),
                   ),
                 ],
               ),
