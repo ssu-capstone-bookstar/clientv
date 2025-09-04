@@ -133,11 +133,7 @@ GoRouter router(Ref ref) {
             routes: [
               GoRoute(
                 path: '/book-log',
-                builder: (context, state) => Consumer(
-                  builder: (context, ref, _) {
-                    return BookLogScreen();
-                  },
-                ),
+                builder: (context, state) => BookLogScreen(),
                 routes: [
                   GoRoute(
                     path: 'search',

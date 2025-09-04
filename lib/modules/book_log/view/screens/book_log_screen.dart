@@ -15,6 +15,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
+final bookLogFeedListKey = GlobalKey<BookLogFeedListState>();
+
 class BookLogScreen extends ConsumerWidget {
   const BookLogScreen({super.key});
 
@@ -55,6 +57,7 @@ class BookLogScreen extends ConsumerWidget {
                 ),
               ),
               body: BookLogFeedList(
+                key: bookLogFeedListKey,
                 feeds: bookLog.feeds,
                 // followInfo: followInfo,
                 initialIndex: null,
