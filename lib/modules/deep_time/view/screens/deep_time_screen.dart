@@ -52,6 +52,12 @@ class _DeepTimeScreenState extends ConsumerState<DeepTimeScreen> {
     ref.watch(audioPlayerProvider);
     ref.listen(deepTimeViewModelProvider, (previous, next) async {
       if (next.value?.status == DeepTimeStatus.finished) {
+        final audioPlayer = ref.read(audioPlayerProvider);
+        if (audioPlayer.playing) {
+          await audioPlayer.stop();
+          ref.read(selectedMusicProvider.notifier).cancel();
+        }
+
         await ref.read(deepTimeViewModelProvider.notifier).resetTimer();
         if (!context.mounted) return;
         await showDialog(
@@ -256,7 +262,7 @@ class _TimerDisplay extends StatelessWidget {
 
     return SizedBox(
       height: circleSize < 270 ? 85 : 120,
-      width: 250,
+      width: MediaQuery.of(context).size.width,
       child: Stack(
         alignment: Alignment.center,
         clipBehavior: Clip.none,
@@ -284,18 +290,18 @@ class _TimerDisplay extends StatelessWidget {
             child: FittedBox(fit: BoxFit.cover, child: timerText),
           ),
           Positioned(
-            left: 0,
-            top: 0,
+            left: 40,
+            top: 5,
             child: Assets.icons.icDeeptypeStickerClock.svg(width: 40),
           ),
           Positioned(
-            right: 0,
-            top: 0,
+            right: 40,
+            top: 5,
             child: Assets.icons.icDeeptypeStickerBook.svg(width: 35),
           ),
           Positioned(
-            bottom: 0,
-            right: -20,
+            bottom: 40,
+            right: 10,
             child: Assets.icons.icDeeptypeStickerCloud.svg(width: 40),
           ),
         ],
