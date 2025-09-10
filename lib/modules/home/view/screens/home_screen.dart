@@ -49,10 +49,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Color? _getAppBarBackgroundColor({required String currentRoute}) {
     switch (currentRoute) {
-      case "/reading-challenge":
-        {
-          return Colors.transparent;
-        }
+      // case "/reading-challenge":
+      //   {
+      //     return Colors.transparent;
+      //   }
       default:
         {
           return null;
@@ -85,14 +85,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget? _getAppBarFlexibleSpace({required String currentRoute}) {
     switch (currentRoute) {
-      case "/reading-challenge":
-        {
-          return Container(
-            decoration: BoxDecoration(
-              color: ColorName.b1,
-            ),
-          );
-        }
+      // case "/reading-challenge":
+      //   {
+      //     return Container(
+      //       decoration: BoxDecoration(
+      //         color: ColorName.b1,
+      //       ),
+      //     );
+      //   }
       default:
         {
           return null;
@@ -102,20 +102,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   BoxDecoration? _getBodyDecoration({required String currentRoute}) {
     switch (currentRoute) {
-      case "/reading-challenge":
-        {
-          return BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomLeft,
-              colors: [
-                ColorName.b1,
-                ColorName.p1,
-              ],
-              stops: [0.15, 1],
-            ),
-          );
-        }
+      // case "/reading-challenge":
+      //   {
+      //     return BoxDecoration(
+      //       gradient: LinearGradient(
+      //         begin: Alignment.topCenter,
+      //         end: Alignment.bottomLeft,
+      //         colors: [
+      //           ColorName.b1,
+      //           ColorName.p1,
+      //         ],
+      //         stops: [0.15, 1],
+      //       ),
+      //     );
+      //   }
       default:
         {
           return null;
@@ -130,6 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
         }
       case "/deep-time":
+      case "/reading-challenge":
         {
           return EdgeInsets.zero;
         }

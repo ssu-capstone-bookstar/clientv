@@ -72,5 +72,7 @@
 	<string>프로필 및 다이어리 사진 등록을 위해 앨범에 접근합니다.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>동영상 촬영을 위해 마이크에 접근합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>스크린샷을 저장하기 위해 앨범에 접근합니다.</string>
 </dict>
 </plist>
