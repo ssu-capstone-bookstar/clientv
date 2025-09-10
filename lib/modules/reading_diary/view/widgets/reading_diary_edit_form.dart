@@ -47,11 +47,13 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
   final List<String> newImages = [];
   final ImagePicker _picker = ImagePicker();
   int _currentImageIndex = 0;
-  
+
   @override
   void initState() {
-    setState(() {
-      uploadedImages.addAll(widget.initialImages);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        uploadedImages.addAll(widget.initialImages);
+      });
     });
     super.initState();
   }
@@ -158,17 +160,19 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildImageSection(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: _buildImageSection(
                         uploadedImages: uploadedImages,
                         newImages: newImages,
                         onPick: _pickImages,
                         onRemove: _removeImage,
                         currentImageIndex: _currentImageIndex,
                         onImageIndexChanged: _onImageIndexChanged),
-                    GestureDetector(
+                  ),
+                  SliverToBoxAdapter(
+                    child: GestureDetector(
                         onTap: _onTabText,
                         child: SizedBox(
                           width: double.infinity,
@@ -181,8 +185,8 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                                 : _buildEmptyTextSection(),
                           ),
                         )),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             if (isNotEmptyText)
@@ -213,18 +217,16 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
         AspectRatio(
           aspectRatio: 1,
           child: totalImageLength == 0
-              ? Expanded(
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () => PhotoSourceModal.show(context,
-                          onPick: (source) => onPick(source)),
-                      child: const Center(
-                        child: Icon(Icons.add_photo_alternate,
-                            size: 24, color: ColorName.g1),
-                      ),
-                    ),
+              ? Center(
+                child: GestureDetector(
+                  onTap: () => PhotoSourceModal.show(context,
+                      onPick: (source) => onPick(source)),
+                  child: const Center(
+                    child: Icon(Icons.add_photo_alternate,
+                        size: 24, color: ColorName.g1),
                   ),
-                )
+                ),
+              )
               : Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -335,7 +337,8 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
     );
   }
 
-  Widget _buildSubmitButton({required Function() onSave, required bool disabled}) {
+  Widget _buildSubmitButton(
+      {required Function() onSave, required bool disabled}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: CtaButtonL1(

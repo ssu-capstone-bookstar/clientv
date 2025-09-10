@@ -35,11 +35,14 @@ class _ReadingDiaryUpdateScreenState
       _disableSave = value;
     });
   }
+
   @override
   void initState() {
-    setState(() {
-      _textController.text = widget.request.content;
-      _uploadedImages.addAll(widget.request.images);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _textController.text = widget.request.content;
+        _uploadedImages.addAll(widget.request.images);
+      });
     });
     super.initState();
   }
