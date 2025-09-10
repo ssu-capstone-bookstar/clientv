@@ -151,11 +151,14 @@ class _ReadingChallengeScreenState
         ),
         Row(
           children: [
-            GestureDetector(
-              onTap: () => onScreenShot(),
-              child: Icon(Icons.crop_free, color: ColorName.w1),
-            ),
+            /** 캡처 */
+            if (totalCount > 0)
+              GestureDetector(
+                onTap: () => onScreenShot(),
+                child: Icon(Icons.crop_free, color: ColorName.w1),
+              ),
             SizedBox(width: 8),
+            /** 새로운 책 읽기 */
             GestureDetector(
               onTap: () => onNew(),
               child: Assets.icons.icPlus.svg(),
