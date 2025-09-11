@@ -17,11 +17,18 @@ import '../../view_model/book_log_view_model.dart';
 
 final bookLogFeedListKey = GlobalKey<BookLogFeedListState>();
 
-class BookLogScreen extends ConsumerWidget {
+class BookLogScreen extends ConsumerStatefulWidget {
   const BookLogScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BookLogScreen> createState() => _BookLogScreenState();
+}
+
+class _BookLogScreenState extends ConsumerState<BookLogScreen> {
+  bool _showScrollToTopButton = false;
+
+  @override
+  Widget build(BuildContext context) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(null));
     final bookLogNotifier = ref.read(bookLogViewModelProvider(null).notifier);
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
@@ -36,25 +43,49 @@ class BookLogScreen extends ConsumerWidget {
         return bookLogAsync.when(
           data: (bookLog) => followInfoAsync.when(
             data: (followInfo) => Scaffold(
-              floatingActionButton: InkWell(
-                onTap: () {
-                  context.push('/book-log/thumbnail/$currentMemberId');
-                },
-                child: SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: CircleAvatar(
-                    key: UniqueKey(),
-                    backgroundColor: ColorName.g7,
-                    backgroundImage: currentMemberProfileImage.isNotEmpty
-                        ? NetworkImage(currentMemberProfileImage)
-                        : null,
-                    child: currentMemberProfileImage.isEmpty
-                        ? const Icon(Icons.person,
-                            size: 40, color: ColorName.g5)
-                        : null,
+              floatingActionButton: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(height: 16),
+                  InkWell(
+                    onTap: () {
+                      context.push('/book-log/thumbnail/$currentMemberId');
+                    },
+                    child: SizedBox(
+                      width: 78,
+                      height: 78,
+                      child: CircleAvatar(
+                        key: UniqueKey(),
+                        backgroundColor: ColorName.g7,
+                        backgroundImage: currentMemberProfileImage.isNotEmpty
+                            ? NetworkImage(currentMemberProfileImage)
+                            : null,
+                        child: currentMemberProfileImage.isEmpty
+                            ? const Icon(Icons.person,
+                                size: 40, color: ColorName.g5)
+                            : null,
+                      ),
+                    ),
                   ),
-                ),
+                  if (_showScrollToTopButton) ...[
+                    SizedBox(
+                      height: 8,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          bookLogFeedListKey.currentState?.jumpToTop();
+                        },
+                        child: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                                color: ColorName.g7,
+                                borderRadius:
+                                    BorderRadiusDirectional.circular(16)),
+                            child: Icon(Icons.keyboard_arrow_up,
+                                color: ColorName.w1))),
+                  ],
+                ],
               ),
               body: BookLogFeedList(
                 key: bookLogFeedListKey,
@@ -66,6 +97,11 @@ class BookLogScreen extends ConsumerWidget {
                 },
                 onRefresh: () async {
                   await bookLogNotifier.initState(null);
+                },
+                onScrollChanged: (showButton) {
+                  setState(() {
+                    _showScrollToTopButton = showButton;
+                  });
                 },
                 onLike: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
@@ -87,7 +123,8 @@ class BookLogScreen extends ConsumerWidget {
 
                   int? commentCount = result?['commentCount'];
                   if (commentCount != null) {
-                    bookLogNotifier.changeCommentCount(targetFeed.diaryId, commentCount);
+                    bookLogNotifier.changeCommentCount(
+                        targetFeed.diaryId, commentCount);
                   }
                 },
                 onDelete: (BuildContext ctx, int targetIndex) async {
@@ -119,7 +156,8 @@ class BookLogScreen extends ConsumerWidget {
                   String? content = result?['content'];
 
                   if (reportType == null || content == null) return;
-                  await bookLogNotifier.reportFeed(targetFeed.diaryId, reportType, content);
+                  await bookLogNotifier.reportFeed(
+                      targetFeed.diaryId, reportType, content);
                   if (!ctx.mounted) return;
                   await showModalBottomSheet(
                       context: ctx,
@@ -147,15 +185,15 @@ class BookLogScreen extends ConsumerWidget {
                 onUpdate: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
                   context.push('/reading-diary/${targetFeed.diaryId}/update',
-                       extra: {
+                      extra: {
                         "memberId": targetFeed.memberId,
                         "request": DiaryUpdateRequest(
-                          content: targetFeed.content,
-                          images: targetFeed.images
-                              .map((e) => ImageRequest(
-                                  image: e.imageUrl, sequence: e.sequence))
-                              .toList())
-                });
+                            content: targetFeed.content,
+                            images: targetFeed.images
+                                .map((e) => ImageRequest(
+                                    image: e.imageUrl, sequence: e.sequence))
+                                .toList())
+                      });
                 },
               ),
             ),

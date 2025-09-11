@@ -15,16 +15,26 @@ import 'package:go_router/go_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
-class BookRelatedFeedScreen extends ConsumerWidget {
+final bookLogFeedListKey3 = GlobalKey<BookLogFeedListState>();
+
+class BookRelatedFeedScreen extends ConsumerStatefulWidget {
   const BookRelatedFeedScreen(
       {super.key, required this.bookId, required this.initialIndex});
   final int bookId;
   final int initialIndex;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bookLogAsync = ref.watch(relatedDiariesViewModelProvider(bookId));
-    final bookLogNotifier = ref.read(relatedDiariesViewModelProvider(bookId).notifier);
+  ConsumerState<BookRelatedFeedScreen> createState() => _BookRelatedFeedScreenState();
+}
+
+class _BookRelatedFeedScreenState extends ConsumerState<BookRelatedFeedScreen> {
+  bool _showScrollToTopButton = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final bookLogAsync = ref.watch(relatedDiariesViewModelProvider(widget.bookId));
+    final bookLogNotifier =
+        ref.read(relatedDiariesViewModelProvider(widget.bookId).notifier);
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
     final userAsync = ref.watch(authViewModelProvider);
 
@@ -40,20 +50,37 @@ class BookRelatedFeedScreen extends ConsumerWidget {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
+              floatingActionButton: _showScrollToTopButton ? GestureDetector(
+                  onTap: () {
+                    bookLogFeedListKey3.currentState?.jumpToTop();
+                  },
+                  child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: ColorName.g7,
+                          borderRadius: BorderRadiusDirectional.circular(16)),
+                      child:
+                          Icon(Icons.keyboard_arrow_up, color: ColorName.w1))) : null,
               body: BookLogFeedList(
+                key: bookLogFeedListKey3,
                 feeds: bookLog.feeds,
-                initialIndex: initialIndex,
+                initialIndex: widget.initialIndex,
                 onScrollBottom: () async {
                   await bookLogNotifier.refreshState();
                 },
                 onRefresh: () async {
-                  await bookLogNotifier.initState(bookId, bookLog.sort);
+                  await bookLogNotifier.initState(widget.bookId, bookLog.sort);
+                },
+                onScrollChanged: (showButton) {
+                  setState(() {
+                    _showScrollToTopButton = showButton;
+                  });
                 },
                 onLike: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
-                  bookLogNotifier
-                      .handleFeedLike(
-                          targetFeed.diaryId, targetFeed.liked, targetIndex);
+                  bookLogNotifier.handleFeedLike(
+                      targetFeed.diaryId, targetFeed.liked, targetIndex);
                 },
                 onMessage: (BuildContext ctx, int targetIndex) async {
                   final targetFeed = bookLog.feeds[targetIndex];
@@ -70,8 +97,8 @@ class BookRelatedFeedScreen extends ConsumerWidget {
 
                   int? commentCount = result?['commentCount'];
                   if (commentCount != null) {
-                    bookLogNotifier
-                        .changeCommentCount(targetFeed.diaryId, commentCount);
+                    bookLogNotifier.changeCommentCount(
+                        targetFeed.diaryId, commentCount);
                   }
                 },
                 onDelete: (BuildContext ctx, int targetIndex) async {
@@ -103,7 +130,8 @@ class BookRelatedFeedScreen extends ConsumerWidget {
                   String? content = result?['content'];
 
                   if (reportType == null || content == null) return;
-                  await bookLogNotifier.reportFeed(targetFeed.diaryId, reportType, content);
+                  await bookLogNotifier.reportFeed(
+                      targetFeed.diaryId, reportType, content);
                   if (!ctx.mounted) return;
                   await showModalBottomSheet(
                       context: ctx,
@@ -134,12 +162,12 @@ class BookRelatedFeedScreen extends ConsumerWidget {
                       extra: {
                         "memberId": targetFeed.memberId,
                         "request": DiaryUpdateRequest(
-                          content: targetFeed.content,
-                          images: targetFeed.images
-                              .map((e) => ImageRequest(
-                                  image: e.imageUrl, sequence: e.sequence))
-                              .toList())
-                });
+                            content: targetFeed.content,
+                            images: targetFeed.images
+                                .map((e) => ImageRequest(
+                                    image: e.imageUrl, sequence: e.sequence))
+                                .toList())
+                      });
                 },
               ),
             ),

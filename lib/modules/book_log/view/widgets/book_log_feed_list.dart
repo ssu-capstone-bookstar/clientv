@@ -22,7 +22,8 @@ class BookLogFeedList extends ConsumerStatefulWidget {
       required this.onProfile,
       required this.onScrap,
       required this.onUpdate,
-      required this.onBookTitle});
+      required this.onBookTitle,
+      this.onScrollChanged});
   final List<DiaryResponse> feeds;
   // final FollowInfoState followInfo;
   final int? initialIndex;
@@ -36,6 +37,7 @@ class BookLogFeedList extends ConsumerStatefulWidget {
   final Function(int) onScrap;
   final Function(int) onUpdate;
   final Function(int) onBookTitle;
+  final Function(bool)? onScrollChanged;
 
   @override
   ConsumerState<BookLogFeedList> createState() => BookLogFeedListState();
@@ -94,6 +96,14 @@ class BookLogFeedListState extends ConsumerState<BookLogFeedList> {
             .map((position) => position.index);
         if (visibleItems.isEmpty) {
           return;
+        }
+
+        /// 현재 보이는 아이템들 중 가장 첫번째 아이템의 인덱스
+        final firstVisibleIndex = visibleItems.reduce((a, b) => a < b ? a : b);
+        
+        // 스크롤 상태 콜백 호출 (3번째 아이템 이후부터 위로가기 버튼 표시)
+        if (widget.onScrollChanged != null) {
+          widget.onScrollChanged!(firstVisibleIndex >= 3);
         }
 
         /// 현재 보이는 아이템들 중 가장 마지막 아이템의 인덱스
