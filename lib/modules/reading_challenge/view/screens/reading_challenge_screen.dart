@@ -1,8 +1,10 @@
 import 'package:book/common/components/custom_list_view.dart';
+import 'package:book/common/theme/style/app_paddings.dart';
 import 'package:book/common/theme/style/app_texts.dart';
 import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
+import 'package:book/modules/reading_challenge/service/full_capture_service.dart';
 import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +15,14 @@ class ReadingChallengeScreen extends ConsumerStatefulWidget {
   const ReadingChallengeScreen({super.key});
 
   @override
-  ConsumerState<ReadingChallengeScreen> createState() => _ReadingChallengeScreenState();
+  ConsumerState<ReadingChallengeScreen> createState() =>
+      _ReadingChallengeScreenState();
 }
 
-class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen> {
+class _ReadingChallengeScreenState
+    extends ConsumerState<ReadingChallengeScreen> {
+  final GlobalKey _screenKey = GlobalKey();
+
   Future<void> _onRefresh() async {
     final notifier = ref.read(ongoingChallengeViewModelProvider.notifier);
     await notifier.fetchChallenges();
@@ -31,53 +37,68 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
       body: state.challenges.when(
         data: (items) {
           final totalCount = items.length;
-          final completedCount = items.where((e) => e.completed).length;
-          return CustomScrollView(
-            physics: items.isEmpty ? const NeverScrollableScrollPhysics() : null,
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    _buildHeaderSection(
-                      totalCount: totalCount,
-                      completedCount: completedCount,
-                      onCalender: () {
-                        /** 캘린더 */
-                        // TODO: 포인트 내역
-                      },
-                      onNew: () {
-                        /** 새로운책 읽기*/
-                        context.go(
-                          '/reading-challenge/search-new',
-                        );
-                      },
+          final completedCount =
+              items.where((element) => element.completed).length;
+          return RefreshIndicator(
+            onRefresh: _onRefresh,
+            child: SingleChildScrollView(
+              child: RepaintBoundary(
+                key: _screenKey,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        ColorName.b1,
+                        ColorName.p1,
+                      ],
+                      stops: [0.1, 1],
                     ),
-                    SizedBox(
-                      height: 35,
-                    ),
-                  ],
-                ),
-              ),
-              SliverFillRemaining(
-                child: RefreshIndicator(
-                  onRefresh: _onRefresh,
-                  child: _buildListSection(
-                    items: items,
-                    onTapItem: (item) {
-                      final uri = Uri(
-                        path: '/reading-challenge/detail/${item.book.id}',
-                        queryParameters: {
-                          'challengeId': item.challengeId.toString(),
-                          'totalPages': item.totalPages.toString(),
-                          'visibleDeleteChallenge': 'true',
+                  ),
+                  padding: AppPaddings.SCREEN_BODY_PADDING,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header
+                      _buildHeaderSection(
+                        totalCount: totalCount,
+                        completedCount: completedCount,
+                        onScreenShot: () {
+                          FullCaptureService.captureAndShow(
+                              context, _screenKey);
                         },
-                      );
-                      context.push(uri.toString());
-                    },
+                        onCalender: () {
+                          /** 캘린더 */
+                          // TODO: 포인트 내역
+                        },
+                        onNew: () {
+                          /** 새로운책 읽기*/
+                          context.go('/reading-challenge/search-new');
+                        },
+                      ),
+                      SizedBox(height: 35),
+                      // 리스트
+                      _buildListSection(
+                        items: items,
+                        onTapItem: (item) {
+                          final uri = Uri(
+                            path: '/reading-challenge/detail/${item.book.id}',
+                            queryParameters: {
+                              'challengeId': item.challengeId.toString(),
+                              'totalPages': item.totalPages.toString(),
+                              'visibleDeleteChallenge': 'true',
+                            },
+                          );
+                          context.push(uri.toString());
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           );
         },
         error: _error("리딩챌린지 정보를 가져오는데 실패했습니다."),
@@ -86,11 +107,14 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
     );
   }
 
-  Widget _buildHeaderSection(
-      {required int totalCount,
-      required int completedCount,
-      required Function onCalender,
-      required Function onNew}) {
+  // Header
+  Widget _buildHeaderSection({
+    required int totalCount,
+    required int completedCount,
+    required Function onScreenShot,
+    required Function onCalender,
+    required Function onNew,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,53 +124,47 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
           children: [
             Text.rich(
               TextSpan(
-                  text: "지금까지 ",
-                  style: AppTexts.b5.copyWith(color: ColorName.g2),
-                  children: [
-                    TextSpan(
-                      text: "$totalCount",
-                      style: AppTexts.h4.copyWith(color: ColorName.w1),
-                    ),
-                    TextSpan(
-                      text: "권",
-                      style: AppTexts.b5.copyWith(color: ColorName.w1),
-                    ),
-                    TextSpan(
-                      text: "의 책을 읽고",
-                    ),
-                  ]),
+                text: "지금까지 ",
+                style: AppTexts.b5.copyWith(color: ColorName.g2),
+                children: [
+                  TextSpan(
+                    text: "$totalCount",
+                    style: AppTexts.h4.copyWith(color: ColorName.w1),
+                  ),
+                  TextSpan(text: "권 읽고"),
+                ],
+              ),
             ),
-            Text.rich(TextSpan(
+            Text.rich(
+              TextSpan(
                 text: "$completedCount",
                 style: AppTexts.h4.copyWith(color: ColorName.w1),
                 children: [
                   TextSpan(
-                    text: "권",
-                    style: AppTexts.b5.copyWith(color: ColorName.w1),
-                  ),
-                  TextSpan(
-                    text: "을 완독했어요!",
+                    text: "권 완독했어요!",
                     style: AppTexts.b5.copyWith(color: ColorName.g2),
                   ),
-                ]))
+                ],
+              ),
+            ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              // GestureDetector(
-              //   onTap: () => onCalender(),
-              //   child: Assets.icons.icCalendar.svg(),
-              // ),
-              SizedBox(width: 8),
+        Row(
+          children: [
+            /** 캡처 */
+            if (totalCount > 0)
               GestureDetector(
-                onTap: () => onNew(),
-                child: Assets.icons.icPlus.svg(),
+                onTap: () => onScreenShot(),
+                child: Icon(Icons.crop_free, color: ColorName.w1),
               ),
-            ],
-          ),
-        )
+            SizedBox(width: 8),
+            /** 새로운 책 읽기 */
+            GestureDetector(
+              onTap: () => onNew(),
+              child: Assets.icons.icPlus.svg(),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -161,7 +179,7 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
           emptyText: '읽던 책이 없네요!',
           emptyTextStyle: AppTexts.b8.copyWith(color: ColorName.w1),
           isEmpty: items.isEmpty,
-          disableScroll: items.isEmpty,
+          disableScroll: true,
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];
@@ -231,13 +249,14 @@ class _ReadingChallengeScreenState extends ConsumerState<ReadingChallengeScreen>
                                 decoration: BoxDecoration(
                                   gradient: RadialGradient(
                                     colors: [
-                                      Color(0xFF775DFF), // 보라색 (#775DFF)
-                                      Color(0xFF000000), // 검정 (#000000)
+                                      ColorName.p1,
+                                      ColorName.b1,
                                     ],
                                     stops: [0.2, 1.0], // 20%에서 보라 → 100%에서 검정
                                     center: Alignment.bottomCenter, // 중심 고정
                                     radius: 0.85, // 퍼지는 정도 (1.0이면 꽉 채움)
                                   ),
+                                  color: ColorName.b1,
                                   border: Border.all(color: Color(0xFFA99AFF)),
                                   borderRadius: BorderRadius.circular(100),
                                 ),

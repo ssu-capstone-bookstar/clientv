@@ -50,6 +50,7 @@ class CustomListView extends StatelessWidget {
         : ListView.separated(
             scrollDirection: scrollDirection,
             controller: scrollController,
+            shrinkWrap: disableScroll,
             physics: disableScroll ? NeverScrollableScrollPhysics() : null,
             itemCount: itemCount,
             itemBuilder: itemBuilder,
