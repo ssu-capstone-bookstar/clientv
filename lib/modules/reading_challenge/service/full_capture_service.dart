@@ -5,7 +5,7 @@ import 'package:book/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gal/gal.dart';
 
 /// 전체 화면 UI를 캡처하는 서비스
 class FullCaptureService {
@@ -47,7 +47,7 @@ class FullCaptureService {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
-                   await ImageGallerySaver.saveImage(bytes, quality: 100, name: "bookstar_${DateTime.now().millisecondsSinceEpoch}");
+                   await Gal.putImageBytes(bytes, name: "bookstar_${DateTime.now().millisecondsSinceEpoch}");
                    if (context.mounted) context.pop();
                 },
                 child: Text("저장", style: AppTexts.b5.copyWith(color: ColorName.w1)),
