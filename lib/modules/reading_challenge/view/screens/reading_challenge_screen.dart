@@ -249,13 +249,14 @@ class _ReadingChallengeScreenState
                                 decoration: BoxDecoration(
                                   gradient: RadialGradient(
                                     colors: [
-                                      Color(0xFF775DFF), // 보라색 (#775DFF)
-                                      Color(0xFF000000), // 검정 (#000000)
+                                      ColorName.p1,
+                                      ColorName.b1,
                                     ],
                                     stops: [0.2, 1.0], // 20%에서 보라 → 100%에서 검정
                                     center: Alignment.bottomCenter, // 중심 고정
                                     radius: 0.85, // 퍼지는 정도 (1.0이면 꽉 채움)
                                   ),
+                                  color: ColorName.b1,
                                   border: Border.all(color: Color(0xFFA99AFF)),
                                   borderRadius: BorderRadius.circular(100),
                                 ),
