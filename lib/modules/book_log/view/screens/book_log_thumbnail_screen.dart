@@ -10,6 +10,7 @@ import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
 import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
 import 'package:book/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,13 +63,27 @@ class _BookLogThumbnailScreenState
                   fit: BoxFit.fill,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 24),
-                  child: Text(
-                    introduction,
-                    style: AppTexts.h4.copyWith(color: ColorName.w1),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                  child: GestureDetector(
+                    onTap: () async {
+                      await Clipboard.setData(ClipboardData(text: introduction));
+                      Navigator.of(context).pop();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('텍스트가 복사되었습니다'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      introduction,
+                      style: AppTexts.h4.copyWith(
+                          color: ColorName.w1, decoration: TextDecoration.none),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                    ),
                   ),
                 ),
               ],
