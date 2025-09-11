@@ -42,8 +42,6 @@ class _BookLogThumbnailScreenState
   }
 
   _onTapBubble(String introduction) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-
     showDialog(
       context: context,
       barrierColor: ColorName.b1.withAlpha(204),
@@ -51,8 +49,8 @@ class _BookLogThumbnailScreenState
         return Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: deviceWidth * 0.8,
-              maxHeight: deviceWidth * 0.8,
+              maxWidth: 300,
+              maxHeight: 400,
             ),
             child: Stack(
               alignment: Alignment.center,
