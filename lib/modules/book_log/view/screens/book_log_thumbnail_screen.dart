@@ -62,11 +62,12 @@ class _BookLogThumbnailScreenState
                   fit: BoxFit.fill,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 24),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                   child: Text(
                     introduction,
-                    style: AppTexts.h4.copyWith(color: ColorName.w1),
+                    style: AppTexts.h4.copyWith(
+                        color: ColorName.w1, decoration: TextDecoration.none),
                     textAlign: TextAlign.center,
                     softWrap: true,
                   ),

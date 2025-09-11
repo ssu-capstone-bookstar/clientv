@@ -11,7 +11,10 @@ class ProfileSpeechBubble extends StatelessWidget {
   final Function() onTap;
 
   const ProfileSpeechBubble(
-      {required this.text, this.width = 100, this.height = 38, required this.onTap});
+      {required this.text,
+      this.width = 100,
+      this.height = 38,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,10 @@ class ProfileSpeechBubble extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
                   displayText,
-                  style: AppTexts.b11.copyWith(color: ColorName.w1),
+                  style: AppTexts.b11.copyWith(
+                    color: ColorName.w1,
+                    decoration: TextDecoration.none,
+                  ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
