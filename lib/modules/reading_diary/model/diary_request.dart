@@ -1,4 +1,4 @@
-import 'package:book/common/models/image_request.dart';
+import 'package:bookstar/common/models/image_request.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'diary_request.freezed.dart';

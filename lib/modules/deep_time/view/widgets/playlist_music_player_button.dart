@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/modules/deep_time/view_model/playlist_view_model.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/modules/deep_time/view_model/playlist_view_model.dart';
 
 class MusicPlayerWidget extends ConsumerStatefulWidget {
   const MusicPlayerWidget({super.key});
@@ -115,7 +115,7 @@ class _MusicPlayerWidgetState extends ConsumerState<MusicPlayerWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        selectedMusic!.title,
+                        selectedMusic.title,
                         style: AppTexts.b9.copyWith(color: ColorName.w1),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

@@ -1,7 +1,7 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/book_log/view/widgets/report_text_field.dart';
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/book_log/view/widgets/report_text_field.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

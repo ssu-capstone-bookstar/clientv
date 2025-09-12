@@ -1,8 +1,8 @@
-import 'package:book/modules/book_log/view/widgets/follow_button.dart';
-import 'package:book/modules/profile/model/profile_with_counts.dart';
+import 'package:bookstar/modules/book_log/view/widgets/follow_button.dart';
+import 'package:bookstar/modules/profile/model/profile_with_counts.dart';
 import 'package:flutter/material.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'profile_stat.dart';
 import 'stat_divider.dart';
 import 'profile_edit_button.dart';

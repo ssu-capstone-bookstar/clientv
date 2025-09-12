@@ -1,4 +1,4 @@
-import 'package:book/modules/book/model/book_summary.dart';
+import 'package:bookstar/modules/book/model/book_summary.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'challenge_creation_response.freezed.dart';

@@ -1,9 +1,9 @@
-import 'package:book/common/models/response_form.dart';
-import 'package:book/infra/network/dio_client.dart';
-import 'package:book/modules/reading_challenge/model/challenge_creation_response.dart';
-import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
-import 'package:book/modules/reading_challenge/model/challenge_progress_response.dart';
-import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
+import 'package:bookstar/common/models/response_form.dart';
+import 'package:bookstar/infra/network/dio_client.dart';
+import 'package:bookstar/modules/reading_challenge/model/challenge_creation_response.dart';
+import 'package:bookstar/modules/reading_challenge/model/challenge_progress_request.dart';
+import 'package:bookstar/modules/reading_challenge/model/challenge_progress_response.dart';
+import 'package:bookstar/modules/reading_challenge/model/reading_challenge_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -12,10 +12,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/challenge_detail_response.dart';
 import '../model/challenge_response.dart';
 import '../model/book_rating_request.dart';
-import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
-import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:book/common/models/cursor_page_response.dart';
-import 'package:book/common/models/dual_cursor_page_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/common/models/cursor_page_response.dart';
+import 'package:bookstar/common/models/dual_cursor_page_response.dart';
 
 part 'reading_challenge_repository.g.dart';
 

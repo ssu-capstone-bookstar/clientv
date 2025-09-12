@@ -1,4 +1,4 @@
-import 'package:book/modules/follow/model/follow_response.dart';
+import 'package:bookstar/modules/follow/model/follow_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 

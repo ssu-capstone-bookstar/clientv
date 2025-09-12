@@ -1,4 +1,4 @@
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'report_request.freezed.dart';

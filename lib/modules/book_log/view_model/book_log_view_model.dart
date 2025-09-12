@@ -1,19 +1,19 @@
 import 'dart:io';
 
-import 'package:book/common/models/cursor_page_response.dart';
-import 'package:book/common/models/image_request.dart';
-import 'package:book/modules/book_log/state/book_log_state.dart';
-import 'package:book/modules/image/model/presigned_url_request.dart';
-import 'package:book/modules/image/repository/image_repository.dart';
-import 'package:book/modules/image/repository/s3_repository.dart';
-import 'package:book/modules/profile/model/profile_with_counts.dart';
-import 'package:book/modules/profile/repository/profile_repository.dart';
-import 'package:book/modules/profile/view_model/profile_view_model.dart';
-import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
-import 'package:book/modules/reading_diary/model/diary_update_request.dart';
-import 'package:book/modules/reading_diary/model/report_request.dart';
-import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:bookstar/common/models/cursor_page_response.dart';
+import 'package:bookstar/common/models/image_request.dart';
+import 'package:bookstar/modules/book_log/state/book_log_state.dart';
+import 'package:bookstar/modules/image/model/presigned_url_request.dart';
+import 'package:bookstar/modules/image/repository/image_repository.dart';
+import 'package:bookstar/modules/image/repository/s3_repository.dart';
+import 'package:bookstar/modules/profile/model/profile_with_counts.dart';
+import 'package:bookstar/modules/profile/repository/profile_repository.dart';
+import 'package:bookstar/modules/profile/view_model/profile_view_model.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
+import 'package:bookstar/modules/reading_diary/model/report_request.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter/material.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';

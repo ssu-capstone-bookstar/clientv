@@ -1,4 +1,4 @@
-import 'package:book/common/models/minimum_member_profile.dart';
+import 'package:bookstar/common/models/minimum_member_profile.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'diary_reply_response.freezed.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:book/modules/book_pick/model/like_book_state.dart';
-import 'package:book/modules/book_pick/repository/book_pick_repository.dart';
+import 'package:bookstar/modules/book_pick/model/like_book_state.dart';
+import 'package:bookstar/modules/book_pick/repository/book_pick_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../state/book_pick_state.dart';

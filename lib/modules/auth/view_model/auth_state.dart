@@ -1,4 +1,4 @@
-import 'package:book/modules/auth/model/auth_response.dart';
+import 'package:bookstar/modules/auth/model/auth_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'auth_view_model.dart';
 

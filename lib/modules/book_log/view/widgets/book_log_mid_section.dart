@@ -1,8 +1,8 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:book/modules/reading_challenge/model/challenge_response.dart';
+import 'package:bookstar/modules/reading_challenge/model/challenge_response.dart';
 import 'book_status_badge.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';

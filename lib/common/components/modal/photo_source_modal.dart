@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/assets.gen.dart';
 
 /// PhotoSourceModal
 ///

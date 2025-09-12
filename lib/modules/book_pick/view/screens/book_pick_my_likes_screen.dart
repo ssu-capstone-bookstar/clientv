@@ -1,5 +1,5 @@
-import 'package:book/common/components/custom_grid_view.dart';
-import 'package:book/modules/book_pick/view_model/book_pick_search_view_model.dart';
+import 'package:bookstar/common/components/custom_grid_view.dart';
+import 'package:bookstar/modules/book_pick/view_model/book_pick_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

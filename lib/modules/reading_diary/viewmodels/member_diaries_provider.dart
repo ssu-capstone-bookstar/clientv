@@ -1,6 +1,6 @@
-import 'package:book/common/models/cursor_page_response.dart';
-import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
-import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:bookstar/common/models/cursor_page_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final memberDiariesProvider =

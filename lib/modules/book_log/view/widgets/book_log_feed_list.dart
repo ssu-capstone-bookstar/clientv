@@ -1,8 +1,8 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/book_log/view/widgets/feed_card.dart';
-import 'package:book/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/book_log/view/widgets/feed_card.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';

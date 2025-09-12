@@ -1,4 +1,4 @@
-import 'package:book/gen/assets.gen.dart';
+import 'package:bookstar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../common/components/dialog/custom_dialog.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:book/modules/auth/model/policy.dart';
-import 'package:book/modules/auth/repository/policy_repository.dart';
+import 'package:bookstar/modules/auth/model/policy.dart';
+import 'package:bookstar/modules/auth/repository/policy_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../infra/storage/secure_storage.dart';

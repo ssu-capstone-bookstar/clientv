@@ -1,5 +1,5 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 /// 말풍선을 오버레이로 띄우는 위젯

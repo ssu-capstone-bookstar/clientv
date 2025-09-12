@@ -1,17 +1,17 @@
 import 'dart:io';
 
-import 'package:book/common/models/image_request.dart';
-import 'package:book/modules/image/model/presigned_url_request.dart';
-import 'package:book/modules/image/repository/image_repository.dart';
-import 'package:book/modules/image/repository/s3_repository.dart';
-import 'package:book/modules/reading_diary/model/diary_request.dart';
-import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:bookstar/common/models/image_request.dart';
+import 'package:bookstar/modules/image/model/presigned_url_request.dart';
+import 'package:bookstar/modules/image/repository/image_repository.dart';
+import 'package:bookstar/modules/image/repository/s3_repository.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_request.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/auth/view_model/auth_state.dart';
+import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/auth/view_model/auth_state.dart';
 
 part 'create_diary_view_model.g.dart';
 

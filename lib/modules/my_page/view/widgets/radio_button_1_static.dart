@@ -5,8 +5,8 @@
 //   description: '내용을 보여주세요',
 // )
 import 'package:flutter/material.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
 
 class RadioButton1Static extends StatelessWidget {
   final String title;

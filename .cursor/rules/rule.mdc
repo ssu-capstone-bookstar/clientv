@@ -13,7 +13,7 @@ alwaysApply: false
 
 파라미터에서 FollowRepositoryRef ref -> Ref ref 이렇게 작성해줘
 
-import 'package:book/common/theme/app_themes.dart'; 에 있는 AppTheme을 최대한 사용하기
+import 'package:bookstar/common/theme/app_themes.dart'; 에 있는 AppTheme을 최대한 사용하기
 
 ### 1. 기본 원칙 (The Core Principles)
 

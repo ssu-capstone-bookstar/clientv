@@ -1,12 +1,12 @@
-import 'package:book/common/components/form/book_with_checkbok.dart';
-import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/common/theme/style/app_paddings.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/components/form/book_with_checkbok.dart';
+import 'package:bookstar/common/components/button/cta_button_l1.dart';
+import 'package:bookstar/common/theme/style/app_paddings.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:book/modules/reading_challenge/state/abandoned_challenges_state.dart';
-import 'package:book/modules/reading_challenge/view_model/abandoned_challenges_view_model.dart';
+import 'package:bookstar/modules/reading_challenge/state/abandoned_challenges_state.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/abandoned_challenges_view_model.dart';
 
 class ChallengeQuitBooksScreen extends ConsumerStatefulWidget {
   const ChallengeQuitBooksScreen({super.key});

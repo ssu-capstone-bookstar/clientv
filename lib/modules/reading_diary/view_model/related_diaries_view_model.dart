@@ -1,6 +1,6 @@
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
-import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:book/modules/reading_diary/model/report_request.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/modules/reading_diary/model/report_request.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/dual_cursor_page_response.dart';

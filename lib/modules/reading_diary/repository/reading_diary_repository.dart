@@ -1,6 +1,6 @@
-import 'package:book/modules/reading_diary/model/diary_update_request.dart';
-import 'package:book/modules/reading_diary/model/report_request.dart';
-import 'package:book/modules/reading_diary/model/search_user_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
+import 'package:bookstar/modules/reading_diary/model/report_request.dart';
+import 'package:bookstar/modules/reading_diary/model/search_user_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';

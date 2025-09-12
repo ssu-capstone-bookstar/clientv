@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:book/modules/reading_diary/model/challenge_diary_thumbnail_response.dart';
-import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:bookstar/modules/reading_diary/model/challenge_diary_thumbnail_response.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../common/models/dual_cursor_page_response.dart';

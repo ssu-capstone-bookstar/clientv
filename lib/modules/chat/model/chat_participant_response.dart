@@ -1,4 +1,4 @@
-import 'package:book/modules/chat/model/chat_participant_item_response.dart';
+import 'package:bookstar/modules/chat/model/chat_participant_item_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'chat_participant_response.freezed.dart';

@@ -15,9 +15,9 @@
 // - enabled: 비활성화 여부 (bool, 기본값 true)
 
 import 'package:flutter/material.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
 
 class CheckBox2 extends StatelessWidget {
   final bool value;

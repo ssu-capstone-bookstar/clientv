@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 
 class Input1 extends StatefulWidget {
   final String? label;

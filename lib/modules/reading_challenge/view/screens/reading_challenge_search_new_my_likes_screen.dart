@@ -1,9 +1,9 @@
-import 'package:book/common/components/custom_grid_view.dart';
-import 'package:book/common/utils/overlay_utils.dart';
-import 'package:book/modules/book_pick/model/search_book_response.dart';
-import 'package:book/modules/book_pick/view/widgets/book_search_result_card.dart';
-import 'package:book/modules/book_pick/view_model/book_pick_search_view_model.dart';
-import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
+import 'package:bookstar/common/components/custom_grid_view.dart';
+import 'package:bookstar/common/utils/overlay_utils.dart';
+import 'package:bookstar/modules/book_pick/model/search_book_response.dart';
+import 'package:bookstar/modules/book_pick/view/widgets/book_search_result_card.dart';
+import 'package:bookstar/modules/book_pick/view_model/book_pick_search_view_model.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

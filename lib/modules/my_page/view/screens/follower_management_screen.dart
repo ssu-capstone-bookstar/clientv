@@ -1,13 +1,13 @@
-import 'package:book/common/theme/style/app_paddings.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/common/components/form/user_with_checkbox.dart';
-import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_paddings.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/common/components/form/user_with_checkbox.dart';
+import 'package:bookstar/common/components/button/cta_button_l1.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:book/modules/follow/model/dummy_follower.dart';
-import 'package:book/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
+import 'package:bookstar/modules/follow/model/dummy_follower.dart';
+import 'package:bookstar/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 
 class FollowerManagementScreen extends StatefulWidget {
   const FollowerManagementScreen({super.key});

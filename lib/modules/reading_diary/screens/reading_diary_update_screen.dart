@@ -1,7 +1,7 @@
-import 'package:book/common/models/image_request.dart';
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
-import 'package:book/modules/reading_diary/model/diary_update_request.dart';
-import 'package:book/modules/reading_diary/view/widgets/reading_diary_edit_form.dart';
+import 'package:bookstar/common/models/image_request.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
+import 'package:bookstar/modules/reading_diary/view/widgets/reading_diary_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

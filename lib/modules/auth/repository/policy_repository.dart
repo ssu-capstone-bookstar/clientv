@@ -1,4 +1,4 @@
-import 'package:book/modules/auth/model/policy.dart';
+import 'package:bookstar/modules/auth/model/policy.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';

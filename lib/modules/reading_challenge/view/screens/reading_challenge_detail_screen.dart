@@ -1,6 +1,6 @@
-import 'package:book/common/components/dialog/custom_dialog.dart';
-import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
-import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
+import 'package:bookstar/common/components/dialog/custom_dialog.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

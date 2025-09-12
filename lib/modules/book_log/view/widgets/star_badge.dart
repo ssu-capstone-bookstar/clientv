@@ -1,5 +1,5 @@
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

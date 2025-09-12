@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/common/components/modal/photo_source_modal.dart';
-import 'package:book/common/models/image_request.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/reading_diary/view/widgets/text_input_sheet.dart';
+import 'package:bookstar/common/components/button/cta_button_l1.dart';
+import 'package:bookstar/common/components/modal/photo_source_modal.dart';
+import 'package:bookstar/common/models/image_request.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/reading_diary/view/widgets/text_input_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

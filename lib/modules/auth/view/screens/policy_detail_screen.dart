@@ -1,6 +1,6 @@
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/auth/model/policy.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/auth/model/policy.dart';
 import 'package:flutter/material.dart' hide IconAlignment;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,9 +1,9 @@
-import 'package:book/modules/auth/view_model/auth_state.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/reading_challenge/view_model/current_challenge_view_model.dart';
-import 'package:book/modules/reading_diary/view/widgets/reading_diary_edit_form.dart';
-import 'package:book/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
-import 'package:book/modules/reading_diary/view_model/create_diary_view_model.dart';
+import 'package:bookstar/modules/auth/view_model/auth_state.dart';
+import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/current_challenge_view_model.dart';
+import 'package:bookstar/modules/reading_diary/view/widgets/reading_diary_edit_form.dart';
+import 'package:bookstar/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
+import 'package:bookstar/modules/reading_diary/view_model/create_diary_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

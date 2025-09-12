@@ -1,10 +1,10 @@
-import 'package:book/common/components/button/cta_button_s.dart';
-import 'package:book/common/components/dialog/custom_dialog.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/chat/model/chat_participant_item_response.dart';
-import 'package:book/modules/chat/view_model/chat_view_model.dart';
+import 'package:bookstar/common/components/button/cta_button_s.dart';
+import 'package:bookstar/common/components/dialog/custom_dialog.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/chat/model/chat_participant_item_response.dart';
+import 'package:bookstar/modules/chat/view_model/chat_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

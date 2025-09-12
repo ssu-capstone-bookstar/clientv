@@ -1,9 +1,9 @@
-import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/common/components/text_field/input_1.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/modules/book_pick/model/search_book_response.dart';
-import 'package:book/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
-import 'package:book/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
+import 'package:bookstar/common/components/button/cta_button_l1.dart';
+import 'package:bookstar/common/components/text_field/input_1.dart';
+import 'package:bookstar/common/theme/app_style.dart';
+import 'package:bookstar/modules/book_pick/model/search_book_response.dart';
+import 'package:bookstar/modules/reading_challenge/view/widgets/challenge_book_info_widget.dart';
+import 'package:bookstar/modules/reading_challenge/view/widgets/step_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

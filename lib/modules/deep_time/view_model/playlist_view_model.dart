@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:book/modules/deep_time/model/music_list_response.dart';
-import 'package:book/modules/deep_time/repository/deep_time_repository.dart';
+import 'package:bookstar/modules/deep_time/model/music_list_response.dart';
+import 'package:bookstar/modules/deep_time/repository/deep_time_repository.dart';
 
 part 'playlist_view_model.g.dart';
 

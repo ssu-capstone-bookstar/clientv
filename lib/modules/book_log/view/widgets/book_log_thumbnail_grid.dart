@@ -1,4 +1,4 @@
-import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_thumbnail_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

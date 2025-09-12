@@ -1,6 +1,6 @@
-import 'package:book/modules/profile/model/profile_with_counts.dart';
-import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:book/modules/reading_diary/model/diary_thumbnail_response.dart';
+import 'package:bookstar/modules/profile/model/profile_with_counts.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_thumbnail_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'book_log_state.freezed.dart';

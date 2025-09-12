@@ -1,4 +1,4 @@
-import 'package:book/modules/reading_diary/model/thumbnail.dart';
+import 'package:bookstar/modules/reading_diary/model/thumbnail.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'related_diary_thumbnail.freezed.dart';

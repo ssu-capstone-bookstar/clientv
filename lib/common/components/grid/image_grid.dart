@@ -1,5 +1,5 @@
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/app_style.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

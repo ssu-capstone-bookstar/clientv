@@ -1,15 +1,15 @@
-import 'package:book/modules/book_pick/model/search_book_response.dart';
-import 'package:book/modules/reading_challenge/model/challenge_progress_request.dart';
-import 'package:book/modules/reading_challenge/model/reading_challenge_request.dart';
-import 'package:book/modules/reading_challenge/model/book_rating_request.dart';
-import 'package:book/modules/reading_challenge/repository/reading_challenge_repository.dart';
-import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
+import 'package:bookstar/modules/book_pick/model/search_book_response.dart';
+import 'package:bookstar/modules/reading_challenge/model/challenge_progress_request.dart';
+import 'package:bookstar/modules/reading_challenge/model/reading_challenge_request.dart';
+import 'package:bookstar/modules/reading_challenge/model/book_rating_request.dart';
+import 'package:bookstar/modules/reading_challenge/repository/reading_challenge_repository.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/auth/view_model/auth_state.dart';
-import 'package:book/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
+import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/auth/view_model/auth_state.dart';
+import 'package:bookstar/modules/reading_challenge/view_model/get_challenges_by_member_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part 'current_challenge_view_model.freezed.dart';

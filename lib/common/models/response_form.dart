@@ -1,4 +1,4 @@
-import 'package:book/common/models/status_response.dart';
+import 'package:bookstar/common/models/status_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'response_form.freezed.dart';

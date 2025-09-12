@@ -1,14 +1,14 @@
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/modules/book_log/view/widgets/comment_list.dart';
-import 'package:book/modules/book_log/view/widgets/comment_text_field.dart';
-import 'package:book/modules/book_log/view/widgets/report_dialog.dart';
-import 'package:book/modules/book_log/view/widgets/report_success_dialog.dart';
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
-import 'package:book/modules/book_log/view_model/feed_comment_view_model.dart';
-import 'package:book/modules/diary_comment/model/diary_comment_response.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/modules/book_log/view/widgets/comment_list.dart';
+import 'package:bookstar/modules/book_log/view/widgets/comment_text_field.dart';
+import 'package:bookstar/modules/book_log/view/widgets/report_dialog.dart';
+import 'package:bookstar/modules/book_log/view/widgets/report_success_dialog.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/modules/book_log/view_model/feed_comment_view_model.dart';
+import 'package:bookstar/modules/diary_comment/model/diary_comment_response.dart';
 import 'package:flutter/material.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DiaryFeedCommentDialog extends ConsumerStatefulWidget {

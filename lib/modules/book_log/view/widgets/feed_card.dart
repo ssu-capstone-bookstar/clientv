@@ -1,15 +1,15 @@
-import 'package:book/common/components/button/menu_button.dart';
-import 'package:book/common/components/text/expandable_text.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/modules/auth/model/auth_response.dart';
-import 'package:book/modules/auth/view_model/auth_state.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/book_log/view/widgets/star_badge.dart';
-import 'package:book/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/common/components/button/menu_button.dart';
+import 'package:bookstar/common/components/text/expandable_text.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/modules/auth/model/auth_response.dart';
+import 'package:bookstar/modules/auth/view_model/auth_state.dart';
+import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/book_log/view/widgets/star_badge.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 

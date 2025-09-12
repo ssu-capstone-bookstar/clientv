@@ -1,4 +1,4 @@
-import 'package:book/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
+import 'package:bookstar/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

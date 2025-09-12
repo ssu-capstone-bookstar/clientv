@@ -1,4 +1,4 @@
-import 'package:book/modules/diary_comment/model/diary_comment_response.dart';
+import 'package:bookstar/modules/diary_comment/model/diary_comment_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'feed_comment_state.freezed.dart';

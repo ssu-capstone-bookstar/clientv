@@ -1,12 +1,12 @@
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:book/common/components/button/cta_button_l1.dart';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/modules/deep_time/view/widgets/playlist_music_player_button.dart';
-import 'package:book/modules/deep_time/view_model/playlist_view_model.dart';
-import 'package:book/modules/deep_time/model/music_list_response.dart';
+import 'package:bookstar/common/components/button/cta_button_l1.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/modules/deep_time/view/widgets/playlist_music_player_button.dart';
+import 'package:bookstar/modules/deep_time/view_model/playlist_view_model.dart';
+import 'package:bookstar/modules/deep_time/model/music_list_response.dart';
 import 'package:audio_session/audio_session.dart';
 
 Future<void> initAudioSession() async {
@@ -161,7 +161,7 @@ class PlaylistButton extends ConsumerWidget {
       builder: (context, ref, child) {
         return GestureDetector(
           onTap: () {
-            ref.read(selectedMusicProvider.notifier).state = music;
+            ref.read(selectedMusicProvider.notifier).select(music);
           },
           child: Container(
             width: MediaQuery.of(context).size.width,

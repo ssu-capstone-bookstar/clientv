@@ -1,4 +1,4 @@
-import 'package:book/modules/book_pick/model/like_book_response.dart';
+import 'package:bookstar/modules/book_pick/model/like_book_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'like_book_state.freezed.dart';

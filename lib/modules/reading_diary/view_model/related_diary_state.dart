@@ -1,5 +1,5 @@
-import 'package:book/modules/reading_diary/model/diary_response.dart';
-import 'package:book/modules/reading_diary/model/related_diary_sort.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
+import 'package:bookstar/modules/reading_diary/model/related_diary_sort.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../model/related_diary_thumbnail.dart';

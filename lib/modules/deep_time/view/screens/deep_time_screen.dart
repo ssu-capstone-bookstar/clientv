@@ -1,18 +1,18 @@
 import 'dart:ui';
-import 'package:book/common/theme/style/app_texts.dart';
-import 'package:book/common/utils/format_utils.dart';
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/deep_time/view/widgets/circular_timer.dart';
-import 'package:book/modules/deep_time/view/widgets/deep_time_completion_dialog.dart';
-import 'package:book/modules/deep_time/view/widgets/timer_character.dart';
-import 'package:book/modules/deep_time/view/widgets/timer_controls.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/common/utils/format_utils.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/deep_time/view/widgets/circular_timer.dart';
+import 'package:bookstar/modules/deep_time/view/widgets/deep_time_completion_dialog.dart';
+import 'package:bookstar/modules/deep_time/view/widgets/timer_character.dart';
+import 'package:bookstar/modules/deep_time/view/widgets/timer_controls.dart';
+import 'package:bookstar/modules/deep_time/view_model/deep_time_state.dart';
+import 'package:bookstar/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:book/modules/deep_time/view/widgets/playlist_button.dart';
-import 'package:book/modules/deep_time/view_model/playlist_view_model.dart';
+import 'package:bookstar/modules/deep_time/view/widgets/playlist_button.dart';
+import 'package:bookstar/modules/deep_time/view_model/playlist_view_model.dart';
 
 class DeepTimeScreen extends ConsumerStatefulWidget {
   const DeepTimeScreen({super.key});

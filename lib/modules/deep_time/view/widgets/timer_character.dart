@@ -1,5 +1,5 @@
-import 'package:book/gen/assets.gen.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
+import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:flutter/material.dart';
 
 class TimerCharacter extends StatelessWidget {

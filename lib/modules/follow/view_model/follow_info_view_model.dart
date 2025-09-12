@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:book/modules/auth/view_model/auth_state.dart';
-import 'package:book/modules/auth/view_model/auth_view_model.dart';
-import 'package:book/modules/book_log/view_model/book_log_view_model.dart';
-import 'package:book/modules/follow/repository/follow_repository.dart';
-import 'package:book/modules/follow/state/follow_info_state.dart';
-import 'package:book/modules/reading_diary/model/report_request.dart';
-import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:bookstar/modules/auth/view_model/auth_state.dart';
+import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
+import 'package:bookstar/modules/follow/repository/follow_repository.dart';
+import 'package:bookstar/modules/follow/state/follow_info_state.dart';
+import 'package:bookstar/modules/reading_diary/model/report_request.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'follow_info_view_model.g.dart';

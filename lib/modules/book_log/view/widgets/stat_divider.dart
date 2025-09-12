@@ -1,4 +1,4 @@
-import 'package:book/gen/colors.gen.dart';
+import 'package:bookstar/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 class StatDivider extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:book/modules/chat/model/chat_message_response.dart';
-import 'package:book/modules/chat/model/chat_participant_response.dart';
-import 'package:book/modules/chat/model/chat_room_response.dart';
+import 'package:bookstar/modules/chat/model/chat_message_response.dart';
+import 'package:bookstar/modules/chat/model/chat_participant_response.dart';
+import 'package:bookstar/modules/chat/model/chat_room_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'chat_state.freezed.dart';

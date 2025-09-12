@@ -1,4 +1,4 @@
-import 'package:book/modules/book/model/book_overview_response.dart';
+import 'package:bookstar/modules/book/model/book_overview_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'book_overview_state.freezed.dart';

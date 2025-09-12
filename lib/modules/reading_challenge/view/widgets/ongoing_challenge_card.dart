@@ -1,8 +1,8 @@
-import 'package:book/common/components/form/checkbox_1.dart';
-import 'package:book/common/theme/app_style.dart';
-import 'package:book/common/utils/overlay_utils.dart';
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/reading_challenge/model/challenge_response.dart';
+import 'package:bookstar/common/components/form/checkbox_1.dart';
+import 'package:bookstar/common/theme/app_style.dart';
+import 'package:bookstar/common/utils/overlay_utils.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/reading_challenge/model/challenge_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

@@ -1,6 +1,6 @@
-import 'package:book/modules/book_log/view/widgets/comment_card.dart';
-import 'package:book/modules/diary_comment/model/diary_comment_response.dart';
-import 'package:book/modules/diary_comment/model/diary_reply_response.dart';
+import 'package:bookstar/modules/book_log/view/widgets/comment_card.dart';
+import 'package:bookstar/modules/diary_comment/model/diary_comment_response.dart';
+import 'package:bookstar/modules/diary_comment/model/diary_reply_response.dart';
 import 'package:flutter/material.dart';
 
 class CommentList extends StatelessWidget {

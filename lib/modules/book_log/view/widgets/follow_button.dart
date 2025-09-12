@@ -1,4 +1,4 @@
-import 'package:book/common/theme/style/app_texts.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../gen/colors.gen.dart';

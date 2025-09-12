@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:book/modules/deep_time/model/timer_request.dart';
-import 'package:book/modules/deep_time/repository/deep_time_repository.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
+import 'package:bookstar/modules/deep_time/model/timer_request.dart';
+import 'package:bookstar/modules/deep_time/repository/deep_time_repository.dart';
+import 'package:bookstar/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'deep_time_view_model.g.dart';

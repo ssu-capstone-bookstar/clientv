@@ -1,6 +1,6 @@
-import 'package:book/modules/book_log/state/search_user_state.dart';
-import 'package:book/modules/book_log/view_model/search_user_history_storage.dart';
-import 'package:book/modules/reading_diary/repository/reading_diary_repository.dart';
+import 'package:bookstar/modules/book_log/state/search_user_state.dart';
+import 'package:bookstar/modules/book_log/view_model/search_user_history_storage.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

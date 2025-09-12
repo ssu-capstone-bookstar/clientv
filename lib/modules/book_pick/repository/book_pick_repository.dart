@@ -1,6 +1,6 @@
-import 'package:book/common/models/cursor_page_response.dart';
-import 'package:book/modules/book_pick/model/like_book_response.dart';
-import 'package:book/modules/book_pick/model/youtube_recommend_response.dart';
+import 'package:bookstar/common/models/cursor_page_response.dart';
+import 'package:bookstar/modules/book_pick/model/like_book_response.dart';
+import 'package:bookstar/modules/book_pick/model/youtube_recommend_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';

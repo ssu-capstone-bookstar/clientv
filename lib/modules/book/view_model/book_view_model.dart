@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:book/modules/book/model/book_rating_request.dart';
-import 'package:book/modules/book/state/book_overview_state.dart';
-import 'package:book/modules/book_pick/view_model/book_pick_view_model.dart';
+import 'package:bookstar/modules/book/model/book_rating_request.dart';
+import 'package:bookstar/modules/book/state/book_overview_state.dart';
+import 'package:bookstar/modules/book_pick/view_model/book_pick_view_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/book_overview_response.dart';

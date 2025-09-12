@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:book/gen/colors.gen.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_state.dart';
-import 'package:book/modules/deep_time/view_model/deep_time_view_model.dart';
+import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/deep_time/view_model/deep_time_state.dart';
+import 'package:bookstar/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
