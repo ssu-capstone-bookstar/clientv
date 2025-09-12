@@ -45,6 +45,9 @@ class _ReadingChallengeScreenState
               child: RepaintBoundary(
                 key: _screenKey,
                 child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height, // 🔴 추가: 최소 높이를 화면 높이로 설정
+                  ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
