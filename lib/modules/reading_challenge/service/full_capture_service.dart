@@ -32,11 +32,11 @@ class FullCaptureService {
   }
 
   /// 캡처한 이미지를 다이얼로그로 보여주는 헬퍼
-  static Future<void> showCapturedImage(
+  static Future<Map<String, dynamic>?> showCapturedImage(
       BuildContext context, Uint8List bytes) async {
-    if (bytes.isEmpty) return;
+    if (bytes.isEmpty) return null;
 
-    await showDialog(
+    return await showDialog(
       context: context,
       builder: (_) => Scaffold(
         backgroundColor: ColorName.b1,
@@ -50,7 +50,8 @@ class FullCaptureService {
                    await Gal.putImageBytes(bytes, name: "bookstar_${DateTime.now().millisecondsSinceEpoch}");
                    if (context.mounted) context.pop();
                 },
-                child: Text("저장", style: AppTexts.b5.copyWith(color: ColorName.w1)),
+                child: Text("저장",
+                    style: AppTexts.b5.copyWith(color: ColorName.w1)),
               ),
             )
           ],
@@ -63,11 +64,12 @@ class FullCaptureService {
   }
 
   /// 캡처 + 다이얼로그 표시
-  static Future<void> captureAndShow(
+  static Future<Map<String, dynamic>?> captureAndShow(
       BuildContext context, GlobalKey boundaryKey) async {
     final bytes = await captureWidget(boundaryKey);
     if (bytes != null && bytes.isNotEmpty && context.mounted) {
-      await showCapturedImage(context, bytes);
+      return await showCapturedImage(context, bytes);
     }
+    return null;
   }
 }

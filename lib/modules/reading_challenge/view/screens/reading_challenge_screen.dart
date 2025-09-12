@@ -5,6 +5,7 @@ import 'package:book/gen/assets.gen.dart';
 import 'package:book/gen/colors.gen.dart';
 import 'package:book/modules/reading_challenge/model/challenge_response.dart';
 import 'package:book/modules/reading_challenge/service/full_capture_service.dart';
+import 'package:book/modules/reading_challenge/view/widgets/save_success_image_dialog.dart';
 import 'package:book/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -68,9 +69,20 @@ class _ReadingChallengeScreenState
                       _buildHeaderSection(
                         totalCount: totalCount,
                         completedCount: completedCount,
-                        onScreenShot: () {
-                          FullCaptureService.captureAndShow(
+                        onScreenShot: () async {
+                          final result = await FullCaptureService.captureAndShow(
                               context, _screenKey);
+                              bool? isSaved = result?['isSaved'];
+                          if (isSaved == true && context.mounted) {
+                            await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: ColorName.b1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                            ),
+                            builder: (context) => SaveSuccessImageDialog());
+                          }
                         },
                         onCalender: () {
                           /** 캘린더 */
