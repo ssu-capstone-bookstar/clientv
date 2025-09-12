@@ -63,7 +63,7 @@ dependencies:
   
   # Bar
   flutter_xlider: ^3.5.0
-  image_gallery_saver: ^2.0.3
+  gal: ^2.3.0
 
 dev_dependencies:
   flutter_test:

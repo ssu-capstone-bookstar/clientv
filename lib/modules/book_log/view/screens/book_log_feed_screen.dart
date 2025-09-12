@@ -14,17 +14,26 @@ import 'package:go_router/go_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
-class BookLogFeedScreen extends ConsumerWidget {
+final bookLogFeedListKey2 = GlobalKey<BookLogFeedListState>();
+
+class BookLogFeedScreen extends ConsumerStatefulWidget {
   const BookLogFeedScreen(
       {super.key, required this.memberId, required this.initialIndex});
   final int memberId;
   final int initialIndex;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final bookLogAsync = ref.watch(bookLogViewModelProvider(memberId));
+  ConsumerState<BookLogFeedScreen> createState() => _BookLogFeedScreenState();
+}
+
+class _BookLogFeedScreenState extends ConsumerState<BookLogFeedScreen> {
+  bool _showScrollToTopButton = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final bookLogAsync = ref.watch(bookLogViewModelProvider(widget.memberId));
     final bookLogNotifier =
-        ref.read(bookLogViewModelProvider(memberId).notifier);
+        ref.read(bookLogViewModelProvider(widget.memberId).notifier);
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
     final userAsync = ref.watch(authViewModelProvider);
 
@@ -40,14 +49,32 @@ class BookLogFeedScreen extends ConsumerWidget {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
+              floatingActionButton: _showScrollToTopButton ? GestureDetector(
+                  onTap: () {
+                    bookLogFeedListKey2.currentState?.jumpToTop();
+                  },
+                  child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                          color: ColorName.g7,
+                          borderRadius: BorderRadiusDirectional.circular(16)),
+                      child:
+                          Icon(Icons.keyboard_arrow_up, color: ColorName.w1))) : null,
               body: BookLogFeedList(
+                key: bookLogFeedListKey2,
                 feeds: bookLog.feeds,
-                initialIndex: initialIndex,
+                initialIndex: widget.initialIndex,
                 onScrollBottom: () async {
                   await bookLogNotifier.refreshContentState();
                 },
                 onRefresh: () async {
-                  await bookLogNotifier.initState(memberId);
+                  await bookLogNotifier.initState(widget.memberId);
+                },
+                onScrollChanged: (showButton) {
+                  setState(() {
+                    _showScrollToTopButton = showButton;
+                  });
                 },
                 onLike: (int targetIndex) {
                   final targetFeed = bookLog.feeds[targetIndex];
