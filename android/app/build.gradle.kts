@@ -1,5 +1,6 @@
 import java.util.Properties
 import java.io.FileInputStream
+import java.io.File
 
 plugins {
     id("com.android.application")
@@ -15,6 +16,14 @@ val keystoreProperties = Properties().apply {
     val keystorePropertiesFile = rootProject.file("key.properties")
     if (keystorePropertiesFile.exists()) {
         load(FileInputStream(keystorePropertiesFile))
+    }
+}
+
+// Load environment variables from .env file
+val envProperties = Properties().apply {
+    val envFile = File("../../assets/env/.env")
+    if (envFile.exists()) {
+        load(FileInputStream(envFile))
     }
 }
 
@@ -45,6 +54,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // Add Kakao native key as manifest placeholder
+        manifestPlaceholders["KAKAO_NATIVE_KEY"] = envProperties["KAKAO_NATIVE_KEY"] ?: ""
     }
 
     signingConfigs {
