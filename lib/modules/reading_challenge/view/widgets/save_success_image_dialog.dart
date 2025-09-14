@@ -23,12 +23,24 @@ class SaveSuccessImageDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("스크린샷이 저장되었어요",
-                style: AppTexts.b5.copyWith(color: ColorName.w1)),
+                style: AppTexts.b3.copyWith(color: ColorName.w1)),
             SizedBox(
               height: 6,
             ),
-            Text("본인의 독서습관을 주변에 공유할 수 있어요!",
-                style: AppTexts.b10.copyWith(color: ColorName.g1)),
+            Text.rich(TextSpan(children: [
+              TextSpan(
+                  text: "#북스타",
+                  style: AppTexts.b6.copyWith(color: ColorName.p1)),
+              TextSpan(
+                  text: " 해시태그와 함께 ",
+                  style: AppTexts.b6.copyWith(color: ColorName.g1)),
+              TextSpan(
+                  text: "인스타그램",
+                  style: AppTexts.b6.copyWith(color: ColorName.p1)),
+              TextSpan(
+                  text: "에 게시하고 나의 꾸준한 독서 습관을 공유해 보세요!",
+                  style: AppTexts.b6.copyWith(color: ColorName.g1)),
+            ])),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 40),
               child: Center(child: Assets.icons.icPointShopChar2.svg()),

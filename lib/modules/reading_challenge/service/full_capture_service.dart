@@ -47,8 +47,10 @@ class FullCaptureService {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () async {
-                   await Gal.putImageBytes(bytes, name: "bookstar_${DateTime.now().millisecondsSinceEpoch}");
-                   if (context.mounted) context.pop();
+                  await Gal.putImageBytes(bytes,
+                      name:
+                          "bookstar_${DateTime.now().millisecondsSinceEpoch}");
+                  if (context.mounted) context.pop({'isSaved': true});
                 },
                 child: Text("저장",
                     style: AppTexts.b5.copyWith(color: ColorName.w1)),

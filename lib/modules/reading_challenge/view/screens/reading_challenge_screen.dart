@@ -47,7 +47,9 @@ class _ReadingChallengeScreenState
                 key: _screenKey,
                 child: Container(
                   constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height, // 🔴 추가: 최소 높이를 화면 높이로 설정
+                    minHeight: MediaQuery.of(context)
+                        .size
+                        .height, // 🔴 추가: 최소 높이를 화면 높이로 설정
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -70,18 +72,21 @@ class _ReadingChallengeScreenState
                         totalCount: totalCount,
                         completedCount: completedCount,
                         onScreenShot: () async {
-                          final result = await FullCaptureService.captureAndShow(
-                              context, _screenKey);
-                              bool? isSaved = result?['isSaved'];
+                          final result =
+                              await FullCaptureService.captureAndShow(
+                                  context, _screenKey);
+                          bool? isSaved = result?['isSaved'];
                           if (isSaved == true && context.mounted) {
                             await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: ColorName.b1,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                            ),
-                            builder: (context) => SaveSuccessImageDialog());
+                                context: context,
+                                isScrollControlled: true,
+                                barrierColor:
+                                    ColorName.b1.withValues(alpha: 0.5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20)),
+                                ),
+                                builder: (context) => SaveSuccessImageDialog());
                           }
                         },
                         onCalender: () {
