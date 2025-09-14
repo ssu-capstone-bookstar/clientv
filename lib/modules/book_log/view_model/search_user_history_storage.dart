@@ -1,51 +1,38 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum ActionType {
-  /** 검색 */
-  search,
-  /** 검색 후, 피드 진입 */
-  feed,
-}
-
 class UserSearchHistory {
-  final String keyword;
-  final int? memberId;
-  final ActionType actionType;
+  int memberId;
+  String nickName;
 
-  UserSearchHistory({required this.keyword, this.memberId, required this.actionType});
+  UserSearchHistory({required this.memberId, required this.nickName});
 
   // 객체 → Map
   Map<String, dynamic> toJson() {
     return {
-      'keyword': keyword,
       'memberId': memberId,
-      'actionType': actionType.name, // enum → String
+      'nickName': nickName,
     };
   }
 
   // Map → 객체
   factory UserSearchHistory.fromJson(Map<String, dynamic> json) {
     return UserSearchHistory(
-      keyword: json['keyword'],
       memberId: json['memberId'],
-      actionType: ActionType.values.firstWhere(
-        (e) => e.name == json['actionType'],
-      ),
+      nickName: json['nickName'],
     );
   }
 }
 
 class SearchUserHistoryStorage {
-  static const _key = 'user_search_history';
+  static const _key = 'book_log_user_search_history';
 
   /// 저장
-  static Future<void> saveHistory(String keyword, int? memberId, ActionType actionType) async {
+  static Future<void> saveHistory({required int memberId, required String nickName}) async {
     final prefs = await SharedPreferences.getInstance();
     final history = await loadHistories();
-    final isExist =
-        history.any((h) => h.keyword == keyword && h.memberId == memberId && h.actionType == actionType);
-    final newItem = UserSearchHistory(keyword: keyword, memberId: memberId, actionType: actionType);
+    final isExist = history.any((h) => h.memberId == memberId);
+    final newItem = UserSearchHistory(memberId: memberId, nickName: nickName);
     if (isExist) return;
     final newHistory = [newItem, ...history];
     final jsonList = newHistory.map((h) => h.toJson()).toList();
@@ -65,12 +52,10 @@ class SearchUserHistoryStorage {
   }
 
   /// 삭제
-  static Future<void> removeHistory(String keyword, int? memberId, ActionType actionType) async {
+  static Future<void> removeHistory({required int memberId}) async {
     final prefs = await SharedPreferences.getInstance();
     final history = await loadHistories();
-    final newHistory = history
-        .where((h) => h.keyword != keyword && h.memberId != memberId && h.actionType != actionType)
-        .toList();
+    final newHistory = history.where((h) => h.memberId != memberId).toList();
     final jsonList = newHistory.map((h) => h.toJson()).toList();
     final jsonString = jsonEncode(jsonList);
     await prefs.setString(_key, jsonString);

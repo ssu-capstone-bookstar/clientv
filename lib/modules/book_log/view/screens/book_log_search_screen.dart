@@ -25,8 +25,6 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _disabledSearch = false;
-  /** 한번이라도 검색했다면 */
-  bool _isSearched = false;
 
   @override
   void initState() {
@@ -38,12 +36,6 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
 
   void _searchUser() async {
     if (_textController.text.isNotEmpty) {
-      if (!_isSearched) {
-        setState(() {
-          _isSearched = true;
-        });
-      }
-
       final notifier = ref.read(searchUserViewModelProvider.notifier);
       setState(() {
         _disabledSearch = true;
@@ -65,24 +57,14 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
   }
 
   Future<void> _onTapHistory(UserSearchHistory history) async {
-    switch (history.actionType) {
-      case ActionType.search:
-        _textController.text = history.keyword;
-        _searchUser();
-        break;
-      case ActionType.feed:
-        if (history.memberId == null || !mounted) return;
-        context.push("/book-log/thumbnail/${history.memberId}");
-        break;
-    }
+    context.push("/book-log/thumbnail/${history.memberId}");
   }
 
   Future<void> _onRemoveHistory(UserSearchHistory history) async {
     final notifier = ref.read(searchUserViewModelProvider.notifier);
     await notifier.removeHistory(
-        keyword: history.keyword,
-        memberId: history.memberId,
-        actionType: history.actionType);
+      memberId: history.memberId,
+    );
     setState(() {});
   }
 
@@ -96,13 +78,26 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(searchUserViewModelProvider);
+    final isNotEmptyText = _textController.text.isNotEmpty;
 
     return GestureDetector(
       onTap: _unFocus,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("유저 검색"),
+          title: const Text("책로그"),
+          backgroundColor: ColorName.dim3,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                _unFocus();
+                context.pop();
+              },
+            ),
+          ],
         ),
+        backgroundColor: ColorName.dim3.withValues(alpha: 0.7),
         body: Padding(
           padding: AppPaddings.SCREEN_BODY_PADDING,
           child: Column(
@@ -122,7 +117,7 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
               Expanded(
                   child: state.when(
                       data: (data) {
-                        return _isSearched
+                        return isNotEmptyText
                             ? _buildUserList(
                                 users: data.users,
                                 onTapUser: _onTapUser,
@@ -213,45 +208,39 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
       {required List<UserSearchHistory> history,
       required Function(UserSearchHistory) onTapHistory,
       required Function(UserSearchHistory) onRemoveHistory}) {
-    return CustomListView(
-      emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
-      emptyText: '검색 기록이 없습니다.',
-      isEmpty: history.isEmpty,
-      itemCount: history.length,
-      itemBuilder: (context, index) {
-        final item = history[index];
-        return ListTile(
-          title: GestureDetector(
-            onTap: () => onTapHistory(item),
-            child: Expanded(
-                child: item.actionType == ActionType.feed
-                    ? Text(
-                        "@${item.keyword}",
-                        style: AppTexts.b5.copyWith(color: ColorName.w1),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    : Row(
-                        children: [
-                          Assets.images.icSearchUncolored3x.image(scale: 3),
-                          SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              item.keyword,
-                              style: AppTexts.b5.copyWith(color: ColorName.g3),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )
-                        ],
-                      )),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("최근 검색", style: AppTexts.b10.copyWith(color: ColorName.g1)),
+        Expanded(
+          child: CustomListView(
+            emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+            emptyText: '검색 기록이 없습니다.',
+            isEmpty: history.isEmpty,
+            itemCount: history.length,
+            itemBuilder: (context, index) {
+              final item = history[index];
+              return ListTile(
+                title: GestureDetector(
+                  onTap: () => onTapHistory(item),
+                  child: Expanded(
+                      child: Text(
+                    "@${item.nickName}",
+                    style: AppTexts.b5.copyWith(color: ColorName.w1),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+                ),
+                trailing: GestureDetector(
+                  child: Icon(Icons.clear),
+                  onTap: () => onRemoveHistory(item),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => SizedBox.shrink(),
           ),
-          trailing: GestureDetector(
-            child: Icon(Icons.clear),
-            onTap: () => onRemoveHistory(item),
-          ),
-        );
-      },
+        ),
+      ],
     );
   }
 

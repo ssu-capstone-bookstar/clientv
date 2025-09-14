@@ -1,4 +1,3 @@
-import 'package:bookstar/modules/book_log/view/screens/book_log_search_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_related_feed_screen.dart';
 import 'package:bookstar/modules/book_pick/view/screens/book_pick_my_likes_screen.dart';
@@ -135,13 +134,6 @@ GoRouter router(Ref ref) {
                 path: '/book-log',
                 builder: (context, state) => BookLogScreen(),
                 routes: [
-                  GoRoute(
-                    path: 'search',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      return const BookLogSearchScreen();
-                    },
-                  ),
                   GoRoute(
                     path: 'thumbnail/:memberId',
                     parentNavigatorKey: rootNavigatorKey,

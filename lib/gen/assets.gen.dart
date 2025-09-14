@@ -239,6 +239,10 @@ class $AssetsIconsGen {
   SvgGenImage get icPentool03 =>
       const SvgGenImage('assets/icons/ic_pentool03.svg');
 
+  /// File path: assets/icons/ic_people_search_one.svg
+  SvgGenImage get icPeopleSearchOne =>
+      const SvgGenImage('assets/icons/ic_people_search_one.svg');
+
   /// File path: assets/icons/ic_person_count.svg
   SvgGenImage get icPersonCount =>
       const SvgGenImage('assets/icons/ic_person_count.svg');
@@ -380,6 +384,7 @@ class $AssetsIconsGen {
     icPencil,
     icPencil01,
     icPentool03,
+    icPeopleSearchOne,
     icPersonCount,
     icPhotoLibrary,
     icPlaylistPlay,
