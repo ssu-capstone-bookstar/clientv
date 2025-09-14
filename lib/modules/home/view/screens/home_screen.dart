@@ -71,7 +71,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 20),
-                child: Assets.images.icSearchColored3x.image(scale: 3),
+                child:
+                    Assets.icons.icPeopleSearchOne.svg(width: 24, height: 24),
               ),
             ),
           ];
@@ -125,10 +126,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
     switch (currentRoute) {
+      // case "/book-log":
+      //   {
+      //     return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
+      //   }
       case "/book-log":
-        {
-          return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
-        }
       case "/deep-time":
       case "/reading-challenge":
         {
@@ -141,17 +143,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  BoxDecoration? _getBottomNavigationBarDecoration({required String currentRoute}) {
+  BoxDecoration? _getBottomNavigationBarDecoration(
+      {required String currentRoute}) {
     switch (currentRoute) {
       case "/reading-challenge":
         {
           return BoxDecoration(
-              color: ColorName.g7,
+            color: ColorName.g7,
           );
         }
       default:
         {
           return null;
+        }
+    }
+  }
+
+  bool _getUseAppBar({required String currentRoute}) {
+    switch (currentRoute) {
+      case "/book-log":
+        {
+          return false;
+        }
+      default:
+        {
+          return true;
         }
     }
   }
@@ -178,9 +194,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BoxDecoration? bottomNavigationBarDecoration =
         _getBottomNavigationBarDecoration(currentRoute: currentRoute);
 
+    bool useAppBar = _getUseAppBar(currentRoute: currentRoute);
+
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
-      appBar: HomeAppBar(
+      appBar: useAppBar ? HomeAppBar(
         backgroundColor: appBarBackgroundColor,
         flexibleSpace: appBarFlexibleSpace,
         currentIndex: navigationShell.currentIndex,
@@ -188,7 +206,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
         },
         actions: appBarActions,
-      ),
+      ) : null,
       body: Container(
         decoration: bodyDecoration,
         child: Padding(

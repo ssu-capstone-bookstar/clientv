@@ -19,7 +19,6 @@ class SearchUserViewModel extends _$SearchUserViewModel {
   }
 
   Future<SearchUserState> searchUsers(String nickName) async {
-    await SearchUserHistoryStorage.saveHistory(nickName, null,ActionType.search);
     final prev = state.value ?? SearchUserState();
     state = AsyncValue.loading();
     final response =
@@ -32,15 +31,15 @@ class SearchUserViewModel extends _$SearchUserViewModel {
 
   Future<SearchUserState> onTapUser({required String nickName, required int memberId}) async {
     final prev = state.value ?? SearchUserState();
-    await SearchUserHistoryStorage.saveHistory(nickName, memberId, ActionType.feed);
+    await SearchUserHistoryStorage.saveHistory(memberId: memberId, nickName: nickName);
     final history = await SearchUserHistoryStorage.loadHistories();
     state = AsyncValue.data(prev.copyWith(history: history));
     return state.value ?? SearchUserState();
   }
 
-  Future<void> removeHistory({required String keyword, required int? memberId, required ActionType actionType}) async {
+  Future<void> removeHistory({required int memberId}) async {
     final prev = state.value ?? SearchUserState();
-    await SearchUserHistoryStorage.removeHistory(keyword, memberId, actionType);
+    await SearchUserHistoryStorage.removeHistory(memberId: memberId);
     final history = await SearchUserHistoryStorage.loadHistories();
     state = AsyncValue.data(prev.copyWith(history: history));
   }

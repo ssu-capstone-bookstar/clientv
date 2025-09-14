@@ -1,6 +1,9 @@
 import 'package:bookstar/common/models/image_request.dart';
+import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/assets.gen.dart';
 import 'package:bookstar/modules/auth/view_model/auth_state.dart';
 import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/book_log/view/screens/book_log_search_screen.dart';
 import 'package:bookstar/modules/book_log/view/widgets/book_log_feed_list.dart';
 import 'package:bookstar/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
 import 'package:bookstar/modules/book_log/view/widgets/diary_feed_delete_dialog.dart';
@@ -43,6 +46,27 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
         return bookLogAsync.when(
           data: (bookLog) => followInfoAsync.when(
             data: (followInfo) => Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: Text("책로그", style: AppTexts.b5),
+                actions: [
+                  GestureDetector(
+                    onTap: () {
+                      // context.push('/book-log/search');
+                      showDialog(
+                        context: context,
+                        barrierColor: ColorName.dim3.withValues(alpha: 0.7),
+                        builder: (context) => BookLogSearchScreen(),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child:
+                          Assets.icons.icPeopleSearchOne.svg(width: 24, height: 24),
+                    ),
+                  ),
+                ],
+              ),
               floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
