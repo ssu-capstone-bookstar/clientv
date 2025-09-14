@@ -70,3 +70,6 @@ ios/Keys.xcconfig
 .fvmrc
 
 .vscode
+
+.claude/**
+docs/**
