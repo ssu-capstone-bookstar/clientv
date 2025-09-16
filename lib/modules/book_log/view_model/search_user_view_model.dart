@@ -1,8 +1,6 @@
-import 'package:bookstar/modules/book_log/state/search_user_state.dart';
-import 'package:bookstar/modules/book_log/view_model/search_user_history_storage.dart';
-import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:bookstar/modules/book_log/state/search_user_state.dart';
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 
 part 'search_user_view_model.g.dart';
 
@@ -13,34 +11,45 @@ class SearchUserViewModel extends _$SearchUserViewModel {
   @override
   Future<SearchUserState> build() async {
     _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
-    final history = await SearchUserHistoryStorage.loadHistories();
-    state = AsyncValue.data(SearchUserState(history: history));
+    return await _initState();
+  }
+
+  Future<SearchUserState> _initState() async {
+    await _refreshHistory();
     return state.value ?? SearchUserState();
+  }
+
+  Future<void> _refreshHistory() async {
+final response = await _readingDiaryRepository.getSearchUsersHistories();
+    final history = response.data.data;
+    final hasNext = response.data.hasNext;
+    final nextCursor = response.data.nextCursor;
+    state = AsyncValue.data(SearchUserState(
+        history: history, historyHasNext: hasNext, nextCursor: nextCursor));
   }
 
   Future<SearchUserState> searchUsers(String nickName) async {
     final prev = state.value ?? SearchUserState();
     state = AsyncValue.loading();
     final response =
-        await _readingDiaryRepository.getSearchUsersNickName(nickName);
+        await _readingDiaryRepository.getSearchUsers(nickName: nickName);
     final users = response.data;
 
     state = AsyncValue.data(prev.copyWith(users: users));
     return state.value ?? SearchUserState();
   }
 
-  Future<SearchUserState> onTapUser({required String nickName, required int memberId}) async {
-    final prev = state.value ?? SearchUserState();
-    await SearchUserHistoryStorage.saveHistory(memberId: memberId, nickName: nickName);
-    final history = await SearchUserHistoryStorage.loadHistories();
-    state = AsyncValue.data(prev.copyWith(history: history));
+  Future<SearchUserState> onTapUser(
+      {required int memberId}) async {
+    await _readingDiaryRepository.postSearchUsersHistories(
+        searchedMemberId: memberId);
+    await _refreshHistory();
     return state.value ?? SearchUserState();
   }
 
   Future<void> removeHistory({required int memberId}) async {
-    final prev = state.value ?? SearchUserState();
-    await SearchUserHistoryStorage.removeHistory(memberId: memberId);
-    final history = await SearchUserHistoryStorage.loadHistories();
-    state = AsyncValue.data(prev.copyWith(history: history));
+    await _readingDiaryRepository.deleteSearchUsersHistories(
+        searchedMemberId: memberId);
+    await _refreshHistory();
   }
 }

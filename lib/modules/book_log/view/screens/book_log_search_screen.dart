@@ -3,9 +3,9 @@ import 'package:bookstar/common/components/text_field/search_text_field.dart';
 import 'package:bookstar/common/theme/style/app_paddings.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:bookstar/gen/assets.gen.dart';
-import 'package:bookstar/modules/book_log/view_model/search_user_history_storage.dart';
 import 'package:bookstar/modules/book_log/view_model/search_user_view_model.dart';
 import 'package:bookstar/modules/reading_diary/model/search_user_response.dart';
+import 'package:bookstar/modules/reading_diary/model/user_search_history_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,19 +51,19 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
 
   void _onTapUser(SearchUserResponse user) async {
     final notifier = ref.read(searchUserViewModelProvider.notifier);
-    await notifier.onTapUser(nickName: user.nickName, memberId: user.memberId);
+    await notifier.onTapUser(memberId: user.memberId);
     if (!mounted) return;
     context.push("/book-log/thumbnail/${user.memberId}");
   }
 
-  Future<void> _onTapHistory(UserSearchHistory history) async {
-    context.push("/book-log/thumbnail/${history.memberId}");
+  Future<void> _onTapHistory(int memberId) async {
+    context.push("/book-log/thumbnail/${memberId}");
   }
 
-  Future<void> _onRemoveHistory(UserSearchHistory history) async {
+  Future<void> _onRemoveHistory(int memberId) async {
     final notifier = ref.read(searchUserViewModelProvider.notifier);
     await notifier.removeHistory(
-      memberId: history.memberId,
+      memberId: memberId,
     );
     setState(() {});
   }
@@ -205,9 +205,9 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
   }
 
   Widget _buildSearchHistory(
-      {required List<UserSearchHistory> history,
-      required Function(UserSearchHistory) onTapHistory,
-      required Function(UserSearchHistory) onRemoveHistory}) {
+      {required List<UserSearchHistoryResponse> history,
+      required Function(int) onTapHistory,
+      required Function(int) onRemoveHistory}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -222,10 +222,10 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
               final item = history[index];
               return ListTile(
                 title: GestureDetector(
-                  onTap: () => onTapHistory(item),
+                  onTap: () => onTapHistory(item.searchedMemberId),
                   child: Expanded(
                       child: Text(
-                    "@${item.nickName}",
+                    "@${item.searchedMemberNickName}",
                     style: AppTexts.b5.copyWith(color: ColorName.w1),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -233,7 +233,7 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
                 ),
                 trailing: GestureDetector(
                   child: Icon(Icons.clear),
-                  onTap: () => onRemoveHistory(item),
+                  onTap: () => onRemoveHistory(item.searchedMemberId),
                 ),
               );
             },
