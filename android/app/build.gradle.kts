@@ -19,14 +19,6 @@ val keystoreProperties = Properties().apply {
     }
 }
 
-// Load environment variables from .env file
-val envProperties = Properties().apply {
-    val envFile = File("../../assets/env/.env")
-    if (envFile.exists()) {
-        load(FileInputStream(envFile))
-    }
-}
-
 android {
     namespace = "com.company.bookstar"
     compileSdk = flutter.compileSdkVersion
@@ -56,7 +48,7 @@ android {
         versionName = flutter.versionName
         
         // Add Kakao native key as manifest placeholder
-        manifestPlaceholders["KAKAO_NATIVE_KEY"] = envProperties["KAKAO_NATIVE_KEY"] ?: ""
+        manifestPlaceholders["KAKAO_NATIVE_KEY"] = keystoreProperties["KAKAO_NATIVE_KEY"] ?: ""
     }
 
     signingConfigs {
