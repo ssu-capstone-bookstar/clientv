@@ -8,6 +8,7 @@ import 'package:bookstar/modules/reading_challenge/view/screens/reading_challeng
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_screen.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:bookstar/modules/reading_diary/screens/reading_diary_update_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -51,6 +52,7 @@ part 'router.g.dart';
 GoRouter router(Ref ref) {
   final rootNavigatorKey = GlobalKey<NavigatorState>();
   final authState = ValueNotifier<AsyncValue<AuthState>>(const AsyncLoading());
+  final analytics = FirebaseAnalytics.instance;
 
   ref
     ..onDispose(authState.dispose)
@@ -64,6 +66,9 @@ GoRouter router(Ref ref) {
     initialLocation: '/login',
     navigatorKey: rootNavigatorKey,
     refreshListenable: authState,
+    observers: [
+      FirebaseAnalyticsObserver(analytics: analytics),
+    ],
     redirect: (context, state) {
       final isKakaoRedirect = state.uri.scheme.startsWith("kakao");
       if (isKakaoRedirect) {
@@ -345,7 +350,10 @@ GoRouter router(Ref ref) {
                           state.uri.queryParameters['challengeId'] ?? '0');
                       final totalPages = int.parse(
                           state.uri.queryParameters['totalPages'] ?? '0');
-                      final visibleDeleteChallenge = (state.uri.queryParameters['visibleDeleteChallenge'] ?? 'false') == 'true';
+                      final visibleDeleteChallenge = (state.uri
+                                  .queryParameters['visibleDeleteChallenge'] ??
+                              'false') ==
+                          'true';
                       return ReadingChallengeDetailScreen(
                         bookId: bookId,
                         challengeId: challengeId,
