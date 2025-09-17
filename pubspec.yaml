@@ -46,6 +46,8 @@ dependencies:
   # Firebase
   firebase_auth:
   firebase_core:
+  firebase_analytics:
+
   sleek_circular_slider: ^2.0.1
   flutter_rating_bar: ^4.0.1
   collection: ^1.19.1
