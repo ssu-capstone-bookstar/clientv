@@ -52,7 +52,6 @@ class _BookLogScreenState extends ConsumerState<BookLogScreen> {
                 actions: [
                   GestureDetector(
                     onTap: () {
-                      // context.push('/book-log/search');
                       showDialog(
                         context: context,
                         barrierColor: ColorName.dim3.withValues(alpha: 0.7),

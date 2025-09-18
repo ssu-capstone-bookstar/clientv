@@ -1,6 +1,7 @@
 import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:bookstar/modules/reading_diary/model/report_request.dart';
 import 'package:bookstar/modules/reading_diary/model/search_user_response.dart';
+import 'package:bookstar/modules/reading_diary/model/user_search_history_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
@@ -127,8 +128,7 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
-
-@GET('/books/{bookId}/reading-diaries/feed')
+  @GET('/books/{bookId}/reading-diaries/feed')
   Future<ResponseForm<DualCursorPageResponse<DiaryResponse>>>
       getRelatedDiariesFeed(
     @Path('bookId') int bookId, {
@@ -180,7 +180,28 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
-  @GET('/search/users/{nickName}')
-  Future<ResponseForm<List<SearchUserResponse>>> getSearchUsersNickName(
-    @Path('nickName') String nickName);
+  /// 유저 검색
+  @GET('/search/users')
+  Future<ResponseForm<List<SearchUserResponse>>> getSearchUsers(
+      {@Query('nickName') required String nickName});
+
+  /// 유저 검색 기록 조회(커서 기반)
+  @GET('/search/users/histories')
+  Future<ResponseForm<CursorPageResponse<UserSearchHistoryResponse>>>
+      getSearchUsersHistories({
+    @Query('cursorId') int? cursorId,
+    @Query('pageSize') int? size = 20,
+  });
+
+  /// 특정 유저 검색 기록 삭제
+  @DELETE('/search/users/histories')
+  Future<ResponseForm<void>> deleteSearchUsersHistories({
+    @Query('searchedMemberId') int? searchedMemberId,
+  });
+
+  /// 유저 검색 기록 저장
+  @POST('/search/users/histories')
+  Future<ResponseForm<void>> postSearchUsersHistories({
+    @Query('searchedMemberId') int? searchedMemberId,
+  });
 }

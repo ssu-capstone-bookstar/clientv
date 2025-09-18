@@ -192,8 +192,7 @@ class _ReadingChallengeScreenState
   Widget _buildListSection(
       {required List<ChallengeResponse> items,
       required Function(ChallengeResponse) onTapItem}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 20),
+    return Flexible(
       child: CustomListView(
           emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
           emptyText: '읽던 책이 없네요!',
@@ -203,7 +202,7 @@ class _ReadingChallengeScreenState
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index];
-
+      
             double angle = 0;
             switch (index % 3) {
               case 0:
@@ -216,7 +215,7 @@ class _ReadingChallengeScreenState
                 angle = -0.2;
                 break;
             }
-
+      
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GestureDetector(

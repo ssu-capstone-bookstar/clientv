@@ -868,18 +868,18 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<List<SearchUserResponse>>> getSearchUsersNickName(
-    String nickName,
-  ) async {
+  Future<ResponseForm<List<SearchUserResponse>>> getSearchUsers({
+    required String nickName,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'nickName': nickName};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ResponseForm<List<SearchUserResponse>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/search/users/${nickName}',
+            '/search/users',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -898,6 +898,114 @@ class _ReadingDiaryRepository implements ReadingDiaryRepository {
                 .toList()
             : List.empty(),
       );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<CursorPageResponse<UserSearchHistoryResponse>>>
+      getSearchUsersHistories({int? cursorId, int? size = 20}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'cursorId': cursorId,
+      r'pageSize': size,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<
+        ResponseForm<CursorPageResponse<UserSearchHistoryResponse>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search/users/histories',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(
+            baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+          ),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<CursorPageResponse<UserSearchHistoryResponse>> _value;
+    try {
+      _value =
+          ResponseForm<CursorPageResponse<UserSearchHistoryResponse>>.fromJson(
+        _result.data!,
+        (json) => CursorPageResponse<UserSearchHistoryResponse>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => UserSearchHistoryResponse.fromJson(
+            json as Map<String, dynamic>,
+          ),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<void>> deleteSearchUsersHistories({
+    int? searchedMemberId,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'searchedMemberId': searchedMemberId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<void>>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search/users/histories',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<void> _value;
+    try {
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResponseForm<void>> postSearchUsersHistories({
+    int? searchedMemberId,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'searchedMemberId': searchedMemberId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ResponseForm<void>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search/users/histories',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResponseForm<void> _value;
+    try {
+      _value = ResponseForm<void>.fromJson(_result.data!, (json) => () {}());
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
