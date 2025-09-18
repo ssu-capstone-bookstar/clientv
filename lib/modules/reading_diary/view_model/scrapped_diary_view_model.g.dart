@@ -47,11 +47,11 @@ final getScrappedDiaryFeedsAsyncProvider =
 typedef GetScrappedDiaryFeedsAsyncRef
     = AutoDisposeFutureProviderRef<List<ScrappedDiaryFeed>>;
 String _$scrappedDiaryViewModelHash() =>
-    r'fb041e5c54c0535f66571b8b5d3bc454693d0e94';
+    r'631f62d8f031086322069cd0517e5e05bbab3f92';
 
 /// See also [ScrappedDiaryViewModel].
 @ProviderFor(ScrappedDiaryViewModel)
-final scrappedDiaryViewModelProvider = AutoDisposeNotifierProvider<
+final scrappedDiaryViewModelProvider = AutoDisposeAsyncNotifierProvider<
     ScrappedDiaryViewModel, ScrappedDiaryState>.internal(
   ScrappedDiaryViewModel.new,
   name: r'scrappedDiaryViewModelProvider',
@@ -62,6 +62,6 @@ final scrappedDiaryViewModelProvider = AutoDisposeNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$ScrappedDiaryViewModel = AutoDisposeNotifier<ScrappedDiaryState>;
+typedef _$ScrappedDiaryViewModel = AutoDisposeAsyncNotifier<ScrappedDiaryState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

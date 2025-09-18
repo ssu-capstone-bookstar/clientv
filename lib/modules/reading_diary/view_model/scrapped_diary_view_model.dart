@@ -23,64 +23,59 @@ Future<List<ScrappedDiaryFeed>> getScrappedDiaryFeedsAsync(Ref ref) async {
 
 @riverpod
 class ScrappedDiaryViewModel extends _$ScrappedDiaryViewModel {
+  late final ScrappedDiaryRepository _scrappedDiaryRepository;
+
   @override
-  ScrappedDiaryState build() {
-    return const ScrappedDiaryState();
+  FutureOr<ScrappedDiaryState> build() async  {
+      _scrappedDiaryRepository = ref.read(scrappedDiaryRepositoryProvider);
+    return await initState();
   }
 
-  Future<void> initState() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-    try {
-      final repository = ref.read(scrappedDiaryRepositoryProvider);
-      final response = await repository.getScrappedDiaryThumbnails(size: 20);
+  Future<ScrappedDiaryState> initState() async {
+    final prev = state.value ?? ScrappedDiaryState();
+      final response = await _scrappedDiaryRepository.getScrappedDiaryThumbnails(size: 20);
 
-      state = state.copyWith(
+      state = AsyncValue.data(prev.copyWith(
         thumbnails: response.data.data,
         nextCursor: response.data.nextCursor,
         hasNext: response.data.hasNext,
         isLoading: false,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.toString(),
-      );
-    }
+      ));
+    return state.value ?? ScrappedDiaryState();
   }
 
   Future<void> refreshState() async {
-    if (!state.hasNext) return;
-
+    final prev = state.value ?? ScrappedDiaryState();
+    if (!prev.hasNext) return;
     try {
       final repository = ref.read(scrappedDiaryRepositoryProvider);
       final response = await repository.getScrappedDiaryThumbnails(
-        cursorId: state.nextCursor,
+        cursorId: prev.nextCursor,
         size: 20,
       );
 
-      state = state.copyWith(
-        thumbnails: [...state.thumbnails, ...response.data.data],
+      state = AsyncValue.data(prev.copyWith(
+        thumbnails: [...prev.thumbnails, ...response.data.data],
         nextCursor: response.data.nextCursor,
         hasNext: response.data.hasNext,
-      );
+      ));
     } catch (e) {
-      state = state.copyWith(errorMessage: e.toString());
+      state = AsyncValue.error(e, StackTrace.current);
     }
   }
 
   Future<void> deleteScrappedDiary(int diaryId) async {
+    final prev = state.value ?? ScrappedDiaryState();
     try {
-      final repository = ref.read(scrappedDiaryRepositoryProvider);
-      await repository.deleteScrappedDiary(diaryId);
-
+      await _scrappedDiaryRepository.deleteScrappedDiary(diaryId);
       // 삭제된 다이어리를 상태에서 제거
-      state = state.copyWith(
-        thumbnails: state.thumbnails
+      state = AsyncValue.data(prev.copyWith(
+        thumbnails: prev.thumbnails
             .where((thumbnail) => thumbnail.diaryId != diaryId)
             .toList(),
-      );
+      ));
     } catch (e) {
-      state = state.copyWith(errorMessage: e.toString());
+      state = AsyncValue.error(e, StackTrace.current);
     }
   }
 }
