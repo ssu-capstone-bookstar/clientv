@@ -222,39 +222,42 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
             itemCount: history.length,
             itemBuilder: (context, index) {
               final item = history[index];
-              return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 46,
-                      height: 46,
-                      child: CircleAvatar(
-                        backgroundColor: ColorName.g7,
-                        backgroundImage:
-                            item.searchedMemberProfileImage.isNotEmpty
-                                ? CachedNetworkImageProvider(
-                                    item.searchedMemberProfileImage,
-                                  )
-                                : null,
-                        child: item.searchedMemberProfileImage.isEmpty
-                            ? const Icon(Icons.person,
-                                size: 32, color: ColorName.g5)
-                            : null,
+              return GestureDetector(
+                onTap: () => onTapHistory(item.searchedMemberId),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 46,
+                        height: 46,
+                        child: CircleAvatar(
+                          backgroundColor: ColorName.g7,
+                          backgroundImage:
+                              item.searchedMemberProfileImage.isNotEmpty
+                                  ? NetworkImage(
+                                      item.searchedMemberProfileImage,
+                                    )
+                                  : null,
+                          child: item.searchedMemberProfileImage.isEmpty
+                              ? const Icon(Icons.person,
+                                  size: 32, color: ColorName.g5)
+                              : null,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                        child: Text(
-                      "@${item.searchedMemberNickName}",
-                      style: AppTexts.b5.copyWith(color: ColorName.w1),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )),
-                    GestureDetector(
-                      child: Icon(Icons.clear),
-                      onTap: () => onRemoveHistory(item.searchedMemberId),
-                    )
-                  ]);
+                      const SizedBox(width: 20),
+                      Expanded(
+                          child: Text(
+                        "@${item.searchedMemberNickName}",
+                        style: AppTexts.b5.copyWith(color: ColorName.w1),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                      GestureDetector(
+                        child: Icon(Icons.clear),
+                        onTap: () => onRemoveHistory(item.searchedMemberId),
+                      )
+                    ]),
+              );
             },
             separatorBuilder: (context, index) => SizedBox.shrink(),
           ),
