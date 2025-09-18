@@ -47,7 +47,7 @@ final getScrappedDiaryFeedsAsyncProvider =
 typedef GetScrappedDiaryFeedsAsyncRef
     = AutoDisposeFutureProviderRef<List<ScrappedDiaryFeed>>;
 String _$scrappedDiaryViewModelHash() =>
-    r'631f62d8f031086322069cd0517e5e05bbab3f92';
+    r'4450a1cf61b9a4b2baceb4272a3ba1a08447854a';
 
 /// See also [ScrappedDiaryViewModel].
 @ProviderFor(ScrappedDiaryViewModel)

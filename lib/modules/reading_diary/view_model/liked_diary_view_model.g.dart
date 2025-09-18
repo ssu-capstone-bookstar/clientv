@@ -46,12 +46,12 @@ final getLikedDiaryFeedsAsyncProvider =
 typedef GetLikedDiaryFeedsAsyncRef
     = AutoDisposeFutureProviderRef<List<LikedDiaryFeed>>;
 String _$likedDiaryViewModelHash() =>
-    r'079a18144833caa3f8041ceb6c84e30e26fad792';
+    r'164bc352fd9ccda997bf3027468cbf6105114069';
 
 /// See also [LikedDiaryViewModel].
 @ProviderFor(LikedDiaryViewModel)
-final likedDiaryViewModelProvider =
-    AutoDisposeNotifierProvider<LikedDiaryViewModel, LikedDiaryState>.internal(
+final likedDiaryViewModelProvider = AutoDisposeAsyncNotifierProvider<
+    LikedDiaryViewModel, LikedDiaryState>.internal(
   LikedDiaryViewModel.new,
   name: r'likedDiaryViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -61,6 +61,6 @@ final likedDiaryViewModelProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$LikedDiaryViewModel = AutoDisposeNotifier<LikedDiaryState>;
+typedef _$LikedDiaryViewModel = AutoDisposeAsyncNotifier<LikedDiaryState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
