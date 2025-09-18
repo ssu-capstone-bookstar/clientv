@@ -1,3 +1,4 @@
+import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/components/button/menu_button.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:bookstar/gen/assets.gen.dart';
@@ -17,28 +18,53 @@ import 'package:go_router/go_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
-class BookLogThumbnailScreen extends ConsumerStatefulWidget {
+class BookLogThumbnailScreen extends BaseScreen {
   const BookLogThumbnailScreen(
       {super.key, required this.memberId, this.requiredRefresh = false});
   final int memberId;
   final bool requiredRefresh;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
-    return _BookLogThumbnailScreenState();
-  }
+  BaseScreenState<BookLogThumbnailScreen> createState() =>
+      _BookLogThumbnailScreenState();
 }
 
 class _BookLogThumbnailScreenState
-    extends ConsumerState<BookLogThumbnailScreen> {
+    extends BaseScreenState<BookLogThumbnailScreen> {
+  @override
+  bool enableRefreshIndicator() => true;
+
+  @override
+  int getListTotalItemCount() =>
+      ref
+          .watch(bookLogViewModelProvider(widget.memberId))
+          .value
+          ?.thumbnails
+          .length ??
+      0;
+
   @override
   initState() {
     super.initState();
     if (widget.requiredRefresh) {
-      ref
-          .read(bookLogViewModelProvider(widget.memberId).notifier)
-          .initState(widget.memberId);
+      final bookLogNotifier =
+          ref.read(bookLogViewModelProvider(widget.memberId).notifier);
+      bookLogNotifier.initState(widget.memberId);
     }
+  }
+
+  @override
+  Future<void> onRefresh() async {
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(widget.memberId).notifier);
+    await bookLogNotifier.initState(widget.memberId);
+  }
+
+  @override
+  Future<void> onBottomReached() async {
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(widget.memberId).notifier);
+    await bookLogNotifier.refreshContentState();
   }
 
   _onTapBubble(String introduction) {
@@ -65,7 +91,8 @@ class _BookLogThumbnailScreenState
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                   child: GestureDetector(
                     onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: introduction));
+                      await Clipboard.setData(
+                          ClipboardData(text: introduction));
                       Navigator.of(context).pop();
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -93,7 +120,74 @@ class _BookLogThumbnailScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    final user = ref.watch(authViewModelProvider).value;
+    final isMyProfile =
+        (user is AuthSuccess && user.memberId == widget.memberId);
+    final followInfoNotifier = ref.read(followInfoViewModelProvider.notifier);
+
+    return AppBar(
+        title: const Text('책로그'),
+        leading: IconButton(
+          icon: const BackButton(),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        actions: [
+          if (!isMyProfile)
+            MenuButton(
+              maxWidth: 90,
+              menus: [
+                MenuButtonItem(
+                  value: "report",
+                  label: "신고하기",
+                )
+              ],
+              icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
+              onSelected: (value) async {
+                switch (value) {
+                  case "report":
+                    final result = await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: ColorName.b1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        builder: (context) => ReportDialog());
+
+                    if (result == null) return;
+                    ReportType? reportType = result?['reportType'];
+                    String? content = result?['content'];
+
+                    if (reportType == null || content == null) return;
+                    followInfoNotifier.reportMember(
+                        widget.memberId, reportType, content);
+                    if (!context.mounted) return;
+                    await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: ColorName.b1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        builder: (context) => ReportSuccessDialog());
+                    break;
+                  default:
+                }
+              },
+            ),
+          if (isMyProfile)
+            IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () => context.push('/book-log/my-page'),
+            )
+        ]);
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(widget.memberId));
     final bookLogNotifier =
         ref.read(bookLogViewModelProvider(widget.memberId).notifier);
@@ -107,119 +201,49 @@ class _BookLogThumbnailScreenState
             .contains(widget.memberId) ??
         false;
 
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text('책로그'),
-          leading: IconButton(
-            icon: const BackButton(),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          actions: [
-            if (!isMyProfile)
-              MenuButton(
-                maxWidth: 90,
-                menus: [
-                  MenuButtonItem(
-                    value: "report",
-                    label: "신고하기",
-                  )
-                ],
-                icon: Assets.icons.icMenuMore.svg(color: ColorName.g3),
-                onSelected: (value) async {
-                  switch (value) {
-                    case "report":
-                      final result = await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: ColorName.b1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          builder: (context) => ReportDialog());
-
-                      if (result == null) return;
-                      ReportType? reportType = result?['reportType'];
-                      String? content = result?['content'];
-
-                      if (reportType == null || content == null) return;
-                      followInfoNotifier.reportMember(
-                          widget.memberId, reportType, content);
-                      if (!context.mounted) return;
-                      await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: ColorName.b1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          builder: (context) => ReportSuccessDialog());
-                      break;
-                    default:
-                  }
-                },
-              ),
-            if (isMyProfile)
-              IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => context.push('/book-log/my-page'),
-              )
-          ]),
-      body: bookLogAsync.when(
-          data: (bookLog) => Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 20),
-                      BookLogProfile(
-                        profile: bookLog.profile,
-                        isMyProfile: isMyProfile,
-                        isFollowing: isFollowing,
-                        onEdit: () => context.push('/book-log/profile'),
-                        onFollow: () async {
-                          if (isFollowing) {
-                            await followInfoNotifier.unfollow(widget.memberId);
-                          } else {
-                            await followInfoNotifier.follow(widget.memberId);
-                          }
-                          await bookLogNotifier.refreshFollowState();
-                        },
-                        profileImageKey: GlobalKey(),
-                      ),
-                      const SizedBox(height: 20),
-                      BookLogThumbnailGrid(
-                          thumbnails: bookLog.thumbnails,
-                          onScrollBottom: () async {
-                            await bookLogNotifier.refreshContentState();
-                          },
-                          onRefresh: () async {
-                            await bookLogNotifier.initState(widget.memberId);
-                          },
-                          onClickThumbnail: (int targetIndex) {
-                            context.push('/book-log/feed/${widget.memberId}',
-                                extra: {
-                                  'index': targetIndex,
-                                });
-                          }),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: ProfileSpeechBubble(
-                        text: bookLog.profile.introduction,
-                        onTap: () =>
-                            _onTapBubble(bookLog.profile.introduction)),
-                  ),
-                ],
-              ),
-          error: _error("북로그 정보를 불러올 수 없습니다."),
-          loading: _loading),
-    );
+    return bookLogAsync.when(
+        data: (bookLog) => Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    BookLogProfile(
+                      profile: bookLog.profile,
+                      isMyProfile: isMyProfile,
+                      isFollowing: isFollowing,
+                      onEdit: () => context.push('/book-log/profile'),
+                      onFollow: () async {
+                        if (isFollowing) {
+                          await followInfoNotifier.unfollow(widget.memberId);
+                        } else {
+                          await followInfoNotifier.follow(widget.memberId);
+                        }
+                        await bookLogNotifier.refreshFollowState();
+                      },
+                      profileImageKey: GlobalKey(),
+                    ),
+                    const SizedBox(height: 20),
+                    BookLogThumbnailGrid(
+                        thumbnails: bookLog.thumbnails,
+                        scrollController: scrollController,
+                        onClickThumbnail: (int targetIndex) {
+                          context.push('/book-log/feed/${widget.memberId}',
+                              extra: {
+                                'index': targetIndex,
+                              });
+                        }),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ProfileSpeechBubble(
+                      text: bookLog.profile.introduction,
+                      onTap: () => _onTapBubble(bookLog.profile.introduction)),
+                ),
+              ],
+            ),
+        error: error("북로그 정보를 불러올 수 없습니다."),
+        loading: loading);
   }
-
-  Widget _loading() => const Center(child: CircularProgressIndicator());
-  Widget Function(Object, StackTrace) _error(String msg) => (e, st) =>
-      Center(child: Text(msg, style: TextStyle(color: ColorName.g3)));
 }
