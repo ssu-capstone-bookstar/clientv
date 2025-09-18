@@ -259,7 +259,9 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
                     ]),
               );
             },
-            separatorBuilder: (context, index) => SizedBox.shrink(),
+            separatorBuilder: (context, index) => SizedBox(
+              height: 20,
+            ),
           ),
         ),
       ],
