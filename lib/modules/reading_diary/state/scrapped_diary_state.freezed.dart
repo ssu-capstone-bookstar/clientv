@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ScrappedDiaryState {
   List<ScrappedDiaryThumbnailResponse> get thumbnails;
+  List<ScrappedDiaryFeedResponse> get feeds;
   int? get nextCursor;
   bool get hasNext;
   bool get isLoading;
@@ -35,6 +36,7 @@ mixin _$ScrappedDiaryState {
             other is ScrappedDiaryState &&
             const DeepCollectionEquality()
                 .equals(other.thumbnails, thumbnails) &&
+            const DeepCollectionEquality().equals(other.feeds, feeds) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
@@ -48,6 +50,7 @@ mixin _$ScrappedDiaryState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(thumbnails),
+      const DeepCollectionEquality().hash(feeds),
       nextCursor,
       hasNext,
       isLoading,
@@ -55,7 +58,7 @@ mixin _$ScrappedDiaryState {
 
   @override
   String toString() {
-    return 'ScrappedDiaryState(thumbnails: $thumbnails, nextCursor: $nextCursor, hasNext: $hasNext, isLoading: $isLoading, errorMessage: $errorMessage)';
+    return 'ScrappedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, hasNext: $hasNext, isLoading: $isLoading, errorMessage: $errorMessage)';
   }
 }
 
@@ -67,6 +70,7 @@ abstract mixin class $ScrappedDiaryStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<ScrappedDiaryThumbnailResponse> thumbnails,
+      List<ScrappedDiaryFeedResponse> feeds,
       int? nextCursor,
       bool hasNext,
       bool isLoading,
@@ -87,6 +91,7 @@ class _$ScrappedDiaryStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? thumbnails = null,
+    Object? feeds = null,
     Object? nextCursor = freezed,
     Object? hasNext = null,
     Object? isLoading = null,
@@ -97,6 +102,10 @@ class _$ScrappedDiaryStateCopyWithImpl<$Res>
           ? _self.thumbnails
           : thumbnails // ignore: cast_nullable_to_non_nullable
               as List<ScrappedDiaryThumbnailResponse>,
+      feeds: null == feeds
+          ? _self.feeds
+          : feeds // ignore: cast_nullable_to_non_nullable
+              as List<ScrappedDiaryFeedResponse>,
       nextCursor: freezed == nextCursor
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable
@@ -212,6 +221,7 @@ extension ScrappedDiaryStatePatterns on ScrappedDiaryState {
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
             List<ScrappedDiaryThumbnailResponse> thumbnails,
+            List<ScrappedDiaryFeedResponse> feeds,
             int? nextCursor,
             bool hasNext,
             bool isLoading,
@@ -222,8 +232,8 @@ extension ScrappedDiaryStatePatterns on ScrappedDiaryState {
     final _that = this;
     switch (_that) {
       case _ScrappedDiaryState() when $default != null:
-        return $default(_that.thumbnails, _that.nextCursor, _that.hasNext,
-            _that.isLoading, _that.errorMessage);
+        return $default(_that.thumbnails, _that.feeds, _that.nextCursor,
+            _that.hasNext, _that.isLoading, _that.errorMessage);
       case _:
         return orElse();
     }
@@ -244,15 +254,20 @@ extension ScrappedDiaryStatePatterns on ScrappedDiaryState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<ScrappedDiaryThumbnailResponse> thumbnails,
-            int? nextCursor, bool hasNext, bool isLoading, String? errorMessage)
+    TResult Function(
+            List<ScrappedDiaryThumbnailResponse> thumbnails,
+            List<ScrappedDiaryFeedResponse> feeds,
+            int? nextCursor,
+            bool hasNext,
+            bool isLoading,
+            String? errorMessage)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ScrappedDiaryState():
-        return $default(_that.thumbnails, _that.nextCursor, _that.hasNext,
-            _that.isLoading, _that.errorMessage);
+        return $default(_that.thumbnails, _that.feeds, _that.nextCursor,
+            _that.hasNext, _that.isLoading, _that.errorMessage);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -274,6 +289,7 @@ extension ScrappedDiaryStatePatterns on ScrappedDiaryState {
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
             List<ScrappedDiaryThumbnailResponse> thumbnails,
+            List<ScrappedDiaryFeedResponse> feeds,
             int? nextCursor,
             bool hasNext,
             bool isLoading,
@@ -283,8 +299,8 @@ extension ScrappedDiaryStatePatterns on ScrappedDiaryState {
     final _that = this;
     switch (_that) {
       case _ScrappedDiaryState() when $default != null:
-        return $default(_that.thumbnails, _that.nextCursor, _that.hasNext,
-            _that.isLoading, _that.errorMessage);
+        return $default(_that.thumbnails, _that.feeds, _that.nextCursor,
+            _that.hasNext, _that.isLoading, _that.errorMessage);
       case _:
         return null;
     }
@@ -296,11 +312,13 @@ extension ScrappedDiaryStatePatterns on ScrappedDiaryState {
 class _ScrappedDiaryState implements ScrappedDiaryState {
   const _ScrappedDiaryState(
       {final List<ScrappedDiaryThumbnailResponse> thumbnails = const [],
+      final List<ScrappedDiaryFeedResponse> feeds = const [],
       this.nextCursor,
       this.hasNext = true,
       this.isLoading = false,
       this.errorMessage})
-      : _thumbnails = thumbnails;
+      : _thumbnails = thumbnails,
+        _feeds = feeds;
 
   final List<ScrappedDiaryThumbnailResponse> _thumbnails;
   @override
@@ -309,6 +327,15 @@ class _ScrappedDiaryState implements ScrappedDiaryState {
     if (_thumbnails is EqualUnmodifiableListView) return _thumbnails;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_thumbnails);
+  }
+
+  final List<ScrappedDiaryFeedResponse> _feeds;
+  @override
+  @JsonKey()
+  List<ScrappedDiaryFeedResponse> get feeds {
+    if (_feeds is EqualUnmodifiableListView) return _feeds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_feeds);
   }
 
   @override
@@ -337,6 +364,7 @@ class _ScrappedDiaryState implements ScrappedDiaryState {
             other is _ScrappedDiaryState &&
             const DeepCollectionEquality()
                 .equals(other._thumbnails, _thumbnails) &&
+            const DeepCollectionEquality().equals(other._feeds, _feeds) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
@@ -350,6 +378,7 @@ class _ScrappedDiaryState implements ScrappedDiaryState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_thumbnails),
+      const DeepCollectionEquality().hash(_feeds),
       nextCursor,
       hasNext,
       isLoading,
@@ -357,7 +386,7 @@ class _ScrappedDiaryState implements ScrappedDiaryState {
 
   @override
   String toString() {
-    return 'ScrappedDiaryState(thumbnails: $thumbnails, nextCursor: $nextCursor, hasNext: $hasNext, isLoading: $isLoading, errorMessage: $errorMessage)';
+    return 'ScrappedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, hasNext: $hasNext, isLoading: $isLoading, errorMessage: $errorMessage)';
   }
 }
 
@@ -371,6 +400,7 @@ abstract mixin class _$ScrappedDiaryStateCopyWith<$Res>
   @useResult
   $Res call(
       {List<ScrappedDiaryThumbnailResponse> thumbnails,
+      List<ScrappedDiaryFeedResponse> feeds,
       int? nextCursor,
       bool hasNext,
       bool isLoading,
@@ -391,6 +421,7 @@ class __$ScrappedDiaryStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? thumbnails = null,
+    Object? feeds = null,
     Object? nextCursor = freezed,
     Object? hasNext = null,
     Object? isLoading = null,
@@ -401,6 +432,10 @@ class __$ScrappedDiaryStateCopyWithImpl<$Res>
           ? _self._thumbnails
           : thumbnails // ignore: cast_nullable_to_non_nullable
               as List<ScrappedDiaryThumbnailResponse>,
+      feeds: null == feeds
+          ? _self._feeds
+          : feeds // ignore: cast_nullable_to_non_nullable
+              as List<ScrappedDiaryFeedResponse>,
       nextCursor: freezed == nextCursor
           ? _self.nextCursor
           : nextCursor // ignore: cast_nullable_to_non_nullable

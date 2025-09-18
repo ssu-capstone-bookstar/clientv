@@ -12,8 +12,5 @@ abstract class LikedDiaryState with _$LikedDiaryState {
     @Default([]) List<LikedDiaryFeed> feeds,
     @Default(0) int nextCursor,
     @Default(false) bool hasNext,
-    @Default(false) bool isLoading,
-    @Default(false) bool isLoadingMore,
-    String? errorMessage,
   }) = _LikedDiaryState;
 }

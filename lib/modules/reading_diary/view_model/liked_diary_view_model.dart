@@ -1,3 +1,4 @@
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,71 +16,111 @@ LikedDiaryRepository likedDiaryRepository(Ref ref) {
 }
 
 @riverpod
-Future<List<LikedDiaryFeed>> getLikedDiaryFeedsAsync(Ref ref) async {
-  final repository = ref.read(likedDiaryRepositoryProvider);
-  final response = await repository.getLikedDiaryFeeds(size: 20);
-  return response.data.data;
-}
-
-@riverpod
 class LikedDiaryViewModel extends _$LikedDiaryViewModel {
+  late final LikedDiaryRepository _likedDiaryRepository;
+  late final ReadingDiaryRepository _readingDiaryRepository;
+
   @override
-  LikedDiaryState build() {
-    return const LikedDiaryState();
+  FutureOr<LikedDiaryState> build() async {
+    _likedDiaryRepository = ref.read(likedDiaryRepositoryProvider);
+    _readingDiaryRepository = ref.read(readingDiaryRepositoryProvider);
+    return await initState();
   }
 
-  Future<void> initState() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-    try {
-      final repository = ref.read(likedDiaryRepositoryProvider);
-      final response = await repository.getLikedDiaryThumbnails(size: 20);
+  Future<LikedDiaryState> initState() async {
+    final prev = state.value ?? LikedDiaryState();
+    final thumbnail =
+        await _likedDiaryRepository.getLikedDiaryThumbnails(size: 20);
+    final feeds = await _likedDiaryRepository.getLikedDiaryFeeds(size: 20);
 
-      state = state.copyWith(
-        thumbnails: response.data.data,
-        nextCursor: response.data.nextCursor,
-        hasNext: response.data.hasNext,
-        isLoading: false,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.toString(),
-      );
-    }
+    state = AsyncValue.data(prev.copyWith(
+      thumbnails: thumbnail.data.data,
+      feeds: feeds.data.data,
+      nextCursor: thumbnail.data.nextCursor,
+      hasNext: thumbnail.data.hasNext,
+    ));
+    return state.value ?? LikedDiaryState();
   }
 
   Future<void> refreshState() async {
-    if (state.isLoadingMore || !state.hasNext) return;
+    final prev = state.value ?? LikedDiaryState();
+    if (!prev.hasNext) return;
+    final thumbnail = await _likedDiaryRepository.getLikedDiaryThumbnails(
+      cursorId: prev.nextCursor,
+      size: 20,
+    );
 
-    state = state.copyWith(isLoadingMore: true);
-    try {
-      final repository = ref.read(likedDiaryRepositoryProvider);
-      final response = await repository.getLikedDiaryThumbnails(
-        cursorId: state.nextCursor,
-        size: 20,
-      );
+    final feeds = await _likedDiaryRepository.getLikedDiaryFeeds(
+        cursorId: prev.nextCursor, size: 20);
 
-      state = state.copyWith(
-        thumbnails: [...state.thumbnails, ...response.data.data],
-        nextCursor: response.data.nextCursor,
-        hasNext: response.data.hasNext,
-        isLoadingMore: false,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoadingMore: false,
-        errorMessage: e.toString(),
-      );
-    }
+    state = AsyncValue.data(prev.copyWith(
+      thumbnails: [...prev.thumbnails, ...thumbnail.data.data],
+      feeds: [...prev.feeds, ...feeds.data.data],
+      nextCursor: thumbnail.data.nextCursor,
+      hasNext: thumbnail.data.hasNext,
+    ));
   }
 
   Future<List<LikedDiaryFeed>> getLikedDiaryFeeds() async {
-    try {
-      final repository = ref.read(likedDiaryRepositoryProvider);
-      final response = await repository.getLikedDiaryFeeds(size: 20);
-      return response.data.data;
-    } catch (e) {
-      throw Exception('좋아요 누른 다이어리 피드를 불러올 수 없습니다: $e');
+    final response = await _likedDiaryRepository.getLikedDiaryFeeds(size: 20);
+    return response.data.data;
+  }
+
+  Future<LikedDiaryState> handleFeedLike(
+      int diaryId, bool liked, int index) async {
+    if (liked) {
+      await _readingDiaryRepository.unlikeDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.likeDiary(diaryId);
     }
+    final prev = state.value ?? LikedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            liked: !feed.liked,
+            likeCount: feed.liked ? feed.likeCount - 1 : feed.likeCount + 1,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? LikedDiaryState();
+  }
+
+  LikedDiaryState changeCommentCount(int diaryId, int commentCount) {
+    final prev = state.value ?? LikedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            commentCount: commentCount,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? LikedDiaryState();
+  }
+
+  Future<LikedDiaryState> handleFeedScrap(
+      int diaryId, bool scraped, int index) async {
+    if (scraped) {
+      await _readingDiaryRepository.unscrapDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.scrapDiary(diaryId);
+    }
+    final prev = state.value ?? LikedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            scraped: !feed.scraped,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? LikedDiaryState();
   }
 }

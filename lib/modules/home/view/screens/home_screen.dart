@@ -1,6 +1,5 @@
 import 'package:bookstar/gen/assets.gen.dart';
 import 'package:bookstar/gen/colors.gen.dart';
-import 'package:bookstar/modules/book_log/view/screens/book_log_screen.dart';
 import 'package:bookstar/modules/deep_time/view_model/deep_time_state.dart';
 import 'package:bookstar/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       });
     }
 
-    if (index == HomeBottomNavMenu.bookLog.index) {
-      bookLogFeedListKey.currentState?.jumpToTop();
-    }
+    if (index == HomeBottomNavMenu.bookLog.index) {}
 
     widget.navigationShell.goBranch(
       index,
@@ -198,15 +195,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       // NOTE(현호): 하나로 통합했어요. 기존 로직은 HomeAppBar 내에 남겨두었습니다.
-      appBar: useAppBar ? HomeAppBar(
-        backgroundColor: appBarBackgroundColor,
-        flexibleSpace: appBarFlexibleSpace,
-        currentIndex: navigationShell.currentIndex,
-        onBackTap: () {
-          navigationShell.goBranch(_lastVisitedTabIndex, initialLocation: true);
-        },
-        actions: appBarActions,
-      ) : null,
+      appBar: useAppBar
+          ? HomeAppBar(
+              backgroundColor: appBarBackgroundColor,
+              flexibleSpace: appBarFlexibleSpace,
+              currentIndex: navigationShell.currentIndex,
+              onBackTap: () {
+                navigationShell.goBranch(_lastVisitedTabIndex,
+                    initialLocation: true);
+              },
+              actions: appBarActions,
+            )
+          : null,
       body: Container(
         decoration: bodyDecoration,
         child: Padding(

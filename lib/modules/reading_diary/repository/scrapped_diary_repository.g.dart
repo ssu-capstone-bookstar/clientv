@@ -65,7 +65,7 @@ class _ScrappedDiaryRepository implements ScrappedDiaryRepository {
   }
 
   @override
-  Future<ResponseForm<CursorPageResponse<ScrappedDiaryFeed>>>
+  Future<ResponseForm<CursorPageResponse<ScrappedDiaryFeedResponse>>>
       getScrappedDiaryFeeds({int? cursorId, int? size}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -75,8 +75,8 @@ class _ScrappedDiaryRepository implements ScrappedDiaryRepository {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<ResponseForm<CursorPageResponse<ScrappedDiaryFeed>>>(
+    final _options = _setStreamType<
+        ResponseForm<CursorPageResponse<ScrappedDiaryFeedResponse>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -89,13 +89,16 @@ class _ScrappedDiaryRepository implements ScrappedDiaryRepository {
           ),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResponseForm<CursorPageResponse<ScrappedDiaryFeed>> _value;
+    late ResponseForm<CursorPageResponse<ScrappedDiaryFeedResponse>> _value;
     try {
-      _value = ResponseForm<CursorPageResponse<ScrappedDiaryFeed>>.fromJson(
+      _value =
+          ResponseForm<CursorPageResponse<ScrappedDiaryFeedResponse>>.fromJson(
         _result.data!,
-        (json) => CursorPageResponse<ScrappedDiaryFeed>.fromJson(
+        (json) => CursorPageResponse<ScrappedDiaryFeedResponse>.fromJson(
           json as Map<String, dynamic>,
-          (json) => ScrappedDiaryFeed.fromJson(json as Map<String, dynamic>),
+          (json) => ScrappedDiaryFeedResponse.fromJson(
+            json as Map<String, dynamic>,
+          ),
         ),
       );
     } on Object catch (e, s) {

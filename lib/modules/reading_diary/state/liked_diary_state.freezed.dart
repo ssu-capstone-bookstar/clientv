@@ -18,9 +18,6 @@ mixin _$LikedDiaryState {
   List<LikedDiaryFeed> get feeds;
   int get nextCursor;
   bool get hasNext;
-  bool get isLoading;
-  bool get isLoadingMore;
-  String? get errorMessage;
 
   /// Create a copy of LikedDiaryState
   /// with the given fields replaced by the non-null parameter values.
@@ -40,13 +37,7 @@ mixin _$LikedDiaryState {
             const DeepCollectionEquality().equals(other.feeds, feeds) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
-            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.isLoadingMore, isLoadingMore) ||
-                other.isLoadingMore == isLoadingMore) &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+            (identical(other.hasNext, hasNext) || other.hasNext == hasNext));
   }
 
   @override
@@ -55,14 +46,11 @@ mixin _$LikedDiaryState {
       const DeepCollectionEquality().hash(thumbnails),
       const DeepCollectionEquality().hash(feeds),
       nextCursor,
-      hasNext,
-      isLoading,
-      isLoadingMore,
-      errorMessage);
+      hasNext);
 
   @override
   String toString() {
-    return 'LikedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, hasNext: $hasNext, isLoading: $isLoading, isLoadingMore: $isLoadingMore, errorMessage: $errorMessage)';
+    return 'LikedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, hasNext: $hasNext)';
   }
 }
 
@@ -76,10 +64,7 @@ abstract mixin class $LikedDiaryStateCopyWith<$Res> {
       {List<LikedDiaryThumbnail> thumbnails,
       List<LikedDiaryFeed> feeds,
       int nextCursor,
-      bool hasNext,
-      bool isLoading,
-      bool isLoadingMore,
-      String? errorMessage});
+      bool hasNext});
 }
 
 /// @nodoc
@@ -99,9 +84,6 @@ class _$LikedDiaryStateCopyWithImpl<$Res>
     Object? feeds = null,
     Object? nextCursor = null,
     Object? hasNext = null,
-    Object? isLoading = null,
-    Object? isLoadingMore = null,
-    Object? errorMessage = freezed,
   }) {
     return _then(_self.copyWith(
       thumbnails: null == thumbnails
@@ -120,18 +102,6 @@ class _$LikedDiaryStateCopyWithImpl<$Res>
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      isLoading: null == isLoading
-          ? _self.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoadingMore: null == isLoadingMore
-          ? _self.isLoadingMore
-          : isLoadingMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-      errorMessage: freezed == errorMessage
-          ? _self.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -229,14 +199,8 @@ extension LikedDiaryStatePatterns on LikedDiaryState {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            List<LikedDiaryThumbnail> thumbnails,
-            List<LikedDiaryFeed> feeds,
-            int nextCursor,
-            bool hasNext,
-            bool isLoading,
-            bool isLoadingMore,
-            String? errorMessage)?
+    TResult Function(List<LikedDiaryThumbnail> thumbnails,
+            List<LikedDiaryFeed> feeds, int nextCursor, bool hasNext)?
         $default, {
     required TResult orElse(),
   }) {
@@ -244,13 +208,7 @@ extension LikedDiaryStatePatterns on LikedDiaryState {
     switch (_that) {
       case _LikedDiaryState() when $default != null:
         return $default(
-            _that.thumbnails,
-            _that.feeds,
-            _that.nextCursor,
-            _that.hasNext,
-            _that.isLoading,
-            _that.isLoadingMore,
-            _that.errorMessage);
+            _that.thumbnails, _that.feeds, _that.nextCursor, _that.hasNext);
       case _:
         return orElse();
     }
@@ -271,27 +229,15 @@ extension LikedDiaryStatePatterns on LikedDiaryState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            List<LikedDiaryThumbnail> thumbnails,
-            List<LikedDiaryFeed> feeds,
-            int nextCursor,
-            bool hasNext,
-            bool isLoading,
-            bool isLoadingMore,
-            String? errorMessage)
+    TResult Function(List<LikedDiaryThumbnail> thumbnails,
+            List<LikedDiaryFeed> feeds, int nextCursor, bool hasNext)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _LikedDiaryState():
         return $default(
-            _that.thumbnails,
-            _that.feeds,
-            _that.nextCursor,
-            _that.hasNext,
-            _that.isLoading,
-            _that.isLoadingMore,
-            _that.errorMessage);
+            _that.thumbnails, _that.feeds, _that.nextCursor, _that.hasNext);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -311,27 +257,15 @@ extension LikedDiaryStatePatterns on LikedDiaryState {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            List<LikedDiaryThumbnail> thumbnails,
-            List<LikedDiaryFeed> feeds,
-            int nextCursor,
-            bool hasNext,
-            bool isLoading,
-            bool isLoadingMore,
-            String? errorMessage)?
+    TResult? Function(List<LikedDiaryThumbnail> thumbnails,
+            List<LikedDiaryFeed> feeds, int nextCursor, bool hasNext)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _LikedDiaryState() when $default != null:
         return $default(
-            _that.thumbnails,
-            _that.feeds,
-            _that.nextCursor,
-            _that.hasNext,
-            _that.isLoading,
-            _that.isLoadingMore,
-            _that.errorMessage);
+            _that.thumbnails, _that.feeds, _that.nextCursor, _that.hasNext);
       case _:
         return null;
     }
@@ -345,10 +279,7 @@ class _LikedDiaryState implements LikedDiaryState {
       {final List<LikedDiaryThumbnail> thumbnails = const [],
       final List<LikedDiaryFeed> feeds = const [],
       this.nextCursor = 0,
-      this.hasNext = false,
-      this.isLoading = false,
-      this.isLoadingMore = false,
-      this.errorMessage})
+      this.hasNext = false})
       : _thumbnails = thumbnails,
         _feeds = feeds;
 
@@ -376,14 +307,6 @@ class _LikedDiaryState implements LikedDiaryState {
   @override
   @JsonKey()
   final bool hasNext;
-  @override
-  @JsonKey()
-  final bool isLoading;
-  @override
-  @JsonKey()
-  final bool isLoadingMore;
-  @override
-  final String? errorMessage;
 
   /// Create a copy of LikedDiaryState
   /// with the given fields replaced by the non-null parameter values.
@@ -403,13 +326,7 @@ class _LikedDiaryState implements LikedDiaryState {
             const DeepCollectionEquality().equals(other._feeds, _feeds) &&
             (identical(other.nextCursor, nextCursor) ||
                 other.nextCursor == nextCursor) &&
-            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.isLoadingMore, isLoadingMore) ||
-                other.isLoadingMore == isLoadingMore) &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+            (identical(other.hasNext, hasNext) || other.hasNext == hasNext));
   }
 
   @override
@@ -418,14 +335,11 @@ class _LikedDiaryState implements LikedDiaryState {
       const DeepCollectionEquality().hash(_thumbnails),
       const DeepCollectionEquality().hash(_feeds),
       nextCursor,
-      hasNext,
-      isLoading,
-      isLoadingMore,
-      errorMessage);
+      hasNext);
 
   @override
   String toString() {
-    return 'LikedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, hasNext: $hasNext, isLoading: $isLoading, isLoadingMore: $isLoadingMore, errorMessage: $errorMessage)';
+    return 'LikedDiaryState(thumbnails: $thumbnails, feeds: $feeds, nextCursor: $nextCursor, hasNext: $hasNext)';
   }
 }
 
@@ -441,10 +355,7 @@ abstract mixin class _$LikedDiaryStateCopyWith<$Res>
       {List<LikedDiaryThumbnail> thumbnails,
       List<LikedDiaryFeed> feeds,
       int nextCursor,
-      bool hasNext,
-      bool isLoading,
-      bool isLoadingMore,
-      String? errorMessage});
+      bool hasNext});
 }
 
 /// @nodoc
@@ -464,9 +375,6 @@ class __$LikedDiaryStateCopyWithImpl<$Res>
     Object? feeds = null,
     Object? nextCursor = null,
     Object? hasNext = null,
-    Object? isLoading = null,
-    Object? isLoadingMore = null,
-    Object? errorMessage = freezed,
   }) {
     return _then(_LikedDiaryState(
       thumbnails: null == thumbnails
@@ -485,18 +393,6 @@ class __$LikedDiaryStateCopyWithImpl<$Res>
           ? _self.hasNext
           : hasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      isLoading: null == isLoading
-          ? _self.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoadingMore: null == isLoadingMore
-          ? _self.isLoadingMore
-          : isLoadingMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-      errorMessage: freezed == errorMessage
-          ? _self.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }

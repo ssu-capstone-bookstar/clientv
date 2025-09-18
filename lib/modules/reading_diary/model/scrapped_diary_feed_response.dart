@@ -6,8 +6,8 @@ part 'scrapped_diary_feed_response.freezed.dart';
 part 'scrapped_diary_feed_response.g.dart';
 
 @freezed
-abstract class ScrappedDiaryFeed with _$ScrappedDiaryFeed {
-  const factory ScrappedDiaryFeed({
+abstract class ScrappedDiaryFeedResponse with _$ScrappedDiaryFeedResponse {
+  const factory ScrappedDiaryFeedResponse({
     @Default(0) int diaryId,
     @Default('') String content,
     @Default('') String createdDate,
@@ -25,8 +25,8 @@ abstract class ScrappedDiaryFeed with _$ScrappedDiaryFeed {
     @Default(0) int scrapId,
     @Default(false) bool liked,
     @Default(false) bool scraped,
-  }) = _ScrappedDiaryFeed;
+  }) = _ScrappedDiaryFeedResponse;
 
-  factory ScrappedDiaryFeed.fromJson(Map<String, dynamic> json) =>
-      _$ScrappedDiaryFeedFromJson(json);
+  factory ScrappedDiaryFeedResponse.fromJson(Map<String, dynamic> json) =>
+      _$ScrappedDiaryFeedResponseFromJson(json);
 }
