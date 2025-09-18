@@ -210,33 +210,54 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
       required Function(int) onRemoveHistory}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text("최근 검색", style: AppTexts.b10.copyWith(color: ColorName.g1)),
-        CustomListView(
-          emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
-          emptyText: '검색 기록이 없습니다.',
-          isEmpty: history.isEmpty,
-          itemCount: history.length,
-          itemBuilder: (context, index) {
-            final item = history[index];
-            return ListTile(
-              title: GestureDetector(
-                onTap: () => onTapHistory(item.searchedMemberId),
-                child: Expanded(
-                    child: Text(
-                  "@${item.searchedMemberNickName}",
-                  style: AppTexts.b5.copyWith(color: ColorName.w1),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )),
-              ),
-              trailing: GestureDetector(
-                child: Icon(Icons.clear),
-                onTap: () => onRemoveHistory(item.searchedMemberId),
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => SizedBox.shrink(),
+        SizedBox(height: 20),
+        Flexible(
+          child: CustomListView(
+            emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+            emptyText: '검색 기록이 없습니다.',
+            isEmpty: history.isEmpty,
+            itemCount: history.length,
+            itemBuilder: (context, index) {
+              final item = history[index];
+              return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 46,
+                      height: 46,
+                      child: CircleAvatar(
+                        backgroundColor: ColorName.g7,
+                        backgroundImage:
+                            item.searchedMemberProfileImage.isNotEmpty
+                                ? CachedNetworkImageProvider(
+                                    item.searchedMemberProfileImage,
+                                  )
+                                : null,
+                        child: item.searchedMemberProfileImage.isEmpty
+                            ? const Icon(Icons.person,
+                                size: 32, color: ColorName.g5)
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                        child: Text(
+                      "@${item.searchedMemberNickName}",
+                      style: AppTexts.b5.copyWith(color: ColorName.w1),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                    GestureDetector(
+                      child: Icon(Icons.clear),
+                      onTap: () => onRemoveHistory(item.searchedMemberId),
+                    )
+                  ]);
+            },
+            separatorBuilder: (context, index) => SizedBox.shrink(),
+          ),
         ),
       ],
     );
