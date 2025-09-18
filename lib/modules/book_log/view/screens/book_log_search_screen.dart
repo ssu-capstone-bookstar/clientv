@@ -212,33 +212,31 @@ class _BookLogSearchScreenState extends ConsumerState<BookLogSearchScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("최근 검색", style: AppTexts.b10.copyWith(color: ColorName.g1)),
-        Expanded(
-          child: CustomListView(
-            emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
-            emptyText: '검색 기록이 없습니다.',
-            isEmpty: history.isEmpty,
-            itemCount: history.length,
-            itemBuilder: (context, index) {
-              final item = history[index];
-              return ListTile(
-                title: GestureDetector(
-                  onTap: () => onTapHistory(item.searchedMemberId),
-                  child: Expanded(
-                      child: Text(
-                    "@${item.searchedMemberNickName}",
-                    style: AppTexts.b5.copyWith(color: ColorName.w1),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-                ),
-                trailing: GestureDetector(
-                  child: Icon(Icons.clear),
-                  onTap: () => onRemoveHistory(item.searchedMemberId),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => SizedBox.shrink(),
-          ),
+        CustomListView(
+          emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+          emptyText: '검색 기록이 없습니다.',
+          isEmpty: history.isEmpty,
+          itemCount: history.length,
+          itemBuilder: (context, index) {
+            final item = history[index];
+            return ListTile(
+              title: GestureDetector(
+                onTap: () => onTapHistory(item.searchedMemberId),
+                child: Expanded(
+                    child: Text(
+                  "@${item.searchedMemberNickName}",
+                  style: AppTexts.b5.copyWith(color: ColorName.w1),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )),
+              ),
+              trailing: GestureDetector(
+                child: Icon(Icons.clear),
+                onTap: () => onRemoveHistory(item.searchedMemberId),
+              ),
+            );
+          },
+          separatorBuilder: (context, index) => SizedBox.shrink(),
         ),
       ],
     );
