@@ -22,7 +22,8 @@ class BookLogFeedList extends StatefulWidget {
       required this.onScrap,
       required this.onUpdate,
       required this.onBookTitle,
-      this.onScrollChanged});
+      this.onScrollChanged,
+      this.visibleMenu = true});
   final List<DiaryResponse> feeds;
   // final FollowInfoState followInfo;
   final int? initialIndex;
@@ -37,6 +38,7 @@ class BookLogFeedList extends StatefulWidget {
   final Function(bool)? onScrollChanged;
   final ItemScrollController itemScrollController;
   final ItemPositionsListener itemPositionsListener;
+  final bool visibleMenu;
 
   @override
   State<BookLogFeedList> createState() => BookLogFeedListState();
@@ -94,6 +96,7 @@ class BookLogFeedListState extends State<BookLogFeedList> {
               onScrap: () => widget.onScrap(index),
               onUpdate: () => widget.onUpdate(index),
               onBookTitle: () => widget.onBookTitle(index),
+              visibleMenu: widget.visibleMenu,
             ),
             separatorBuilder: (context, index) => const Divider(
               color: ColorName.g7,

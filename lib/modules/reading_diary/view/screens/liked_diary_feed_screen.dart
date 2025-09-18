@@ -1,15 +1,16 @@
+import 'package:bookstar/common/components/base_screen.dart';
+import 'package:bookstar/modules/book_log/view/widgets/book_log_feed_list.dart';
+import 'package:bookstar/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../gen/colors.gen.dart';
-import '../../model/liked_diary_feed_response.dart';
 import '../../model/diary_response.dart';
 import '../../model/diary_image_response.dart';
 import '../../view_model/liked_diary_view_model.dart';
-import '../../../book_log/view/widgets/feed_card.dart';
 
-class LikedDiaryFeedScreen extends ConsumerStatefulWidget {
+class LikedDiaryFeedScreen extends BaseScreen {
   const LikedDiaryFeedScreen({
     super.key,
     required this.initialIndex,
@@ -18,152 +19,122 @@ class LikedDiaryFeedScreen extends ConsumerStatefulWidget {
   final int initialIndex;
 
   @override
-  ConsumerState<LikedDiaryFeedScreen> createState() =>
+  BaseScreenState<LikedDiaryFeedScreen> createState() =>
       _LikedDiaryFeedScreenState();
 }
 
-class _LikedDiaryFeedScreenState extends ConsumerState<LikedDiaryFeedScreen> {
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
-
-  bool _hasJumped = false;
+class _LikedDiaryFeedScreenState extends BaseScreenState<LikedDiaryFeedScreen> {
+  @override
+  bool enableRefreshIndicator() => true;
 
   @override
-  void initState() {
-    super.initState();
-  }
+  int getListTotalItemCount() =>
+      ref.watch(likedDiaryViewModelProvider).value?.feeds.length ?? 0;
 
-  void _jumpToIndex(int index) {
-    if (!mounted) return;
-
-    final feedsAsync = ref.read(getLikedDiaryFeedsAsyncProvider);
-    if (!feedsAsync.hasValue || feedsAsync.value!.isEmpty) return;
-
-    final validIndex = index.clamp(0, feedsAsync.value!.length - 1);
-
-    _attemptJump(validIndex, 0);
-  }
-
-  void _attemptJump(int index, int attemptCount) {
-    if (!mounted || attemptCount > 5) return;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-
-      try {
-        itemScrollController.jumpTo(index: index);
-      } catch (e) {
-        debugPrint('Jump attempt $attemptCount failed: $e');
-        if (attemptCount < 5) {
-          _attemptJump(index, attemptCount + 1);
-        }
-      }
-    });
+  @override
+  Future<void> onRefresh() async {
+    final likedDiaryNotifier = ref.read(likedDiaryViewModelProvider.notifier);
+    await likedDiaryNotifier.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    ref.listen<AsyncValue<List<LikedDiaryFeed>>>(
-      getLikedDiaryFeedsAsyncProvider,
-      (previous, next) {
-        if (next.hasValue && next.value!.isNotEmpty && mounted && !_hasJumped) {
-          _hasJumped = true;
-          _jumpToIndex(widget.initialIndex);
-        }
-      },
-    );
+  Future<void> onBottomReached() async {
+    final likedDiaryNotifier = ref.read(likedDiaryViewModelProvider.notifier);
+    await likedDiaryNotifier.refreshState();
+  }
 
-    final feedsAsync = ref.watch(getLikedDiaryFeedsAsyncProvider);
-
-    return feedsAsync.when(
-      data: (feeds) => Scaffold(
-        appBar: AppBar(
-          title: const Text('좋아요 누른 다이어리'),
-          leading: IconButton(
-            icon: const BackButton(),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-        body: _buildFeedList(feeds),
+  @override
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('좋아요 누른 다이어리'),
+      leading: IconButton(
+        icon: const BackButton(),
+        onPressed: () => Navigator.of(context).pop(),
       ),
-      error: _error("좋아요 누른 다이어리 정보를 불러올 수 없습니다."),
-      loading: _loading,
     );
   }
 
-  Widget _buildFeedList(List<LikedDiaryFeed> feeds) {
-    if (feeds.isEmpty) {
-      return const Center(
-        child: Text(
-          '좋아요 누른 다이어리가 없습니다.',
-          style: TextStyle(
-            color: ColorName.g7,
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: () async {
-        await ref.read(likedDiaryViewModelProvider.notifier).initState();
-      },
-      child: ScrollablePositionedList.separated(
-        itemCount: feeds.length,
+  @override
+  Widget buildBody(BuildContext context) {
+    final likedDiaryAsync = ref.watch(likedDiaryViewModelProvider);
+    final likedDiaryNotifier = ref.read(likedDiaryViewModelProvider.notifier);
+    return likedDiaryAsync.when(
+      data: (likedDiary) => BookLogFeedList(
+        visibleMenu: false,
+        feeds: likedDiary.feeds.map((e) {
+          return DiaryResponse(
+            diaryId: e.diaryId,
+            content: e.content,
+            createdDate: e.createdDate.toIso8601String(),
+            memberId: e.memberId,
+            nickname: e.nickname,
+            profileImageUrl: e.profileImageUrl,
+            bookId: e.bookId,
+            bookTitle: e.bookTitle,
+            bookAuthor: e.bookAuthor,
+            bookRating: e.bookRating.toDouble(),
+            images: e.images.map((image) {
+              return DiaryImageResponse(
+                imageUrl: image.imageUrl,
+                sequence: e.images.indexOf(image),
+              );
+            }).toList(),
+            likeCount: e.likeCount,
+            commentCount: e.commentCount,
+            viewCount: e.viewCount,
+            liked: e.liked,
+            scraped: e.scraped,
+          );
+        }).toList(),
+        initialIndex: widget.initialIndex,
         itemScrollController: itemScrollController,
         itemPositionsListener: itemPositionsListener,
-        itemBuilder: (context, index) {
-          final feed = feeds[index];
-          final diaryResponse = _convertToDiaryResponse(feed);
-
-          return FeedCard(
-            feed: diaryResponse,
-            onLike: () {},
-            onMessage: () {},
-            onDelete: () {},
-            onReport: () {},
-            onProfile: () {},
-            onBookTitle: () {},
-            onScrap: () {},
-            onUpdate: () {},
-          );
+        onLike: (int targetIndex) {
+          final targetFeed = likedDiary.feeds[targetIndex];
+          likedDiaryNotifier.handleFeedLike(
+              targetFeed.diaryId, targetFeed.liked, targetIndex);
         },
-        separatorBuilder: (context, index) => const SizedBox(height: 0),
+        onMessage: (BuildContext ctx, int targetIndex) async {
+          final targetFeed = likedDiary.feeds[targetIndex];
+          final result = await showModalBottomSheet(
+              context: ctx,
+              isScrollControlled: true,
+              backgroundColor: ColorName.b1,
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) =>
+                  DiaryFeedCommentDialog(diaryId: targetFeed.diaryId));
+
+          int? commentCount = result?['commentCount'];
+          if (commentCount != null) {
+            likedDiaryNotifier.changeCommentCount(
+                targetFeed.diaryId, commentCount);
+          }
+        },
+        onDelete: (BuildContext ctx, int targetIndex) async {
+        },
+        onReport: (BuildContext ctx, int targetIndex) async {
+        },
+        onProfile: (int targetIndex) {
+          final targetFeed = likedDiary.feeds[targetIndex];
+          context.push('/book-log/thumbnail/${targetFeed.memberId}');
+        },
+        onBookTitle: (int targetIndex) {
+          final targetFeed = likedDiary.feeds[targetIndex];
+          context.push('/book-pick/overview/${targetFeed.bookId}');
+        },
+        onScrap: (int targetIndex) {
+          final targetFeed = likedDiary.feeds[targetIndex];
+          likedDiaryNotifier.handleFeedScrap(
+              targetFeed.diaryId, targetFeed.scraped, targetIndex);
+        },
+        onUpdate: (int targetIndex) {
+        },
       ),
+      error: error("좋아요 누른 다이어리 정보를 불러올 수 없습니다."),
+      loading: loading,
     );
   }
-
-  DiaryResponse _convertToDiaryResponse(LikedDiaryFeed feed) {
-    return DiaryResponse(
-      diaryId: feed.diaryId,
-      content: feed.content,
-      createdDate: feed.createdDate.toIso8601String(),
-      memberId: feed.memberId,
-      nickname: feed.nickname,
-      profileImageUrl: feed.profileImageUrl,
-      bookId: feed.bookId,
-      bookTitle: feed.bookTitle,
-      bookAuthor: feed.bookAuthor,
-      bookRating: feed.bookRating.toDouble(),
-      images: feed.images
-          .map((image) => DiaryImageResponse(
-                diaryId: feed.diaryId,
-                imageId: 0,
-                imageUrl: image.imageUrl,
-                sequence: 0,
-              ))
-          .toList(),
-      likeCount: feed.likeCount,
-      commentCount: feed.commentCount,
-      viewCount: feed.viewCount,
-      liked: feed.liked,
-      scraped: feed.scraped,
-    );
-  }
-
-  Widget _loading() => const Center(child: CircularProgressIndicator());
-  Widget Function(Object, StackTrace) _error(String msg) => (e, st) =>
-      Center(child: Text(msg, style: TextStyle(color: ColorName.g3)));
 }

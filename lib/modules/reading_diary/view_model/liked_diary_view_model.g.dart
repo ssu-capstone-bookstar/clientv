@@ -25,28 +25,8 @@ final likedDiaryRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef LikedDiaryRepositoryRef = AutoDisposeProviderRef<LikedDiaryRepository>;
-String _$getLikedDiaryFeedsAsyncHash() =>
-    r'f558c8cda10b97e6dcd70accef945152fef89b0e';
-
-/// See also [getLikedDiaryFeedsAsync].
-@ProviderFor(getLikedDiaryFeedsAsync)
-final getLikedDiaryFeedsAsyncProvider =
-    AutoDisposeFutureProvider<List<LikedDiaryFeed>>.internal(
-  getLikedDiaryFeedsAsync,
-  name: r'getLikedDiaryFeedsAsyncProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getLikedDiaryFeedsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetLikedDiaryFeedsAsyncRef
-    = AutoDisposeFutureProviderRef<List<LikedDiaryFeed>>;
 String _$likedDiaryViewModelHash() =>
-    r'164bc352fd9ccda997bf3027468cbf6105114069';
+    r'dbd9c9a2ffd79fab2f1deb726b61909afe81b34c';
 
 /// See also [LikedDiaryViewModel].
 @ProviderFor(LikedDiaryViewModel)

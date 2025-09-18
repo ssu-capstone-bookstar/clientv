@@ -25,6 +25,7 @@ class FeedCard extends ConsumerStatefulWidget {
     required this.onScrap,
     required this.onUpdate,
     required this.onBookTitle,
+    this.visibleMenu = true,
   });
 
   final DiaryResponse feed;
@@ -36,6 +37,7 @@ class FeedCard extends ConsumerStatefulWidget {
   final Function onScrap;
   final Function onUpdate;
   final Function onBookTitle;
+  final bool visibleMenu;
 
   @override
   ConsumerState<FeedCard> createState() => _FeedCardState();
@@ -100,39 +102,40 @@ class _FeedCardState extends ConsumerState<FeedCard> {
                   ],
                 ),
               ),
-              MenuButton(
-                menus: [
-                  if (isMyFeed)
+              if (widget.visibleMenu)
+                MenuButton(
+                  menus: [
+                    if (isMyFeed)
+                      MenuButtonItem(
+                        value: "update",
+                        label: "수정하기",
+                      ),
+                    if (isMyFeed || isAdmin)
+                      MenuButtonItem(
+                        value: "delete",
+                        label: "삭제하기",
+                      ),
                     MenuButtonItem(
-                      value: "update",
-                      label: "수정하기",
-                    ),
-                  if (isMyFeed || isAdmin)
-                    MenuButtonItem(
-                      value: "delete",
-                      label: "삭제하기",
-                    ),
-                  MenuButtonItem(
-                    value: "report",
-                    label: "신고하기",
-                  )
-                ],
-                icon: Assets.icons.icMenuMore.svg(),
-                onSelected: (value) {
-                  switch (value) {
-                    case "update":
-                      widget.onUpdate();
-                      break;
-                    case "delete":
-                      widget.onDelete();
-                      break;
-                    case "report":
-                      widget.onReport();
-                      break;
-                    default:
-                  }
-                },
-              ),
+                      value: "report",
+                      label: "신고하기",
+                    )
+                  ],
+                  icon: Assets.icons.icMenuMore.svg(),
+                  onSelected: (value) {
+                    switch (value) {
+                      case "update":
+                        widget.onUpdate();
+                        break;
+                      case "delete":
+                        widget.onDelete();
+                        break;
+                      case "report":
+                        widget.onReport();
+                        break;
+                      default:
+                    }
+                  },
+                ),
             ],
           ),
         ),

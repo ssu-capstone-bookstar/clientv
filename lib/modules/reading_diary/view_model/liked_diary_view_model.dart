@@ -1,3 +1,4 @@
+import 'package:bookstar/modules/reading_diary/repository/reading_diary_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,32 +16,28 @@ LikedDiaryRepository likedDiaryRepository(Ref ref) {
 }
 
 @riverpod
-Future<List<LikedDiaryFeed>> getLikedDiaryFeedsAsync(Ref ref) async {
-  final repository = ref.read(likedDiaryRepositoryProvider);
-  final response = await repository.getLikedDiaryFeeds(size: 20);
-  return response.data.data;
-}
-
-@riverpod
 class LikedDiaryViewModel extends _$LikedDiaryViewModel {
   late final LikedDiaryRepository _likedDiaryRepository;
+  late final ReadingDiaryRepository _readingDiaryRepository;
 
   @override
   FutureOr<LikedDiaryState> build() async {
     _likedDiaryRepository = ref.read(likedDiaryRepositoryProvider);
+    _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
     return await initState();
   }
 
   Future<LikedDiaryState> initState() async {
     final prev = state.value ?? LikedDiaryState();
-    final response =
+    final thumbnail =
         await _likedDiaryRepository.getLikedDiaryThumbnails(size: 20);
+    final feeds = await _likedDiaryRepository.getLikedDiaryFeeds(size: 20);
 
     state = AsyncValue.data(prev.copyWith(
-      thumbnails: response.data.data,
-      nextCursor: response.data.nextCursor,
-      hasNext: response.data.hasNext,
-      isLoading: false,
+      thumbnails: thumbnail.data.data,
+      feeds: feeds.data.data,
+      nextCursor: thumbnail.data.nextCursor,
+      hasNext: thumbnail.data.hasNext,
     ));
     return state.value ?? LikedDiaryState();
   }
@@ -49,20 +46,82 @@ class LikedDiaryViewModel extends _$LikedDiaryViewModel {
     final prev = state.value ?? LikedDiaryState();
     if (!prev.hasNext) return;
 
-    final response = await _likedDiaryRepository.getLikedDiaryThumbnails(
+    final thumbnail = await _likedDiaryRepository.getLikedDiaryThumbnails(
       cursorId: prev.nextCursor,
       size: 20,
     );
 
+    final feeds = await _likedDiaryRepository.getLikedDiaryFeeds(
+        cursorId: prev.nextCursor, size: 20);
+
     state = AsyncValue.data(prev.copyWith(
-      thumbnails: [...prev.thumbnails, ...response.data.data],
-      nextCursor: response.data.nextCursor,
-      hasNext: response.data.hasNext,
+      thumbnails: [...prev.thumbnails, ...thumbnail.data.data],
+      feeds: [...prev.feeds, ...feeds.data.data],
+      nextCursor: thumbnail.data.nextCursor,
+      hasNext: thumbnail.data.hasNext,
     ));
   }
 
   Future<List<LikedDiaryFeed>> getLikedDiaryFeeds() async {
     final response = await _likedDiaryRepository.getLikedDiaryFeeds(size: 20);
     return response.data.data;
+  }
+
+  Future<LikedDiaryState> handleFeedLike(
+      int diaryId, bool liked, int index) async {
+    if (liked) {
+      await _readingDiaryRepository.unlikeDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.likeDiary(diaryId);
+    }
+    final prev = state.value ?? LikedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            liked: !feed.liked,
+            likeCount: feed.liked ? feed.likeCount - 1 : feed.likeCount + 1,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? LikedDiaryState();
+  }
+
+  LikedDiaryState changeCommentCount(int diaryId, int commentCount) {
+    final prev = state.value ?? LikedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            commentCount: commentCount,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? LikedDiaryState();
+  }
+
+  Future<LikedDiaryState> handleFeedScrap(
+      int diaryId, bool scraped, int index) async {
+    if (scraped) {
+      await _readingDiaryRepository.unscrapDiary(diaryId);
+    } else {
+      await _readingDiaryRepository.scrapDiary(diaryId);
+    }
+    final prev = state.value ?? LikedDiaryState();
+    state = AsyncValue.data(prev.copyWith(
+      feeds: prev.feeds.map((feed) {
+        if (feed.diaryId == diaryId) {
+          return feed.copyWith(
+            scraped: !feed.scraped,
+          );
+        }
+        return feed;
+      }).toList(),
+    ));
+    return state.value ?? LikedDiaryState();
   }
 }
