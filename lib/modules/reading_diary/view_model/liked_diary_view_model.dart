@@ -23,7 +23,7 @@ class LikedDiaryViewModel extends _$LikedDiaryViewModel {
   @override
   FutureOr<LikedDiaryState> build() async {
     _likedDiaryRepository = ref.read(likedDiaryRepositoryProvider);
-    _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
+    _readingDiaryRepository = ref.read(readingDiaryRepositoryProvider);
     return await initState();
   }
 
@@ -45,7 +45,6 @@ class LikedDiaryViewModel extends _$LikedDiaryViewModel {
   Future<void> refreshState() async {
     final prev = state.value ?? LikedDiaryState();
     if (!prev.hasNext) return;
-
     final thumbnail = await _likedDiaryRepository.getLikedDiaryThumbnails(
       cursorId: prev.nextCursor,
       size: 20,

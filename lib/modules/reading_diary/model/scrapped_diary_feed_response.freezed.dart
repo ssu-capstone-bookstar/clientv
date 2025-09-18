@@ -13,7 +13,7 @@ part of 'scrapped_diary_feed_response.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ScrappedDiaryFeed {
+mixin _$ScrappedDiaryFeedResponse {
   int get diaryId;
   String get content;
   String get createdDate;
@@ -32,22 +32,22 @@ mixin _$ScrappedDiaryFeed {
   bool get liked;
   bool get scraped;
 
-  /// Create a copy of ScrappedDiaryFeed
+  /// Create a copy of ScrappedDiaryFeedResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $ScrappedDiaryFeedCopyWith<ScrappedDiaryFeed> get copyWith =>
-      _$ScrappedDiaryFeedCopyWithImpl<ScrappedDiaryFeed>(
-          this as ScrappedDiaryFeed, _$identity);
+  $ScrappedDiaryFeedResponseCopyWith<ScrappedDiaryFeedResponse> get copyWith =>
+      _$ScrappedDiaryFeedResponseCopyWithImpl<ScrappedDiaryFeedResponse>(
+          this as ScrappedDiaryFeedResponse, _$identity);
 
-  /// Serializes this ScrappedDiaryFeed to a JSON map.
+  /// Serializes this ScrappedDiaryFeedResponse to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is ScrappedDiaryFeed &&
+            other is ScrappedDiaryFeedResponse &&
             (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.createdDate, createdDate) ||
@@ -101,15 +101,15 @@ mixin _$ScrappedDiaryFeed {
 
   @override
   String toString() {
-    return 'ScrappedDiaryFeed(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, scrapId: $scrapId, liked: $liked, scraped: $scraped)';
+    return 'ScrappedDiaryFeedResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, scrapId: $scrapId, liked: $liked, scraped: $scraped)';
   }
 }
 
 /// @nodoc
-abstract mixin class $ScrappedDiaryFeedCopyWith<$Res> {
-  factory $ScrappedDiaryFeedCopyWith(
-          ScrappedDiaryFeed value, $Res Function(ScrappedDiaryFeed) _then) =
-      _$ScrappedDiaryFeedCopyWithImpl;
+abstract mixin class $ScrappedDiaryFeedResponseCopyWith<$Res> {
+  factory $ScrappedDiaryFeedResponseCopyWith(ScrappedDiaryFeedResponse value,
+          $Res Function(ScrappedDiaryFeedResponse) _then) =
+      _$ScrappedDiaryFeedResponseCopyWithImpl;
   @useResult
   $Res call(
       {int diaryId,
@@ -132,14 +132,14 @@ abstract mixin class $ScrappedDiaryFeedCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ScrappedDiaryFeedCopyWithImpl<$Res>
-    implements $ScrappedDiaryFeedCopyWith<$Res> {
-  _$ScrappedDiaryFeedCopyWithImpl(this._self, this._then);
+class _$ScrappedDiaryFeedResponseCopyWithImpl<$Res>
+    implements $ScrappedDiaryFeedResponseCopyWith<$Res> {
+  _$ScrappedDiaryFeedResponseCopyWithImpl(this._self, this._then);
 
-  final ScrappedDiaryFeed _self;
-  final $Res Function(ScrappedDiaryFeed) _then;
+  final ScrappedDiaryFeedResponse _self;
+  final $Res Function(ScrappedDiaryFeedResponse) _then;
 
-  /// Create a copy of ScrappedDiaryFeed
+  /// Create a copy of ScrappedDiaryFeedResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -235,8 +235,8 @@ class _$ScrappedDiaryFeedCopyWithImpl<$Res>
   }
 }
 
-/// Adds pattern-matching-related methods to [ScrappedDiaryFeed].
-extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
+/// Adds pattern-matching-related methods to [ScrappedDiaryFeedResponse].
+extension ScrappedDiaryFeedResponsePatterns on ScrappedDiaryFeedResponse {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -251,12 +251,12 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_ScrappedDiaryFeed value)? $default, {
+    TResult Function(_ScrappedDiaryFeedResponse value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _ScrappedDiaryFeed() when $default != null:
+      case _ScrappedDiaryFeedResponse() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -278,11 +278,11 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_ScrappedDiaryFeed value) $default,
+    TResult Function(_ScrappedDiaryFeedResponse value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ScrappedDiaryFeed():
+      case _ScrappedDiaryFeedResponse():
         return $default(_that);
       case _:
         throw StateError('Unexpected subclass');
@@ -303,11 +303,11 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_ScrappedDiaryFeed value)? $default,
+    TResult? Function(_ScrappedDiaryFeedResponse value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _ScrappedDiaryFeed() when $default != null:
+      case _ScrappedDiaryFeedResponse() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -351,7 +351,7 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
   }) {
     final _that = this;
     switch (_that) {
-      case _ScrappedDiaryFeed() when $default != null:
+      case _ScrappedDiaryFeedResponse() when $default != null:
         return $default(
             _that.diaryId,
             _that.content,
@@ -412,7 +412,7 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
   ) {
     final _that = this;
     switch (_that) {
-      case _ScrappedDiaryFeed():
+      case _ScrappedDiaryFeedResponse():
         return $default(
             _that.diaryId,
             _that.content,
@@ -472,7 +472,7 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
   ) {
     final _that = this;
     switch (_that) {
-      case _ScrappedDiaryFeed() when $default != null:
+      case _ScrappedDiaryFeedResponse() when $default != null:
         return $default(
             _that.diaryId,
             _that.content,
@@ -499,8 +499,8 @@ extension ScrappedDiaryFeedPatterns on ScrappedDiaryFeed {
 
 /// @nodoc
 @JsonSerializable()
-class _ScrappedDiaryFeed implements ScrappedDiaryFeed {
-  const _ScrappedDiaryFeed(
+class _ScrappedDiaryFeedResponse implements ScrappedDiaryFeedResponse {
+  const _ScrappedDiaryFeedResponse(
       {this.diaryId = 0,
       this.content = '',
       this.createdDate = '',
@@ -519,8 +519,8 @@ class _ScrappedDiaryFeed implements ScrappedDiaryFeed {
       this.liked = false,
       this.scraped = false})
       : _images = images;
-  factory _ScrappedDiaryFeed.fromJson(Map<String, dynamic> json) =>
-      _$ScrappedDiaryFeedFromJson(json);
+  factory _ScrappedDiaryFeedResponse.fromJson(Map<String, dynamic> json) =>
+      _$ScrappedDiaryFeedResponseFromJson(json);
 
   @override
   @JsonKey()
@@ -580,17 +580,19 @@ class _ScrappedDiaryFeed implements ScrappedDiaryFeed {
   @JsonKey()
   final bool scraped;
 
-  /// Create a copy of ScrappedDiaryFeed
+  /// Create a copy of ScrappedDiaryFeedResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ScrappedDiaryFeedCopyWith<_ScrappedDiaryFeed> get copyWith =>
-      __$ScrappedDiaryFeedCopyWithImpl<_ScrappedDiaryFeed>(this, _$identity);
+  _$ScrappedDiaryFeedResponseCopyWith<_ScrappedDiaryFeedResponse>
+      get copyWith =>
+          __$ScrappedDiaryFeedResponseCopyWithImpl<_ScrappedDiaryFeedResponse>(
+              this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$ScrappedDiaryFeedToJson(
+    return _$ScrappedDiaryFeedResponseToJson(
       this,
     );
   }
@@ -599,7 +601,7 @@ class _ScrappedDiaryFeed implements ScrappedDiaryFeed {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ScrappedDiaryFeed &&
+            other is _ScrappedDiaryFeedResponse &&
             (identical(other.diaryId, diaryId) || other.diaryId == diaryId) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.createdDate, createdDate) ||
@@ -653,16 +655,16 @@ class _ScrappedDiaryFeed implements ScrappedDiaryFeed {
 
   @override
   String toString() {
-    return 'ScrappedDiaryFeed(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, scrapId: $scrapId, liked: $liked, scraped: $scraped)';
+    return 'ScrappedDiaryFeedResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, scrapId: $scrapId, liked: $liked, scraped: $scraped)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$ScrappedDiaryFeedCopyWith<$Res>
-    implements $ScrappedDiaryFeedCopyWith<$Res> {
-  factory _$ScrappedDiaryFeedCopyWith(
-          _ScrappedDiaryFeed value, $Res Function(_ScrappedDiaryFeed) _then) =
-      __$ScrappedDiaryFeedCopyWithImpl;
+abstract mixin class _$ScrappedDiaryFeedResponseCopyWith<$Res>
+    implements $ScrappedDiaryFeedResponseCopyWith<$Res> {
+  factory _$ScrappedDiaryFeedResponseCopyWith(_ScrappedDiaryFeedResponse value,
+          $Res Function(_ScrappedDiaryFeedResponse) _then) =
+      __$ScrappedDiaryFeedResponseCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -686,14 +688,14 @@ abstract mixin class _$ScrappedDiaryFeedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$ScrappedDiaryFeedCopyWithImpl<$Res>
-    implements _$ScrappedDiaryFeedCopyWith<$Res> {
-  __$ScrappedDiaryFeedCopyWithImpl(this._self, this._then);
+class __$ScrappedDiaryFeedResponseCopyWithImpl<$Res>
+    implements _$ScrappedDiaryFeedResponseCopyWith<$Res> {
+  __$ScrappedDiaryFeedResponseCopyWithImpl(this._self, this._then);
 
-  final _ScrappedDiaryFeed _self;
-  final $Res Function(_ScrappedDiaryFeed) _then;
+  final _ScrappedDiaryFeedResponse _self;
+  final $Res Function(_ScrappedDiaryFeedResponse) _then;
 
-  /// Create a copy of ScrappedDiaryFeed
+  /// Create a copy of ScrappedDiaryFeedResponse
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -716,7 +718,7 @@ class __$ScrappedDiaryFeedCopyWithImpl<$Res>
     Object? liked = null,
     Object? scraped = null,
   }) {
-    return _then(_ScrappedDiaryFeed(
+    return _then(_ScrappedDiaryFeedResponse(
       diaryId: null == diaryId
           ? _self.diaryId
           : diaryId // ignore: cast_nullable_to_non_nullable

@@ -30,7 +30,7 @@ abstract class ScrappedDiaryRepository {
   });
 
   @GET('/scraps/reading-diaries/feed')
-  Future<ResponseForm<CursorPageResponse<ScrappedDiaryFeed>>>
+  Future<ResponseForm<CursorPageResponse<ScrappedDiaryFeedResponse>>>
       getScrappedDiaryFeeds({
     @Query('cursorId') int? cursorId,
     @Query('size') int? size,

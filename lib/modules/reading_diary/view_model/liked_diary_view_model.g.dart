@@ -26,7 +26,7 @@ final likedDiaryRepositoryProvider =
 // ignore: unused_element
 typedef LikedDiaryRepositoryRef = AutoDisposeProviderRef<LikedDiaryRepository>;
 String _$likedDiaryViewModelHash() =>
-    r'dbd9c9a2ffd79fab2f1deb726b61909afe81b34c';
+    r'6499fc8ae9626e2ee4454a20f0d3f1176e57300c';
 
 /// See also [LikedDiaryViewModel].
 @ProviderFor(LikedDiaryViewModel)

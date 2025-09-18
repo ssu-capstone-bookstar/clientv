@@ -6,8 +6,9 @@ part of 'scrapped_diary_feed_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ScrappedDiaryFeed _$ScrappedDiaryFeedFromJson(Map<String, dynamic> json) =>
-    _ScrappedDiaryFeed(
+_ScrappedDiaryFeedResponse _$ScrappedDiaryFeedResponseFromJson(
+        Map<String, dynamic> json) =>
+    _ScrappedDiaryFeedResponse(
       diaryId: (json['diaryId'] as num?)?.toInt() ?? 0,
       content: json['content'] as String? ?? '',
       createdDate: json['createdDate'] as String? ?? '',
@@ -31,7 +32,8 @@ _ScrappedDiaryFeed _$ScrappedDiaryFeedFromJson(Map<String, dynamic> json) =>
       scraped: json['scraped'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$ScrappedDiaryFeedToJson(_ScrappedDiaryFeed instance) =>
+Map<String, dynamic> _$ScrappedDiaryFeedResponseToJson(
+        _ScrappedDiaryFeedResponse instance) =>
     <String, dynamic>{
       'diaryId': instance.diaryId,
       'content': instance.content,

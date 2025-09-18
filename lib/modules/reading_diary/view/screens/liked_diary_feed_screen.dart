@@ -101,8 +101,7 @@ class _LikedDiaryFeedScreenState extends BaseScreenState<LikedDiaryFeedScreen> {
               isScrollControlled: true,
               backgroundColor: ColorName.b1,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               builder: (context) =>
                   DiaryFeedCommentDialog(diaryId: targetFeed.diaryId));
@@ -113,10 +112,8 @@ class _LikedDiaryFeedScreenState extends BaseScreenState<LikedDiaryFeedScreen> {
                 targetFeed.diaryId, commentCount);
           }
         },
-        onDelete: (BuildContext ctx, int targetIndex) async {
-        },
-        onReport: (BuildContext ctx, int targetIndex) async {
-        },
+        onDelete: (BuildContext ctx, int targetIndex) async {},
+        onReport: (BuildContext ctx, int targetIndex) async {},
         onProfile: (int targetIndex) {
           final targetFeed = likedDiary.feeds[targetIndex];
           context.push('/book-log/thumbnail/${targetFeed.memberId}');
@@ -130,8 +127,7 @@ class _LikedDiaryFeedScreenState extends BaseScreenState<LikedDiaryFeedScreen> {
           likedDiaryNotifier.handleFeedScrap(
               targetFeed.diaryId, targetFeed.scraped, targetIndex);
         },
-        onUpdate: (int targetIndex) {
-        },
+        onUpdate: (int targetIndex) {},
       ),
       error: error("좋아요 누른 다이어리 정보를 불러올 수 없습니다."),
       loading: loading,

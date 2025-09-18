@@ -26,28 +26,8 @@ final scrappedDiaryRepositoryProvider =
 // ignore: unused_element
 typedef ScrappedDiaryRepositoryRef
     = AutoDisposeProviderRef<ScrappedDiaryRepository>;
-String _$getScrappedDiaryFeedsAsyncHash() =>
-    r'4a46b4dc2ada10c2755133a89b351ea6ebd2b546';
-
-/// See also [getScrappedDiaryFeedsAsync].
-@ProviderFor(getScrappedDiaryFeedsAsync)
-final getScrappedDiaryFeedsAsyncProvider =
-    AutoDisposeFutureProvider<List<ScrappedDiaryFeed>>.internal(
-  getScrappedDiaryFeedsAsync,
-  name: r'getScrappedDiaryFeedsAsyncProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getScrappedDiaryFeedsAsyncHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GetScrappedDiaryFeedsAsyncRef
-    = AutoDisposeFutureProviderRef<List<ScrappedDiaryFeed>>;
 String _$scrappedDiaryViewModelHash() =>
-    r'4450a1cf61b9a4b2baceb4272a3ba1a08447854a';
+    r'9f01b5aafcf7235bc020fc6a2ba9977bf074c445';
 
 /// See also [ScrappedDiaryViewModel].
 @ProviderFor(ScrappedDiaryViewModel)
