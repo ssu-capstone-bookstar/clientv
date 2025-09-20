@@ -38,7 +38,13 @@ class _MusicPlayerWidgetState extends ConsumerState<MusicPlayerWidget> {
       if (d != null && mounted) setState(() => _duration = d);
     });
     _positionSubscription = player.positionStream.listen((p) {
-      if (mounted && !_isDragging) setState(() => _position = p);
+      if (mounted && !_isDragging) {
+        setState(() => _position = p);
+      }
+      final remaining = _duration - p;
+      if (remaining.inSeconds < 1 && _duration > Duration.zero) {
+        player.seek(Duration.zero);
+      }
     });
     _playerStateSubscription = player.playerStateStream.listen((state) {
       if (mounted) setState(() => _isPlaying = state.playing);
