@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../view_model/book_view_model.dart';
 
 class BookOverviewScreen extends ConsumerStatefulWidget {
@@ -79,6 +80,15 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
         .handleOverviewLike();
   }
 
+  Future<void> _onAladin(String aladinUrl) async {
+    if (await canLaunchUrl(Uri.parse(aladinUrl))) {
+      await launchUrl(Uri.parse(aladinUrl),
+          mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $aladinUrl';
+    }
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -123,10 +133,9 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                                 children: [
                                   ..._buildAppBarTopSection(
                                       context, bookOverview.overview,
-                                      onLike: _onLike)
+                                      onAladin: _onAladin, onLike: _onLike)
                                 ],
                               ),
-
                               _buildAppBarBottomSection(
                                   initialStar: currentStar,
                                   updateStar: _updateStar)
@@ -187,7 +196,7 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
 
   List<Widget> _buildAppBarTopSection(
       BuildContext context, BookOverviewResponse book,
-      {required Function() onLike}) {
+      {required Function() onLike, required Function(String) onAladin}) {
     return [
       BackButton(
         color: ColorName.w1,
@@ -228,11 +237,20 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                   ),
                 ],
               ),
-              InkWell(
-                  onTap: onLike,
-                  child: book.liked
-                      ? Assets.icons.icHeartFilled.svg(width: 24, height: 24)
-                      : Assets.icons.icHeart.svg(width: 24, height: 24))
+              Row(
+                children: [
+                  InkWell(
+                      onTap: () => onAladin(book.aladinUrl),
+                      child: Assets.icons.aladin.svg(width: 24, height: 24)),
+                  const SizedBox(width: 8),
+                  InkWell(
+                      onTap: onLike,
+                      child: book.liked
+                          ? Assets.icons.icHeartFilled
+                              .svg(width: 24, height: 24)
+                          : Assets.icons.icHeart.svg(width: 24, height: 24)),
+                ],
+              )
             ],
           ),
           SizedBox(

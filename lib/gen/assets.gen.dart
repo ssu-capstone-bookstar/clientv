@@ -69,6 +69,9 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/aladin.svg
+  SvgGenImage get aladin => const SvgGenImage('assets/icons/aladin.svg');
+
   /// File path: assets/icons/apple.svg
   SvgGenImage get apple => const SvgGenImage('assets/icons/apple.svg');
 
@@ -339,6 +342,7 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    aladin,
     apple,
     google,
     icAddPick,
