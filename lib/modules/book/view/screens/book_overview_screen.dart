@@ -133,11 +133,9 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                                 children: [
                                   ..._buildAppBarTopSection(
                                       context, bookOverview.overview,
-                                      onAladin: _onAladin,
-                                      onLike: _onLike)
+                                      onAladin: _onAladin, onLike: _onLike)
                                 ],
                               ),
-
                               _buildAppBarBottomSection(
                                   initialStar: currentStar,
                                   updateStar: _updateStar)
@@ -239,14 +237,20 @@ class _BookOverviewScreenState extends ConsumerState<BookOverviewScreen> {
                   ),
                 ],
               ),
-              InkWell(
-                  onTap: () => onAladin(book.aladinUrl),
-                  child: Assets.icons.aladin.svg(width: 24, height: 24)),
-              InkWell(
-                  onTap: onLike,
-                  child: book.liked
-                      ? Assets.icons.icHeartFilled.svg(width: 24, height: 24)
-                      : Assets.icons.icHeart.svg(width: 24, height: 24)),
+              Row(
+                children: [
+                  InkWell(
+                      onTap: () => onAladin(book.aladinUrl),
+                      child: Assets.icons.aladin.svg(width: 24, height: 24)),
+                  const SizedBox(width: 8),
+                  InkWell(
+                      onTap: onLike,
+                      child: book.liked
+                          ? Assets.icons.icHeartFilled
+                              .svg(width: 24, height: 24)
+                          : Assets.icons.icHeart.svg(width: 24, height: 24)),
+                ],
+              )
             ],
           ),
           SizedBox(
