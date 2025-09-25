@@ -136,32 +136,33 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   }
 
   _handleMessageReport(int messageId) async {
-     final result = await showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: ColorName.b1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          builder: (context) => ReportDialog());
+    final result = await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: ColorName.b1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => ReportDialog());
 
-      if (result == null) return;
+    if (result == null) return;
 
-      ReportType? reportType = result?['reportType'];
-      String? content = result?['content'];
+    ReportType? reportType = result?['reportType'];
+    String? content = result?['content'];
 
-      if (reportType == null || content == null) return;
-      await ref.read(chatViewModelProvider.notifier).reportMessage(messageId, reportType, content);
-      if (!mounted) return;
-      await showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: ColorName.b1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          builder: (context) => ReportSuccessDialog());
-    
+    if (reportType == null || content == null) return;
+    await ref
+        .read(chatViewModelProvider.notifier)
+        .reportMessage(messageId, reportType, content);
+    if (!mounted) return;
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: ColorName.b1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => ReportSuccessDialog());
   }
 
   @override
@@ -338,12 +339,26 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                                   ),
                                   ConstrainedBox(
                                     constraints: BoxConstraints(maxWidth: 140),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: backgroundColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: getChatWidget(message, textStyle),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(message.senderName,
+                                            style: AppTexts.b12.copyWith(
+                                                color: ColorName.g1,
+                                                overflow:
+                                                    TextOverflow.ellipsis)),
+                                        SizedBox(height: 4),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: backgroundColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child:
+                                              getChatWidget(message, textStyle),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(
