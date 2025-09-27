@@ -36,6 +36,12 @@ abstract class BaseScreenState<T extends BaseScreen> extends ConsumerState<T>
   DateTime? _lastTopReachedTime;
   DateTime? _lastBottomReachedTime;
 
+// 가로 스크롤용 변수들
+  DateTime? _lastLeftReachedTime;
+  DateTime? _lastRightReachedTime;
+  double _currentHorizontalScrollOffset = 0.0;
+  double _previousHorizontalScrollOffset = 0.0;
+
   // 디바운싱 시간 (밀리초)
   final double _scrollDebounceDuration = 1000;
 
@@ -95,10 +101,41 @@ abstract class BaseScreenState<T extends BaseScreen> extends ConsumerState<T>
     onScroll(offset, maxScrollExtent);
 
     // 방향 감지 - 이전 offset과 비교
-    if (offset > _previousScrollOffset) {
-      onScrollDown(offset);
-    } else if (offset < _previousScrollOffset) {
-      onScrollUp(offset);
+    if (scrollController.position.axis == Axis.vertical) {
+      if (offset > _previousScrollOffset) {
+        onScrollDown(offset);
+      } else if (offset < _previousScrollOffset) {
+        onScrollUp(offset);
+      }
+    } else if (scrollController.position.axis == Axis.horizontal) {
+      _previousHorizontalScrollOffset = _currentHorizontalScrollOffset;
+      _currentHorizontalScrollOffset = offset;
+
+      if (offset > _previousHorizontalScrollOffset) {
+        onScrollRight(offset);
+      } else if (offset < _previousHorizontalScrollOffset) {
+        onScrollLeft(offset);
+      }
+
+      // 좌측 끝 도달 감지
+      if (offset <= 0) {
+        final now = DateTime.now();
+        if (_lastLeftReachedTime == null ||
+            now.difference(_lastLeftReachedTime!).inMilliseconds >= 300) {
+          _lastLeftReachedTime = now;
+          onLeftReached();
+        }
+      }
+
+      // 우측 끝 도달 감지 (80% 지점)
+      if (maxScrollExtent > 0 && offset >= maxScrollExtent * 0.8) {
+        final now = DateTime.now();
+        if (_lastRightReachedTime == null ||
+            now.difference(_lastRightReachedTime!).inMilliseconds >= 300) {
+          _lastRightReachedTime = now;
+          onRightReached();
+        }
+      }
     }
 
     // 상단 도달 감지 - DateTime 디바운싱 적용
@@ -321,8 +358,12 @@ abstract class BaseScreenState<T extends BaseScreen> extends ConsumerState<T>
   void onScroll(double offset, double maxScrollExtent) {}
   void onScrollDown(double offset) {}
   void onScrollUp(double offset) {}
+  void onScrollLeft(double offset) {}
+  void onScrollRight(double offset) {}
   void onBottomReached() async {}
   void onTopReached() {}
+  void onLeftReached() {}
+  void onRightReached() {}
   void onKeyboardShown() {}
   void onKeyboardHidden() {}
   void onFocusGained() {}
