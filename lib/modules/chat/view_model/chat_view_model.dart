@@ -93,7 +93,10 @@ class ChatViewModel extends _$ChatViewModel {
     _imageRepo = ref.read(imageRepositoryProvider);
     _s3Repo = ref.read(s3RepositoryProvider);
     _readingDiaryRepository = ref.watch(readingDiaryRepositoryProvider);
+    return await initState();
+  }
 
+  Future<ChatState> initState() async {
     final response = await _repository.getMyChatRooms();
     state = AsyncValue.data(
       ChatState(
@@ -135,7 +138,6 @@ class ChatViewModel extends _$ChatViewModel {
   Future<void> fetchPreviousChatHistory(int roomId) async {
     final prev = state.value ?? ChatState();
     if (!prev.hasNext || prev.nextCursor == -1) return;
-    // state = AsyncValue.loading();
     final previousChatHistory =
         await getChatHistory(roomId, cursorId: prev.nextCursor);
     state = AsyncValue.data(

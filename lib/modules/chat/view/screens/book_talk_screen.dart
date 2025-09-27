@@ -1,3 +1,5 @@
+import 'package:bookstar/common/components/base_screen.dart';
+import 'package:bookstar/common/components/custom_list_view.dart';
 import 'package:bookstar/common/theme/style/app_paddings.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:bookstar/gen/assets.gen.dart';
@@ -8,58 +10,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class BookTalkScreen extends ConsumerStatefulWidget {
+class BookTalkScreen extends BaseScreen {
   const BookTalkScreen({super.key});
 
   @override
-  ConsumerState<BookTalkScreen> createState() => _BookTalkScreenState();
+  BaseScreenState<BookTalkScreen> createState() => _BookTalkScreenState();
 }
 
-class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
-  late final ScrollController _scrollController;
+class _BookTalkScreenState extends BaseScreenState<BookTalkScreen> {
+  @override
+  bool enableRefreshIndicator() => true;
 
   @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
+  Future<void> onRefresh() async {
+    final notifier = ref.read(chatViewModelProvider.notifier);
+    await notifier.initState();
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Text("책톡", style: AppTexts.b5),
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     final state = ref.watch(chatViewModelProvider);
     return state.when(
       data: (data) {
-        final Set<int> myChatRoomIds = data.myChatRooms.map((v) => v.id).toSet();
-        return CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildCategoryChatRooms(ref, myChatRoomIds,
-                    (roomId) => context.push('/book-talk/chat-room/${roomId}')),
-                SizedBox(height: 60),
-                _buildJoinedChatRooms(data.myChatRooms,
-                    (roomId) => context.push('/book-talk/chat-room/${roomId}')),
-              ],
-            )),
-          ],
+        final Set<int> myChatRoomIds =
+            data.myChatRooms.map((v) => v.id).toSet();
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            /** 카테고리 */
+            _buildCategoryChatRooms(
+                chatRoomIds: myChatRoomIds,
+                onTap: (roomId) async {
+                  if (!myChatRoomIds.contains(roomId)) {
+                    await ref
+                        .read(chatViewModelProvider.notifier)
+                        .joinChatRoom(roomId);
+                  }
+                  if (!context.mounted) return;
+                  context.push('/book-talk/chat-room/$roomId');
+                }),
+            SizedBox(height: 60),
+            /** 참여한 채팅방 */
+            Expanded(
+              child: _buildJoinedChatRooms(
+                  items: data.myChatRooms,
+                  onTap: (roomId) => context.push('/book-talk/chat-room/$roomId')),
+            ),
+          ]),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text('Error: $err')),
+      loading: loading,
+      error: error("채팅방 정보를 불러올 수 없습니다."),
     );
   }
 
   Widget _buildCategoryChatRooms(
-      WidgetRef ref, Set<int> myChatRoomIds, Function(int) goToChatRoom) {
+      {required Set<int> chatRoomIds, required Function(int) onTap}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -70,14 +84,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
           runSpacing: 12,
           children: ChatViewModel.categories
               .map((category) => GestureDetector(
-                    onTap: () async {
-                      if (!myChatRoomIds.contains(category.roomId)) {
-                        await ref
-                            .read(chatViewModelProvider.notifier)
-                            .joinChatRoom(category.roomId);
-                      }
-                      goToChatRoom(category.roomId);
-                    },
+                    onTap: () => onTap(category.roomId),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
@@ -96,7 +103,7 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
   }
 
   Widget _buildJoinedChatRooms(
-      List<ChatRoomResponse> items, Function(int) goToChatRoom) {
+      {required List<ChatRoomResponse> items, required Function(int) onTap}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -104,32 +111,32 @@ class _BookTalkScreenState extends ConsumerState<BookTalkScreen> {
         Text('참여 중인 채팅방을 확인해 보세요',
             style: AppTexts.b10.copyWith(color: ColorName.g2)),
         SizedBox(height: 12),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return GestureDetector(
-              onTap: () {
-                goToChatRoom(item.id);
+        Expanded(
+          child: CustomListView(
+              emptyIcon: Assets.icons.icBookpickSearchCharacter.svg(),
+              emptyText: '검색 결과가 없습니다.',
+              isEmpty: items.isEmpty,
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return GestureDetector(
+                  onTap: () => onTap(item.id),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: _buildJoinedChatRoomItem(item: item),
+                  ),
+                );
               },
-              child: Container(
-                color: Colors.transparent,
-                child: _buildJoinedChatRoomItem(item),
-              ),
-            );
-          },
-          itemCount: items.length,
-          separatorBuilder: (context, index) => Divider(
-            height: 1,
-            color: ColorName.g7,
-          ),
-        )
+              separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: ColorName.g7,
+                  )),
+        ),
       ],
     );
   }
 
-  Widget _buildJoinedChatRoomItem(ChatRoomResponse item) {
+  Widget _buildJoinedChatRoomItem({required ChatRoomResponse item}) {
     ChatCategory category = ChatViewModel.categories.firstWhere(
         (v) => v.roomId == item.id,
         orElse: () => ChatViewModel.defaultCategory);

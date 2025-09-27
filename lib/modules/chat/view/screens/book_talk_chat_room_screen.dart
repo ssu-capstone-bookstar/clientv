@@ -1,4 +1,5 @@
 import 'package:ably_flutter/ably_flutter.dart' as ably;
+import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/theme/style/app_paddings.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:bookstar/gen/assets.gen.dart';
@@ -22,52 +23,49 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-class BookTalkChatRoomScreen extends ConsumerStatefulWidget {
+class BookTalkChatRoomScreen extends BaseScreen {
   const BookTalkChatRoomScreen({super.key, required this.roomId});
 
   final int roomId;
 
   @override
-  ConsumerState<BookTalkChatRoomScreen> createState() =>
+  BaseScreenState<BookTalkChatRoomScreen> createState() =>
       _BookTalkChatRoomScreen();
 }
 
-class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
-  late final ScrollController _scrollController;
+class _BookTalkChatRoomScreen extends BaseScreenState<BookTalkChatRoomScreen> {
+  @override
+  bool enableRefreshIndicator() => false;
   final TextEditingController _textController = TextEditingController();
   bool _visibleOption = false;
   final ImagePicker _picker = ImagePicker();
   ably.RealtimeChannel? _channel;
-  final FocusNode _chatInputFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
     _textController.addListener(() {
       setState(() {});
     });
-    Future.microtask(() async {
-      await ref
-          .read(chatViewModelProvider.notifier)
-          .initChatRoomState(widget.roomId);
-      _channel = await ref
-          .read(chatViewModelProvider.notifier)
-          .initAbly(widget.roomId);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final notifier = ref.read(chatViewModelProvider.notifier);
+      await notifier.initChatRoomState(widget.roomId);
+      _channel = await notifier.initAbly(widget.roomId);
       _subscribe();
     });
   }
 
-  void _onScroll() async {
-    const margin = 10;
-    // 맨 위에 도달했는지 확인
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent + margin) {
-      await ref
-          .read(chatViewModelProvider.notifier)
-          .fetchPreviousChatHistory(widget.roomId);
-    }
+  
+  
+  @override
+  Future<void> onTopReached() async {
+    final notifier = ref.read(chatViewModelProvider.notifier);
+    await notifier.fetchPreviousChatHistory(widget.roomId);
+  }
+
+  @override
+  onScreenTap() {
+    _clearChatInput();
   }
 
   _subscribe() {
@@ -86,7 +84,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     setState(() {
       _visibleOption = value;
     });
-    if (value) _chatInputFocusNode.unfocus();
+    if (value) focusNode.unfocus();
   }
 
   _handleTextSend() async {
@@ -131,7 +129,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   }
 
   _clearChatInput() {
-    _chatInputFocusNode.unfocus();
+    focusNode.unfocus();
     _updateVisibleOption(false);
   }
 
@@ -172,53 +170,54 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(chatViewModelProvider);
-    final user = ref.watch(authViewModelProvider).value;
-    final memberId = (user is AuthSuccess) ? user.memberId : 0;
-
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
     String roomName = ChatViewModel.categories
         .firstWhere((item) => item.roomId == widget.roomId,
             orElse: () => ChatViewModel.defaultCategory)
         .name;
+    return AppBar(
+      title: Text(roomName),
+      actions: [
+        IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () =>
+                context.push('/book-talk/chat-room/${widget.roomId}/menu'))
+      ],
+    );
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
+    final state = ref.watch(chatViewModelProvider);
+    final user = ref.watch(authViewModelProvider).value;
+    final memberId = (user is AuthSuccess) ? user.memberId : 0;
 
     return GestureDetector(
       onTap: () {
         _clearChatInput();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(roomName),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () =>
-                    context.push('/book-talk/chat-room/${widget.roomId}/menu'))
-          ],
-        ),
-        body: SafeArea(
-          child: state.when(
-            data: (data) => Column(
-              children: [
-                Expanded(
-                    child: _buildChatHistory(
-                        scrollController: _scrollController,
-                        data: data,
-                        currentMemberId: memberId,
-                        onReport: _handleMessageReport)),
-                ChatInputWrap(
-                  textController: _textController,
-                  visibleOption: _visibleOption,
-                  focusNode: _chatInputFocusNode,
-                  updateVisibleOption: _updateVisibleOption,
-                  handleTextSend: _handleTextSend,
-                  clickInputOption: _clickInputOption,
-                )
-              ],
-            ),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Center(child: Text('Error: $err')),
+      child: SafeArea(
+        child: state.when(
+          data: (data) => Column(
+            children: [
+              Expanded(
+                  child: _buildChatHistory(
+                      scrollController: scrollController,
+                      data: data,
+                      currentMemberId: memberId,
+                      onReport: _handleMessageReport)),
+              ChatInputWrap(
+                textController: _textController,
+                visibleOption: _visibleOption,
+                focusNode: focusNode,
+                updateVisibleOption: _updateVisibleOption,
+                handleTextSend: _handleTextSend,
+                clickInputOption: _clickInputOption,
+              )
+            ],
           ),
+          loading: loading,
+          error: error("채팅방 정보를 불러올 수 없습니다."),
         ),
       ),
     );
@@ -230,7 +229,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
     required int currentMemberId,
     required Function(int) onReport,
   }) {
-    final messages = data.chatHistory;
+    final revertMessages = data.chatHistory.reversed.toList();
 
     Widget? getProfileImage(int senderId) {
       final profileImageUrl = data.chatParticipants.participants
@@ -290,18 +289,17 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
       return Text(formatted, style: AppTexts.b12.copyWith(color: ColorName.w1));
     }
 
-    return messages.isEmpty
+    return revertMessages.isEmpty
         ? _buildEmptyChatRoom()
         : Padding(
             padding: AppPaddings.CHAT_CONTAINER_PADDING,
             child: CustomScrollView(
-              controller: _scrollController,
-              reverse: true,
+              controller: scrollController,
               slivers: [
                 SliverList(
                     delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final message = messages[index];
+                    final message = revertMessages[index];
                     final isMe = message.senderId == currentMemberId;
                     final profileImage = getProfileImage(message.senderId);
                     final backgroundColor = !isMe ? ColorName.g7 : ColorName.p1;
@@ -390,7 +388,7 @@ class _BookTalkChatRoomScreen extends ConsumerState<BookTalkChatRoomScreen> {
                       ),
                     );
                   },
-                  childCount: messages.length,
+                  childCount: revertMessages.length,
                 ))
               ],
             ),

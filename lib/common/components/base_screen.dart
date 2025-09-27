@@ -85,50 +85,51 @@ abstract class BaseScreenState<T extends BaseScreen> extends ConsumerState<T>
   }
 
   void _scrollListener() {
-  final offset = scrollController.offset;
-  final maxScrollExtent = scrollController.position.maxScrollExtent;
+    final offset = scrollController.offset;
+    final maxScrollExtent = scrollController.position.maxScrollExtent;
 
-  // 이전 offset 저장 후 현재 offset 업데이트
-  _previousScrollOffset = _currentScrollOffset;
-  _currentScrollOffset = offset;
+    // 이전 offset 저장 후 현재 offset 업데이트
+    _previousScrollOffset = _currentScrollOffset;
+    _currentScrollOffset = offset;
 
-  onScroll(offset, maxScrollExtent);
+    onScroll(offset, maxScrollExtent);
 
-  // 방향 감지 - 이전 offset과 비교
-  if (offset > _previousScrollOffset) {
-    onScrollDown(offset);
-  } else if (offset < _previousScrollOffset) {
-    onScrollUp(offset);
-  }
-
-  // 상단 도달 감지 - DateTime 디바운싱 적용
-  if (offset <= 0) {
-    final now = DateTime.now();
-    if (_lastScrollTopReachedTime == null ||
-        now.difference(_lastScrollTopReachedTime!).inMilliseconds >= 300) {
-      _lastScrollTopReachedTime = now;
-      onTopReached();
+    // 방향 감지 - 이전 offset과 비교
+    if (offset > _previousScrollOffset) {
+      onScrollDown(offset);
+    } else if (offset < _previousScrollOffset) {
+      onScrollUp(offset);
     }
-  }
 
-  // 하단 도달 감지 - 리스트 개수 기반으로 계산
-  final totalItems = getListTotalItemCount();
-  if (totalItems > 0 && maxScrollExtent > 0) {
-    // 전체 아이템의 80% 지점의 스크롤 위치 계산
-    final threshold = (totalItems * 0.8).round();
-    final itemHeight = maxScrollExtent / totalItems; // 평균 아이템 높이
-    final thresholdScrollPosition = threshold * itemHeight;
-    
-    if (offset >= thresholdScrollPosition) {
+    // 상단 도달 감지 - DateTime 디바운싱 적용
+    if (offset <= 0) {
       final now = DateTime.now();
-      if (_lastScrollBottomReachedTime == null ||
-          now.difference(_lastScrollBottomReachedTime!).inMilliseconds >= 300) {
-        _lastScrollBottomReachedTime = now;
-        onBottomReached();
+      if (_lastScrollTopReachedTime == null ||
+          now.difference(_lastScrollTopReachedTime!).inMilliseconds >= 300) {
+        _lastScrollTopReachedTime = now;
+        onTopReached();
+      }
+    }
+
+    // 하단 도달 감지 - 리스트 개수 기반으로 계산
+    final totalItems = getListTotalItemCount();
+    if (totalItems > 0 && maxScrollExtent > 0) {
+      // 전체 아이템의 80% 지점의 스크롤 위치 계산
+      final threshold = (totalItems * 0.8).round();
+      final itemHeight = maxScrollExtent / totalItems; // 평균 아이템 높이
+      final thresholdScrollPosition = threshold * itemHeight;
+
+      if (offset >= thresholdScrollPosition) {
+        final now = DateTime.now();
+        if (_lastScrollBottomReachedTime == null ||
+            now.difference(_lastScrollBottomReachedTime!).inMilliseconds >=
+                300) {
+          _lastScrollBottomReachedTime = now;
+          onBottomReached();
+        }
       }
     }
   }
-}
 
   void _itemPositionsListener() {
     final positions = itemPositionsListener.itemPositions.value;
@@ -191,7 +192,9 @@ abstract class BaseScreenState<T extends BaseScreen> extends ConsumerState<T>
           if (_lastBottomReachedTime == null ||
               now.difference(_lastBottomReachedTime!).inMilliseconds >=
                   _scrollDebounceDuration) {
-            _lastBottomReachedTime = now;
+            setState(() {
+              _lastBottomReachedTime = now;
+            });
             onBottomReached();
           }
         }

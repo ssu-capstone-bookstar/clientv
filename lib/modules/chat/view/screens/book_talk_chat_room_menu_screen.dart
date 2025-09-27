@@ -1,3 +1,4 @@
+import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/components/button/cta_button_s.dart';
 import 'package:bookstar/common/components/dialog/custom_dialog.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
@@ -10,64 +11,91 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class BookTalkChatRoomMenuScreen extends ConsumerStatefulWidget {
+class BookTalkChatRoomMenuScreen extends BaseScreen {
   const BookTalkChatRoomMenuScreen({super.key, required this.roomId});
   final int roomId;
 
   @override
-  ConsumerState<BookTalkChatRoomMenuScreen> createState() =>
+  BaseScreenState<BookTalkChatRoomMenuScreen> createState() =>
       _BookTalkChatRoomMenuScreenState();
 }
 
 class _BookTalkChatRoomMenuScreenState
-    extends ConsumerState<BookTalkChatRoomMenuScreen> {
-  late final ScrollController _scrollController;
+    extends BaseScreenState<BookTalkChatRoomMenuScreen> {
+  @override
+  bool enableRefreshIndicator() => false;
 
   @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(chatViewModelProvider);
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: state.when(
-          data: (data) {
-            final chatParticipants = data.chatParticipants;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(context, widget.roomId,
-                    chatParticipants.totalParticipantCount),
-                Expanded(
-                  child: CustomScrollView(
-                      controller: _scrollController,
-                      slivers: [
-                        _buildChatParticipantList(chatParticipants.participants)
-                      ]),
-                )
-              ],
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text('Error: $err')),
-        ),
-      ),
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    String roomName = ChatViewModel.categories
+        .firstWhere((item) => item.roomId == widget.roomId,
+            orElse: () => ChatViewModel.defaultCategory)
+        .name;
+    return AppBar(
+      title: Text(roomName),
     );
   }
 
-  Widget _buildHeader(
-      BuildContext context, int roomId, int totalParticipantCount) {
+  void _showExitChatRoomDialog(BuildContext context, int roomId) {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return CustomDialog(
+            title: '채팅방 나가기',
+            content: '채팅방을 나갈까요?',
+            icon: Assets.icons.icReadingChallengeChar1.svg(),
+            onCancel: () => Navigator.of(ctx).pop(),
+            onConfirm: () async {
+              await ref
+                  .read(chatViewModelProvider.notifier)
+                  .leaveChatRoom(roomId);
+              if (ctx.mounted) {
+                Navigator.of(ctx).pop();
+                ctx.go("/book-talk");
+              }
+            },
+            confirmButtonText: '채팅방 나가기',
+            cancelButtonText: '닫기',
+          );
+        });
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
+    final state = ref.watch(chatViewModelProvider);
+    return state.when(
+      data: (data) {
+        final chatParticipants = data.chatParticipants;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(
+                totalParticipantCount: chatParticipants.totalParticipantCount,
+                exitChatRoom: () {
+                  _showExitChatRoomDialog(context, widget.roomId);
+                }),
+            Expanded(
+              child: CustomScrollView(controller: scrollController, slivers: [
+                _buildChatParticipantList(
+                    participants: chatParticipants.participants,
+                    onTap: (memberId) {
+                      context.push(
+                          '/book-talk/chat-room/${widget.roomId}/book-log/$memberId');
+                    })
+              ]),
+            )
+          ],
+        );
+      },
+      loading: loading,
+      error: error("채팅 참여자 정보를 불러올 수 없습니다."),
+    );
+  }
+
+  Widget _buildHeader({
+    required int totalParticipantCount,
+    required Function() exitChatRoom,
+  }) {
     return Padding(
       padding: EdgeInsetsGeometry.all(16),
       child: Row(
@@ -99,7 +127,7 @@ class _BookTalkChatRoomMenuScreenState
           ),
           CtaButtonS(
             text: '채팅방 나가기',
-            onPressed: () => _showExitChatRoomDialog(context, roomId),
+            onPressed: exitChatRoom,
             width: 71,
           )
         ],
@@ -108,15 +136,15 @@ class _BookTalkChatRoomMenuScreenState
   }
 
   Widget _buildChatParticipantList(
-      List<ChatParticipantItemResponse> participants) {
+      {
+        required List<ChatParticipantItemResponse> participants,
+        required Function(int memberId) onTap,
+      }) {
     return SliverList.separated(
       itemBuilder: (context, index) {
         final item = participants[index];
         return GestureDetector(
-          onTap: () {
-            context.push(
-                '/book-talk/chat-room/${widget.roomId}/book-log/${item.memberId}');
-          },
+          onTap: () => onTap(item.memberId),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -166,29 +194,5 @@ class _BookTalkChatRoomMenuScreenState
         color: ColorName.g7,
       ),
     );
-  }
-
-  void _showExitChatRoomDialog(BuildContext context, int roomId) {
-    showDialog(
-        context: context,
-        builder: (ctx) {
-          return CustomDialog(
-            title: '채팅방 나가기',
-            content: '채팅방을 나갈까요?',
-            icon: Assets.icons.icReadingChallengeChar1.svg(),
-            onCancel: () => Navigator.of(ctx).pop(),
-            onConfirm: () async {
-              await ref
-                  .read(chatViewModelProvider.notifier)
-                  .leaveChatRoom(roomId);
-              if (ctx.mounted) {
-                Navigator.of(ctx).pop();
-                ctx.go("/book-talk");
-              }
-            },
-            confirmButtonText: '채팅방 나가기',
-            cancelButtonText: '닫기',
-          );
-        });
   }
 }

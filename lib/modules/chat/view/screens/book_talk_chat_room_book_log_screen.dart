@@ -9,10 +9,8 @@ class BookTalkChatRoomBookLogScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: BookLogThumbnailScreen(
-        memberId: memberId,
-      ),
+    return BookLogThumbnailScreen(
+      memberId: memberId,
     );
   }
 }
