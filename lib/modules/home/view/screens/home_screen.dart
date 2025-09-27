@@ -130,6 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       case "/book-log":
       case "/deep-time":
       case "/reading-challenge":
+      case "/book-talk":
         {
           return EdgeInsets.zero;
         }
@@ -159,6 +160,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _getUseAppBar({required String currentRoute}) {
     switch (currentRoute) {
       case "/book-log":
+      case "/book-talk":
         {
           return false;
         }
