@@ -1,12 +1,12 @@
+import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/models/image_request.dart';
 import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:bookstar/modules/reading_diary/view/widgets/reading_diary_edit_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ReadingDiaryUpdateScreen extends ConsumerStatefulWidget {
+class ReadingDiaryUpdateScreen extends BaseScreen {
   const ReadingDiaryUpdateScreen({
     super.key,
     required this.diaryId,
@@ -19,14 +19,16 @@ class ReadingDiaryUpdateScreen extends ConsumerStatefulWidget {
   final int memberId;
 
   @override
-  ConsumerState<ReadingDiaryUpdateScreen> createState() =>
+  BaseScreenState<ReadingDiaryUpdateScreen> createState() =>
       _ReadingDiaryUpdateScreenState();
 }
 
 class _ReadingDiaryUpdateScreenState
-    extends ConsumerState<ReadingDiaryUpdateScreen> {
+    extends BaseScreenState<ReadingDiaryUpdateScreen> {
+  @override
+  bool enableRefreshIndicator() => false;
+
   final TextEditingController _textController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
   final List<ImageRequest> _uploadedImages = [];
   final List<String> _newImages = [];
   bool _disableSave = false;
@@ -50,38 +52,33 @@ class _ReadingDiaryUpdateScreenState
   @override
   void dispose() {
     _textController.dispose();
-    _focusNode.dispose();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('독서 다이어리'),
-        leading: const BackButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => context.pop(),
-          ),
-        ],
+    @override
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('독서 다이어리'),
+      leading: IconButton(
+        icon: const BackButton(),
+        onPressed: () => Navigator.of(context).pop(),
       ),
-      body: GestureDetector(
-        onTap: () {
-          _focusNode.unfocus();
-        },
-        child: ReadingDiaryEditForm(
+    );
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
+    return ReadingDiaryEditForm(
             textController: _textController,
             initialImages: widget.request.images,
-            focusNode: _focusNode,
+            focusNode: focusNode,
             disabledSave: _disableSave,
             onUpdateDisabledSave: _updateDisableSave,
             onFocus: (show) {
               if (show) {
-                _focusNode.requestFocus();
+                focusNode.requestFocus();
               } else {
-                _focusNode.unfocus();
+                focusNode.unfocus();
               }
             },
             onUpdateText: (text) {
@@ -121,8 +118,6 @@ class _ReadingDiaryUpdateScreenState
                 context.go('/book-log/thumbnail/${widget.memberId}',
                     extra: {'requiredRefresh': true});
               }
-            }),
-      ),
-    );
+            });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/modules/auth/view_model/auth_state.dart';
 import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
 import 'package:bookstar/modules/reading_challenge/view_model/current_challenge_view_model.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ReadingDiaryCreateScreen extends ConsumerStatefulWidget {
+class ReadingDiaryCreateScreen extends BaseScreen {
   const ReadingDiaryCreateScreen({
     super.key,
     required this.bookId,
@@ -18,14 +19,15 @@ class ReadingDiaryCreateScreen extends ConsumerStatefulWidget {
   final int bookId;
 
   @override
-  ConsumerState<ReadingDiaryCreateScreen> createState() =>
-      _ReadingDiaryCreateScreenState();
+  BaseScreenState<BaseScreen> createState() => _ReadingDiaryCreateScreenState();
 }
 
 class _ReadingDiaryCreateScreenState
-    extends ConsumerState<ReadingDiaryCreateScreen> {
+    extends BaseScreenState<ReadingDiaryCreateScreen> {
+  @override
+  bool enableRefreshIndicator() => false;
+
   final TextEditingController _textController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
   final List<String> _newImages = [];
   bool _disableSave = false;
   void _updateDisableSave(bool value) {
@@ -35,82 +37,82 @@ class _ReadingDiaryCreateScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('독서 다이어리'),
-        leading: const BackButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => context.pop(),
-          ),
-        ],
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('독서 다이어리'),
+      leading: IconButton(
+        icon: const BackButton(),
+        onPressed: () => Navigator.of(context).pop(),
       ),
-      body: GestureDetector(
-          onTap: () {
-            _focusNode.unfocus();
-          },
-          child: ReadingDiaryEditForm(
-            textController: _textController,
-            initialImages: [],
-            focusNode: _focusNode,
-            disabledSave: _disableSave,
-            onUpdateDisabledSave: _updateDisableSave,
-            onFocus: (show) {
-              if (show) {
-                _focusNode.requestFocus();
-              } else {
-                _focusNode.unfocus();
-              }
-            },
-            onUpdateText: (text) {
-              setState(() {
-                _textController.text = text;
-              });
-            },
-            onUpdateImage: (_, newImages) {
-              setState(() {
-                _newImages.clear();
-                _newImages.addAll(newImages);
-              });
-            },
-            onSave: () async {
-              final images = _newImages.map((path) => XFile(path)).toList();
-              final success = await ref
-                  .read(createDiaryViewModelProvider.notifier)
-                  .submitDiary(
-                    bookId: widget.bookId,
-                    images: images,
-                    content: _textController.text,
-                  );
-              if (success) {
-                final authState = ref.read(authViewModelProvider);
-                final int? memberId = authState.when(
-                  data: (data) => (data is AuthSuccess) ? data.memberId : null,
-                  loading: () => null,
-                  error: (e, st) => null,
+    );
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
+    return ReadingDiaryEditForm(
+      textController: _textController,
+      initialImages: [],
+      focusNode: focusNode,
+      disabledSave: _disableSave,
+      onUpdateDisabledSave: _updateDisableSave,
+      onFocus: (show) {
+        if (show) {
+          focusNode.requestFocus();
+        } else {
+          focusNode.unfocus();
+        }
+      },
+      onUpdateText: (text) {
+        setState(() {
+          _textController.text = text;
+        });
+      },
+      onUpdateImage: (_, newImages) {
+        setState(() {
+          _newImages.clear();
+          _newImages.addAll(newImages);
+        });
+      },
+      onSave: () async {
+        final images = _newImages.map((path) => XFile(path)).toList();
+        final success =
+            await ref.read(createDiaryViewModelProvider.notifier).submitDiary(
+                  bookId: widget.bookId,
+                  images: images,
+                  content: _textController.text,
                 );
-                final challengeId =
-                    ref.read(currentChallengeViewModelProvider).challengeId;
-                if (memberId != null && challengeId != null) {
-                  ref.invalidate(challengeDiariesViewModelProvider(
-                    memberId: memberId,
-                    challengeId: challengeId,
-                  ));
-                }
-                if (context.mounted) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    context.go('/reading-challenge');
-                  });
-                }
-              } else if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('다이어리 저장에 실패했습니다.')),
-                );
-              }
-            },
-          )),
+        if (success) {
+          final authState = ref.read(authViewModelProvider);
+          final int? memberId = authState.when(
+            data: (data) => (data is AuthSuccess) ? data.memberId : null,
+            loading: () => null,
+            error: (e, st) => null,
+          );
+          final challengeId =
+              ref.read(currentChallengeViewModelProvider).challengeId;
+          if (memberId != null && challengeId != null) {
+            ref.invalidate(challengeDiariesViewModelProvider(
+              memberId: memberId,
+              challengeId: challengeId,
+            ));
+          }
+          if (context.mounted) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.go('/reading-challenge');
+            });
+          }
+        } else if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('다이어리 저장에 실패했습니다.')),
+          );
+        }
+      },
     );
   }
 }
