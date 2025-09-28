@@ -30,7 +30,6 @@ class _ReadingDiaryUpdateScreenState
     extends BaseScreenState<ReadingDiaryUpdateScreen> {
   @override
   bool enableRefreshIndicator() => false;
-
   final TextEditingController _textController = TextEditingController();
   final List<ImageItem> _images = [];
   bool _disableSave = false;
@@ -41,13 +40,12 @@ class _ReadingDiaryUpdateScreenState
   }
 
   @override
-  void initState() {
+  void onInitState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         _textController.text = widget.request.content;
       });
     });
-    super.initState();
   }
 
   @override

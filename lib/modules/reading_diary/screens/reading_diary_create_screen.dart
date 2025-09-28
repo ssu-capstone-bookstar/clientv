@@ -30,7 +30,6 @@ class _ReadingDiaryCreateScreenState
     extends BaseScreenState<ReadingDiaryCreateScreen> {
   @override
   bool enableRefreshIndicator() => false;
-
   final TextEditingController _textController = TextEditingController();
   final List<ImageItem> _images = [];
   bool _disableSave = false;
@@ -84,7 +83,8 @@ class _ReadingDiaryCreateScreenState
         });
       },
       onSave: () async {
-        final List<ImageRequest> imageRequests = await Future.wait(_images.asMap().entries.map((entry) async {
+        final List<ImageRequest> imageRequests =
+            await Future.wait(_images.asMap().entries.map((entry) async {
           final index = entry.key;
           final item = entry.value;
           if (item is UrlImage) {
@@ -117,7 +117,6 @@ class _ReadingDiaryCreateScreenState
             throw Exception('Unknown image type');
           }
         }));
-
         final diaryRequest = DiaryRequest(
           bookId: widget.bookId,
           content: _textController.text,
