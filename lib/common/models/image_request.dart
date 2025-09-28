@@ -6,7 +6,7 @@ part 'image_request.g.dart';
 @freezed
 abstract class ImageRequest with _$ImageRequest {
   const factory ImageRequest({
-    @JsonKey(name: 'imageUrl') String? image,
+    @Default("") String imageUrl,
     @Default(1) int sequence,
   }) = _ImageRequest;
 

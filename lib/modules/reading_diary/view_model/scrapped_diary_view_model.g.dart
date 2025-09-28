@@ -27,7 +27,7 @@ final scrappedDiaryRepositoryProvider =
 typedef ScrappedDiaryRepositoryRef
     = AutoDisposeProviderRef<ScrappedDiaryRepository>;
 String _$scrappedDiaryViewModelHash() =>
-    r'9f01b5aafcf7235bc020fc6a2ba9977bf074c445';
+    r'c2a230482c99f5570a3f955e184dff504ac50d83';
 
 /// See also [ScrappedDiaryViewModel].
 @ProviderFor(ScrappedDiaryViewModel)

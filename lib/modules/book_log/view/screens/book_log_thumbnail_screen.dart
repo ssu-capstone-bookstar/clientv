@@ -44,12 +44,11 @@ class _BookLogThumbnailScreenState
       0;
 
   @override
-  initState() {
-    super.initState();
+  Future<void> onInitState() async {
     if (widget.requiredRefresh) {
       final bookLogNotifier =
           ref.read(bookLogViewModelProvider(widget.memberId).notifier);
-      bookLogNotifier.initState(widget.memberId);
+      await bookLogNotifier.initState(widget.memberId);
     }
   }
 

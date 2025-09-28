@@ -9,6 +9,7 @@ import 'package:bookstar/modules/image/repository/s3_repository.dart';
 import 'package:bookstar/modules/profile/model/profile_with_counts.dart';
 import 'package:bookstar/modules/profile/repository/profile_repository.dart';
 import 'package:bookstar/modules/profile/view_model/profile_view_model.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_request.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_response.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_thumbnail_response.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
@@ -36,37 +37,27 @@ final bookLogDiariesProvider =
   return response.data;
 });
 
-final imageUploadProvider =
-    FutureProvider.family<List<ImageRequest>, List<String>>(
-        (ref, images) async {
+final fileToImageRequestProvider = FutureProvider.family<ImageRequest, File>((ref, file) async {
   final imageRepo = ref.read(imageRepositoryProvider);
   final s3Repo = ref.read(s3RepositoryProvider);
 
-  final imageRequests =
-      await Future.wait(images.asMap().entries.map((entry) async {
-    final index = entry.key;
-    final path = entry.value;
-    final file = File(path);
-    final fileName = file.uri.pathSegments.last;
+  final fileName = file.uri.pathSegments.last;
 
-    final presignedUrlResponse = await imageRepo.getPresignedUrl(
-      'DIARY_IMAGE',
-      PresignedUrlRequest(fileName: fileName),
-    );
-    debugPrint('##### Presigned URL Response: ${presignedUrlResponse.data}');
-    final presignedData = presignedUrlResponse.data;
+  final presignedUrlResponse = await imageRepo.getPresignedUrl(
+    'DIARY_IMAGE',
+    PresignedUrlRequest(fileName: fileName),
+  );
+  debugPrint('##### Presigned URL Response: ${presignedUrlResponse.data}');
+  final presignedData = presignedUrlResponse.data;
 
-    await s3Repo.uploadFileToS3(
-      presignedUrl: presignedData.presignedUrl,
-      file: file,
-    );
+  await s3Repo.uploadFileToS3(
+    presignedUrl: presignedData.presignedUrl,
+    file: file,
+  );
 
-    return ImageRequest(
-      image: presignedData.imageUrl,
-      sequence: index + 1,
-    );
-  }));
-  return imageRequests;
+  return ImageRequest(
+    imageUrl: presignedData.imageUrl,
+  );
 });
 
 class DiaryRequestWithId {
@@ -78,6 +69,15 @@ class DiaryRequestWithId {
     required this.diaryId,
   });
 }
+
+final bookLogDiaryCreateProvider =
+    FutureProvider.family<DiaryResponse, DiaryRequest>(
+        (ref, request) async {
+  final diaryRepo = ref.read(readingDiaryRepositoryProvider);
+  final response =
+      await diaryRepo.createDiary(request);
+  return response.data;
+});
 
 final bookLogDiaryUpdateProvider =
     FutureProvider.family<DiaryResponse, DiaryRequestWithId>(
