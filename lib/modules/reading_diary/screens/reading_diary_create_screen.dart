@@ -90,7 +90,7 @@ class _ReadingDiaryCreateScreenState
           if (item is UrlImage) {
             return ImageRequest(
               imageUrl: item.imageRequest.imageUrl,
-              sequence: index,
+              sequence: index + 1,
             );
           } else if (item is GalleryImage) {
             final file = File(item.path);
@@ -98,7 +98,7 @@ class _ReadingDiaryCreateScreenState
                 await ref.read(fileToImageRequestProvider(file).future);
             return ImageRequest(
               imageUrl: imageRequest.imageUrl,
-              sequence: index,
+              sequence: index + 1,
             );
           } else if (item is EditingImage) {
             // 임시 디렉토리 가져오기
@@ -111,7 +111,7 @@ class _ReadingDiaryCreateScreenState
                 await ref.read(fileToImageRequestProvider(file).future);
             return ImageRequest(
               imageUrl: imageRequest.imageUrl,
-              sequence: index,
+              sequence: index + 1,
             );
           } else {
             throw Exception('Unknown image type');
