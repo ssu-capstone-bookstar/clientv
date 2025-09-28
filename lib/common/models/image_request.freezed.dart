@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ImageRequest {
-  @JsonKey(name: 'imageUrl')
-  String? get image;
+  String get imageUrl;
   int get sequence;
 
   /// Create a copy of ImageRequest
@@ -34,18 +33,19 @@ mixin _$ImageRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ImageRequest &&
-            (identical(other.image, image) || other.image == image) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.sequence, sequence) ||
                 other.sequence == sequence));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, image, sequence);
+  int get hashCode => Object.hash(runtimeType, imageUrl, sequence);
 
   @override
   String toString() {
-    return 'ImageRequest(image: $image, sequence: $sequence)';
+    return 'ImageRequest(imageUrl: $imageUrl, sequence: $sequence)';
   }
 }
 
@@ -55,7 +55,7 @@ abstract mixin class $ImageRequestCopyWith<$Res> {
           ImageRequest value, $Res Function(ImageRequest) _then) =
       _$ImageRequestCopyWithImpl;
   @useResult
-  $Res call({@JsonKey(name: 'imageUrl') String? image, int sequence});
+  $Res call({String imageUrl, int sequence});
 }
 
 /// @nodoc
@@ -70,14 +70,14 @@ class _$ImageRequestCopyWithImpl<$Res> implements $ImageRequestCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? image = freezed,
+    Object? imageUrl = null,
     Object? sequence = null,
   }) {
     return _then(_self.copyWith(
-      image: freezed == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrl: null == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       sequence: null == sequence
           ? _self.sequence
           : sequence // ignore: cast_nullable_to_non_nullable
@@ -179,14 +179,13 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(@JsonKey(name: 'imageUrl') String? image, int sequence)?
-        $default, {
+    TResult Function(String imageUrl, int sequence)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _ImageRequest() when $default != null:
-        return $default(_that.image, _that.sequence);
+        return $default(_that.imageUrl, _that.sequence);
       case _:
         return orElse();
     }
@@ -207,13 +206,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(@JsonKey(name: 'imageUrl') String? image, int sequence)
-        $default,
+    TResult Function(String imageUrl, int sequence) $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ImageRequest():
-        return $default(_that.image, _that.sequence);
+        return $default(_that.imageUrl, _that.sequence);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -233,13 +231,12 @@ extension ImageRequestPatterns on ImageRequest {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(@JsonKey(name: 'imageUrl') String? image, int sequence)?
-        $default,
+    TResult? Function(String imageUrl, int sequence)? $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ImageRequest() when $default != null:
-        return $default(_that.image, _that.sequence);
+        return $default(_that.imageUrl, _that.sequence);
       case _:
         return null;
     }
@@ -249,14 +246,13 @@ extension ImageRequestPatterns on ImageRequest {
 /// @nodoc
 @JsonSerializable()
 class _ImageRequest implements ImageRequest {
-  const _ImageRequest(
-      {@JsonKey(name: 'imageUrl') this.image, this.sequence = 1});
+  const _ImageRequest({this.imageUrl = "", this.sequence = 0});
   factory _ImageRequest.fromJson(Map<String, dynamic> json) =>
       _$ImageRequestFromJson(json);
 
   @override
-  @JsonKey(name: 'imageUrl')
-  final String? image;
+  @JsonKey()
+  final String imageUrl;
   @override
   @JsonKey()
   final int sequence;
@@ -281,18 +277,19 @@ class _ImageRequest implements ImageRequest {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ImageRequest &&
-            (identical(other.image, image) || other.image == image) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.sequence, sequence) ||
                 other.sequence == sequence));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, image, sequence);
+  int get hashCode => Object.hash(runtimeType, imageUrl, sequence);
 
   @override
   String toString() {
-    return 'ImageRequest(image: $image, sequence: $sequence)';
+    return 'ImageRequest(imageUrl: $imageUrl, sequence: $sequence)';
   }
 }
 
@@ -304,7 +301,7 @@ abstract mixin class _$ImageRequestCopyWith<$Res>
       __$ImageRequestCopyWithImpl;
   @override
   @useResult
-  $Res call({@JsonKey(name: 'imageUrl') String? image, int sequence});
+  $Res call({String imageUrl, int sequence});
 }
 
 /// @nodoc
@@ -320,14 +317,14 @@ class __$ImageRequestCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? image = freezed,
+    Object? imageUrl = null,
     Object? sequence = null,
   }) {
     return _then(_ImageRequest(
-      image: freezed == image
-          ? _self.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrl: null == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       sequence: null == sequence
           ? _self.sequence
           : sequence // ignore: cast_nullable_to_non_nullable

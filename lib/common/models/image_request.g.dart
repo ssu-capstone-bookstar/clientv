@@ -8,12 +8,12 @@ part of 'image_request.dart';
 
 _ImageRequest _$ImageRequestFromJson(Map<String, dynamic> json) =>
     _ImageRequest(
-      image: json['imageUrl'] as String?,
-      sequence: (json['sequence'] as num?)?.toInt() ?? 1,
+      imageUrl: json['imageUrl'] as String? ?? "",
+      sequence: (json['sequence'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$ImageRequestToJson(_ImageRequest instance) =>
     <String, dynamic>{
-      'imageUrl': instance.image,
+      'imageUrl': instance.imageUrl,
       'sequence': instance.sequence,
     };
