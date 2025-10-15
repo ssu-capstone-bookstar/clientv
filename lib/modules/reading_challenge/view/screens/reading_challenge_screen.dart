@@ -4,7 +4,7 @@ import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:bookstar/gen/assets.gen.dart';
 import 'package:bookstar/gen/colors.gen.dart';
 import 'package:bookstar/modules/reading_challenge/model/challenge_response.dart';
-import 'package:bookstar/modules/reading_challenge/service/full_capture_service.dart';
+import 'package:bookstar/common/service/full_capture_service.dart';
 import 'package:bookstar/modules/reading_challenge/view/widgets/save_success_image_dialog.dart';
 import 'package:bookstar/modules/reading_challenge/view_model/ongoing_challenge_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
