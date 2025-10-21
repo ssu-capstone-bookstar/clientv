@@ -167,6 +167,7 @@ class FCMService {
   ///
   /// [data]: 알림 데이터 (페이지 이동 정보 등)
   static void _handleNotificationTap(Map<String, dynamic> data) {
+    print("_handleNotificationTap: $data");
     // TODO: 페이지 이동 처리 (예: GoRouter 사용)
     // 예시:
     // final String? type = data['type'] as String?;
