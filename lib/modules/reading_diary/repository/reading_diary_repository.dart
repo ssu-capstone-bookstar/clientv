@@ -74,6 +74,13 @@ abstract class ReadingDiaryRepository {
     @Query('size') int? size,
   });
 
+  @GET('/reading-diaries/following/personalized-feed')
+  Future<ResponseForm<CursorPageResponse<DiaryResponse>>>
+      getReadingDiariesMembersFollowingPersonalizedFeed({
+    @Query('cursor') int? cursor, // 서버 명세에 따라 파라미터 이름이 다를 수 있음
+    @Query('size') int? size,
+  });
+
   @GET('/reading-diaries/books/{bookId}')
   Future<ResponseForm<CursorPageResponse<DiaryResponse>>> getBookDiaries(
     @Path('bookId') int bookId, {

@@ -246,7 +246,7 @@ extension ImageRequestPatterns on ImageRequest {
 /// @nodoc
 @JsonSerializable()
 class _ImageRequest implements ImageRequest {
-  const _ImageRequest({this.imageUrl = "", this.sequence = 0});
+  const _ImageRequest({this.imageUrl = "", this.sequence = 1});
   factory _ImageRequest.fromJson(Map<String, dynamic> json) =>
       _$ImageRequestFromJson(json);
 
