@@ -17,8 +17,10 @@ mixin _$BookLogState {
   ProfileWithCounts get profile;
   List<DiaryThumbnail> get thumbnails;
   List<DiaryResponse> get feeds;
-  bool get hasNext;
-  int get nextCursor;
+  bool get feedHasNext;
+  int get feedNextCursor;
+  bool get personalizedFeedHasNext;
+  int get personalizedFeedNextCursor;
   int? get memberId;
 
   /// Create a copy of BookLogState
@@ -38,9 +40,17 @@ mixin _$BookLogState {
             const DeepCollectionEquality()
                 .equals(other.thumbnails, thumbnails) &&
             const DeepCollectionEquality().equals(other.feeds, feeds) &&
-            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
-            (identical(other.nextCursor, nextCursor) ||
-                other.nextCursor == nextCursor) &&
+            (identical(other.feedHasNext, feedHasNext) ||
+                other.feedHasNext == feedHasNext) &&
+            (identical(other.feedNextCursor, feedNextCursor) ||
+                other.feedNextCursor == feedNextCursor) &&
+            (identical(
+                    other.personalizedFeedHasNext, personalizedFeedHasNext) ||
+                other.personalizedFeedHasNext == personalizedFeedHasNext) &&
+            (identical(other.personalizedFeedNextCursor,
+                    personalizedFeedNextCursor) ||
+                other.personalizedFeedNextCursor ==
+                    personalizedFeedNextCursor) &&
             (identical(other.memberId, memberId) ||
                 other.memberId == memberId));
   }
@@ -51,13 +61,15 @@ mixin _$BookLogState {
       profile,
       const DeepCollectionEquality().hash(thumbnails),
       const DeepCollectionEquality().hash(feeds),
-      hasNext,
-      nextCursor,
+      feedHasNext,
+      feedNextCursor,
+      personalizedFeedHasNext,
+      personalizedFeedNextCursor,
       memberId);
 
   @override
   String toString() {
-    return 'BookLogState(profile: $profile, thumbnails: $thumbnails, feeds: $feeds, hasNext: $hasNext, nextCursor: $nextCursor, memberId: $memberId)';
+    return 'BookLogState(profile: $profile, thumbnails: $thumbnails, feeds: $feeds, feedHasNext: $feedHasNext, feedNextCursor: $feedNextCursor, personalizedFeedHasNext: $personalizedFeedHasNext, personalizedFeedNextCursor: $personalizedFeedNextCursor, memberId: $memberId)';
   }
 }
 
@@ -71,8 +83,10 @@ abstract mixin class $BookLogStateCopyWith<$Res> {
       {ProfileWithCounts profile,
       List<DiaryThumbnail> thumbnails,
       List<DiaryResponse> feeds,
-      bool hasNext,
-      int nextCursor,
+      bool feedHasNext,
+      int feedNextCursor,
+      bool personalizedFeedHasNext,
+      int personalizedFeedNextCursor,
       int? memberId});
 
   $ProfileWithCountsCopyWith<$Res> get profile;
@@ -93,8 +107,10 @@ class _$BookLogStateCopyWithImpl<$Res> implements $BookLogStateCopyWith<$Res> {
     Object? profile = null,
     Object? thumbnails = null,
     Object? feeds = null,
-    Object? hasNext = null,
-    Object? nextCursor = null,
+    Object? feedHasNext = null,
+    Object? feedNextCursor = null,
+    Object? personalizedFeedHasNext = null,
+    Object? personalizedFeedNextCursor = null,
     Object? memberId = freezed,
   }) {
     return _then(_self.copyWith(
@@ -110,13 +126,21 @@ class _$BookLogStateCopyWithImpl<$Res> implements $BookLogStateCopyWith<$Res> {
           ? _self.feeds
           : feeds // ignore: cast_nullable_to_non_nullable
               as List<DiaryResponse>,
-      hasNext: null == hasNext
-          ? _self.hasNext
-          : hasNext // ignore: cast_nullable_to_non_nullable
+      feedHasNext: null == feedHasNext
+          ? _self.feedHasNext
+          : feedHasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      nextCursor: null == nextCursor
-          ? _self.nextCursor
-          : nextCursor // ignore: cast_nullable_to_non_nullable
+      feedNextCursor: null == feedNextCursor
+          ? _self.feedNextCursor
+          : feedNextCursor // ignore: cast_nullable_to_non_nullable
+              as int,
+      personalizedFeedHasNext: null == personalizedFeedHasNext
+          ? _self.personalizedFeedHasNext
+          : personalizedFeedHasNext // ignore: cast_nullable_to_non_nullable
+              as bool,
+      personalizedFeedNextCursor: null == personalizedFeedNextCursor
+          ? _self.personalizedFeedNextCursor
+          : personalizedFeedNextCursor // ignore: cast_nullable_to_non_nullable
               as int,
       memberId: freezed == memberId
           ? _self.memberId
@@ -233,8 +257,10 @@ extension BookLogStatePatterns on BookLogState {
             ProfileWithCounts profile,
             List<DiaryThumbnail> thumbnails,
             List<DiaryResponse> feeds,
-            bool hasNext,
-            int nextCursor,
+            bool feedHasNext,
+            int feedNextCursor,
+            bool personalizedFeedHasNext,
+            int personalizedFeedNextCursor,
             int? memberId)?
         $default, {
     required TResult orElse(),
@@ -242,8 +268,15 @@ extension BookLogStatePatterns on BookLogState {
     final _that = this;
     switch (_that) {
       case _BookLogState() when $default != null:
-        return $default(_that.profile, _that.thumbnails, _that.feeds,
-            _that.hasNext, _that.nextCursor, _that.memberId);
+        return $default(
+            _that.profile,
+            _that.thumbnails,
+            _that.feeds,
+            _that.feedHasNext,
+            _that.feedNextCursor,
+            _that.personalizedFeedHasNext,
+            _that.personalizedFeedNextCursor,
+            _that.memberId);
       case _:
         return orElse();
     }
@@ -268,16 +301,25 @@ extension BookLogStatePatterns on BookLogState {
             ProfileWithCounts profile,
             List<DiaryThumbnail> thumbnails,
             List<DiaryResponse> feeds,
-            bool hasNext,
-            int nextCursor,
+            bool feedHasNext,
+            int feedNextCursor,
+            bool personalizedFeedHasNext,
+            int personalizedFeedNextCursor,
             int? memberId)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BookLogState():
-        return $default(_that.profile, _that.thumbnails, _that.feeds,
-            _that.hasNext, _that.nextCursor, _that.memberId);
+        return $default(
+            _that.profile,
+            _that.thumbnails,
+            _that.feeds,
+            _that.feedHasNext,
+            _that.feedNextCursor,
+            _that.personalizedFeedHasNext,
+            _that.personalizedFeedNextCursor,
+            _that.memberId);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -301,16 +343,25 @@ extension BookLogStatePatterns on BookLogState {
             ProfileWithCounts profile,
             List<DiaryThumbnail> thumbnails,
             List<DiaryResponse> feeds,
-            bool hasNext,
-            int nextCursor,
+            bool feedHasNext,
+            int feedNextCursor,
+            bool personalizedFeedHasNext,
+            int personalizedFeedNextCursor,
             int? memberId)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BookLogState() when $default != null:
-        return $default(_that.profile, _that.thumbnails, _that.feeds,
-            _that.hasNext, _that.nextCursor, _that.memberId);
+        return $default(
+            _that.profile,
+            _that.thumbnails,
+            _that.feeds,
+            _that.feedHasNext,
+            _that.feedNextCursor,
+            _that.personalizedFeedHasNext,
+            _that.personalizedFeedNextCursor,
+            _that.memberId);
       case _:
         return null;
     }
@@ -324,8 +375,10 @@ class _BookLogState implements BookLogState {
       {this.profile = const ProfileWithCounts(),
       final List<DiaryThumbnail> thumbnails = const [],
       final List<DiaryResponse> feeds = const [],
-      this.hasNext = false,
-      this.nextCursor = -1,
+      this.feedHasNext = false,
+      this.feedNextCursor = -1,
+      this.personalizedFeedHasNext = false,
+      this.personalizedFeedNextCursor = -1,
       this.memberId})
       : _thumbnails = thumbnails,
         _feeds = feeds;
@@ -353,10 +406,16 @@ class _BookLogState implements BookLogState {
 
   @override
   @JsonKey()
-  final bool hasNext;
+  final bool feedHasNext;
   @override
   @JsonKey()
-  final int nextCursor;
+  final int feedNextCursor;
+  @override
+  @JsonKey()
+  final bool personalizedFeedHasNext;
+  @override
+  @JsonKey()
+  final int personalizedFeedNextCursor;
   @override
   final int? memberId;
 
@@ -377,9 +436,17 @@ class _BookLogState implements BookLogState {
             const DeepCollectionEquality()
                 .equals(other._thumbnails, _thumbnails) &&
             const DeepCollectionEquality().equals(other._feeds, _feeds) &&
-            (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
-            (identical(other.nextCursor, nextCursor) ||
-                other.nextCursor == nextCursor) &&
+            (identical(other.feedHasNext, feedHasNext) ||
+                other.feedHasNext == feedHasNext) &&
+            (identical(other.feedNextCursor, feedNextCursor) ||
+                other.feedNextCursor == feedNextCursor) &&
+            (identical(
+                    other.personalizedFeedHasNext, personalizedFeedHasNext) ||
+                other.personalizedFeedHasNext == personalizedFeedHasNext) &&
+            (identical(other.personalizedFeedNextCursor,
+                    personalizedFeedNextCursor) ||
+                other.personalizedFeedNextCursor ==
+                    personalizedFeedNextCursor) &&
             (identical(other.memberId, memberId) ||
                 other.memberId == memberId));
   }
@@ -390,13 +457,15 @@ class _BookLogState implements BookLogState {
       profile,
       const DeepCollectionEquality().hash(_thumbnails),
       const DeepCollectionEquality().hash(_feeds),
-      hasNext,
-      nextCursor,
+      feedHasNext,
+      feedNextCursor,
+      personalizedFeedHasNext,
+      personalizedFeedNextCursor,
       memberId);
 
   @override
   String toString() {
-    return 'BookLogState(profile: $profile, thumbnails: $thumbnails, feeds: $feeds, hasNext: $hasNext, nextCursor: $nextCursor, memberId: $memberId)';
+    return 'BookLogState(profile: $profile, thumbnails: $thumbnails, feeds: $feeds, feedHasNext: $feedHasNext, feedNextCursor: $feedNextCursor, personalizedFeedHasNext: $personalizedFeedHasNext, personalizedFeedNextCursor: $personalizedFeedNextCursor, memberId: $memberId)';
   }
 }
 
@@ -412,8 +481,10 @@ abstract mixin class _$BookLogStateCopyWith<$Res>
       {ProfileWithCounts profile,
       List<DiaryThumbnail> thumbnails,
       List<DiaryResponse> feeds,
-      bool hasNext,
-      int nextCursor,
+      bool feedHasNext,
+      int feedNextCursor,
+      bool personalizedFeedHasNext,
+      int personalizedFeedNextCursor,
       int? memberId});
 
   @override
@@ -436,8 +507,10 @@ class __$BookLogStateCopyWithImpl<$Res>
     Object? profile = null,
     Object? thumbnails = null,
     Object? feeds = null,
-    Object? hasNext = null,
-    Object? nextCursor = null,
+    Object? feedHasNext = null,
+    Object? feedNextCursor = null,
+    Object? personalizedFeedHasNext = null,
+    Object? personalizedFeedNextCursor = null,
     Object? memberId = freezed,
   }) {
     return _then(_BookLogState(
@@ -453,13 +526,21 @@ class __$BookLogStateCopyWithImpl<$Res>
           ? _self._feeds
           : feeds // ignore: cast_nullable_to_non_nullable
               as List<DiaryResponse>,
-      hasNext: null == hasNext
-          ? _self.hasNext
-          : hasNext // ignore: cast_nullable_to_non_nullable
+      feedHasNext: null == feedHasNext
+          ? _self.feedHasNext
+          : feedHasNext // ignore: cast_nullable_to_non_nullable
               as bool,
-      nextCursor: null == nextCursor
-          ? _self.nextCursor
-          : nextCursor // ignore: cast_nullable_to_non_nullable
+      feedNextCursor: null == feedNextCursor
+          ? _self.feedNextCursor
+          : feedNextCursor // ignore: cast_nullable_to_non_nullable
+              as int,
+      personalizedFeedHasNext: null == personalizedFeedHasNext
+          ? _self.personalizedFeedHasNext
+          : personalizedFeedHasNext // ignore: cast_nullable_to_non_nullable
+              as bool,
+      personalizedFeedNextCursor: null == personalizedFeedNextCursor
+          ? _self.personalizedFeedNextCursor
+          : personalizedFeedNextCursor // ignore: cast_nullable_to_non_nullable
               as int,
       memberId: freezed == memberId
           ? _self.memberId

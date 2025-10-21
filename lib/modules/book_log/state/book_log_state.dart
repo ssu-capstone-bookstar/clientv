@@ -11,8 +11,10 @@ abstract class BookLogState with _$BookLogState {
     @Default(ProfileWithCounts()) ProfileWithCounts profile,
     @Default([]) List<DiaryThumbnail> thumbnails,
     @Default([]) List<DiaryResponse> feeds,
-    @Default(false) bool hasNext,
-    @Default(-1) int nextCursor,
+    @Default(false) bool feedHasNext,
+    @Default(-1) int feedNextCursor,
+    @Default(false) bool personalizedFeedHasNext,
+    @Default(-1) int personalizedFeedNextCursor,
     int? memberId,
   }) = _BookLogState;
 }
