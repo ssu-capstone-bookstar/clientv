@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:bookstar/common/service/fcm_service.dart';
 import 'package:bookstar/modules/auth/model/policy.dart';
 import 'package:bookstar/modules/auth/repository/policy_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../infra/network/dio_client.dart';
 import '../../../infra/storage/secure_storage.dart';
 import '../model/auth_response.dart';
 import '../model/login_request.dart';
@@ -65,14 +67,27 @@ class AuthViewModel extends _$AuthViewModel {
         refreshToken: authData.refreshToken,
       );
 
-      return AuthSuccess(
-          memberId: authData.memberId,
-          nickName: authData.nickName,
-          profileImage: authData.profileImage,
-          providerType: authData.providerType,
-          email: authData.email,
-          memberRole: authData.memberRole,
+      await FCMService.initialize();
+      final fcmToken = FCMService.fcmToken;
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        final dio = ref.read(dioClientProvider);
+        await dio.post(
+          '/api/v2/notifications/fcmToken',
+          data: {
+            'userId': authData.memberId,
+            'fcmToken': fcmToken,
+          },
         );
+      }
+
+      return AuthSuccess(
+        memberId: authData.memberId,
+        nickName: authData.nickName,
+        profileImage: authData.profileImage,
+        providerType: authData.providerType,
+        email: authData.email,
+        memberRole: authData.memberRole,
+      );
     });
   }
 
@@ -155,6 +170,19 @@ class AuthViewModel extends _$AuthViewModel {
       final email = authData.email.isNotEmpty ? authData.email : '이메일 정보 없음';
       final providerType =
           authData.providerType.isNotEmpty ? authData.providerType : '연동 상태';
+
+      await FCMService.initialize();
+      final fcmToken = FCMService.fcmToken;
+      if (fcmToken != null && fcmToken.isNotEmpty) {
+        final dio = ref.read(dioClientProvider);
+        await dio.post(
+          '/api/v2/notifications/fcmToken',
+          data: {
+            'userId': authData.memberId,
+            'fcmToken': fcmToken,
+          },
+        );
+      }
 
       state = AsyncData(
         AuthSuccess(
