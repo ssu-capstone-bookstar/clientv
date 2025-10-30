@@ -1,9 +1,8 @@
 import 'package:bookstar/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_related_feed_screen.dart';
 import 'package:bookstar/modules/book_pick/view/screens/book_pick_my_likes_screen.dart';
-import 'package:bookstar/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
-import 'package:bookstar/modules/chat/view/screens/book_talk_chat_room_menu_screen.dart';
-import 'package:bookstar/modules/chat/view/screens/book_talk_chat_room_screen.dart';
+import 'package:bookstar/modules/my_feed/view/screens/my_feed_feed_screen.dart';
+import 'package:bookstar/modules/my_feed/view/screens/my_feed_screen.dart';
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_my_likes_screen.dart';
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_screen.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
@@ -23,8 +22,6 @@ import '../../modules/book_log/view/screens/book_log_screen.dart';
 import '../../modules/book_pick/model/search_book_response.dart';
 import '../../modules/book_pick/view/screens/book_pick_screen.dart';
 import '../../modules/book_pick/view/screens/book_pick_search_screen.dart';
-import '../../modules/chat/view/screens/book_talk_screen.dart';
-import '../../modules/deep_time/view/screens/deep_time_screen.dart';
 import '../../modules/home/view/screens/home_screen.dart';
 import '../../modules/my_page/view/screens/challenge_quit_books_screen.dart';
 import '../../modules/my_page/view/screens/customer_support_screen.dart';
@@ -133,168 +130,7 @@ GoRouter router(Ref ref) {
           return HomeScreen(navigationShell: navigationShell);
         },
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/book-log',
-                builder: (context, state) => BookLogScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'thumbnail/:memberId',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final memberId =
-                          int.parse(state.pathParameters['memberId']!);
-                      final extra = state.extra as Map<String, dynamic>?;
-                      final requiredRefresh =
-                          extra?['requiredRefresh'] as bool? ?? false;
-                      return BookLogThumbnailScreen(
-                          memberId: memberId, requiredRefresh: requiredRefresh);
-                    },
-                  ),
-                  GoRoute(
-                    path: 'feed/:memberId',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final memberId =
-                          int.parse(state.pathParameters['memberId']!);
-                      final extra = state.extra as Map<String, dynamic>?;
-                      final index = extra?['index'] as int? ?? 0;
-                      return BookLogFeedScreen(
-                          memberId: memberId, initialIndex: index);
-                    },
-                  ),
-                  GoRoute(
-                    path: 'related-feed/:bookId',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final bookId = int.parse(state.pathParameters['bookId']!);
-                      final extra = state.extra as Map<String, dynamic>;
-                      final index = extra['index'] as int;
-                      return BookRelatedFeedScreen(
-                          bookId: bookId, initialIndex: index);
-                    },
-                  ),
-                  GoRoute(
-                    path: 'profile',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const ProfileScreen(),
-                  ),
-                  GoRoute(
-                    path: 'my-page',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) => const MyPageScreen(),
-                    routes: [
-                      GoRoute(
-                        path: 'challenge-quit-books',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) =>
-                            const ChallengeQuitBooksScreen(),
-                      ),
-                      GoRoute(
-                        path: 'customer-support',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) =>
-                            const CustomerSupportScreen(),
-                      ),
-                      GoRoute(
-                        path: 'delete-account',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) =>
-                            const DeleteAccountScreen(),
-                      ),
-                      GoRoute(
-                        path: 'scrapped-diaries',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) =>
-                            const ScrappedDiariesScreen(),
-                        routes: [
-                          GoRoute(
-                            path: 'feed',
-                            parentNavigatorKey: rootNavigatorKey,
-                            builder: (context, state) {
-                              final extra =
-                                  state.extra as Map<String, dynamic>?;
-                              final index = extra?['index'] as int? ?? 0;
-                              return ScrappedDiaryFeedScreen(
-                                  initialIndex: index);
-                            },
-                          ),
-                        ],
-                      ),
-                      GoRoute(
-                        path: 'follower-management',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) =>
-                            const FollowerManagementScreen(),
-                      ),
-                      GoRoute(
-                        path: 'liked-diaries',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) => const LikedDiariesScreen(),
-                        routes: [
-                          GoRoute(
-                            path: 'feed',
-                            parentNavigatorKey: rootNavigatorKey,
-                            builder: (context, state) {
-                              final extra =
-                                  state.extra as Map<String, dynamic>?;
-                              final index = extra?['index'] as int? ?? 0;
-                              return LikedDiaryFeedScreen(initialIndex: index);
-                            },
-                          ),
-                        ],
-                      ),
-                      GoRoute(
-                        path: 'login-info',
-                        parentNavigatorKey: rootNavigatorKey,
-                        builder: (context, state) => const LoginInfoScreen(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/book-talk',
-                builder: (context, state) => const BookTalkScreen(),
-                routes: [
-                  GoRoute(
-                      path: 'chat-room/:roomId',
-                      parentNavigatorKey: rootNavigatorKey,
-                      builder: (context, state) {
-                        final roomId =
-                            int.parse(state.pathParameters['roomId']!);
-                        return BookTalkChatRoomScreen(roomId: roomId);
-                      },
-                      routes: [
-                        GoRoute(
-                          path: 'book-log/:memberId',
-                          parentNavigatorKey: rootNavigatorKey,
-                          builder: (context, state) {
-                            final memberId =
-                                int.parse(state.pathParameters['memberId']!);
-                            return BookTalkChatRoomBookLogScreen(
-                                memberId: memberId);
-                          },
-                        ),
-                        GoRoute(
-                          path: 'menu',
-                          parentNavigatorKey: rootNavigatorKey,
-                          builder: (context, state) {
-                            final roomId =
-                                int.parse(state.pathParameters['roomId']!);
-                            return BookTalkChatRoomMenuScreen(roomId: roomId);
-                          },
-                        ),
-                      ]),
-                ],
-              ),
-            ],
-          ),
+          /// 책픽
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -327,14 +163,8 @@ GoRouter router(Ref ref) {
               ),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/deep-time',
-                builder: (context, state) => const DeepTimeScreen(),
-              ),
-            ],
-          ),
+
+          /// 리딩챌린지
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -439,6 +269,152 @@ GoRouter router(Ref ref) {
                         initialIndex: index,
                       );
                     },
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          /// 책로그
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/book-log',
+                builder: (context, state) => BookLogScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'thumbnail/:memberId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final memberId =
+                          int.parse(state.pathParameters['memberId']!);
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final requiredRefresh =
+                          extra?['requiredRefresh'] as bool? ?? false;
+                      return BookLogThumbnailScreen(
+                          memberId: memberId, requiredRefresh: requiredRefresh);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'feed/:memberId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final memberId =
+                          int.parse(state.pathParameters['memberId']!);
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final index = extra?['index'] as int? ?? 0;
+                      return BookLogFeedScreen(
+                          memberId: memberId, initialIndex: index);
+                    },
+                  ),
+                   GoRoute(
+                    path: 'related-feed/:bookId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final bookId = int.parse(state.pathParameters['bookId']!);
+                      final extra = state.extra as Map<String, dynamic>;
+                      final index = extra['index'] as int;
+                      return BookRelatedFeedScreen(
+                          bookId: bookId, initialIndex: index);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          /// 마이피드
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/my-feed',
+                builder: (context, state) => MyFeedScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'feed/:memberId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final extra = state.extra as Map<String, dynamic>?;
+                      final index = extra?['index'] as int? ?? 0;
+                      return MyFeedFeedScreen(
+                          initialIndex: index);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'profile',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const ProfileScreen(),
+                  ),
+                  GoRoute(
+                    path: 'my-page',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const MyPageScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'challenge-quit-books',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const ChallengeQuitBooksScreen(),
+                      ),
+                      GoRoute(
+                        path: 'customer-support',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const CustomerSupportScreen(),
+                      ),
+                      GoRoute(
+                        path: 'delete-account',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const DeleteAccountScreen(),
+                      ),
+                      GoRoute(
+                        path: 'scrapped-diaries',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const ScrappedDiariesScreen(),
+                        routes: [
+                          GoRoute(
+                            path: 'feed',
+                            parentNavigatorKey: rootNavigatorKey,
+                            builder: (context, state) {
+                              final extra =
+                                  state.extra as Map<String, dynamic>?;
+                              final index = extra?['index'] as int? ?? 0;
+                              return ScrappedDiaryFeedScreen(
+                                  initialIndex: index);
+                            },
+                          ),
+                        ],
+                      ),
+                      GoRoute(
+                        path: 'follower-management',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) =>
+                            const FollowerManagementScreen(),
+                      ),
+                      GoRoute(
+                        path: 'liked-diaries',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) => const LikedDiariesScreen(),
+                        routes: [
+                          GoRoute(
+                            path: 'feed',
+                            parentNavigatorKey: rootNavigatorKey,
+                            builder: (context, state) {
+                              final extra =
+                                  state.extra as Map<String, dynamic>?;
+                              final index = extra?['index'] as int? ?? 0;
+                              return LikedDiaryFeedScreen(initialIndex: index);
+                            },
+                          ),
+                        ],
+                      ),
+                      GoRoute(
+                        path: 'login-info',
+                        parentNavigatorKey: rootNavigatorKey,
+                        builder: (context, state) => const LoginInfoScreen(),
+                      ),
+                    ],
                   ),
                 ],
               ),

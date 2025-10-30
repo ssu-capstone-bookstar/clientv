@@ -1,14 +1,13 @@
 import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/models/image_request.dart';
-import 'package:bookstar/common/theme/style/app_texts.dart';
-import 'package:bookstar/gen/assets.gen.dart';
+import 'package:bookstar/modules/auth/view_model/auth_state.dart';
 import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
-import 'package:bookstar/modules/book_log/view/screens/book_log_search_screen.dart';
 import 'package:bookstar/modules/book_log/view/widgets/book_log_feed_list.dart';
 import 'package:bookstar/modules/book_log/view/widgets/diary_feed_comment_dialog.dart';
 import 'package:bookstar/modules/book_log/view/widgets/diary_feed_delete_dialog.dart';
 import 'package:bookstar/modules/book_log/view/widgets/report_dialog.dart';
 import 'package:bookstar/modules/book_log/view/widgets/report_success_dialog.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:bookstar/modules/follow/view_model/follow_info_view_model.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:flutter/material.dart';
@@ -16,63 +15,74 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../gen/colors.gen.dart';
-import '../../view_model/book_log_view_model.dart';
 
-class BookLogScreen extends BaseScreen {
-  const BookLogScreen({super.key});
+class MyFeedFeedScreen extends BaseScreen {
+  const MyFeedFeedScreen(
+      {super.key, required this.initialIndex});
+  final int initialIndex;
 
   @override
-  BaseScreenState<BookLogScreen> createState() => _BookLogScreenState();
+  BaseScreenState<MyFeedFeedScreen> createState() => _MyFeedFeedScreenState();
 }
 
-class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
+class _MyFeedFeedScreenState extends BaseScreenState<MyFeedFeedScreen> {
   @override
   bool enableRefreshIndicator() => true;
 
   @override
-  int getListTotalItemCount() => ref.watch(bookLogViewModelProvider(null)).value?.feeds.length ?? 0;
+  int getListTotalItemCount() {
+    final userAsync = ref.read(authViewModelProvider);
+    final user = userAsync.value;
+    final currentMemberId = (user is AuthSuccess) ? user.memberId : -1;
+
+    return ref
+            .read(bookLogViewModelProvider(currentMemberId))
+            .value
+            ?.feeds
+            .length ??
+        0;
+  }
 
   @override
   Future<void> onRefresh() async {
-    final bookLogNotifier = ref.read(bookLogViewModelProvider(null).notifier);
-    await bookLogNotifier.initState(null);
+    final userAsync = ref.watch(authViewModelProvider);
+    final user = userAsync.value;
+    final currentMemberId = (user is AuthSuccess) ? user.memberId : -1;
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(currentMemberId).notifier);
+    await bookLogNotifier.initState(currentMemberId);
   }
 
   @override
   Future<void> onBottomReached() async {
-    final bookLogNotifier = ref.read(bookLogViewModelProvider(null).notifier);
+    final userAsync = ref.watch(authViewModelProvider);
+    final user = userAsync.value;
+    final currentMemberId = (user is AuthSuccess) ? user.memberId : -1;
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(currentMemberId).notifier);
     await bookLogNotifier.refreshContentState();
   }
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
-      title: Text("책로그", style: AppTexts.b5),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              barrierColor: ColorName.dim3.withValues(alpha: 0.7),
-              builder: (context) => BookLogSearchScreen(),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Assets.icons.icPeopleSearchOne.svg(width: 24, height: 24),
-          ),
-        ),
-      ],
+      title: const Text('마이피드'),
+      leading: IconButton(
+        icon: const BackButton(),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
     );
   }
 
   @override
   Widget buildBody(BuildContext context) {
-    final bookLogAsync = ref.watch(bookLogViewModelProvider(null));
-    final followInfoAsync = ref.watch(followInfoViewModelProvider);
     final userAsync = ref.watch(authViewModelProvider);
-    final bookLogNotifier = ref.read(bookLogViewModelProvider(null).notifier);
+    final user = userAsync.value;
+    final currentMemberId = (user is AuthSuccess) ? user.memberId : -1;
+    final bookLogAsync = ref.watch(bookLogViewModelProvider(currentMemberId));
+    final bookLogNotifier =
+        ref.read(bookLogViewModelProvider(currentMemberId).notifier);
+    final followInfoAsync = ref.watch(followInfoViewModelProvider);
 
     return userAsync.when(
       data: (user) {
@@ -80,15 +90,9 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
           data: (bookLog) => followInfoAsync.when(
             data: (followInfo) => BookLogFeedList(
               feeds: bookLog.feeds,
+              initialIndex: widget.initialIndex,
               itemScrollController: itemScrollController,
               itemPositionsListener: itemPositionsListener,
-              // followInfo: followInfo,
-              initialIndex: null,
-              onScrollChanged: (showButton) {
-                // setState(() {
-                //   _showScrollToTopButton = showButton;
-                // });
-              },
               onLike: (int targetIndex) {
                 final targetFeed = bookLog.feeds[targetIndex];
                 bookLogNotifier.handleFeedLike(
@@ -156,8 +160,8 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
                     builder: (context) => ReportSuccessDialog());
               },
               onProfile: (int targetIndex) {
-                final targetFeed = bookLog.feeds[targetIndex];
-                context.push('/book-log/thumbnail/${targetFeed.memberId}');
+                // final targetFeed = bookLog.feeds[targetIndex];
+                // context.push('/book-log/thumbnail/${targetFeed.memberId}');
               },
               onBookTitle: (int targetIndex) {
                 final targetFeed = bookLog.feeds[targetIndex];
@@ -182,15 +186,19 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
                     });
               },
             ),
-            error: error("팔로우 정보를 불러올 수 없습니다."),
-            loading: loading,
+            error: _error("팔로우 정보를 불러올 수 없습니다."),
+            loading: _loading,
           ),
-          error: error("북로그 정보를 불러올 수 없습니다."),
-          loading: loading,
+          error: _error("북로그 정보를 불러올 수 없습니다."),
+          loading: _loading,
         );
       },
-      error: error("유저 정보를 불러올 수 없습니다."),
-      loading: loading,
+      error: _error("유저 정보를 불러올 수 없습니다."),
+      loading: _loading,
     );
   }
+
+  Widget _loading() => const Center(child: CircularProgressIndicator());
+  Widget Function(Object, StackTrace) _error(String msg) => (e, st) =>
+      Center(child: Text(msg, style: TextStyle(color: ColorName.g3)));
 }

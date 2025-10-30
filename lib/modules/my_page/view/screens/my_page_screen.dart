@@ -35,13 +35,13 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
               CustomTextButton(
                 label: '로그인 정보',
                 onTap: () {
-                  context.go('/book-log/my-page/login-info');
+                  context.go('/my-feed/my-page/login-info');
                 },
               ),
               CustomTextButton(
                 label: '회원 탈퇴',
                 onTap: () {
-                  context.go('/book-log/my-page/delete-account');
+                  context.go('/my-feed/my-page/delete-account');
                 },
               ),
               const SizedBox(height: 35),
@@ -50,7 +50,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
               CustomTextButton(
                 label: '고객 센터',
                 onTap: () {
-                  context.go('/book-log/my-page/customer-support');
+                  context.go('/my-feed/my-page/customer-support');
                 },
               ),
               const SizedBox(height: 35),
@@ -59,25 +59,25 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
               CustomTextButton(
                 label: '좋아요 누른 다이어리',
                 onTap: () {
-                  context.go('/book-log/my-page/liked-diaries');
+                  context.go('/my-feed/my-page/liked-diaries');
                 },
               ),
               CustomTextButton(
                 label: '스크랩한 다이어리',
                 onTap: () {
-                  context.go('/book-log/my-page/scrapped-diaries');
+                  context.go('/my-feed/my-page/scrapped-diaries');
                 },
               ),
               CustomTextButton(
                 label: '팔로워 관리',
                 onTap: () {
-                  context.go('/book-log/my-page/follower-management');
+                  context.go('/my-feed/my-page/follower-management');
                 },
               ),
               CustomTextButton(
                 label: '챌린지 중단 도서',
                 onTap: () {
-                  context.go('/book-log/my-page/challenge-quit-books');
+                  context.go('/my-feed/my-page/challenge-quit-books');
                 },
               ),
               const Spacer(),

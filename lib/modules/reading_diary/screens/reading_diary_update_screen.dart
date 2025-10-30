@@ -135,7 +135,7 @@ class _ReadingDiaryUpdateScreenState
           );
           await ref.read(bookLogDiaryUpdateProvider(diaryRequestWithId).future);
           if (context.mounted) {
-            context.go('/book-log/thumbnail/${widget.memberId}',
+            context.go('/my-feed/thumbnail/${widget.memberId}',
                 extra: {'requiredRefresh': true});
           }
         });

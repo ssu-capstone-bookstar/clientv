@@ -62,7 +62,7 @@ class _LikedDiariesScreenState extends BaseScreenState<LikedDiariesScreen> {
                 .toList(),
             scrollController: scrollController,
             onClickThumbnail: (int targetIndex) {
-              context.push('/book-log/my-page/liked-diaries/feed',
+              context.push('/my-feed/my-page/liked-diaries/feed',
                   extra: {'index': targetIndex});
             });
       },

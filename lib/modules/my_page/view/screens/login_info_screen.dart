@@ -42,7 +42,7 @@ class LoginInfoScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              GoRouter.of(context).go('/book-log');
+              GoRouter.of(context).go('/my-feed');
             },
           ),
         ],

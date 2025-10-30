@@ -1,7 +1,5 @@
 import 'package:bookstar/gen/assets.gen.dart';
 import 'package:bookstar/gen/colors.gen.dart';
-import 'package:bookstar/modules/deep_time/view_model/deep_time_state.dart';
-import 'package:bookstar/modules/deep_time/view_model/deep_time_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,17 +22,17 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int _lastVisitedTabIndex = HomeBottomNavMenu.bookPick.index;
+  final int _lastVisitedTabIndex = HomeBottomNavMenu.bookPick.index;
 
   // NOTE(현호): 개선 필요
   void _onTabTapped(int index) {
     // 딥타임 같이 전체 화면을 사용하는 뷰로 이동할 때, 현재 탭(이전 탭이 될)을 저장합니다.
-    final previousIndex = widget.navigationShell.currentIndex;
-    if (index == HomeBottomNavMenu.deepTime.index) {
-      setState(() {
-        _lastVisitedTabIndex = previousIndex;
-      });
-    }
+    // final previousIndex = widget.navigationShell.currentIndex;
+    // if (index == HomeBottomNavMenu.deepTime.index) {
+    //   setState(() {
+    //     _lastVisitedTabIndex = previousIndex;
+    //   });
+    // }
 
     if (index == HomeBottomNavMenu.bookLog.index) {}
 
@@ -123,14 +121,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   EdgeInsetsGeometry _getBodyPadding({required String currentRoute}) {
     switch (currentRoute) {
-      // case "/book-log":
-      //   {
-      //     return AppPaddings.BOOK_LOG_SCREEN_BODY_PADDING;
-      //   }
       case "/book-log":
-      case "/deep-time":
       case "/reading-challenge":
-      case "/book-talk":
         {
           return EdgeInsets.zero;
         }
@@ -160,7 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _getUseAppBar({required String currentRoute}) {
     switch (currentRoute) {
       case "/book-log":
-      case "/book-talk":
+      case "/my-feed":
         {
           return false;
         }
@@ -174,9 +166,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final navigationShell = widget.navigationShell;
-    final isRunningDeepTime =
-        ref.watch(deepTimeViewModelProvider).value?.status ==
-            DeepTimeStatus.running;
+    // final isRunningDeepTime =
+    //     ref.watch(deepTimeViewModelProvider).value?.status ==
+    //         DeepTimeStatus.running;
     final router = GoRouter.of(context);
     final currentRoute =
         router.routerDelegate.currentConfiguration.uri.toString();
@@ -220,7 +212,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       bottomNavigationBar: Container(
         decoration: bottomNavigationBarDecoration,
         child: AbsorbPointer(
-          absorbing: isRunningDeepTime,
+          absorbing: false,
+          // absorbing: isRunningDeepTime,
           child: HomeBottomNavBar(
             currentMenu: HomeBottomNavMenu.values[navigationShell.currentIndex],
             onTap: (tab) => _onTabTapped(HomeBottomNavMenu.values.indexOf(tab)),

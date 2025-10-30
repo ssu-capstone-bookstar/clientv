@@ -116,7 +116,7 @@ class _LikedDiaryFeedScreenState extends BaseScreenState<LikedDiaryFeedScreen> {
         onReport: (BuildContext ctx, int targetIndex) async {},
         onProfile: (int targetIndex) {
           final targetFeed = likedDiary.feeds[targetIndex];
-          context.push('/book-log/thumbnail/${targetFeed.memberId}');
+          context.push('/my-feed/thumbnail/${targetFeed.memberId}');
         },
         onBookTitle: (int targetIndex) {
           final targetFeed = likedDiary.feeds[targetIndex];
