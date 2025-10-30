@@ -4,10 +4,10 @@ import 'package:bookstar/common/components/form/user_with_checkbox.dart';
 import 'package:bookstar/common/components/button/cta_button_l1.dart';
 import 'package:bookstar/gen/assets.gen.dart';
 import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bookstar/modules/follow/model/dummy_follower.dart';
-import 'package:bookstar/modules/chat/view/screens/book_talk_chat_room_book_log_screen.dart';
 
 class FollowerManagementScreen extends StatefulWidget {
   const FollowerManagementScreen({super.key});
@@ -40,7 +40,7 @@ class _FollowerManagementScreenState extends State<FollowerManagementScreen> {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              GoRouter.of(context).go('/book-log');
+              GoRouter.of(context).go('/my-feed');
             },
           ),
         ],
@@ -89,7 +89,7 @@ class _FollowerManagementScreenState extends State<FollowerManagementScreen> {
                       onViewProfile: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => BookTalkChatRoomBookLogScreen(
+                            builder: (context) => BookLogThumbnailScreen(
                               memberId: follower.id,
                             ),
                           ),

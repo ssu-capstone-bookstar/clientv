@@ -63,7 +63,7 @@ class _ScrappedDiariesScreenState
                 .toList(),
             scrollController: scrollController,
             onClickThumbnail: (int targetIndex) {
-              context.push('/book-log/my-page/scrapped-diaries/feed',
+              context.push('/my-feed/my-page/scrapped-diaries/feed',
                   extra: {'index': targetIndex});
             });
       },

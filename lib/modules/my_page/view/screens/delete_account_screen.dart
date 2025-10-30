@@ -54,7 +54,7 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen> {
             IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                GoRouter.of(context).go('/book-log');
+                GoRouter.of(context).go('/my-feed');
               },
             ),
         ],
