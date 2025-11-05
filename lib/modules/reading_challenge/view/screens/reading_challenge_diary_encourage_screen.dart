@@ -105,7 +105,8 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                 ref.read(currentChallengeViewModelProvider).book?.bookId;
             if (bookId == null) return;
             if (!context.mounted) return;
-            context.push('/reading-diary/$bookId/create');
+            // TODO: 사용하지 않는 위젯, 삭제 예정
+            // context.push('/book-log/$bookId/create');
           },
         ),
         const SizedBox(height: 8),
@@ -126,7 +127,7 @@ class ReadingChallengeDiaryEncourageScreen extends ConsumerWidget {
                       ref.read(currentChallengeViewModelProvider).book?.bookId;
                   if (bookId == null) return;
                   context.pop();
-                  context.push('/reading-diary/$bookId/create');
+                  // context.push('/book-log/$bookId/create');
                 },
                 onCancel: () async {
                   await _updateChallengeProgress(ref);

@@ -1,5 +1,4 @@
 import 'package:bookstar/common/components/base_screen.dart';
-import 'package:bookstar/common/models/image_request.dart';
 import 'package:bookstar/modules/auth/view_model/auth_state.dart';
 import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
 import 'package:bookstar/modules/book_log/view/widgets/book_log_feed_list.dart';
@@ -9,7 +8,6 @@ import 'package:bookstar/modules/book_log/view/widgets/report_dialog.dart';
 import 'package:bookstar/modules/book_log/view/widgets/report_success_dialog.dart';
 import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:bookstar/modules/follow/view_model/follow_info_view_model.dart';
-import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +15,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../gen/colors.gen.dart';
 
 class MyFeedFeedScreen extends BaseScreen {
-  const MyFeedFeedScreen(
-      {super.key, required this.initialIndex});
+  const MyFeedFeedScreen({super.key, required this.initialIndex});
   final int initialIndex;
 
   @override
@@ -173,17 +170,19 @@ class _MyFeedFeedScreenState extends BaseScreenState<MyFeedFeedScreen> {
                     targetFeed.diaryId, targetFeed.scraped, targetIndex);
               },
               onUpdate: (int targetIndex) {
-                final targetFeed = bookLog.feeds[targetIndex];
-                context.push('/reading-diary/${targetFeed.diaryId}/update',
-                    extra: {
-                      "memberId": targetFeed.memberId,
-                      "request": DiaryUpdateRequest(
-                          content: targetFeed.content,
-                          images: targetFeed.images
-                              .map((e) => ImageRequest(
-                                  imageUrl: e.imageUrl, sequence: e.sequence))
-                              .toList())
-                    });
+                // TODO: 사용하지 않는 위젯, 삭제 예정
+
+                // final targetFeed = bookLog.feeds[targetIndex];
+                // context.push('/book-log/${targetFeed.diaryId}/update',
+                //     extra: {
+                //       "memberId": targetFeed.memberId,
+                //       "request": DiaryUpdateRequest(
+                //           content: targetFeed.content,
+                //           images: targetFeed.images
+                //               .map((e) => ImageRequest(
+                //                   imageUrl: e.imageUrl, sequence: e.sequence))
+                //               .toList())
+                //     });
               },
             ),
             error: _error("팔로우 정보를 불러올 수 없습니다."),
