@@ -68,6 +68,38 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
   }
 
   @override
+  Widget? buildFloatingActionButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.push('/book-log/create');
+      },
+      child: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF3A3A43),
+              Color(0xFF4F4F7F),
+            ],
+            stops: [0.3, 0.7],
+          ),
+        ),
+        child: Center(
+          child: Assets.icons.icPencil.svg(
+            width: 30,
+            colorFilter: ColorFilter.mode(ColorName.p2, BlendMode.srcIn)
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  @override
   Widget buildBody(BuildContext context) {
     final bookLogAsync = ref.watch(bookLogViewModelProvider(null));
     final followInfoAsync = ref.watch(followInfoViewModelProvider);
@@ -170,7 +202,7 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
               },
               onUpdate: (int targetIndex) {
                 final targetFeed = bookLog.feeds[targetIndex];
-                context.push('/reading-diary/${targetFeed.diaryId}/update',
+                context.push('/book-log/${targetFeed.diaryId}/update',
                     extra: {
                       "memberId": targetFeed.memberId,
                       "request": DiaryUpdateRequest(

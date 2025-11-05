@@ -1,3 +1,4 @@
+import 'package:bookstar/modules/book_log/view/screens/book_log_create_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_related_feed_screen.dart';
 import 'package:bookstar/modules/book_pick/view/screens/book_pick_my_likes_screen.dart';
@@ -41,7 +42,6 @@ import '../../modules/reading_challenge/view/screens/reading_challenge_screen.da
 import '../../modules/reading_challenge/view/screens/reading_challenge_start_and_end_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/reading_challenge_total_page_screen.dart';
 import '../../modules/reading_challenge/view/screens/my_diary_feeds_screen.dart';
-import '../../modules/reading_diary/screens/reading_diary_create_screen.dart';
 
 part 'router.g.dart';
 
@@ -104,26 +104,6 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/reading-diary/:bookId/create',
-        parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) {
-          final bookId = int.parse(state.pathParameters['bookId']!);
-          return ReadingDiaryCreateScreen(bookId: bookId);
-        },
-      ),
-      GoRoute(
-        path: '/reading-diary/:diaryId/update',
-        parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) {
-          final diaryId = int.parse(state.pathParameters['diaryId']!);
-          final extra = state.extra as Map<String, dynamic>;
-          final memberId = extra["memberId"] as int;
-          final request = extra["request"] as DiaryUpdateRequest;
-          return ReadingDiaryUpdateScreen(
-              diaryId: diaryId, request: request, memberId: memberId);
-        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -307,7 +287,7 @@ GoRouter router(Ref ref) {
                           memberId: memberId, initialIndex: index);
                     },
                   ),
-                   GoRoute(
+                  GoRoute(
                     path: 'related-feed/:bookId',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
@@ -316,6 +296,25 @@ GoRouter router(Ref ref) {
                       final index = extra['index'] as int;
                       return BookRelatedFeedScreen(
                           bookId: bookId, initialIndex: index);
+                    },
+                  ),
+                   GoRoute(
+                    path: '/create',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      return BookLogCreateScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: '/:diaryId/update',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final diaryId = int.parse(state.pathParameters['diaryId']!);
+                      final extra = state.extra as Map<String, dynamic>;
+                      final memberId = extra["memberId"] as int;
+                      final request = extra["request"] as DiaryUpdateRequest;
+                      return ReadingDiaryUpdateScreen(
+                          diaryId: diaryId, request: request, memberId: memberId);
                     },
                   ),
                 ],
