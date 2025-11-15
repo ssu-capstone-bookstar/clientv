@@ -4,6 +4,7 @@ import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/models/image_request.dart';
 import 'package:bookstar/modules/auth/view_model/auth_state.dart';
 import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
+import 'package:bookstar/modules/book_log/view/widgets/select_image_dialog.dart';
 import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:bookstar/modules/reading_challenge/view_model/current_challenge_view_model.dart';
 import 'package:bookstar/modules/reading_diary/model/diary_request.dart';
@@ -23,17 +24,26 @@ class BookLogCreateScreen extends BaseScreen {
   BaseScreenState<BaseScreen> createState() => _BookLogCreateScreenState();
 }
 
-class _BookLogCreateScreenState
-    extends BaseScreenState<BookLogCreateScreen> {
+class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
   @override
   bool enableRefreshIndicator() => false;
   final int _selectedBookId = -1;
   final TextEditingController _textController = TextEditingController();
-  final List<ImageItem> _images = [];
+  List<ImageItem> _images = [];
   bool _disableSave = false;
+  int _currentImageIndex = 0;
+
   void _updateDisableSave(bool value) {
     setState(() {
       _disableSave = value;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _openPhotoSelectDialog();
     });
   }
 
@@ -43,10 +53,34 @@ class _BookLogCreateScreenState
     super.dispose();
   }
 
+  Future<void> _openPhotoSelectDialog() async {
+    final maxCount = MAX_COUNT - _images.length;
+    final result = await showDialog(
+      context: context,
+      builder: (_) {
+        return SelectImageDialog(maxCount: maxCount);
+      },
+    );
+    if (result != null) {
+      final r = result as List<SelectedImage>;
+      setState(() {
+        for (final item in r) {
+          _images.add(GalleryImage(originBytes: item.originBytes));
+        }
+      });
+    }
+  }
+
+  void _onImageIndexChanged(int index) {
+    setState(() {
+      _currentImageIndex = index;
+    });
+  }
+
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('독서 다이어리'),
+      title: const Text('책로그'),
       leading: IconButton(
         icon: const BackButton(),
         onPressed: () => Navigator.of(context).pop(),
@@ -58,7 +92,9 @@ class _BookLogCreateScreenState
   Widget buildBody(BuildContext context) {
     return ReadingDiaryEditForm(
       textController: _textController,
-      initialImages: [],
+      images: _images,
+      currentImageIndex: _currentImageIndex,
+      onImageIndexChanged: _onImageIndexChanged,
       focusNode: focusNode,
       disabledSave: _disableSave,
       onUpdateDisabledSave: _updateDisableSave,
@@ -76,8 +112,7 @@ class _BookLogCreateScreenState
       },
       onUpdateImage: (newImages) {
         setState(() {
-          _images.clear();
-          _images.addAll(newImages);
+          _images = [...newImages];
         });
       },
       onSave: () async {
@@ -91,20 +126,12 @@ class _BookLogCreateScreenState
               sequence: index + 1,
             );
           } else if (item is GalleryImage) {
-            final file = File(item.path);
-            final imageRequest =
-                await ref.read(fileToImageRequestProvider(file).future);
-            return ImageRequest(
-              imageUrl: imageRequest.imageUrl,
-              sequence: index + 1,
-            );
-          } else if (item is EditingImage) {
-            // 임시 디렉토리 가져오기
+            // 임시 디렉토리 가져오기 (앱 종료 시 OS가 정리)
             final tempDir = await getTemporaryDirectory();
             final file = File(
                 '${tempDir.path}/bookstar_${DateTime.now().millisecondsSinceEpoch}.png');
             // 바이트 데이터 쓰기
-            await file.writeAsBytes(item.bytes);
+            await file.writeAsBytes(item.originBytes);
             final imageRequest =
                 await ref.read(fileToImageRequestProvider(file).future);
             return ImageRequest(
@@ -142,6 +169,9 @@ class _BookLogCreateScreenState
             context.go('/reading-challenge');
           });
         }
+      },
+      onPick: () {
+        _openPhotoSelectDialog();
       },
     );
   }
