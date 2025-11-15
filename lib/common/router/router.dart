@@ -6,8 +6,6 @@ import 'package:bookstar/modules/my_feed/view/screens/my_feed_feed_screen.dart';
 import 'package:bookstar/modules/my_feed/view/screens/my_feed_screen.dart';
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_my_likes_screen.dart';
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_screen.dart';
-import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
-import 'package:bookstar/modules/reading_diary/screens/reading_diary_update_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -305,18 +303,18 @@ GoRouter router(Ref ref) {
                       return BookLogCreateScreen();
                     },
                   ),
-                  GoRoute(
-                    path: '/:diaryId/update',
-                    parentNavigatorKey: rootNavigatorKey,
-                    builder: (context, state) {
-                      final diaryId = int.parse(state.pathParameters['diaryId']!);
-                      final extra = state.extra as Map<String, dynamic>;
-                      final memberId = extra["memberId"] as int;
-                      final request = extra["request"] as DiaryUpdateRequest;
-                      return ReadingDiaryUpdateScreen(
-                          diaryId: diaryId, request: request, memberId: memberId);
-                    },
-                  ),
+                  // GoRoute(
+                  //   path: '/:diaryId/update',
+                  //   parentNavigatorKey: rootNavigatorKey,
+                  //   builder: (context, state) {
+                  //     final diaryId = int.parse(state.pathParameters['diaryId']!);
+                  //     final extra = state.extra as Map<String, dynamic>;
+                  //     final memberId = extra["memberId"] as int;
+                  //     final request = extra["request"] as DiaryUpdateRequest;
+                  //     return ReadingDiaryUpdateScreen(
+                  //         diaryId: diaryId, request: request, memberId: memberId);
+                  //   },
+                  // ),
                 ],
               ),
             ],

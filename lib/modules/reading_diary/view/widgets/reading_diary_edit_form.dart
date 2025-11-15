@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bookstar/common/components/button/cta_button_l1.dart';
-import 'package:bookstar/common/components/modal/photo_source_modal.dart';
 import 'package:bookstar/common/models/image_request.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
 import 'package:bookstar/gen/colors.gen.dart';
@@ -10,10 +8,6 @@ import 'package:bookstar/modules/reading_diary/view/widgets/text_input_sheet.dar
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pro_image_editor/core/models/editor_callbacks/pro_image_editor_callbacks.dart';
-import 'package:pro_image_editor/core/models/editor_configs/pro_image_editor_configs.dart';
-import 'package:pro_image_editor/features/main_editor/main_editor.dart';
 
 const int IMAGE_LIMIT = 10;
 
@@ -28,21 +22,17 @@ class UrlImage extends ImageItem {
 }
 
 class GalleryImage extends ImageItem {
-  final String path;
+  final Uint8List originBytes;
 
-  GalleryImage({required this.path});
-}
-
-class EditingImage extends ImageItem {
-  final Uint8List bytes;
-  EditingImage({required this.bytes});
+  GalleryImage({required this.originBytes});
 }
 
 class ReadingDiaryEditForm extends ConsumerStatefulWidget {
   const ReadingDiaryEditForm({
     super.key,
     required this.textController,
-    required this.initialImages,
+    required this.images,
+    required this.currentImageIndex,
     required this.focusNode,
     required this.disabledSave,
     required this.onFocus,
@@ -50,10 +40,13 @@ class ReadingDiaryEditForm extends ConsumerStatefulWidget {
     required this.onUpdateImage,
     required this.onSave,
     required this.onUpdateDisabledSave,
+    required this.onPick,
+    required this.onImageIndexChanged,
   });
 
   final TextEditingController textController;
-  final List<ImageRequest> initialImages;
+  final List<ImageItem> images;
+  final int currentImageIndex;
   final FocusNode focusNode;
   final bool disabledSave;
   final Function(bool) onFocus;
@@ -61,6 +54,8 @@ class ReadingDiaryEditForm extends ConsumerStatefulWidget {
   final Function(List<ImageItem>) onUpdateImage;
   final Function() onSave;
   final Function(bool) onUpdateDisabledSave;
+  final Function() onPick;
+  final Function(int) onImageIndexChanged;
 
   @override
   ConsumerState<ReadingDiaryEditForm> createState() =>
@@ -68,23 +63,8 @@ class ReadingDiaryEditForm extends ConsumerStatefulWidget {
 }
 
 class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
-  final List<ImageItem> images = [];
-  final ImagePicker _picker = ImagePicker();
-  bool _isEditing = false;
-  int _currentImageIndex = 0;
-
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.initialImages.isNotEmpty) {
-        setState(() {
-          widget.initialImages.asMap().forEach((index, item) {
-            images.add(UrlImage(imageRequest: item));
-          });
-        });
-        widget.onUpdateImage(images);
-      }
-    });
     super.initState();
   }
 
@@ -119,74 +99,14 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
   void _onImageIndexChanged(int index) {
     int newIndex = index;
     if (newIndex < 0) newIndex = 0;
-    setState(() {
-      _currentImageIndex = newIndex;
-    });
-  }
-
-  void _editImage(int index) {
-    setState(() {
-      _isEditing = true;
-    });
-  }
-
-  void _endEditing() {
-    setState(() {
-      _isEditing = false;
-    });
-  }
-
-  void _onImageEditingComplete(Uint8List bytes, int index) {
-    setState(() {
-      images[index] = EditingImage(bytes: bytes);
-    });
-    widget.onUpdateImage(images);
-  }
-
-  Future<void> _pickImages(ImageSource source) async {
-    List<XFile> pickedFiles = [];
-    final limit = IMAGE_LIMIT - images.length;
-    if (source == ImageSource.camera) {
-      if (limit > 0) {
-        final XFile? image = await _picker.pickImage(source: source);
-        if (image != null) {
-          pickedFiles.add(image);
-        }
-      } else {
-        // TODO: limit이 0인 경우 처리 (토스트 메시지)
-      }
-    } else if (source == ImageSource.gallery) {
-      if (limit >= 2) {
-        pickedFiles = await _picker.pickMultiImage(limit: limit);
-      } else if (limit == 1) {
-        final XFile? image = await _picker.pickImage(source: source);
-        if (image != null) {
-          pickedFiles.add(image);
-        }
-      } else {
-        // TODO: limit이 0인 경우 처리 (토스트 메시지)
-      }
-    }
-
-    if (pickedFiles.isNotEmpty && mounted) {
-      final imagePaths = pickedFiles.map((f) => f.path).toList();
-      if (imagePaths.isNotEmpty) {
-        setState(() {
-          imagePaths.asMap().forEach((index, path) {
-            images.add(GalleryImage(path: path));
-          });
-        });
-        widget.onUpdateImage(images);
-      }
-    }
+    widget.onImageIndexChanged(newIndex);
   }
 
   void _removeImage(int index) {
+    final images = widget.images;
     final totalImageCount = images.length;
     final isLastIndex = index == totalImageCount - 1;
-    setState(() {
-      images.removeAt(index);
-    });
+    images.removeAt(index);
     if (isLastIndex) {
       _onImageIndexChanged(index - 1);
     }
@@ -208,14 +128,10 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                 slivers: [
                   SliverToBoxAdapter(
                     child: _buildImageSection(
-                        images: images,
-                        isEditing: _isEditing,
-                        onEditImage: _editImage,
-                        onEndEditing: _endEditing,
-                        onImageEditingComplete: _onImageEditingComplete,
-                        onPick: _pickImages,
+                        images: widget.images,
+                        onPick: widget.onPick,
                         onRemove: _removeImage,
-                        currentImageIndex: _currentImageIndex,
+                        currentImageIndex: widget.currentImageIndex,
                         onImageIndexChanged: _onImageIndexChanged),
                   ),
                   SliverToBoxAdapter(
@@ -252,11 +168,7 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
 
   Widget _buildImageSection(
       {required List<ImageItem> images,
-      required bool isEditing,
-      required Function(int) onEditImage,
-      required Function() onEndEditing,
-      required Function(Uint8List bytes, int index) onImageEditingComplete,
-      required Function(ImageSource) onPick,
+      required Function() onPick,
       required Function(int) onRemove,
       required int currentImageIndex,
       required Function(int) onImageIndexChanged}) {
@@ -269,8 +181,7 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
           child: totalImageLength == 0
               ? Center(
                   child: GestureDetector(
-                    onTap: () => PhotoSourceModal.show(context,
-                        onPick: (source) => onPick(source)),
+                    onTap: () => onPick(),
                     child: const Center(
                       child: Icon(Icons.add_photo_alternate,
                           size: 24, color: ColorName.g1),
@@ -285,36 +196,9 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           GestureDetector(
-                            onTap: () => !isEditing
-                                ? onEditImage(currentImageIndex)
-                                : onEndEditing(),
-                            child: !isEditing
-                                ? Icon(Icons.edit,
-                                    color: Colors.white, size: 24)
-                                : Icon(Icons.close,
-                                    color: Colors.white, size: 24),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          GestureDetector(
-                            onTap: () => !isEditing
-                                ? PhotoSourceModal.show(context,
-                                    onPick: (source) => onPick(source))
-                                : null,
+                            onTap: () => onPick(),
                             child: const Center(
                               child: Icon(Icons.add_photo_alternate,
-                                  size: 24, color: ColorName.g1),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                !isEditing ? onRemove(currentImageIndex) : null,
-                            child: const Center(
-                              child: Icon(Icons.close,
                                   size: 24, color: ColorName.g1),
                             ),
                           ),
@@ -325,40 +209,55 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                       ),
                       Expanded(
                         child: PageView.builder(
-                          physics: isEditing
-                              ? const NeverScrollableScrollPhysics() // 편집 중 → 스크롤 막기
-                              : const AlwaysScrollableScrollPhysics(), // 기본 → 스크롤 가능
+                          physics: const AlwaysScrollableScrollPhysics(),
                           itemCount: totalImageLength,
                           onPageChanged: onImageIndexChanged,
                           itemBuilder: (context, index) {
                             final item = images[index];
-                            if (item is UrlImage) {
-                              return _urlImageWidget(
-                                  item: item,
-                                  isEditing: isEditing,
-                                  onImageEditingComplete: (bytes) {
-                                    onImageEditingComplete(bytes, index);
-                                  },
-                                  onCloseEditor: onEndEditing);
-                            } else if (item is GalleryImage) {
-                              return _galleryImageWidget(
-                                  item: item,
-                                  isEditing: isEditing,
-                                  onImageEditingComplete: (bytes) {
-                                    onImageEditingComplete(bytes, index);
-                                  },
-                                  onCloseEditor: onEndEditing);
-                            } else if (item is EditingImage) {
-                              return _editingImageWidget(
-                                  item: item,
-                                  isEditing: isEditing,
-                                  onImageEditingComplete: (bytes) {
-                                    onImageEditingComplete(bytes, index);
-                                  },
-                                  onCloseEditor: onEndEditing);
-                            } else {
-                              return Container();
-                            }
+                            return Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                if (item is UrlImage)
+                                  _urlImageWidget(item: item)
+                                else if (item is GalleryImage)
+                                  _galleryImageWidget(item: item)
+                                else
+                                  Container(),
+                                Positioned(
+                                    top: 16,
+                                    right: 16,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          color: ColorName.b1),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 13,
+                                          vertical: 7.5,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () =>
+                                                  onRemove(currentImageIndex),
+                                              child: const Center(
+                                                child: Icon(Icons.close,
+                                                    size: 24,
+                                                    color: ColorName.g1),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text(
+                                                "${index + 1}/$totalImageLength"),
+                                          ],
+                                        ),
+                                      ),
+                                    ))
+                              ],
+                            );
                           },
                         ),
                       ),
@@ -427,165 +326,17 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
     );
   }
 
-  Widget _urlImageWidget(
-      {required UrlImage item,
-      required bool isEditing,
-      required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return !isEditing
-        ? CachedNetworkImage(
-            imageUrl: item.imageRequest.imageUrl,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Container())
-        : ProImageEditor.network(item.imageRequest.imageUrl,
-            configs: proImageEditorConfigs,
-            callbacks: getProImageEditorCallback(
-              onImageEditingComplete: (bytes) async {
-                onImageEditingComplete(bytes);
-              },
-              onCloseEditor: () {
-                onCloseEditor();
-              },
-            ));
+  Widget _urlImageWidget({required UrlImage item}) {
+    return CachedNetworkImage(
+        imageUrl: item.imageRequest.imageUrl,
+        fit: BoxFit.contain,
+        errorWidget: (context, url, error) => Container());
   }
 
-  Widget _galleryImageWidget(
-      {required GalleryImage item,
-      required bool isEditing,
-      required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return !isEditing
-        ? Image.file(
-            File(
-              item.path,
-            ),
-            fit: BoxFit.contain,
-          )
-        : ProImageEditor.file(
-            File(item.path),
-            configs: proImageEditorConfigs,
-            callbacks: getProImageEditorCallback(
-              onImageEditingComplete: (bytes) async {
-                onImageEditingComplete(bytes);
-              },
-              onCloseEditor: () {
-                onCloseEditor();
-              },
-            ),
-          );
-  }
-
-  Widget _editingImageWidget(
-      {required EditingImage item,
-      required bool isEditing,
-      required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return !isEditing
-        ? Image.memory(
-            item.bytes,
-            fit: BoxFit.contain,
-          )
-        : ProImageEditor.memory(
-            item.bytes,
-            configs: proImageEditorConfigs,
-            callbacks: getProImageEditorCallback(
-              onImageEditingComplete: (bytes) async {
-                onImageEditingComplete(bytes);
-              },
-              onCloseEditor: () {
-                onCloseEditor();
-              },
-            ),
-          );
-  }
-
-  ProImageEditorConfigs proImageEditorConfigs = ProImageEditorConfigs(
-      theme: ThemeData(
-        primaryColor: ColorName.p1,
-        scaffoldBackgroundColor: ColorName.b1,
-        brightness: Brightness.dark,
-        appBarTheme: AppBarTheme(
-          backgroundColor: ColorName.b1,
-          surfaceTintColor: ColorName.b1,
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: IconThemeData(color: ColorName.g7),
-          actionsIconTheme: IconThemeData(color: ColorName.g7),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: ColorName.g7,
-          selectedItemColor: ColorName.p1,
-          unselectedItemColor: ColorName.g3,
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: ColorName.g7,
-          hintStyle: const TextStyle(color: ColorName.g3),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide.none,
-          ),
-          prefixIconColor: ColorName.g3,
-        ),
-      ),
-      i18n: I18n(
-        paintEditor: I18nPaintEditor(
-          bottomNavigationBarText: "펜",
-          freestyle: "펜",
-          eraser: "지우개",
-          lineWidth: "선 굵기",
-          changeOpacity: "투명도",
-        ),
-        textEditor: I18nTextEditor(
-          bottomNavigationBarText: "텍스트",
-          fontScale: "폰트 크기",
-          inputHintText: "텍스트 입력",
-        ),
-        cropRotateEditor: I18nCropRotateEditor(
-          bottomNavigationBarText: "자르기/회전",
-          rotate: "회전",
-          flip: "좌우반전",
-          ratio: "비율",
-          reset: "초기화",
-        ),
-      ),
-      mainEditor: MainEditorConfigs(
-        canZoomWhenLayerSelected: false,
-      ),
-      paintEditor: PaintEditorConfigs(
-        enableModeArrow: false,
-        enableModeLine: false,
-        enableModeRect: false,
-        enableModeCircle: false,
-        enableModeDashLine: false,
-        enableModePolygon: false,
-        enableModeBlur: false,
-        enableModePixelate: false,
-        showToggleFillButton: false,
-        style: PaintEditorStyle(
-          bottomBarActiveItemColor: Colors.deepPurple,
-        ),
-      ),
-      tuneEditor: TuneEditorConfigs(enabled: false),
-      filterEditor: FilterEditorConfigs(enabled: false),
-      blurEditor: BlurEditorConfigs(enabled: false),
-      stickerEditor: StickerEditorConfigs(
-        enabled: false,
-      )
-      );
-
-  ProImageEditorCallbacks getProImageEditorCallback(
-      {required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return ProImageEditorCallbacks(
-      onCloseEditor: (editorMode) {
-        onCloseEditor();
-      },
-      onImageEditingComplete: (bytes) async {
-        onImageEditingComplete(bytes);
-      },
+  Widget _galleryImageWidget({required GalleryImage item}) {
+    return Image.memory(
+      item.originBytes,
+      fit: BoxFit.contain,
     );
   }
 }

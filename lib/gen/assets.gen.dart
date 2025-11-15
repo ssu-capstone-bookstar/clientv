@@ -82,6 +82,14 @@ class $AssetsIconsGen {
   SvgGenImage get icAddPick =>
       const SvgGenImage('assets/icons/ic_add_pick.svg');
 
+  /// File path: assets/icons/ic_arrow_check.svg
+  SvgGenImage get icArrowCheck =>
+      const SvgGenImage('assets/icons/ic_arrow_check.svg');
+
+  /// File path: assets/icons/ic_arrow_down.svg
+  SvgGenImage get icArrowDown =>
+      const SvgGenImage('assets/icons/ic_arrow_down.svg');
+
   /// File path: assets/icons/ic_arrow_up_down.svg
   SvgGenImage get icArrowUpDown =>
       const SvgGenImage('assets/icons/ic_arrow_up_down.svg');
@@ -346,6 +354,8 @@ class $AssetsIconsGen {
     apple,
     google,
     icAddPick,
+    icArrowCheck,
+    icArrowDown,
     icArrowUpDown,
     icBookpickChatCharacter,
     icBookpickChatOption,
