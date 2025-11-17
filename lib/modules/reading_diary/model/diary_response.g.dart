@@ -28,6 +28,7 @@ _DiaryResponse _$DiaryResponseFromJson(Map<String, dynamic> json) =>
       viewCount: (json['viewCount'] as num?)?.toInt() ?? 0,
       liked: json['liked'] as bool? ?? false,
       scraped: json['scraped'] as bool? ?? false,
+      private: json['private'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$DiaryResponseToJson(_DiaryResponse instance) =>
@@ -48,4 +49,5 @@ Map<String, dynamic> _$DiaryResponseToJson(_DiaryResponse instance) =>
       'viewCount': instance.viewCount,
       'liked': instance.liked,
       'scraped': instance.scraped,
+      'private': instance.private,
     };

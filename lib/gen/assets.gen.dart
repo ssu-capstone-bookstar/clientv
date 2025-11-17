@@ -25,6 +25,9 @@ class $AssetsEnvGen {
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
+  /// File path: assets/fonts/BookkMyungjo_Bold.ttf
+  String get bookkMyungjoBold => 'assets/fonts/BookkMyungjo_Bold.ttf';
+
   /// File path: assets/fonts/Pretendard-Black.otf
   String get pretendardBlack => 'assets/fonts/Pretendard-Black.otf';
 
@@ -54,6 +57,7 @@ class $AssetsFontsGen {
 
   /// List of all assets
   List<String> get values => [
+    bookkMyungjoBold,
     pretendardBlack,
     pretendardBold,
     pretendardExtraBold,
@@ -82,9 +86,20 @@ class $AssetsIconsGen {
   SvgGenImage get icAddPick =>
       const SvgGenImage('assets/icons/ic_add_pick.svg');
 
+  /// File path: assets/icons/ic_arrow_down.svg
+  SvgGenImage get icArrowDown =>
+      const SvgGenImage('assets/icons/ic_arrow_down.svg');
+
   /// File path: assets/icons/ic_arrow_up_down.svg
   SvgGenImage get icArrowUpDown =>
       const SvgGenImage('assets/icons/ic_arrow_up_down.svg');
+
+  /// File path: assets/icons/ic_book.svg
+  SvgGenImage get icBook => const SvgGenImage('assets/icons/ic_book.svg');
+
+  /// File path: assets/icons/ic_book_search.svg
+  SvgGenImage get icBookSearch =>
+      const SvgGenImage('assets/icons/ic_book_search.svg');
 
   /// File path: assets/icons/ic_bookpick_chat_character.svg
   SvgGenImage get icBookpickChatCharacter =>
@@ -346,7 +361,10 @@ class $AssetsIconsGen {
     apple,
     google,
     icAddPick,
+    icArrowDown,
     icArrowUpDown,
+    icBook,
+    icBookSearch,
     icBookpickChatCharacter,
     icBookpickChatOption,
     icBookpickChatOptionPicture,

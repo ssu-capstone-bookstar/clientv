@@ -1,19 +1,17 @@
-import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:bookstar/common/components/base_screen.dart';
 import 'package:bookstar/common/components/button/cta_button_l1.dart';
-import 'package:bookstar/common/components/modal/photo_source_modal.dart';
 import 'package:bookstar/common/models/image_request.dart';
 import 'package:bookstar/common/theme/style/app_texts.dart';
+import 'package:bookstar/gen/assets.gen.dart';
 import 'package:bookstar/gen/colors.gen.dart';
+import 'package:bookstar/modules/book/model/book_overview_response.dart';
+import 'package:bookstar/modules/book_log/view/widgets/select_book_dialog.dart';
+import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:bookstar/modules/reading_diary/view/widgets/text_input_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pro_image_editor/core/models/editor_callbacks/pro_image_editor_callbacks.dart';
-import 'package:pro_image_editor/core/models/editor_configs/pro_image_editor_configs.dart';
-import 'package:pro_image_editor/features/main_editor/main_editor.dart';
 
 const int IMAGE_LIMIT = 10;
 
@@ -28,70 +26,56 @@ class UrlImage extends ImageItem {
 }
 
 class GalleryImage extends ImageItem {
-  final String path;
+  final Uint8List originBytes;
 
-  GalleryImage({required this.path});
+  GalleryImage({required this.originBytes});
 }
 
-class EditingImage extends ImageItem {
-  final Uint8List bytes;
-  EditingImage({required this.bytes});
-}
-
-class ReadingDiaryEditForm extends ConsumerStatefulWidget {
+class ReadingDiaryEditForm extends BaseScreen {
   const ReadingDiaryEditForm({
     super.key,
     required this.textController,
-    required this.initialImages,
+    required this.images,
+    required this.currentImageIndex,
     required this.focusNode,
     required this.disabledSave,
+    required this.selectedBookId,
+    required this.private,
+    required this.onUpdatePrivate,
     required this.onFocus,
     required this.onUpdateText,
     required this.onUpdateImage,
     required this.onSave,
     required this.onUpdateDisabledSave,
+    required this.onPick,
+    required this.onImageIndexChanged,
+    required this.onUpdateSelectedBookId,
   });
 
   final TextEditingController textController;
-  final List<ImageRequest> initialImages;
+  final List<ImageItem> images;
+  final int currentImageIndex;
   final FocusNode focusNode;
   final bool disabledSave;
+  final int? selectedBookId;
+  final bool private;
+  final Function(bool) onUpdatePrivate;
   final Function(bool) onFocus;
   final Function(String) onUpdateText;
   final Function(List<ImageItem>) onUpdateImage;
   final Function() onSave;
   final Function(bool) onUpdateDisabledSave;
+  final Function() onPick;
+  final Function(int) onImageIndexChanged;
+  final Function(int) onUpdateSelectedBookId;
 
   @override
-  ConsumerState<ReadingDiaryEditForm> createState() =>
-      _ReadingDiaryEditFormState();
+  BaseScreenState<BaseScreen> createState() => _ReadingDiaryEditFormState();
 }
 
-class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
-  final List<ImageItem> images = [];
-  final ImagePicker _picker = ImagePicker();
-  bool _isEditing = false;
-  int _currentImageIndex = 0;
-
+class _ReadingDiaryEditFormState extends BaseScreenState<ReadingDiaryEditForm> {
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.initialImages.isNotEmpty) {
-        setState(() {
-          widget.initialImages.asMap().forEach((index, item) {
-            images.add(UrlImage(imageRequest: item));
-          });
-        });
-        widget.onUpdateImage(images);
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  bool enableRefreshIndicator() => false;
 
   void _onTabText() {
     showModalBottomSheet(
@@ -119,83 +103,39 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
   void _onImageIndexChanged(int index) {
     int newIndex = index;
     if (newIndex < 0) newIndex = 0;
-    setState(() {
-      _currentImageIndex = newIndex;
-    });
-  }
-
-  void _editImage(int index) {
-    setState(() {
-      _isEditing = true;
-    });
-  }
-
-  void _endEditing() {
-    setState(() {
-      _isEditing = false;
-    });
-  }
-
-  void _onImageEditingComplete(Uint8List bytes, int index) {
-    setState(() {
-      images[index] = EditingImage(bytes: bytes);
-    });
-    widget.onUpdateImage(images);
-  }
-
-  Future<void> _pickImages(ImageSource source) async {
-    List<XFile> pickedFiles = [];
-    final limit = IMAGE_LIMIT - images.length;
-    if (source == ImageSource.camera) {
-      if (limit > 0) {
-        final XFile? image = await _picker.pickImage(source: source);
-        if (image != null) {
-          pickedFiles.add(image);
-        }
-      } else {
-        // TODO: limit이 0인 경우 처리 (토스트 메시지)
-      }
-    } else if (source == ImageSource.gallery) {
-      if (limit >= 2) {
-        pickedFiles = await _picker.pickMultiImage(limit: limit);
-      } else if (limit == 1) {
-        final XFile? image = await _picker.pickImage(source: source);
-        if (image != null) {
-          pickedFiles.add(image);
-        }
-      } else {
-        // TODO: limit이 0인 경우 처리 (토스트 메시지)
-      }
-    }
-
-    if (pickedFiles.isNotEmpty && mounted) {
-      final imagePaths = pickedFiles.map((f) => f.path).toList();
-      if (imagePaths.isNotEmpty) {
-        setState(() {
-          imagePaths.asMap().forEach((index, path) {
-            images.add(GalleryImage(path: path));
-          });
-        });
-        widget.onUpdateImage(images);
-      }
-    }
+    widget.onImageIndexChanged(newIndex);
   }
 
   void _removeImage(int index) {
+    final images = widget.images;
     final totalImageCount = images.length;
     final isLastIndex = index == totalImageCount - 1;
-    setState(() {
-      images.removeAt(index);
-    });
+    images.removeAt(index);
     if (isLastIndex) {
       _onImageIndexChanged(index - 1);
     }
     widget.onUpdateImage(images);
   }
 
+  Future<void> _openSelectBookDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return SelectBookDialog();
+      },
+    );
+    if (result != null) {
+      widget.onUpdateSelectedBookId(result);
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     final isNotEmptyText = widget.textController.text.isNotEmpty;
+    final isOver10lines =
+        "\n".allMatches(widget.textController.text).length + 1 >= 10;
+    final state = ref.watch(bookLogBookOverviewProvider(widget.selectedBookId));
+
     return GestureDetector(
       onTap: () {
         widget.onFocus(false);
@@ -208,15 +148,17 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                 slivers: [
                   SliverToBoxAdapter(
                     child: _buildImageSection(
-                        images: images,
-                        isEditing: _isEditing,
-                        onEditImage: _editImage,
-                        onEndEditing: _endEditing,
-                        onImageEditingComplete: _onImageEditingComplete,
-                        onPick: _pickImages,
+                        images: widget.images,
+                        onPick: widget.onPick,
                         onRemove: _removeImage,
-                        currentImageIndex: _currentImageIndex,
+                        currentImageIndex: widget.currentImageIndex,
                         onImageIndexChanged: _onImageIndexChanged),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _buildDescriptionSection(
+                      isNotEmptyText: isNotEmptyText,
+                      isOver10lines: isOver10lines,
+                    ),
                   ),
                   SliverToBoxAdapter(
                     child: GestureDetector(
@@ -224,8 +166,7 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                         child: SizedBox(
                           width: double.infinity,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 24),
+                            padding: const EdgeInsets.symmetric(),
                             child: isNotEmptyText
                                 ? _buildTextSection(
                                     text: widget.textController.text)
@@ -236,7 +177,21 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                 ],
               ),
             ),
-            if (isNotEmptyText)
+            _buildRegisterBookButton(
+              selectedBookId: widget.selectedBookId,
+              bookOverview: state.value,
+              onPressed: _openSelectBookDialog,
+            ),
+            SizedBox(height: 12),
+            _buildPrivateButton(
+              private: widget.private,
+              onPressed: () {
+                widget.onUpdatePrivate(!widget.private);
+              },
+            ),
+            if (isNotEmptyText &&
+                isOver10lines &&
+                widget.selectedBookId != null)
               _buildSubmitButton(
                   disabled: widget.disabledSave,
                   onSave: () async {
@@ -244,6 +199,9 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
                     await widget.onSave();
                     widget.onUpdateDisabledSave(false);
                   }),
+            SizedBox(
+              height: 16,
+            )
           ],
         ),
       ),
@@ -252,155 +210,173 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
 
   Widget _buildImageSection(
       {required List<ImageItem> images,
-      required bool isEditing,
-      required Function(int) onEditImage,
-      required Function() onEndEditing,
-      required Function(Uint8List bytes, int index) onImageEditingComplete,
-      required Function(ImageSource) onPick,
+      required Function() onPick,
       required Function(int) onRemove,
       required int currentImageIndex,
       required Function(int) onImageIndexChanged}) {
     final totalImageLength = images.length;
 
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: totalImageLength == 0
-              ? Center(
-                  child: GestureDetector(
-                    onTap: () => PhotoSourceModal.show(context,
-                        onPick: (source) => onPick(source)),
-                    child: const Center(
-                      child: Icon(Icons.add_photo_alternate,
-                          size: 24, color: ColorName.g1),
-                    ),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
+    if (totalImageLength == 0) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: () => onPick(),
+              child: Icon(Icons.add_photo_alternate,
+                  size: 24, color: ColorName.g1),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () => !isEditing
-                                ? onEditImage(currentImageIndex)
-                                : onEndEditing(),
-                            child: !isEditing
-                                ? Icon(Icons.edit,
-                                    color: Colors.white, size: 24)
-                                : Icon(Icons.close,
-                                    color: Colors.white, size: 24),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          GestureDetector(
-                            onTap: () => !isEditing
-                                ? PhotoSourceModal.show(context,
-                                    onPick: (source) => onPick(source))
-                                : null,
-                            child: const Center(
-                              child: Icon(Icons.add_photo_alternate,
-                                  size: 24, color: ColorName.g1),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                !isEditing ? onRemove(currentImageIndex) : null,
-                            child: const Center(
-                              child: Icon(Icons.close,
-                                  size: 24, color: ColorName.g1),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Expanded(
-                        child: PageView.builder(
-                          physics: isEditing
-                              ? const NeverScrollableScrollPhysics() // 편집 중 → 스크롤 막기
-                              : const AlwaysScrollableScrollPhysics(), // 기본 → 스크롤 가능
-                          itemCount: totalImageLength,
-                          onPageChanged: onImageIndexChanged,
-                          itemBuilder: (context, index) {
-                            final item = images[index];
-                            if (item is UrlImage) {
-                              return _urlImageWidget(
-                                  item: item,
-                                  isEditing: isEditing,
-                                  onImageEditingComplete: (bytes) {
-                                    onImageEditingComplete(bytes, index);
-                                  },
-                                  onCloseEditor: onEndEditing);
-                            } else if (item is GalleryImage) {
-                              return _galleryImageWidget(
-                                  item: item,
-                                  isEditing: isEditing,
-                                  onImageEditingComplete: (bytes) {
-                                    onImageEditingComplete(bytes, index);
-                                  },
-                                  onCloseEditor: onEndEditing);
-                            } else if (item is EditingImage) {
-                              return _editingImageWidget(
-                                  item: item,
-                                  isEditing: isEditing,
-                                  onImageEditingComplete: (bytes) {
-                                    onImageEditingComplete(bytes, index);
-                                  },
-                                  onCloseEditor: onEndEditing);
-                            } else {
-                              return Container();
-                            }
-                          },
+                      GestureDetector(
+                        onTap: () => onPick(),
+                        child: const Center(
+                          child: Icon(Icons.add_photo_alternate,
+                              size: 24, color: ColorName.g1),
                         ),
                       ),
                     ],
                   ),
-                ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            totalImageLength,
-            (index) => AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: currentImageIndex == index ? 20 : 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: currentImageIndex == index
-                    ? ColorName.p1 // 활성화된 인디케이터 색상
-                    : ColorName.g7, // 비활성화된 인디케이터 색상
-                borderRadius: BorderRadius.circular(4),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Expanded(
+                    child: PageView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: totalImageLength,
+                      onPageChanged: onImageIndexChanged,
+                      itemBuilder: (context, index) {
+                        final item = images[index];
+                        return Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (item is UrlImage)
+                              _urlImageWidget(item: item)
+                            else if (item is GalleryImage)
+                              _galleryImageWidget(item: item)
+                            else
+                              Container(),
+                            Positioned(
+                                top: 16,
+                                right: 16,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      color: ColorName.b1),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 13,
+                                      vertical: 7.5,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () =>
+                                              onRemove(currentImageIndex),
+                                          child: const Center(
+                                            child: Icon(Icons.close,
+                                                size: 24, color: ColorName.g1),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text("${index + 1}/$totalImageLength"),
+                                      ],
+                                    ),
+                                  ),
+                                ))
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
-      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              totalImageLength,
+              (index) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: currentImageIndex == index ? 20 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: currentImageIndex == index
+                      ? ColorName.p1 // 활성화된 인디케이터 색상
+                      : ColorName.g7, // 비활성화된 인디케이터 색상
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  Widget _buildDescriptionSection({
+    required bool isNotEmptyText,
+    required bool isOver10lines,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: isNotEmptyText && !isOver10lines
+            ? [
+                Row(
+                  children: [
+                    Text("최소 10줄 이상",
+                        style: AppTexts.b1.copyWith(color: ColorName.e0)),
+                    Text("의", style: AppTexts.b1.copyWith(color: ColorName.w1)),
+                  ],
+                ),
+                Text("감상평을 입력해 주세요.",
+                    style: AppTexts.b1.copyWith(color: ColorName.w1)),
+              ]
+            : [
+                Text("책을 덮은 지금,",
+                    style: AppTexts.b1.copyWith(color: ColorName.w1)),
+                Row(
+                  children: [
+                    Text("어떤 생각",
+                        style: AppTexts.b1.copyWith(color: ColorName.p1)),
+                    Text("이 드시나요?",
+                        style: AppTexts.b1.copyWith(color: ColorName.w1)),
+                  ],
+                ),
+              ],
+      ),
     );
   }
 
   Widget _buildEmptyTextSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(Icons.edit, color: ColorName.g4, size: 18),
-          const SizedBox(width: 8),
-          Text(
-            '느낀 생각을 마음껏 표현해 보세요',
-            style: AppTexts.b8.copyWith(color: ColorName.g4),
-          ),
-        ],
+      child: Text(
+        '감상평을 입력해 보세요.',
+        style: AppTexts.b8.copyWith(
+          color: ColorName.g4,
+          fontFamily: 'BookkMyungjo',
+        ),
       ),
     );
   }
@@ -410,7 +386,186 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Text(
         text,
-        style: AppTexts.b8.copyWith(color: ColorName.w1),
+        style: AppTexts.b8.copyWith(
+          color: ColorName.w1,
+          fontFamily: 'BookkMyungjo',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRegisterBookButton({
+    required int? selectedBookId,
+    required BookOverviewResponse? bookOverview,
+    required Function() onPressed,
+  }) {
+    if (selectedBookId == null) {
+      return GestureDetector(
+        onTap: onPressed,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: ColorName.g7,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: ColorName.e0),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Row(
+                      children: [
+                        Assets.icons.icBook.svg(),
+                        SizedBox(width: 8),
+                        Text("읽은 책 등록하기",
+                            style: AppTexts.b7.copyWith(color: ColorName.w1)),
+                        SizedBox(width: 4),
+                        Text("필수*",
+                            style: AppTexts.b10.copyWith(color: ColorName.g2)),
+                      ],
+                    )),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 24,
+                      color: ColorName.g3,
+                    )
+                  ],
+                ),
+              )),
+        ),
+      );
+    } else if (bookOverview != null) {
+      return GestureDetector(
+        onTap: onPressed,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: ColorName.g7,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Row(
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 78,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: bookOverview.cover,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 210,
+                                  child: Text(bookOverview.title,
+                                      style: AppTexts.b5
+                                          .copyWith(color: ColorName.w1),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 210,
+                                  child: Text(
+                                      "${bookOverview.author}・${bookOverview.publisher}",
+                                      style: AppTexts.b8
+                                          .copyWith(color: ColorName.g2),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    )),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 24,
+                      color: ColorName.w1,
+                    )
+                  ],
+                ),
+              )),
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
+  Widget _buildPrivateButton({
+    required bool private,
+    required Function() onPressed,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: ColorName.g7,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Assets.icons.icBookSearch.svg(),
+                    SizedBox(width: 8),
+                    Text("나만 보기",
+                        style: AppTexts.b7.copyWith(color: ColorName.g3)),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: onPressed,
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: private ? ColorName.w2 : ColorName.g1,
+                    border: Border.all(
+                      color: private ? ColorName.w2 : ColorName.w1,
+                      width: 2,
+                    ),
+                  ),
+                  child: private
+                      ? Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Assets.icons.icCheck.svg(),
+                        )
+                      : null,
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -420,172 +575,24 @@ class _ReadingDiaryEditFormState extends ConsumerState<ReadingDiaryEditForm> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: CtaButtonL1(
-        text: '저장하기',
+        text: '게시하기',
         enabled: !disabled,
         onPressed: onSave,
       ),
     );
   }
 
-  Widget _urlImageWidget(
-      {required UrlImage item,
-      required bool isEditing,
-      required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return !isEditing
-        ? CachedNetworkImage(
-            imageUrl: item.imageRequest.imageUrl,
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Container())
-        : ProImageEditor.network(item.imageRequest.imageUrl,
-            configs: proImageEditorConfigs,
-            callbacks: getProImageEditorCallback(
-              onImageEditingComplete: (bytes) async {
-                onImageEditingComplete(bytes);
-              },
-              onCloseEditor: () {
-                onCloseEditor();
-              },
-            ));
+  Widget _urlImageWidget({required UrlImage item}) {
+    return CachedNetworkImage(
+        imageUrl: item.imageRequest.imageUrl,
+        fit: BoxFit.contain,
+        errorWidget: (context, url, error) => Container());
   }
 
-  Widget _galleryImageWidget(
-      {required GalleryImage item,
-      required bool isEditing,
-      required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return !isEditing
-        ? Image.file(
-            File(
-              item.path,
-            ),
-            fit: BoxFit.contain,
-          )
-        : ProImageEditor.file(
-            File(item.path),
-            configs: proImageEditorConfigs,
-            callbacks: getProImageEditorCallback(
-              onImageEditingComplete: (bytes) async {
-                onImageEditingComplete(bytes);
-              },
-              onCloseEditor: () {
-                onCloseEditor();
-              },
-            ),
-          );
-  }
-
-  Widget _editingImageWidget(
-      {required EditingImage item,
-      required bool isEditing,
-      required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return !isEditing
-        ? Image.memory(
-            item.bytes,
-            fit: BoxFit.contain,
-          )
-        : ProImageEditor.memory(
-            item.bytes,
-            configs: proImageEditorConfigs,
-            callbacks: getProImageEditorCallback(
-              onImageEditingComplete: (bytes) async {
-                onImageEditingComplete(bytes);
-              },
-              onCloseEditor: () {
-                onCloseEditor();
-              },
-            ),
-          );
-  }
-
-  ProImageEditorConfigs proImageEditorConfigs = ProImageEditorConfigs(
-      theme: ThemeData(
-        primaryColor: ColorName.p1,
-        scaffoldBackgroundColor: ColorName.b1,
-        brightness: Brightness.dark,
-        appBarTheme: AppBarTheme(
-          backgroundColor: ColorName.b1,
-          surfaceTintColor: ColorName.b1,
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: IconThemeData(color: ColorName.g7),
-          actionsIconTheme: IconThemeData(color: ColorName.g7),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: ColorName.g7,
-          selectedItemColor: ColorName.p1,
-          unselectedItemColor: ColorName.g3,
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: ColorName.g7,
-          hintStyle: const TextStyle(color: ColorName.g3),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide.none,
-          ),
-          prefixIconColor: ColorName.g3,
-        ),
-      ),
-      i18n: I18n(
-        paintEditor: I18nPaintEditor(
-          bottomNavigationBarText: "펜",
-          freestyle: "펜",
-          eraser: "지우개",
-          lineWidth: "선 굵기",
-          changeOpacity: "투명도",
-        ),
-        textEditor: I18nTextEditor(
-          bottomNavigationBarText: "텍스트",
-          fontScale: "폰트 크기",
-          inputHintText: "텍스트 입력",
-        ),
-        cropRotateEditor: I18nCropRotateEditor(
-          bottomNavigationBarText: "자르기/회전",
-          rotate: "회전",
-          flip: "좌우반전",
-          ratio: "비율",
-          reset: "초기화",
-        ),
-      ),
-      mainEditor: MainEditorConfigs(
-        canZoomWhenLayerSelected: false,
-      ),
-      paintEditor: PaintEditorConfigs(
-        enableModeArrow: false,
-        enableModeLine: false,
-        enableModeRect: false,
-        enableModeCircle: false,
-        enableModeDashLine: false,
-        enableModePolygon: false,
-        enableModeBlur: false,
-        enableModePixelate: false,
-        showToggleFillButton: false,
-        style: PaintEditorStyle(
-          bottomBarActiveItemColor: Colors.deepPurple,
-        ),
-      ),
-      tuneEditor: TuneEditorConfigs(enabled: false),
-      filterEditor: FilterEditorConfigs(enabled: false),
-      blurEditor: BlurEditorConfigs(enabled: false),
-      stickerEditor: StickerEditorConfigs(
-        enabled: false,
-      )
-      );
-
-  ProImageEditorCallbacks getProImageEditorCallback(
-      {required Function(Uint8List bytes) onImageEditingComplete,
-      required Function() onCloseEditor}) {
-    return ProImageEditorCallbacks(
-      onCloseEditor: (editorMode) {
-        onCloseEditor();
-      },
-      onImageEditingComplete: (bytes) async {
-        onImageEditingComplete(bytes);
-      },
+  Widget _galleryImageWidget({required GalleryImage item}) {
+    return Image.memory(
+      item.originBytes,
+      fit: BoxFit.contain,
     );
   }
 }

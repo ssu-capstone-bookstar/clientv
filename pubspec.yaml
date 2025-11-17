@@ -68,6 +68,7 @@ dependencies:
   gal: ^2.3.0
   pro_image_editor: ^11.3.0
   path_provider: ^2.1.5
+  photo_manager: ^3.7.1
 
 dev_dependencies:
   flutter_test:
