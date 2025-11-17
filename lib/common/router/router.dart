@@ -260,7 +260,12 @@ GoRouter router(Ref ref) {
             routes: [
               GoRoute(
                 path: '/book-log',
-                builder: (context, state) => BookLogScreen(),
+                builder: (context, state) {
+                  final extra = state.extra as Map<String, dynamic>?;
+                  final requiredRefresh =
+                      extra?['requiredRefresh'] as bool? ?? false;
+                  return BookLogScreen(requiredRefresh: requiredRefresh);
+                },
                 routes: [
                   GoRoute(
                     path: 'thumbnail/:memberId',

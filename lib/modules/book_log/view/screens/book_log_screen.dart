@@ -19,7 +19,9 @@ import '../../../../gen/colors.gen.dart';
 import '../../view_model/book_log_view_model.dart';
 
 class BookLogScreen extends BaseScreen {
-  const BookLogScreen({super.key});
+  const BookLogScreen({super.key, required this.requiredRefresh});
+
+  final bool requiredRefresh;
 
   @override
   BaseScreenState<BookLogScreen> createState() => _BookLogScreenState();
@@ -32,6 +34,17 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
   @override
   int getListTotalItemCount() =>
       ref.watch(bookLogViewModelProvider(null)).value?.feeds.length ?? 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final bookLogNotifier = ref.read(bookLogViewModelProvider(null).notifier);
+      if (widget.requiredRefresh) {
+        bookLogNotifier.initState(null);
+      }
+    });
+  }
 
   @override
   Future<void> onRefresh() async {
