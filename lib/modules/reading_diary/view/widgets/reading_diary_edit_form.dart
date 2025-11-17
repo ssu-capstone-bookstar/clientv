@@ -134,7 +134,7 @@ class _ReadingDiaryEditFormState extends BaseScreenState<ReadingDiaryEditForm> {
     final isNotEmptyText = widget.textController.text.isNotEmpty;
     final isOver10lines =
         "\n".allMatches(widget.textController.text).length + 1 >= 10;
-    final state = ref.read(bookLogBookOverviewProvider(widget.selectedBookId));
+    final state = ref.watch(bookLogBookOverviewProvider(widget.selectedBookId));
 
     return GestureDetector(
       onTap: () {
