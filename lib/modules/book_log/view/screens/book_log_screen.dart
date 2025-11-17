@@ -30,7 +30,8 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
   bool enableRefreshIndicator() => true;
 
   @override
-  int getListTotalItemCount() => ref.watch(bookLogViewModelProvider(null)).value?.feeds.length ?? 0;
+  int getListTotalItemCount() =>
+      ref.watch(bookLogViewModelProvider(null)).value?.feeds.length ?? 0;
 
   @override
   Future<void> onRefresh() async {
@@ -90,14 +91,12 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
         ),
         child: Center(
           child: Assets.icons.icPencil.svg(
-            width: 30,
-            colorFilter: ColorFilter.mode(ColorName.p2, BlendMode.srcIn)
-          ),
+              width: 30,
+              colorFilter: ColorFilter.mode(ColorName.p2, BlendMode.srcIn)),
         ),
       ),
     );
   }
-
 
   @override
   Widget buildBody(BuildContext context) {
@@ -202,16 +201,18 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
               },
               onUpdate: (int targetIndex) {
                 final targetFeed = bookLog.feeds[targetIndex];
-                context.push('/book-log/${targetFeed.diaryId}/update',
-                    extra: {
-                      "memberId": targetFeed.memberId,
-                      "request": DiaryUpdateRequest(
-                          content: targetFeed.content,
-                          images: targetFeed.images
-                              .map((e) => ImageRequest(
-                                  imageUrl: e.imageUrl, sequence: e.sequence))
-                              .toList())
-                    });
+                context.push('/book-log/update/${targetFeed.diaryId}', extra: {
+                  "memberId": targetFeed.memberId,
+                  "request": DiaryUpdateRequest(
+                    bookId: targetFeed.bookId,
+                    content: targetFeed.content,
+                    images: targetFeed.images
+                        .map((e) => ImageRequest(
+                            imageUrl: e.imageUrl, sequence: e.sequence))
+                        .toList(),
+                    private: targetFeed.private,
+                  )
+                });
               },
             ),
             error: error("팔로우 정보를 불러올 수 없습니다."),

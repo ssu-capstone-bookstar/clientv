@@ -7,7 +7,7 @@ import 'package:bookstar/modules/auth/view_model/auth_view_model.dart';
 import 'package:bookstar/modules/book_log/view/widgets/select_image_dialog.dart';
 import 'package:bookstar/modules/book_log/view_model/book_log_view_model.dart';
 import 'package:bookstar/modules/reading_challenge/view_model/current_challenge_view_model.dart';
-import 'package:bookstar/modules/reading_diary/model/diary_request.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:bookstar/modules/reading_diary/view/widgets/reading_diary_edit_form.dart';
 import 'package:bookstar/modules/reading_diary/view_model/challenge_diaries_view_model.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +15,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
-class BookLogCreateScreen extends BaseScreen {
-  const BookLogCreateScreen({
+class BookLogUpdateScreen extends BaseScreen {
+  const BookLogUpdateScreen({
     super.key,
+    required this.diaryId,
+    required this.request,
   });
 
+  final int diaryId;
+  final DiaryUpdateRequest request;
+
   @override
-  BaseScreenState<BaseScreen> createState() => _BookLogCreateScreenState();
+  BaseScreenState<BaseScreen> createState() => _BookLogUpdateScreenState();
 }
 
-class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
+class _BookLogUpdateScreenState extends BaseScreenState<BookLogUpdateScreen> {
   @override
   bool enableRefreshIndicator() => false;
   int? _selectedBookId;
@@ -44,7 +49,14 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _openPhotoSelectDialog();
+      setState(() {
+        _textController.text = widget.request.content;
+        _images = widget.request.images
+            .map((e) => UrlImage(imageRequest: e))
+            .toList();
+        _private = widget.request.private;
+        _selectedBookId = widget.request.bookId;
+      });
     });
   }
 
@@ -159,14 +171,16 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
           }));
           if (_selectedBookId == null) return;
 
-          final diaryRequest = DiaryRequest(
+          final diaryRequest = DiaryUpdateRequest(
             bookId: _selectedBookId!,
             content: _textController.text,
             images: imageRequests,
             private: _private,
           );
 
-          await ref.read(bookLogDiaryCreateProvider(diaryRequest).future);
+          await ref.read(bookLogDiaryUpdateProvider(DiaryRequestWithId(
+                  diaryId: widget.diaryId, request: diaryRequest))
+              .future);
 
           final authState = ref.read(authViewModelProvider);
           final int? memberId = authState.when(

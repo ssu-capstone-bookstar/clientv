@@ -24,6 +24,7 @@ abstract class DiaryResponse with _$DiaryResponse {
     @Default(0) int viewCount,
     @Default(false) bool liked,
     @Default(false) bool scraped,
+    @Default(false) bool private,
   }) = _DiaryResponse;
 
   factory DiaryResponse.fromJson(Map<String, dynamic> json) => _$DiaryResponseFromJson(json);

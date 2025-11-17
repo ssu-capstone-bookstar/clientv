@@ -1,11 +1,13 @@
 import 'package:bookstar/modules/book_log/view/screens/book_log_create_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_log_thumbnail_screen.dart';
+import 'package:bookstar/modules/book_log/view/screens/book_log_update_screen.dart';
 import 'package:bookstar/modules/book_log/view/screens/book_related_feed_screen.dart';
 import 'package:bookstar/modules/book_pick/view/screens/book_pick_my_likes_screen.dart';
 import 'package:bookstar/modules/my_feed/view/screens/my_feed_feed_screen.dart';
 import 'package:bookstar/modules/my_feed/view/screens/my_feed_screen.dart';
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_my_likes_screen.dart';
 import 'package:bookstar/modules/reading_challenge/view/screens/reading_challenge_search_new_screen.dart';
+import 'package:bookstar/modules/reading_diary/model/diary_update_request.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -296,29 +298,28 @@ GoRouter router(Ref ref) {
                           bookId: bookId, initialIndex: index);
                     },
                   ),
-                   GoRoute(
+                  GoRoute(
                     path: '/create',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       return BookLogCreateScreen();
                     },
                   ),
-                  // GoRoute(
-                  //   path: '/:diaryId/update',
-                  //   parentNavigatorKey: rootNavigatorKey,
-                  //   builder: (context, state) {
-                  //     final diaryId = int.parse(state.pathParameters['diaryId']!);
-                  //     final extra = state.extra as Map<String, dynamic>;
-                  //     final memberId = extra["memberId"] as int;
-                  //     final request = extra["request"] as DiaryUpdateRequest;
-                  //     return ReadingDiaryUpdateScreen(
-                  //         diaryId: diaryId, request: request, memberId: memberId);
-                  //   },
-                  // ),
+                  GoRoute(
+                    path: '/update/:diaryId',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) {
+                      final diaryId = int.parse(state.pathParameters['diaryId']!);
+                      final extra = state.extra as Map<String, dynamic>;
+                      final request = extra["request"] as DiaryUpdateRequest;
+                      return BookLogUpdateScreen(diaryId: diaryId, request: request);
+                    },
+                  ),
                 ],
               ),
             ],
           ),
+
           /// 마이피드
           StatefulShellBranch(
             routes: [
@@ -332,8 +333,7 @@ GoRouter router(Ref ref) {
                     builder: (context, state) {
                       final extra = state.extra as Map<String, dynamic>?;
                       final index = extra?['index'] as int? ?? 0;
-                      return MyFeedFeedScreen(
-                          initialIndex: index);
+                      return MyFeedFeedScreen(initialIndex: index);
                     },
                   ),
                   GoRoute(
