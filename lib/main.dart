@@ -1,6 +1,7 @@
 import 'package:bookstar/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -19,6 +20,10 @@ void main() async {
   KakaoSdk.init(
     nativeAppKey: dotenv.env['KAKAO_NATIVE_KEY'],
   );
+
+  final fontLoader = FontLoader('BookkMyungjo');
+  fontLoader.addFont(rootBundle.load(Assets.fonts.bookkMyungjoBold));
+  await fontLoader.load();
 
   // await FlutterSecureStorage().deleteAll();
 

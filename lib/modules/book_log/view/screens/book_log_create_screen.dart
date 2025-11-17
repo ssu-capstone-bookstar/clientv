@@ -27,11 +27,12 @@ class BookLogCreateScreen extends BaseScreen {
 class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
   @override
   bool enableRefreshIndicator() => false;
-  final int _selectedBookId = -1;
+  int? _selectedBookId;
   final TextEditingController _textController = TextEditingController();
   List<ImageItem> _images = [];
   bool _disableSave = false;
   int _currentImageIndex = 0;
+  bool _private = false;
 
   void _updateDisableSave(bool value) {
     setState(() {
@@ -77,6 +78,12 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
     });
   }
 
+  void _onUpdateSelectedBookId(int id) {
+    setState(() {
+      _selectedBookId = id;
+    });
+  }
+
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return AppBar(
@@ -97,6 +104,14 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
       onImageIndexChanged: _onImageIndexChanged,
       focusNode: focusNode,
       disabledSave: _disableSave,
+      selectedBookId: _selectedBookId,
+      onUpdateSelectedBookId: _onUpdateSelectedBookId,
+      private: _private,
+      onUpdatePrivate: (value) {
+        setState(() {
+          _private = value;
+        });
+      },
       onUpdateDisabledSave: _updateDisableSave,
       onFocus: (show) {
         if (show) {
@@ -142,8 +157,10 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
             throw Exception('Unknown image type');
           }
         }));
+        if (_selectedBookId == null) return;
+
         final diaryRequest = DiaryRequest(
-          bookId: _selectedBookId,
+          bookId: _selectedBookId!,
           content: _textController.text,
           images: imageRequests,
         );
@@ -172,7 +189,7 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
       },
       onPick: () {
         _openPhotoSelectDialog();
-      },
+      }
     );
   }
 }

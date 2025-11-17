@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:bookstar/common/models/cursor_page_response.dart';
 import 'package:bookstar/common/models/image_request.dart';
+import 'package:bookstar/modules/book/model/book_overview_response.dart';
+import 'package:bookstar/modules/book/repository/book_repository.dart';
 import 'package:bookstar/modules/book_log/state/book_log_state.dart';
 import 'package:bookstar/modules/image/model/presigned_url_request.dart';
 import 'package:bookstar/modules/image/repository/image_repository.dart';
@@ -20,6 +22,14 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_log_view_model.g.dart';
+
+final bookLogBookOverviewProvider =
+    FutureProvider.family<BookOverviewResponse, int?>((ref, bookId) async {
+  final bookRepo = ref.watch(bookRepositoryProvider);
+  if (bookId == null) return BookOverviewResponse();
+  final response = await bookRepo.getBookOverview(bookId);
+  return response.data;
+});
 
 // Provider for profile (delegates to profileProvider)
 final bookLogProfileProvider =

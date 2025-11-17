@@ -81,7 +81,7 @@ class _TextInputSheetState extends ConsumerState<TextInputSheet> {
                 focusNode: widget.focusNode,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
-                style: AppTexts.b8.copyWith(color: ColorName.w1),
+                style: AppTexts.b8.copyWith(color: ColorName.w1,  fontFamily: 'BookkMyungjo',),
                 cursorColor: ColorName.w1,
                 cursorWidth: 2.0,
                 cursorHeight: 24.0,

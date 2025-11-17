@@ -259,7 +259,6 @@ class _SelectImageDialogState extends BaseScreenState<SelectImageDialog> {
                             break;
                           }
                         }
-                        // 画像の描画処理
                         return ThumbnailImage(
                           image: image,
                           isSelected: isSelected,
