@@ -10,7 +10,7 @@ abstract class DiaryRequest with _$DiaryRequest {
     required int bookId,
     @Default('') String content,
     @Default([]) List<ImageRequest> images,
-    @Default(false) bool private,
+    @Default(false) bool privacy,
   }) = _DiaryRequest;
 
   factory DiaryRequest.fromJson(Map<String, dynamic> json) => _$DiaryRequestFromJson(json);

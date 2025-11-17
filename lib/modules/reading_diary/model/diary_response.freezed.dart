@@ -30,7 +30,7 @@ mixin _$DiaryResponse {
   int get viewCount;
   bool get liked;
   bool get scraped;
-  bool get private;
+  bool get privacy;
 
   /// Create a copy of DiaryResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -74,7 +74,7 @@ mixin _$DiaryResponse {
                 other.viewCount == viewCount) &&
             (identical(other.liked, liked) || other.liked == liked) &&
             (identical(other.scraped, scraped) || other.scraped == scraped) &&
-            (identical(other.private, private) || other.private == private));
+            (identical(other.privacy, privacy) || other.privacy == privacy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -97,11 +97,11 @@ mixin _$DiaryResponse {
       viewCount,
       liked,
       scraped,
-      private);
+      privacy);
 
   @override
   String toString() {
-    return 'DiaryResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, liked: $liked, scraped: $scraped, private: $private)';
+    return 'DiaryResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, liked: $liked, scraped: $scraped, privacy: $privacy)';
   }
 }
 
@@ -128,7 +128,7 @@ abstract mixin class $DiaryResponseCopyWith<$Res> {
       int viewCount,
       bool liked,
       bool scraped,
-      bool private});
+      bool privacy});
 }
 
 /// @nodoc
@@ -160,7 +160,7 @@ class _$DiaryResponseCopyWithImpl<$Res>
     Object? viewCount = null,
     Object? liked = null,
     Object? scraped = null,
-    Object? private = null,
+    Object? privacy = null,
   }) {
     return _then(_self.copyWith(
       diaryId: null == diaryId
@@ -227,9 +227,9 @@ class _$DiaryResponseCopyWithImpl<$Res>
           ? _self.scraped
           : scraped // ignore: cast_nullable_to_non_nullable
               as bool,
-      private: null == private
-          ? _self.private
-          : private // ignore: cast_nullable_to_non_nullable
+      privacy: null == privacy
+          ? _self.privacy
+          : privacy // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -345,7 +345,7 @@ extension DiaryResponsePatterns on DiaryResponse {
             int viewCount,
             bool liked,
             bool scraped,
-            bool private)?
+            bool privacy)?
         $default, {
     required TResult orElse(),
   }) {
@@ -369,7 +369,7 @@ extension DiaryResponsePatterns on DiaryResponse {
             _that.viewCount,
             _that.liked,
             _that.scraped,
-            _that.private);
+            _that.privacy);
       case _:
         return orElse();
     }
@@ -407,7 +407,7 @@ extension DiaryResponsePatterns on DiaryResponse {
             int viewCount,
             bool liked,
             bool scraped,
-            bool private)
+            bool privacy)
         $default,
   ) {
     final _that = this;
@@ -430,7 +430,7 @@ extension DiaryResponsePatterns on DiaryResponse {
             _that.viewCount,
             _that.liked,
             _that.scraped,
-            _that.private);
+            _that.privacy);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -467,7 +467,7 @@ extension DiaryResponsePatterns on DiaryResponse {
             int viewCount,
             bool liked,
             bool scraped,
-            bool private)?
+            bool privacy)?
         $default,
   ) {
     final _that = this;
@@ -490,7 +490,7 @@ extension DiaryResponsePatterns on DiaryResponse {
             _that.viewCount,
             _that.liked,
             _that.scraped,
-            _that.private);
+            _that.privacy);
       case _:
         return null;
     }
@@ -517,7 +517,7 @@ class _DiaryResponse implements DiaryResponse {
       this.viewCount = 0,
       this.liked = false,
       this.scraped = false,
-      this.private = false})
+      this.privacy = false})
       : _images = images;
   factory _DiaryResponse.fromJson(Map<String, dynamic> json) =>
       _$DiaryResponseFromJson(json);
@@ -578,7 +578,7 @@ class _DiaryResponse implements DiaryResponse {
   final bool scraped;
   @override
   @JsonKey()
-  final bool private;
+  final bool privacy;
 
   /// Create a copy of DiaryResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -626,7 +626,7 @@ class _DiaryResponse implements DiaryResponse {
                 other.viewCount == viewCount) &&
             (identical(other.liked, liked) || other.liked == liked) &&
             (identical(other.scraped, scraped) || other.scraped == scraped) &&
-            (identical(other.private, private) || other.private == private));
+            (identical(other.privacy, privacy) || other.privacy == privacy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -649,11 +649,11 @@ class _DiaryResponse implements DiaryResponse {
       viewCount,
       liked,
       scraped,
-      private);
+      privacy);
 
   @override
   String toString() {
-    return 'DiaryResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, liked: $liked, scraped: $scraped, private: $private)';
+    return 'DiaryResponse(diaryId: $diaryId, content: $content, createdDate: $createdDate, memberId: $memberId, nickname: $nickname, profileImageUrl: $profileImageUrl, bookId: $bookId, bookTitle: $bookTitle, bookAuthor: $bookAuthor, bookRating: $bookRating, images: $images, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, liked: $liked, scraped: $scraped, privacy: $privacy)';
   }
 }
 
@@ -682,7 +682,7 @@ abstract mixin class _$DiaryResponseCopyWith<$Res>
       int viewCount,
       bool liked,
       bool scraped,
-      bool private});
+      bool privacy});
 }
 
 /// @nodoc
@@ -714,7 +714,7 @@ class __$DiaryResponseCopyWithImpl<$Res>
     Object? viewCount = null,
     Object? liked = null,
     Object? scraped = null,
-    Object? private = null,
+    Object? privacy = null,
   }) {
     return _then(_DiaryResponse(
       diaryId: null == diaryId
@@ -781,9 +781,9 @@ class __$DiaryResponseCopyWithImpl<$Res>
           ? _self.scraped
           : scraped // ignore: cast_nullable_to_non_nullable
               as bool,
-      private: null == private
-          ? _self.private
-          : private // ignore: cast_nullable_to_non_nullable
+      privacy: null == privacy
+          ? _self.privacy
+          : privacy // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

@@ -182,7 +182,7 @@ class _MyFeedFeedScreenState extends BaseScreenState<MyFeedFeedScreen> {
                         .map((e) => ImageRequest(
                             imageUrl: e.imageUrl, sequence: e.sequence))
                         .toList(),
-                    private: targetFeed.private,
+                    privacy: targetFeed.privacy,
                   )
                 });
               },

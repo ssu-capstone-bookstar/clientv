@@ -223,7 +223,7 @@ class _BookLogScreenState extends BaseScreenState<BookLogScreen> {
                         .map((e) => ImageRequest(
                             imageUrl: e.imageUrl, sequence: e.sequence))
                         .toList(),
-                    private: targetFeed.private,
+                    privacy: targetFeed.privacy,
                   )
                 });
               },

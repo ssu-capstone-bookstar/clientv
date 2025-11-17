@@ -14,7 +14,7 @@ _DiaryRequest _$DiaryRequestFromJson(Map<String, dynamic> json) =>
               ?.map((e) => ImageRequest.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      private: json['private'] as bool? ?? false,
+      privacy: json['privacy'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$DiaryRequestToJson(_DiaryRequest instance) =>
@@ -22,5 +22,5 @@ Map<String, dynamic> _$DiaryRequestToJson(_DiaryRequest instance) =>
       'bookId': instance.bookId,
       'content': instance.content,
       'images': instance.images,
-      'private': instance.private,
+      'privacy': instance.privacy,
     };

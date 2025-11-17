@@ -37,7 +37,7 @@ class _BookLogUpdateScreenState extends BaseScreenState<BookLogUpdateScreen> {
   List<ImageItem> _images = [];
   bool _disableSave = false;
   int _currentImageIndex = 0;
-  bool _private = false;
+  bool _privacy = false;
 
   void _updateDisableSave(bool value) {
     setState(() {
@@ -54,7 +54,7 @@ class _BookLogUpdateScreenState extends BaseScreenState<BookLogUpdateScreen> {
         _images = widget.request.images
             .map((e) => UrlImage(imageRequest: e))
             .toList();
-        _private = widget.request.private;
+        _privacy = widget.request.privacy;
         _selectedBookId = widget.request.bookId;
       });
     });
@@ -118,10 +118,10 @@ class _BookLogUpdateScreenState extends BaseScreenState<BookLogUpdateScreen> {
         disabledSave: _disableSave,
         selectedBookId: _selectedBookId,
         onUpdateSelectedBookId: _onUpdateSelectedBookId,
-        private: _private,
-        onUpdatePrivate: (value) {
+        privacy: _privacy,
+        onUpdatePrivacy: (value) {
           setState(() {
-            _private = value;
+            _privacy = value;
           });
         },
         onUpdateDisabledSave: _updateDisableSave,
@@ -175,7 +175,7 @@ class _BookLogUpdateScreenState extends BaseScreenState<BookLogUpdateScreen> {
             bookId: _selectedBookId!,
             content: _textController.text,
             images: imageRequests,
-            private: _private,
+            privacy: _privacy,
           );
 
           await ref.read(bookLogDiaryUpdateProvider(DiaryRequestWithId(

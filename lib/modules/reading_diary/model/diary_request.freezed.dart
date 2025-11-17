@@ -17,7 +17,7 @@ mixin _$DiaryRequest {
   int get bookId;
   String get content;
   List<ImageRequest> get images;
-  bool get private;
+  bool get privacy;
 
   /// Create a copy of DiaryRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -38,17 +38,17 @@ mixin _$DiaryRequest {
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality().equals(other.images, images) &&
-            (identical(other.private, private) || other.private == private));
+            (identical(other.privacy, privacy) || other.privacy == privacy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, bookId, content,
-      const DeepCollectionEquality().hash(images), private);
+      const DeepCollectionEquality().hash(images), privacy);
 
   @override
   String toString() {
-    return 'DiaryRequest(bookId: $bookId, content: $content, images: $images, private: $private)';
+    return 'DiaryRequest(bookId: $bookId, content: $content, images: $images, privacy: $privacy)';
   }
 }
 
@@ -59,7 +59,7 @@ abstract mixin class $DiaryRequestCopyWith<$Res> {
       _$DiaryRequestCopyWithImpl;
   @useResult
   $Res call(
-      {int bookId, String content, List<ImageRequest> images, bool private});
+      {int bookId, String content, List<ImageRequest> images, bool privacy});
 }
 
 /// @nodoc
@@ -77,7 +77,7 @@ class _$DiaryRequestCopyWithImpl<$Res> implements $DiaryRequestCopyWith<$Res> {
     Object? bookId = null,
     Object? content = null,
     Object? images = null,
-    Object? private = null,
+    Object? privacy = null,
   }) {
     return _then(_self.copyWith(
       bookId: null == bookId
@@ -92,9 +92,9 @@ class _$DiaryRequestCopyWithImpl<$Res> implements $DiaryRequestCopyWith<$Res> {
           ? _self.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<ImageRequest>,
-      private: null == private
-          ? _self.private
-          : private // ignore: cast_nullable_to_non_nullable
+      privacy: null == privacy
+          ? _self.privacy
+          : privacy // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -194,7 +194,7 @@ extension DiaryRequestPatterns on DiaryRequest {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(int bookId, String content, List<ImageRequest> images,
-            bool private)?
+            bool privacy)?
         $default, {
     required TResult orElse(),
   }) {
@@ -202,7 +202,7 @@ extension DiaryRequestPatterns on DiaryRequest {
     switch (_that) {
       case _DiaryRequest() when $default != null:
         return $default(
-            _that.bookId, _that.content, _that.images, _that.private);
+            _that.bookId, _that.content, _that.images, _that.privacy);
       case _:
         return orElse();
     }
@@ -224,14 +224,14 @@ extension DiaryRequestPatterns on DiaryRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            int bookId, String content, List<ImageRequest> images, bool private)
+            int bookId, String content, List<ImageRequest> images, bool privacy)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryRequest():
         return $default(
-            _that.bookId, _that.content, _that.images, _that.private);
+            _that.bookId, _that.content, _that.images, _that.privacy);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -252,14 +252,14 @@ extension DiaryRequestPatterns on DiaryRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(int bookId, String content, List<ImageRequest> images,
-            bool private)?
+            bool privacy)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _DiaryRequest() when $default != null:
         return $default(
-            _that.bookId, _that.content, _that.images, _that.private);
+            _that.bookId, _that.content, _that.images, _that.privacy);
       case _:
         return null;
     }
@@ -273,7 +273,7 @@ class _DiaryRequest implements DiaryRequest {
       {required this.bookId,
       this.content = '',
       final List<ImageRequest> images = const [],
-      this.private = false})
+      this.privacy = false})
       : _images = images;
   factory _DiaryRequest.fromJson(Map<String, dynamic> json) =>
       _$DiaryRequestFromJson(json);
@@ -294,7 +294,7 @@ class _DiaryRequest implements DiaryRequest {
 
   @override
   @JsonKey()
-  final bool private;
+  final bool privacy;
 
   /// Create a copy of DiaryRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -319,17 +319,17 @@ class _DiaryRequest implements DiaryRequest {
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.content, content) || other.content == content) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            (identical(other.private, private) || other.private == private));
+            (identical(other.privacy, privacy) || other.privacy == privacy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, bookId, content,
-      const DeepCollectionEquality().hash(_images), private);
+      const DeepCollectionEquality().hash(_images), privacy);
 
   @override
   String toString() {
-    return 'DiaryRequest(bookId: $bookId, content: $content, images: $images, private: $private)';
+    return 'DiaryRequest(bookId: $bookId, content: $content, images: $images, privacy: $privacy)';
   }
 }
 
@@ -342,7 +342,7 @@ abstract mixin class _$DiaryRequestCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int bookId, String content, List<ImageRequest> images, bool private});
+      {int bookId, String content, List<ImageRequest> images, bool privacy});
 }
 
 /// @nodoc
@@ -361,7 +361,7 @@ class __$DiaryRequestCopyWithImpl<$Res>
     Object? bookId = null,
     Object? content = null,
     Object? images = null,
-    Object? private = null,
+    Object? privacy = null,
   }) {
     return _then(_DiaryRequest(
       bookId: null == bookId
@@ -376,9 +376,9 @@ class __$DiaryRequestCopyWithImpl<$Res>
           ? _self._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<ImageRequest>,
-      private: null == private
-          ? _self.private
-          : private // ignore: cast_nullable_to_non_nullable
+      privacy: null == privacy
+          ? _self.privacy
+          : privacy // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

@@ -32,7 +32,7 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
   List<ImageItem> _images = [];
   bool _disableSave = false;
   int _currentImageIndex = 0;
-  bool _private = false;
+  bool _privacy = false;
 
   void _updateDisableSave(bool value) {
     setState(() {
@@ -106,10 +106,10 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
         disabledSave: _disableSave,
         selectedBookId: _selectedBookId,
         onUpdateSelectedBookId: _onUpdateSelectedBookId,
-        private: _private,
-        onUpdatePrivate: (value) {
+        privacy: _privacy,
+        onUpdatePrivacy: (value) {
           setState(() {
-            _private = value;
+            _privacy = value;
           });
         },
         onUpdateDisabledSave: _updateDisableSave,
@@ -163,7 +163,7 @@ class _BookLogCreateScreenState extends BaseScreenState<BookLogCreateScreen> {
             bookId: _selectedBookId!,
             content: _textController.text,
             images: imageRequests,
-            private: _private,
+            privacy: _privacy,
           );
 
           await ref.read(bookLogDiaryCreateProvider(diaryRequest).future);

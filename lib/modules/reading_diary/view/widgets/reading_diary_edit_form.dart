@@ -40,8 +40,8 @@ class ReadingDiaryEditForm extends BaseScreen {
     required this.focusNode,
     required this.disabledSave,
     required this.selectedBookId,
-    required this.private,
-    required this.onUpdatePrivate,
+    required this.privacy,
+    required this.onUpdatePrivacy,
     required this.onFocus,
     required this.onUpdateText,
     required this.onUpdateImage,
@@ -58,8 +58,8 @@ class ReadingDiaryEditForm extends BaseScreen {
   final FocusNode focusNode;
   final bool disabledSave;
   final int? selectedBookId;
-  final bool private;
-  final Function(bool) onUpdatePrivate;
+  final bool privacy;
+  final Function(bool) onUpdatePrivacy;
   final Function(bool) onFocus;
   final Function(String) onUpdateText;
   final Function(List<ImageItem>) onUpdateImage;
@@ -183,10 +183,10 @@ class _ReadingDiaryEditFormState extends BaseScreenState<ReadingDiaryEditForm> {
               onPressed: _openSelectBookDialog,
             ),
             SizedBox(height: 12),
-            _buildPrivateButton(
-              private: widget.private,
+            _buildPrivacyButton(
+              privacy: widget.privacy,
               onPressed: () {
-                widget.onUpdatePrivate(!widget.private);
+                widget.onUpdatePrivacy(!widget.privacy);
               },
             ),
             if (isNotEmptyText &&
@@ -516,8 +516,8 @@ class _ReadingDiaryEditFormState extends BaseScreenState<ReadingDiaryEditForm> {
     }
   }
 
-  Widget _buildPrivateButton({
-    required bool private,
+  Widget _buildPrivacyButton({
+    required bool privacy,
     required Function() onPressed,
   }) {
     return Padding(
@@ -549,13 +549,13 @@ class _ReadingDiaryEditFormState extends BaseScreenState<ReadingDiaryEditForm> {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: private ? ColorName.w2 : ColorName.g1,
+                    color: privacy ? ColorName.w2 : ColorName.g1,
                     border: Border.all(
-                      color: private ? ColorName.w2 : ColorName.w1,
+                      color: privacy ? ColorName.w2 : ColorName.w1,
                       width: 2,
                     ),
                   ),
-                  child: private
+                  child: privacy
                       ? Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Assets.icons.icCheck.svg(),
